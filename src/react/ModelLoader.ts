@@ -31,7 +31,7 @@ interface ModelLoaderProps {
  *   id="myModel"
  *   url="/path/to/model.gltf"
  *   onLoaded={(model) => console.log('Model loaded:', model)}
- *   onProgress={(progress) => console.log('Loading progress:', progress)}
+ *   onProgress={(download) => console.log('Download:', download)}
  *   onError={(error) => console.error('Error loading model:', error)}
  * />
  * ```
@@ -49,7 +49,7 @@ export const ModelLoader = ({
   useEffect(() => {
     if (!sceneManager || !url || hasLoadedRef.current) {return;}
 
-    // Verificar si el modelo ya está cargado
+    // Verify if the model is already loaded
     if (sceneManager.getModel(id)) {
       onLoaded?.(sceneManager.getModel(id)!);
       return;
