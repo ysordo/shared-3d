@@ -1,0 +1,1 @@
+{"version":3,"file":"SceneContext.d.ts","sourceRoot":"","sources":["../../src/react/SceneContext.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,sBAAsB,CAAC;AAEzD;;;;;;;;;;;;;;;;;;;;;;;;GAwBG;AACH,eAAO,MAAM,YAAY;kBACT,YAAY,GAAG,IAAI;YACzB,iBAAiB,GAAG,IAAI;EACM,CAAC;AAEzC,eAAO,MAAM,eAAe;kBAJZ,YAAY,GAAG,IAAI;YACzB,iBAAiB,GAAG,IAAI;CAG2B,CAAC"}
