@@ -1,13 +1,51 @@
 {
   "name": "@types/shared-3d",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "Shared 3D library for React applications",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ysordo/shared-3d.git"
   },
-  "keywords": [],
-  "author": "",
+  "type": "module",
+  "keywords": [
+    "react",
+    "3d",
+    "shared",
+    "library",
+    "three.js",
+    "idb-keyval"
+  ],
+  "author": "Junior Yohan Sordo García <juniorsordogarcia@gmail.com>",
+  "homepage": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepublishOnly": "pnpm run build && pnpm run test",
+    "build": "tsc",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix"
+  },
+  "dependencies": {
+    "idb-keyval": "^6.2.2",
+    "three": "^0.177.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@types/resize-observer-browser": "^0.1.11",
+    "@types/three": "^0.177.0",
+    "@typescript-eslint/eslint-plugin": "^8.35.1",
+    "@typescript-eslint/parser": "^8.35.1",
+    "eslint": "^9.30.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.3.0",
+    "typescript": "^5.8.3"
+  },
+  "peerDependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
   "license": "ISC",
   "packageManager": "pnpm@10.12.4"
 }
