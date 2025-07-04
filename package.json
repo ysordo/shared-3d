@@ -1,5 +1,5 @@
 {
-  "name": "@types/shared-3d",
+  "name": "shared-3d",
   "version": "1.0.0",
   "description": "Shared 3D library for React applications",
   "repository": {
