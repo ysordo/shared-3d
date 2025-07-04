@@ -4,7 +4,7 @@
   "description": "Shared 3D library for React applications",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ysordo/shared-3d.git"
+    "url": "https://github.com/ysordo/shared-3d"
   },
   "type": "module",
   "keywords": [
@@ -19,6 +19,12 @@
   "homepage": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "scripts": {
     "prepublishOnly": "pnpm run build && pnpm run test",
     "build": "tsc",
