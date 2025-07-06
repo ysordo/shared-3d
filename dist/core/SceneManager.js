@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { EffectComposer, GLTFLoader, OrbitControls, RenderPass, SMAAPass, SSAARenderPass } from 'three/examples/jsm/Addons.js';
-//import { CacheManager } from './CacheManager';
+import { CacheManager } from './CacheManager';
 /**
  * SceneManager class that manages a 3D scene using Three.js.
  * It handles rendering, model loading, camera controls, and post-processing effects.
@@ -242,22 +242,37 @@ export class SceneManager {
         console.warn(`[SceneManager] Iniciando carga de modelo: ${id} desde ${url}`);
         const loadPromise = new Promise(async (resolve, reject) => {
             try {
-                const loader = new GLTFLoader();
-                loader.load(url, (gltf) => {
-                    const model = gltf instanceof THREE.Object3D ? gltf : gltf.scene;
-                    this.addModelToScene(id, model);
-                    this.hasModelLoaded.set(id, true);
-                    resolve(model);
-                }, (xhr) => {
-                    if (onProgress) {
-                        const k = 1024;
-                        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-                        const i = Math.floor(Math.log(xhr.loaded) / Math.log(k));
-                        onProgress(`${(xhr.loaded / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`);
-                    }
-                }, (error) => {
-                    reject(error);
-                });
+                const cache = await CacheManager.getModel(url);
+                if (cache) {
+                    console.warn(`[SceneManager] Modelo ${id} encontrado en caché.`);
+                    const loader = new GLTFLoader();
+                    loader.parse(cache, url, (gltf) => {
+                        const model = gltf instanceof THREE.Object3D ? gltf : gltf.scene;
+                        this.addModelToScene(id, model);
+                        this.hasModelLoaded.set(id, true);
+                        resolve(model);
+                    }, (error) => {
+                        reject(error);
+                    });
+                }
+                else {
+                    const loader = new GLTFLoader();
+                    loader.load(url, (gltf) => {
+                        const model = gltf instanceof THREE.Object3D ? gltf : gltf.scene;
+                        this.addModelToScene(id, model);
+                        this.hasModelLoaded.set(id, true);
+                        resolve(model);
+                    }, (xhr) => {
+                        if (onProgress) {
+                            const k = 1024;
+                            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                            const i = Math.floor(Math.log(xhr.loaded) / Math.log(k));
+                            onProgress(`${(xhr.loaded / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`);
+                        }
+                    }, (error) => {
+                        reject(error);
+                    });
+                }
             }
             catch (error) {
                 reject(error);

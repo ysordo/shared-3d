@@ -3,6 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useRef, useState, useEffect, forwardRef } from 'react';
 import { SceneManager } from '../core/SceneManager';
 import { SceneContext } from './SceneContext';
+import { useCacheCleanup } from './useCacheCleanup';
 /**
  * SceneRenderer component that renders a canvas for the 3D scene.
  * @param {SceneRendererProps} props - Properties for the canvas element.
@@ -24,13 +25,23 @@ SceneRenderer.displayName = 'SceneRenderer';
  * @param {SceneProviderProps} props - Properties for the SceneProvider component.
  * @returns {JSX.Element} A provider that wraps the SceneRenderer and provides the scene context.
  * @example
+ * ```tsx
+ * import { SceneProvider } from 'shared-3d';
+ * import My3DComponent from './My3DComponent';
+ * // Usage in a React component
+ * // Wrap your 3D components with SceneProvider to provide the scene context
+ * // and manage the 3D scene lifecycle.
+ * // You can pass configuration options to the SceneProvider.
+ * // For example, to enable antialiasing and shadows:
  * <SceneProvider config={{ antialias: true, shadows: true }}>
  *   <My3DComponent />
  * </SceneProvider>
+ * ```
  * @see {@link SceneContext} for accessing the scene manager and canvas.
  * @see {@link SceneManager} for managing the 3D scene.
  */
 export function SceneProvider({ children, config, ...props }) {
+    useCacheCleanup();
     const [sceneManager, setSceneManager] = useState(null);
     const canvasRef = useRef(null);
     const initializedRef = useRef(false);
