@@ -304,7 +304,7 @@ export class SceneManager {
       return this.models.get(id)!;
     }
 
-    console.warn(`[SceneManager] Iniciando carga de modelo: ${id} desde ${url}`);
+    console.warn(`[SceneManager] Change model using: ${id} for url: ${url}`);
 
     const loadPromise = new Promise<THREE.Object3D>(async (resolve, reject) => {
       try {
@@ -349,7 +349,11 @@ export class SceneManager {
           (error) => {
             reject(error);
           }
-        );}
+        );
+        console.warn(`[SceneManager] Model save to cache: ${url}`);
+        await CacheManager.saveModel(url, await (await fetch(url)).arrayBuffer());
+      
+      }
       } catch (error) {
         reject(error);
       }
@@ -377,48 +381,46 @@ export class SceneManager {
    * @private
    */
   private addModelToScene(id: string, model: THREE.Object3D): void {
-    console.warn(`[SceneManager] Añadiendo modelo a escena: ${id}`);
+    console.warn(`[SceneManager] Adding model with ID: ${id} to the scene.`);
     
-    // 1. Calcular el bounding box del modelo
+    // 1. Calculate the bounding box of the model
     const box = new THREE.Box3().setFromObject(model, true);
     
-    // 2. Crear vectores para el centro y tamaño
+    // 2. Create a bounding box to center the model
     const center = new THREE.Vector3();
     const size = new THREE.Vector3();
     box.getCenter(center);
     box.getSize(size);
     
-    // 3. Centrar el modelo en el origen
+    // 3. Center the model at the origin
     model.position.sub(center);
     
-    // 4. Calcular el radio del bounding sphere
+    // 4. Calculate the bounding sphere of the model
     const boundingSphere = new THREE.Sphere();
     box.getBoundingSphere(boundingSphere);
     const radius = boundingSphere.radius;
     
-    // 5. Calcular la distancia óptima de la cámara
+    // 5. Calculate the camera distance based on the bounding sphere radius
     const fovRad = this.camera.fov * (Math.PI / 180);
     const aspect = this.camera.aspect;
     
-    // Considerar tanto el aspect ratio vertical como horizontal
+    // Calculate the horizontal field of view
     const horizontalFov = 2 * Math.atan(Math.tan(fovRad / 2) * aspect);
     
-    // Calcular la distancia necesaria para encuadrar completamente el modelo
+    // Calculate the distance based on the bounding sphere radius
     const distanceV = radius / Math.tan(fovRad / 2);
     const distanceH = radius / Math.tan(horizontalFov / 2);
     const cameraDistance = Math.max(distanceV, distanceH) * this.MARGIN;
     
-    // 6. Posicionar la cámara
+    // 6. Position the camera
     this.camera.position.set(0, 0, cameraDistance);
     this.camera.lookAt(0, 0, 0);
     
-    // 7. Añadir el modelo a la escena
+    // 7. Add the model to the scene
     this.models.set(id, model);
     this.scene.add(model);
     
-    console.warn(`[SceneManager] Radio del modelo: ${radius.toFixed(2)}`);
-    console.warn(`[SceneManager] Distancia cámara: ${cameraDistance.toFixed(2)}`);
-    console.warn(`[SceneManager] Aspect ratio: ${aspect.toFixed(2)}`);
+    console.warn(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
   }
 
   /**
