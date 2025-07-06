@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { EffectComposer, GLTFLoader, OrbitControls, RenderPass, SMAAPass, SSAARenderPass } from 'three/examples/jsm/Addons.js';
-//import { CacheManager } from './CacheManager';
+import { CacheManager } from './CacheManager';
 
 /**
  * SceneManager class that manages a 3D scene using Three.js.
@@ -305,9 +305,29 @@ export class SceneManager {
     }
 
     console.warn(`[SceneManager] Iniciando carga de modelo: ${id} desde ${url}`);
-    
+
     const loadPromise = new Promise<THREE.Object3D>(async (resolve, reject) => {
       try {
+        const cache = await CacheManager.getModel(url);
+
+        if(cache) {
+          console.warn(`[SceneManager] Modelo ${id} encontrado en caché.`);
+          const loader = new GLTFLoader();
+          loader.parse(
+            cache,
+            url,
+            (gltf) => {
+            const model = gltf instanceof THREE.Object3D ? gltf : gltf.scene;
+                this.addModelToScene(id, model);
+                this.hasModelLoaded.set(id, true);
+                resolve(model);
+            },
+            (error) => {
+              reject(error);
+            }
+          );
+        }
+        else{
         const loader = new GLTFLoader();
         
         loader.load(
@@ -329,7 +349,7 @@ export class SceneManager {
           (error) => {
             reject(error);
           }
-        );
+        );}
       } catch (error) {
         reject(error);
       }
