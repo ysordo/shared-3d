@@ -8,7 +8,7 @@
 
 > `const` **SceneContext**: `Context`\<\{ `canvas`: `null` \| `HTMLCanvasElement`; `sceneManager`: `null` \| [`SceneManager`](../classes/SceneManager.md); \}\>
 
-Defined in: [react/SceneContext.ts:30](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/react/SceneContext.ts#L30)
+Defined in: [react/SceneContext.ts:30](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/react/SceneContext.ts#L30)
 
 Context to handle the scene and canvas in the React application.
 It provides access to the SceneManager and Canvas HTML.

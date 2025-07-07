@@ -6,7 +6,7 @@
 
 # Class: SceneManager
 
-Defined in: [core/SceneManager.ts:64](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L64)
+Defined in: [core/SceneManager.ts:64](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L64)
 
 SceneManager class that manages a 3D scene using Three.js.
 It handles rendering, model loading, camera controls, and post-processing effects.
@@ -88,7 +88,7 @@ sceneManager.animate();
 
 > **new SceneManager**(`canvas`, `config?`): `SceneManager`
 
-Defined in: [core/SceneManager.ts:109](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L109)
+Defined in: [core/SceneManager.ts:109](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L109)
 
 Creates an instance of SceneManager.
 Initializes the Three.js scene, camera, renderer, and optional post-processing effects.
@@ -165,7 +165,7 @@ sceneManager.animate();
 
 > **animate**(): `void`
 
-Defined in: [core/SceneManager.ts:592](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L592)
+Defined in: [core/SceneManager.ts:592](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L592)
 
 Starts the animation loop for rendering the scene.
 It uses requestAnimationFrame to continuously render the scene and update controls if available.
@@ -181,7 +181,7 @@ If post-processing is enabled, it renders through the composer, otherwise direct
 
 > **applyActiveParallax**(`progress`): `void`
 
-Defined in: [core/SceneManager.ts:713](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L713)
+Defined in: [core/SceneManager.ts:713](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L713)
 
 Applies the active parallax effect to the currently active model.
 This function checks if there is an active model and applies the parallax effect to it.
@@ -215,7 +215,7 @@ to the active model with a progress of 0.5.
 
 > **applyAllParallaxEffects**(`progress`): `void`
 
-Defined in: [core/SceneManager.ts:725](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L725)
+Defined in: [core/SceneManager.ts:725](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L725)
 
 Applies all registered parallax effects based on the provided progress value.
 This function iterates through all parallax effects and applies them.
@@ -238,7 +238,7 @@ Progress value to apply the parallax effects.
 
 > **applyParallaxEffect**(`modelId`, `progress`): `void`
 
-Defined in: [core/SceneManager.ts:698](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L698)
+Defined in: [core/SceneManager.ts:698](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L698)
 
 Applies a parallax effect to a specific model based on its ID and progress.
 This function retrieves the effect from the map and applies it.
@@ -267,7 +267,7 @@ Progress value to apply the parallax effect.
 
 > **createParallaxEffect**(`modelId`, `intensity?`, `axis?`): (`progress`) => `void`
 
-Defined in: [core/SceneManager.ts:662](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L662)
+Defined in: [core/SceneManager.ts:662](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L662)
 
 Creates a parallax effect for a specific model.
 The effect is applied based on the scroll progress and can be configured for different axes.
@@ -314,7 +314,7 @@ Function to apply the parallax effect based on progress.
 
 > **createRotationEffect**(`modelId`, `intensity?`, `axis?`): (`progress`) => `void`
 
-Defined in: [core/SceneManager.ts:737](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L737)
+Defined in: [core/SceneManager.ts:737](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L737)
 
 Creates a rotation effect for a specific model based on its ID and intensity.
 The effect rotates the model around a specified axis based on the progress value.
@@ -361,7 +361,7 @@ Function to apply the rotation effect based on progress.
 
 > **dispose**(): `void`
 
-Defined in: [core/SceneManager.ts:614](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L614)
+Defined in: [core/SceneManager.ts:614](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L614)
 
 Disposes of the scene manager resources.
 It disconnects the resize observer, disposes of the renderer,
@@ -377,7 +377,7 @@ removes all models from the scene, and disposes of controls if they exist.
 
 > **getModel**(`id`): `undefined` \| `Object3D`\<`Object3DEventMap`\>
 
-Defined in: [core/SceneManager.ts:515](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L515)
+Defined in: [core/SceneManager.ts:515](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L515)
 
 Retrieves a model by its ID.
 
@@ -401,7 +401,7 @@ The model if found, otherwise undefined.
 
 > **hasModel**(`id`): `boolean`
 
-Defined in: [core/SceneManager.ts:455](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L455)
+Defined in: [core/SceneManager.ts:455](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L455)
 
 Checks if a model with the given ID has been loaded.
 
@@ -425,7 +425,7 @@ True if the model is loaded, false otherwise.
 
 > **loadModel**(`id`, `url`, `onProgress?`): `Promise`\<`Object3D`\<`Object3DEventMap`\>\>
 
-Defined in: [core/SceneManager.ts:376](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L376)
+Defined in: [core/SceneManager.ts:376](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L376)
 
 Loads a 3D model from a given URL and adds it to the scene.
 If the model is already loaded, it returns the existing model.
@@ -463,7 +463,7 @@ A promise that resolves to the loaded model.
 
 > **preloadModels**(`models`): `void`
 
-Defined in: [core/SceneManager.ts:294](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L294)
+Defined in: [core/SceneManager.ts:294](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L294)
 
 Preloads models by their IDs and URLs.
 This method loads models in the background without adding them to the scene immediately.
@@ -487,7 +487,7 @@ Array of model objects with id and url.
 
 > **setMaterial**(`id`, `materialType`, `options`): `void`
 
-Defined in: [core/SceneManager.ts:539](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L539)
+Defined in: [core/SceneManager.ts:539](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L539)
 
 Sets the material of a model by its ID.
 It traverses the model's children and applies the specified material type with options.
@@ -522,7 +522,7 @@ Parameters for the material.
 
 > **setupOrbitControls**(`options`): `OrbitControls`
 
-Defined in: [core/SceneManager.ts:277](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L277)
+Defined in: [core/SceneManager.ts:277](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L277)
 
 Sets up orbit controls for the camera.
 This allows the user to rotate, zoom, and pan the camera around the scene.
@@ -563,7 +563,7 @@ The configured OrbitControls instance.
 
 > **setupParallaxEffect**(`intensity?`, `axis?`): (`scrollProgress`) => `void`
 
-Defined in: [core/SceneManager.ts:628](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L628)
+Defined in: [core/SceneManager.ts:628](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L628)
 
 Sets up a parallax effect for all models in the scene.
 The effect is applied based on the scroll progress and can be configured for different axes.
@@ -604,7 +604,7 @@ Function to apply the parallax effect based on scroll progress.
 
 > **setWireframe**(`id`, `enabled`): `void`
 
-Defined in: [core/SceneManager.ts:576](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L576)
+Defined in: [core/SceneManager.ts:576](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L576)
 
 Sets the wireframe mode for a model by its ID.
 It traverses the model's children and enables or disables wireframe mode.
@@ -633,7 +633,7 @@ Whether to enable wireframe mode.
 
 > **transitionToModel**(`targetId`): `void`
 
-Defined in: [core/SceneManager.ts:316](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L316)
+Defined in: [core/SceneManager.ts:316](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L316)
 
 Transitions to a model with a specified ID.
 This method handles the transition effect between the currently active model and the target model.
@@ -657,7 +657,7 @@ The ID of the model to transition to.
 
 > **updateModel**(`id`, `updater`): `void`
 
-Defined in: [core/SceneManager.ts:526](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/core/SceneManager.ts#L526)
+Defined in: [core/SceneManager.ts:526](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/SceneManager.ts#L526)
 
 Updates a model by its ID using a provided updater function.
 The updater function receives the model as an argument and can modify it.

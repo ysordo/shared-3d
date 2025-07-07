@@ -8,7 +8,7 @@
 
 > **ModelLoader**(`props`): `null`
 
-Defined in: [react/ModelLoader.ts:43](https://github.com/ysordo/shared-3d/blob/79ab5be25ff066438316798d0d17f916ea9f1fbf/src/react/ModelLoader.ts#L43)
+Defined in: [react/ModelLoader.ts:43](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/react/ModelLoader.ts#L43)
 
 Component to load a 3D model into the scene.
 It uses the SceneManager from the SceneContext to load the model.
