@@ -53,3 +53,6 @@ lerna-debug.log*
 # Configuraciones locales
 .eslintcache
 .stylelintcache
+
+#doctype
+/scripts/

@@ -1,0 +1,9 @@
+{
+  "entryPoints": ["./src/index.ts"],
+  "out": "docs",
+  "hideGenerator": true,
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "categorizeByGroup": true,
+  "plugin": ["typedoc-plugin-markdown"]
+}

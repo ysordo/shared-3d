@@ -29,7 +29,8 @@
     "prepublishOnly": "pnpm run build && pnpm run test",
     "build": "tsc",
     "lint": "eslint src --ext .ts,.tsx",
-    "lint:fix": "eslint src --ext .ts,.tsx --fix"
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "docs:generate": "typedoc"
   },
   "dependencies": {
     "idb-keyval": "^6.2.2",
@@ -46,6 +47,8 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "globals": "^16.3.0",
+    "typedoc": "^0.28.7",
+    "typedoc-plugin-markdown": "^4.7.0",
     "typescript": "^5.8.3"
   },
   "peerDependencies": {
