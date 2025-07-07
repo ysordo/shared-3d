@@ -73,6 +73,10 @@ export declare class SceneManager {
     private resizeObserver;
     private parallaxEffects;
     private MARGIN;
+    private activeModelId;
+    private transitionProgress;
+    private transitionDuration;
+    private transitionModels;
     /**
      * Creates an instance of SceneManager.
      * Initializes the Three.js scene, camera, renderer, and optional post-processing effects.
@@ -131,6 +135,25 @@ export declare class SceneManager {
         enableZoom?: boolean;
         enablePan?: boolean;
     }): OrbitControls;
+    /**
+     * Preloads models by their IDs and URLs.
+     * This method loads models in the background without adding them to the scene immediately.
+     * It allows for faster transitions later by preloading models that will be used frequently.
+     * @param {Array<{id: string; url: string}>} models - Array of model objects with id and url.
+     * @returns {void}
+     */
+    preloadModels(models: {
+        id: string;
+        url: string;
+    }[]): void;
+    /**
+     * Transitions to a model with a specified ID.
+     * This method handles the transition effect between the currently active model and the target model.
+     * It uses a fade-in and fade-out effect to smoothly switch between models.
+     * @param {string} targetId - The ID of the model to transition to.
+     * @returns {void}
+     */
+    transitionToModel(targetId: string): void;
     /**
      * Loads a 3D model from a given URL and adds it to the scene.
      * If the model is already loaded, it returns the existing model.
@@ -226,6 +249,17 @@ export declare class SceneManager {
      * @returns {void}
      */
     applyParallaxEffect(modelId: string, progress: number): void;
+    /**
+     * Applies the active parallax effect to the currently active model.
+     * This function checks if there is an active model and applies the parallax effect to it.
+     * @param {number} progress - Progress value to apply the parallax effect.
+     * @returns {void}
+     * @see {@link SceneManager.applyParallaxEffect}
+     * @example
+     * sceneManager.applyActiveParallax(0.5); // Applies the parallax effect
+     * to the active model with a progress of 0.5.
+     */
+    applyActiveParallax(progress: number): void;
     /**
      * Applies all registered parallax effects based on the provided progress value.
      * This function iterates through all parallax effects and applies them.

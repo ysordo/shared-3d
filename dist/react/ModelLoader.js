@@ -17,32 +17,31 @@ import { useSceneContext } from './SceneContext';
  * />
  * ```
  */
-export const ModelLoader = ({ id, url, onLoaded, onProgress, onError }) => {
+export const ModelLoader = ({ id, url, onLoaded, onProgress, onError, preloadOnly = false, setAsActive = false }) => {
     const { sceneManager } = useSceneContext();
     const hasLoadedRef = useRef(false);
     useEffect(() => {
         if (!sceneManager || !url || hasLoadedRef.current) {
             return;
         }
-        // Verify if the model is already loaded
-        if (sceneManager.getModel(id)) {
-            onLoaded?.(sceneManager.getModel(id));
-            return;
-        }
         hasLoadedRef.current = true;
-        sceneManager
-            .loadModel(id, url, onProgress)
+        // Modificado para soportar precarga
+        sceneManager.loadModel(id, url, onProgress)
             .then((model) => {
+            if (preloadOnly) {
+                model.visible = false;
+            }
             onLoaded?.(model);
+            if (setAsActive) {
+                sceneManager.transitionToModel(id);
+            }
         })
-            .catch((error) => {
-            onError?.(error);
-        });
+            .catch(onError);
         return () => {
             hasLoadedRef.current = false;
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id, url, sceneManager]);
+    }, [id, url, sceneManager, preloadOnly, setAsActive]);
     return null;
 };
 //# sourceMappingURL=ModelLoader.js.map

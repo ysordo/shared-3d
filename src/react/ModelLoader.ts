@@ -10,6 +10,8 @@ import type * as THREE from 'three';
  * @property {(model: THREE.Object3D) => void} [onLoaded] - Callback function called when the model is loaded.
  * @property {(download: string) => void} [onProgress] - Callback function called to report download progress.
  * @property {(error: Error) => void} [onError] - Callback function called when an error occurs during loading.
+ * @property {boolean} [preloadOnly=false] - If true, the model is loaded but not added to the scene immediately (useful for preloading).
+ * @property {boolean} [setAsActive=false] - If true, the model will be set as the active model in the scene after loading.
  * @typedef {Object} ModelLoaderProps
  */
 interface ModelLoaderProps {
@@ -18,6 +20,8 @@ interface ModelLoaderProps {
   onLoaded?: (model: THREE.Object3D) => void;
   onProgress?: (download: string) => void;
   onError?: (error: Error) => void;
+  preloadOnly?: boolean; // Nueva prop para precarga
+  setAsActive?: boolean; // Nueva prop para activar al cargar
 }
 
 /**
@@ -41,7 +45,9 @@ export const ModelLoader = ({
   url,
   onLoaded,
   onProgress,
-  onError
+  onError,
+  preloadOnly = false,
+  setAsActive = false
 }: ModelLoaderProps) => {
   const { sceneManager } = useSceneContext();
   const hasLoadedRef = useRef(false);
@@ -49,28 +55,28 @@ export const ModelLoader = ({
   useEffect(() => {
     if (!sceneManager || !url || hasLoadedRef.current) {return;}
 
-    // Verify if the model is already loaded
-    if (sceneManager.getModel(id)) {
-      onLoaded?.(sceneManager.getModel(id)!);
-      return;
-    }
-
     hasLoadedRef.current = true;
 
-    sceneManager
-      .loadModel(id, url, onProgress)
+    // Modificado para soportar precarga
+    sceneManager.loadModel(id, url, onProgress)
       .then((model) => {
+        if (preloadOnly) {
+          model.visible = false;
+        }
+        
         onLoaded?.(model);
+        
+        if (setAsActive) {
+          sceneManager.transitionToModel(id);
+        }
       })
-      .catch((error) => {
-        onError?.(error);
-      });
+      .catch(onError);
 
     return () => {
       hasLoadedRef.current = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, url, sceneManager]);
+  }, [id, url, sceneManager, preloadOnly, setAsActive]);
 
   return null;
 };

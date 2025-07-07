@@ -73,6 +73,10 @@ export class SceneManager {
   private resizeObserver: ResizeObserver;
   private parallaxEffects: Map<string, (progress: number) => void> = new Map();
   private MARGIN: number = 0.8;
+  private activeModelId: string | null = null;
+  private transitionProgress: number = 0;
+  private transitionDuration: number = 1000; // ms
+  private transitionModels: Map<string, THREE.Object3D> = new Map();
 
   /**
    * Creates an instance of SceneManager.
@@ -278,6 +282,86 @@ export class SceneManager {
     this.controls = new OrbitControls(this.camera, this.canvas);
     Object.assign(this.controls, options);
     return this.controls;
+  }
+
+  /**
+   * Preloads models by their IDs and URLs.
+   * This method loads models in the background without adding them to the scene immediately.
+   * It allows for faster transitions later by preloading models that will be used frequently.
+   * @param {Array<{id: string; url: string}>} models - Array of model objects with id and url.
+   * @returns {void}
+   */
+   public preloadModels(models: {id: string; url: string}[]): void {
+    models.forEach(({id, url}) => {
+      if (!this.models.has(id) && !this.loadedModels.has(id)) {
+        this.loadModel(id, url)
+          .then(model => {
+            model.visible = false;
+            this.transitionModels.set(id, model);
+          })
+          .catch(error => {
+            console.error(`Error preloading model ${id}:`, error);
+          });
+      }
+    });
+  }
+
+  /**
+   * Transitions to a model with a specified ID.
+   * This method handles the transition effect between the currently active model and the target model.
+   * It uses a fade-in and fade-out effect to smoothly switch between models.
+   * @param {string} targetId - The ID of the model to transition to.
+   * @returns {void}
+   */
+  public transitionToModel(targetId: string): void {
+    if (!this.models.has(targetId) || this.activeModelId === targetId) {return;}
+
+    const startTime = performance.now();
+    const startModel = this.activeModelId ? this.models.get(this.activeModelId)! : null;
+    const targetModel = this.models.get(targetId)!;
+
+    const animateTransition = () => {
+      const elapsed = performance.now() - startTime;
+      this.transitionProgress = Math.min(elapsed / this.transitionDuration, 1);
+
+      // Aplicar efecto de fundido durante la transición
+      if (startModel) {
+        startModel.visible = this.transitionProgress < 0.8;
+        startModel.traverse(child => {
+          if (child instanceof THREE.Mesh) {
+            child.material.opacity = 1 - this.transitionProgress;
+            child.material.transparent = true;
+          }
+        });
+      }
+
+      targetModel.visible = this.transitionProgress > 0.2;
+      targetModel.traverse(child => {
+        if (child instanceof THREE.Mesh) {
+          child.material.opacity = this.transitionProgress;
+          child.material.transparent = true;
+        }
+      });
+
+      if (this.transitionProgress < 1) {
+        requestAnimationFrame(animateTransition);
+      } else {
+        // Finalizar transición
+        if (startModel) {startModel.visible = false;}
+        targetModel.visible = true;
+        this.activeModelId = targetId;
+        this.transitionProgress = 0;
+        
+        // Restablecer opacidad
+        targetModel.traverse(child => {
+          if (child instanceof THREE.Mesh) {
+            child.material.opacity = 1;
+          }
+        });
+      }
+    };
+
+    animateTransition();
   }
 
   /**
@@ -614,6 +698,22 @@ export class SceneManager {
   public applyParallaxEffect(modelId: string, progress: number): void {
     const effect = this.parallaxEffects.get(modelId);
     if (effect) {effect(progress);}
+  }
+
+  /**
+   * Applies the active parallax effect to the currently active model.
+   * This function checks if there is an active model and applies the parallax effect to it.
+   * @param {number} progress - Progress value to apply the parallax effect.
+   * @returns {void}
+   * @see {@link SceneManager.applyParallaxEffect}
+   * @example
+   * sceneManager.applyActiveParallax(0.5); // Applies the parallax effect
+   * to the active model with a progress of 0.5.
+   */
+  public applyActiveParallax(progress: number): void {
+    if (this.activeModelId) {
+      this.applyParallaxEffect(this.activeModelId, progress);
+    }
   }
 
   /**

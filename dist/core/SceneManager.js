@@ -97,6 +97,10 @@ export class SceneManager {
         this.hasModelLoaded = new Map();
         this.parallaxEffects = new Map();
         this.MARGIN = 0.8;
+        this.activeModelId = null;
+        this.transitionProgress = 0;
+        this.transitionDuration = 1000; // ms
+        this.transitionModels = new Map();
         this.handleResize = () => {
             const pixelRatio = this.config.pixelRatio || Math.min(window.devicePixelRatio, 2);
             const { canvas } = this;
@@ -222,6 +226,82 @@ export class SceneManager {
         return this.controls;
     }
     /**
+     * Preloads models by their IDs and URLs.
+     * This method loads models in the background without adding them to the scene immediately.
+     * It allows for faster transitions later by preloading models that will be used frequently.
+     * @param {Array<{id: string; url: string}>} models - Array of model objects with id and url.
+     * @returns {void}
+     */
+    preloadModels(models) {
+        models.forEach(({ id, url }) => {
+            if (!this.models.has(id) && !this.loadedModels.has(id)) {
+                this.loadModel(id, url)
+                    .then(model => {
+                    model.visible = false;
+                    this.transitionModels.set(id, model);
+                })
+                    .catch(error => {
+                    console.error(`Error preloading model ${id}:`, error);
+                });
+            }
+        });
+    }
+    /**
+     * Transitions to a model with a specified ID.
+     * This method handles the transition effect between the currently active model and the target model.
+     * It uses a fade-in and fade-out effect to smoothly switch between models.
+     * @param {string} targetId - The ID of the model to transition to.
+     * @returns {void}
+     */
+    transitionToModel(targetId) {
+        if (!this.models.has(targetId) || this.activeModelId === targetId) {
+            return;
+        }
+        const startTime = performance.now();
+        const startModel = this.activeModelId ? this.models.get(this.activeModelId) : null;
+        const targetModel = this.models.get(targetId);
+        const animateTransition = () => {
+            const elapsed = performance.now() - startTime;
+            this.transitionProgress = Math.min(elapsed / this.transitionDuration, 1);
+            // Aplicar efecto de fundido durante la transición
+            if (startModel) {
+                startModel.visible = this.transitionProgress < 0.8;
+                startModel.traverse(child => {
+                    if (child instanceof THREE.Mesh) {
+                        child.material.opacity = 1 - this.transitionProgress;
+                        child.material.transparent = true;
+                    }
+                });
+            }
+            targetModel.visible = this.transitionProgress > 0.2;
+            targetModel.traverse(child => {
+                if (child instanceof THREE.Mesh) {
+                    child.material.opacity = this.transitionProgress;
+                    child.material.transparent = true;
+                }
+            });
+            if (this.transitionProgress < 1) {
+                requestAnimationFrame(animateTransition);
+            }
+            else {
+                // Finalizar transición
+                if (startModel) {
+                    startModel.visible = false;
+                }
+                targetModel.visible = true;
+                this.activeModelId = targetId;
+                this.transitionProgress = 0;
+                // Restablecer opacidad
+                targetModel.traverse(child => {
+                    if (child instanceof THREE.Mesh) {
+                        child.material.opacity = 1;
+                    }
+                });
+            }
+        };
+        animateTransition();
+    }
+    /**
      * Loads a 3D model from a given URL and adds it to the scene.
      * If the model is already loaded, it returns the existing model.
      * If the model is currently loading, it returns the existing promise.
@@ -239,7 +319,7 @@ export class SceneManager {
         if (this.hasModelLoaded.get(id) && this.models.has(id)) {
             return this.models.get(id);
         }
-        console.warn(`[SceneManager] Iniciando carga de modelo: ${id} desde ${url}`);
+        console.warn(`[SceneManager] Change model using: ${id} for url: ${url}`);
         const loadPromise = new Promise(async (resolve, reject) => {
             try {
                 const cache = await CacheManager.getModel(url);
@@ -272,6 +352,8 @@ export class SceneManager {
                     }, (error) => {
                         reject(error);
                     });
+                    console.warn(`[SceneManager] Model save to cache: ${url}`);
+                    await CacheManager.saveModel(url, await (await fetch(url)).arrayBuffer());
                 }
             }
             catch (error) {
@@ -298,38 +380,36 @@ export class SceneManager {
      * @private
      */
     addModelToScene(id, model) {
-        console.warn(`[SceneManager] Añadiendo modelo a escena: ${id}`);
-        // 1. Calcular el bounding box del modelo
+        console.warn(`[SceneManager] Adding model with ID: ${id} to the scene.`);
+        // 1. Calculate the bounding box of the model
         const box = new THREE.Box3().setFromObject(model, true);
-        // 2. Crear vectores para el centro y tamaño
+        // 2. Create a bounding box to center the model
         const center = new THREE.Vector3();
         const size = new THREE.Vector3();
         box.getCenter(center);
         box.getSize(size);
-        // 3. Centrar el modelo en el origen
+        // 3. Center the model at the origin
         model.position.sub(center);
-        // 4. Calcular el radio del bounding sphere
+        // 4. Calculate the bounding sphere of the model
         const boundingSphere = new THREE.Sphere();
         box.getBoundingSphere(boundingSphere);
         const radius = boundingSphere.radius;
-        // 5. Calcular la distancia óptima de la cámara
+        // 5. Calculate the camera distance based on the bounding sphere radius
         const fovRad = this.camera.fov * (Math.PI / 180);
         const aspect = this.camera.aspect;
-        // Considerar tanto el aspect ratio vertical como horizontal
+        // Calculate the horizontal field of view
         const horizontalFov = 2 * Math.atan(Math.tan(fovRad / 2) * aspect);
-        // Calcular la distancia necesaria para encuadrar completamente el modelo
+        // Calculate the distance based on the bounding sphere radius
         const distanceV = radius / Math.tan(fovRad / 2);
         const distanceH = radius / Math.tan(horizontalFov / 2);
         const cameraDistance = Math.max(distanceV, distanceH) * this.MARGIN;
-        // 6. Posicionar la cámara
+        // 6. Position the camera
         this.camera.position.set(0, 0, cameraDistance);
         this.camera.lookAt(0, 0, 0);
-        // 7. Añadir el modelo a la escena
+        // 7. Add the model to the scene
         this.models.set(id, model);
         this.scene.add(model);
-        console.warn(`[SceneManager] Radio del modelo: ${radius.toFixed(2)}`);
-        console.warn(`[SceneManager] Distancia cámara: ${cameraDistance.toFixed(2)}`);
-        console.warn(`[SceneManager] Aspect ratio: ${aspect.toFixed(2)}`);
+        console.warn(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
     }
     /**
      * Retrieves a model by its ID.
@@ -513,6 +593,21 @@ export class SceneManager {
         const effect = this.parallaxEffects.get(modelId);
         if (effect) {
             effect(progress);
+        }
+    }
+    /**
+     * Applies the active parallax effect to the currently active model.
+     * This function checks if there is an active model and applies the parallax effect to it.
+     * @param {number} progress - Progress value to apply the parallax effect.
+     * @returns {void}
+     * @see {@link SceneManager.applyParallaxEffect}
+     * @example
+     * sceneManager.applyActiveParallax(0.5); // Applies the parallax effect
+     * to the active model with a progress of 0.5.
+     */
+    applyActiveParallax(progress) {
+        if (this.activeModelId) {
+            this.applyParallaxEffect(this.activeModelId, progress);
         }
     }
     /**
