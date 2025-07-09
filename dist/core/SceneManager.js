@@ -177,6 +177,9 @@ export class SceneManager {
         this.resizeObserver = new ResizeObserver(this.handleResize);
         this.resizeObserver.observe(canvas);
     }
+    getModelActiveId() {
+        return this.activeModelId;
+    }
     /**
      * Sets up post-processing effects for the scene.
      * This includes configuring the renderer's tone mapping, shadow maps,

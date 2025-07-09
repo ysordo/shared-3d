@@ -112,6 +112,7 @@ export declare class SceneManager {
         pixelRatio?: number;
         background?: THREE.Color;
     });
+    getModelActiveId(): string | null;
     /**
      * Sets up post-processing effects for the scene.
      * This includes configuring the renderer's tone mapping, shadow maps,
