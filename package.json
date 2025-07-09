@@ -1,6 +1,6 @@
 {
   "name": "shared-3d",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Shared 3D library for React applications",
   "repository": {
     "type": "git",
