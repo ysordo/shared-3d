@@ -310,16 +310,19 @@ export class SceneManager {
      * If the model is currently loading, it returns the existing promise.
      * @param {string} id - Unique identifier for the model.
      * @param {string} url - URL of the model to load.
-     * @param {function} [onProgress] - Optional callback function to track download progress.
+     * @param {function} [onStateChange] - Optional callback function to report loading state changes.
      * @returns {Promise<THREE.Object3D>} A promise that resolves to the loaded model.
      */
-    async loadModel(id, url, onProgress) {
+    async loadModel(id, url, onStateChange) {
         // Si ya está cargando este modelo, retorna la promesa existente
         if (this.loadedModels.has(id)) {
             return this.loadedModels.get(id);
         }
         // Si el modelo ya está cargado, retórnalo directamente
         if (this.hasModelLoaded.get(id) && this.models.has(id)) {
+            if (onStateChange) {
+                onStateChange('model_ready', `Model ${id} is already loaded.`);
+            }
             return this.models.get(id);
         }
         console.warn(`[SceneManager] Change model using: ${id} for url: ${url}`);
@@ -328,10 +331,22 @@ export class SceneManager {
                 const cache = await CacheManager.getModel(url);
                 if (cache) {
                     console.warn(`[SceneManager] Modelo ${id} encontrado en caché.`);
+                    if (onStateChange) {
+                        onStateChange('cache_hit', `Model ${id} found in cache.`);
+                    }
                     const loader = new GLTFLoader();
                     loader.parse(cache, url, (gltf) => {
+                        /*[State Change]*/ if (onStateChange) {
+                            onStateChange('parsing', `Parsing model ${id} from cache.`);
+                        }
                         const model = gltf instanceof THREE.Object3D ? gltf : gltf.scene;
+                        /*[State Change]*/ if (onStateChange) {
+                            onStateChange('adding_to_scene', `Adding model ${id} to scene.`);
+                        }
                         this.addModelToScene(id, model);
+                        /*[State Change]*/ if (onStateChange) {
+                            onStateChange('model_ready', `Model ${id} loaded from cache.`);
+                        }
                         this.hasModelLoaded.set(id, true);
                         resolve(model);
                     }, (error) => {
@@ -341,25 +356,44 @@ export class SceneManager {
                 else {
                     const loader = new GLTFLoader();
                     loader.load(url, (gltf) => {
+                        /*[State Change]*/ if (onStateChange) {
+                            onStateChange('parsing', `Parsing model ${id} from URL.`);
+                        }
                         const model = gltf instanceof THREE.Object3D ? gltf : gltf.scene;
+                        /*[State Change]*/ if (onStateChange) {
+                            onStateChange('adding_to_scene', `Adding model ${id} to scene.`);
+                        }
                         this.addModelToScene(id, model);
+                        /*[State Change]*/ if (onStateChange) {
+                            onStateChange('model_ready', `Model ${id} loaded successfully.`);
+                        }
                         this.hasModelLoaded.set(id, true);
                         resolve(model);
                     }, (xhr) => {
-                        if (onProgress) {
+                        if (onStateChange) {
                             const k = 1024;
                             const sizes = ['Bytes', 'KB', 'MB', 'GB'];
                             const i = Math.floor(Math.log(xhr.loaded) / Math.log(k));
-                            onProgress(`${(xhr.loaded / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`);
+                            onStateChange('downloading', `Download: ${(xhr.loaded / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`);
                         }
                     }, (error) => {
                         reject(error);
                     });
                     console.warn(`[SceneManager] Model save to cache: ${url}`);
+                    /*[State Change]*/ if (onStateChange) {
+                        onStateChange('checking_cache', `Checking cache for model ${id}.`);
+                    }
                     await CacheManager.saveModel(url, await (await fetch(url)).arrayBuffer());
+                    /*[State Change]*/ if (onStateChange) {
+                        onStateChange('caching', `Model ${id} cached successfully.`);
+                    }
                 }
             }
             catch (error) {
+                console.error(`[SceneManager] Error loading model ${id}:`, error);
+                /*[State Change]*/ if (onStateChange) {
+                    onStateChange('error', `Error loading model ${id}: ${error}`);
+                }
                 reject(error);
             }
         });

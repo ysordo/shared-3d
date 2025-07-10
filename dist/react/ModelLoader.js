@@ -17,7 +17,7 @@ import { useSceneContext } from './SceneContext';
  * />
  * ```
  */
-export const ModelLoader = ({ id, url, onLoaded, onProgress, onError, preloadOnly = false, setAsActive = false }) => {
+export const ModelLoader = ({ id, url, onLoaded, onStateChange, onError, preloadOnly = false, setAsActive = false }) => {
     const { sceneManager } = useSceneContext();
     const hasLoadedRef = useRef(false);
     useEffect(() => {
@@ -26,7 +26,7 @@ export const ModelLoader = ({ id, url, onLoaded, onProgress, onError, preloadOnl
         }
         hasLoadedRef.current = true;
         // Modificado para soportar precarga
-        sceneManager.loadModel(id, url, onProgress)
+        sceneManager.loadModel(id, url, onStateChange)
             .then((model) => {
             if (preloadOnly) {
                 model.visible = false;

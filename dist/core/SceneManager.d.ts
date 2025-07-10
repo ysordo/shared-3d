@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
+export type LoadState = 'checking_cache' | 'cache_hit' | 'cache_miss' | 'downloading' | 'parsing' | 'caching' | 'adding_to_scene' | 'model_ready' | 'error';
 /**
  * SceneManager class that manages a 3D scene using Three.js.
  * It handles rendering, model loading, camera controls, and post-processing effects.
@@ -161,10 +162,10 @@ export declare class SceneManager {
      * If the model is currently loading, it returns the existing promise.
      * @param {string} id - Unique identifier for the model.
      * @param {string} url - URL of the model to load.
-     * @param {function} [onProgress] - Optional callback function to track download progress.
+     * @param {function} [onStateChange] - Optional callback function to report loading state changes.
      * @returns {Promise<THREE.Object3D>} A promise that resolves to the loaded model.
      */
-    loadModel(id: string, url: string, onProgress?: (download: string) => void): Promise<THREE.Object3D>;
+    loadModel(id: string, url: string, onStateChange?: (status: LoadState, details: string) => void): Promise<THREE.Object3D>;
     /**
      * Checks if a model with the given ID has been loaded.
      * @param {string} id - Unique identifier for the model.

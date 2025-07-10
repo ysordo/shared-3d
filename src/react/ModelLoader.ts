@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { useSceneContext } from './SceneContext';
 import type * as THREE from 'three';
+import type { LoadState } from '../core/SceneManager';
 
 /**
  * Props for the ModelLoader component.
@@ -18,7 +19,7 @@ interface ModelLoaderProps {
   id: string;
   url: string;
   onLoaded?: (model: THREE.Object3D) => void;
-  onProgress?: (download: string) => void;
+  onStateChange?: (status: LoadState, details: string) => void
   onError?: (error: Error) => void;
   preloadOnly?: boolean; // Nueva prop para precarga
   setAsActive?: boolean; // Nueva prop para activar al cargar
@@ -44,7 +45,7 @@ export const ModelLoader = ({
   id,
   url,
   onLoaded,
-  onProgress,
+  onStateChange,
   onError,
   preloadOnly = false,
   setAsActive = false
@@ -58,7 +59,7 @@ export const ModelLoader = ({
     hasLoadedRef.current = true;
 
     // Modificado para soportar precarga
-    sceneManager.loadModel(id, url, onProgress)
+    sceneManager.loadModel(id, url, onStateChange)
       .then((model) => {
         if (preloadOnly) {
           model.visible = false;

@@ -1,4 +1,5 @@
 import type * as THREE from 'three';
+import type { LoadState } from '../core/SceneManager';
 /**
  * Props for the ModelLoader component.
  * @property {string} id - Unique identifier for the model.
@@ -14,7 +15,7 @@ interface ModelLoaderProps {
     id: string;
     url: string;
     onLoaded?: (model: THREE.Object3D) => void;
-    onProgress?: (download: string) => void;
+    onStateChange?: (status: LoadState, details: string) => void;
     onError?: (error: Error) => void;
     preloadOnly?: boolean;
     setAsActive?: boolean;
@@ -35,6 +36,6 @@ interface ModelLoaderProps {
  * />
  * ```
  */
-export declare const ModelLoader: ({ id, url, onLoaded, onProgress, onError, preloadOnly, setAsActive }: ModelLoaderProps) => null;
+export declare const ModelLoader: ({ id, url, onLoaded, onStateChange, onError, preloadOnly, setAsActive }: ModelLoaderProps) => null;
 export {};
 //# sourceMappingURL=ModelLoader.d.ts.map
