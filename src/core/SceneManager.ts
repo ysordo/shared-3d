@@ -313,6 +313,45 @@ export class SceneManager {
   }
 
   /**
+   * Sets up orbit controls for the camera based on the currently active model.
+   * This allows the user to rotate, zoom, and pan the camera around the active model.
+   * @param {Object} options - Options for configuring the orbit controls.
+   * @param {boolean} [options.enableRotate=true] - Whether to enable rotation of the camera.
+   * @param {boolean} [options.enableZoom=true] - Whether to enable zooming of the camera.
+   * @param {boolean} [options.enablePan=true] - Whether to enable panning of the camera.
+   * @return {OrbitControls} The configured OrbitControls instance for the active model.
+   * @throws {Error} If no active model is set or if the active model does not exist in the scene.
+   */
+  public setupModelOrbitControls(options: {
+    enableRotate?: boolean;
+    enableZoom?: boolean;
+    enablePan?: boolean;
+  }): OrbitControls {
+    if (!this.models.has(this.activeModelId!)) {
+      console.error(`[SceneManager] Model with ID: ${this.activeModelId!} does not exist.`);
+      return this.setupOrbitControls(options);
+    }
+    const model = this.models.get(this.activeModelId!)!;
+
+    const dummyCamera = new THREE.PerspectiveCamera();
+    dummyCamera.position.copy(new THREE.Vector3(0, 0, 0));
+
+    this.controls = new OrbitControls(dummyCamera, this.canvas);
+    Object.assign(this.controls, options);
+
+    this.controls.target.copy(dummyCamera.position);
+
+    this.controls.addEventListener('change', () => {
+      model.rotation.x = this.controls!.getPolarAngle();
+      model.rotation.y = this.controls!.getAzimuthalAngle();
+      model.position.copy(this.controls!.target).multiplyScalar(-1);
+      model.updateMatrixWorld();
+  });
+
+    return this.controls;
+  }
+
+  /**
    * Preloads models by their IDs and URLs.
    * This method loads models in the background without adding them to the scene immediately.
    * It allows for faster transitions later by preloading models that will be used frequently.
