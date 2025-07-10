@@ -1,7 +1,7 @@
 {
   "name": "shared-3d",
-  "version": "1.0.1",
-  "description": "Shared 3D library for React applications",
+  "version": "1.0.2",
+  "description": "Shared 3D library for React applications using Three.js and idb-keyval for state management. This library provides a SceneManager for managing 3D scenes, models, and interactions, with support for OrbitControls and state persistence.",
   "repository": {
     "type": "git",
     "url": "https://github.com/ysordo/shared-3d"
@@ -13,7 +13,15 @@
     "shared",
     "library",
     "three.js",
-    "idb-keyval"
+    "idb-keyval",
+    "scene manager",
+    "orbit controls",
+    "state management",
+    "typescript",
+    "webgl",
+    "web development",
+    "ui",
+    "user interface"
   ],
   "author": "Junior Yohan Sordo García <juniorsordogarcia@gmail.com>",
   "homepage": "",
