@@ -236,29 +236,9 @@ export class SceneManager {
      * @param {boolean} [options.enablePan=true] - Whether to enable panning of the camera.
      * @returns {OrbitControls} The configured OrbitControls instance.
      */
-    setupOrbitControls(modelId, options) {
-        const model = this.models.get(modelId);
-        if (!model) {
-            throw new Error(`Model with ID ${modelId} not found.`);
-        }
-        // Create a dummy camera to use with OrbitControls
-        const dummyCamera = new THREE.PerspectiveCamera();
-        // Set the dummy camera position to match the active model's position
-        this.controls = new OrbitControls(dummyCamera, this.canvas);
+    setupOrbitControls(options) {
+        this.controls = new OrbitControls(this.camera, this.canvas);
         Object.assign(this.controls, options);
-        // Set the controls target to the center of the model
-        const box = new THREE.Box3().setFromObject(model);
-        const center = new THREE.Vector3();
-        box.getCenter(center);
-        this.controls.target = center;
-        // Event listener to update the model's position and rotation based on the controls
-        this.controls.addEventListener('change', () => {
-            if (this.activeModelId === modelId) {
-                model.rotation.x = this.controls.getPolarAngle();
-                model.rotation.y = this.controls.getAzimuthalAngle();
-                model.position.copy(this.controls.target).multiplyScalar(-1);
-            }
-        });
         return this.controls;
     }
     /**
@@ -332,13 +312,6 @@ export class SceneManager {
                     if (child instanceof THREE.Mesh) {
                         child.material.opacity = 1;
                     }
-                    if (!this.controls) {
-                        this.setupOrbitControls(targetId, {
-                            enableRotate: this.controls.enableRotate,
-                            enableZoom: this.controls.enableZoom,
-                            enablePan: this.controls.enablePan
-                        });
-                    }
                 });
             }
         };
@@ -383,7 +356,7 @@ export class SceneManager {
                         /*[State Change]*/ if (onStateChange) {
                             onStateChange('adding_to_scene', `Adding model ${id} to scene.`);
                         }
-                        this.addModelToScene(id, model, onStateChange);
+                        this.addModelToScene(id, model);
                         /*[State Change]*/ if (onStateChange) {
                             onStateChange('model_ready', `Model ${id} loaded from cache.`);
                         }
@@ -403,7 +376,7 @@ export class SceneManager {
                         /*[State Change]*/ if (onStateChange) {
                             onStateChange('adding_to_scene', `Adding model ${id} to scene.`);
                         }
-                        this.addModelToScene(id, model, onStateChange);
+                        this.addModelToScene(id, model);
                         /*[State Change]*/ if (onStateChange) {
                             onStateChange('model_ready', `Model ${id} loaded successfully.`);
                         }
@@ -456,11 +429,8 @@ export class SceneManager {
      * @returns {void}
      * @private
      */
-    addModelToScene(id, model, onStateChange) {
+    addModelToScene(id, model) {
         console.warn(`[SceneManager] Adding model with ID: ${id} to the scene.`);
-        /*[State Change]*/ if (onStateChange) {
-            onStateChange('adding_to_scene', `Adding model ${id} to scene.`);
-        }
         // 1. Calculate the bounding box of the model
         const box = new THREE.Box3().setFromObject(model, true);
         // 2. Create a bounding box to center the model
@@ -489,9 +459,6 @@ export class SceneManager {
         // 7. Add the model to the scene
         this.models.set(id, model);
         this.scene.add(model);
-        /*[State Change]*/ if (onStateChange) {
-            onStateChange('adding_to_scene', `Model with ID: ${id} added to the scene and camera positioned.`);
-        }
         console.warn(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
     }
     /**
