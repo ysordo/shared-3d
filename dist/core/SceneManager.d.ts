@@ -113,6 +113,12 @@ export declare class SceneManager {
         pixelRatio?: number;
         background?: THREE.Color;
     });
+    /**
+     * Gets the ID of the currently active model in the scene.
+     * If no model is active, it returns null.
+     * @returns {string | null} The ID of the active model or null if no model is active.
+     * @memberof SceneManager
+     */
     getModelActiveId(): string | null;
     /**
      * Sets up post-processing effects for the scene.
@@ -122,6 +128,13 @@ export declare class SceneManager {
      * @private
      */
     private setupPostProcessing;
+    /**
+     * Handles canvas resizing by updating the renderer size, camera aspect ratio,
+     * and recalculating camera position for all models in the scene.
+     * It also updates the post-processing composer size if it exists.
+     * @returns {void}
+     * @private
+     */
     private handleResize;
     /**
      * Sets up orbit controls for the camera.
@@ -132,7 +145,7 @@ export declare class SceneManager {
      * @param {boolean} [options.enablePan=true] - Whether to enable panning of the camera.
      * @returns {OrbitControls} The configured OrbitControls instance.
      */
-    setupOrbitControls(options: {
+    setupOrbitControls(modelId: string, options: {
         enableRotate?: boolean;
         enableZoom?: boolean;
         enablePan?: boolean;
