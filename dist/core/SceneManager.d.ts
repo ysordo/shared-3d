@@ -151,6 +151,21 @@ export declare class SceneManager {
         enablePan?: boolean;
     }): OrbitControls;
     /**
+     * Sets up orbit controls for the camera based on the currently active model.
+     * This allows the user to rotate, zoom, and pan the camera around the active model.
+     * @param {Object} options - Options for configuring the orbit controls.
+     * @param {boolean} [options.enableRotate=true] - Whether to enable rotation of the camera.
+     * @param {boolean} [options.enableZoom=true] - Whether to enable zooming of the camera.
+     * @param {boolean} [options.enablePan=true] - Whether to enable panning of the camera.
+     * @return {OrbitControls} The configured OrbitControls instance for the active model.
+     * @throws {Error} If no active model is set or if the active model does not exist in the scene.
+     */
+    setupModelOrbitControls(options: {
+        enableRotate?: boolean;
+        enableZoom?: boolean;
+        enablePan?: boolean;
+    }): OrbitControls;
+    /**
      * Preloads models by their IDs and URLs.
      * This method loads models in the background without adding them to the scene immediately.
      * It allows for faster transitions later by preloading models that will be used frequently.
