@@ -11,4 +11,5 @@ export * from './react/AmbientalLightControler';
 export * from './react/DistanceDisplay';
 export * from './react/TheaterLighting';
 export * from './react/TheaterLightingController';
+export * from './react/OrbitControls';
 export * as THREE from 'three';
