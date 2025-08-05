@@ -6,5 +6,10 @@ export * from './react/SceneContext';
 export * from './react/useCacheCleanup';
 export * from './react/useScene';
 export * from './react/SceneProvider';
+export * from './react/AmbientLight';
+export * from './react/AmbientalLightControler';
+export * from './react/DistanceDisplay';
+export * from './react/TheaterLighting';
+export * from './react/TheaterLightingController';
 export * as THREE from 'three';
 //# sourceMappingURL=index.d.ts.map
