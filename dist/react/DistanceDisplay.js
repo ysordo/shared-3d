@@ -1,70 +1,20 @@
 'use client';
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useEffect, useRef, useState } from 'react';
+import { jsx as _jsx } from "react/jsx-runtime";
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { useSceneContext } from './SceneContext';
 /**
  * Component to display the distance from the camera to the active model in a 3D scene.
- * It shows the distance in meters, centimeters, or kilometers, and includes a scale bar.
+ * It updates the distance in real-time and can optionally set it via a callback.
  * @param {DistanceDisplayProps} props - Component properties
  * @param {string} [props.className] - Additional CSS classes for styling
+ * @param {React.ReactNode} [props.children] - Child elements to render inside the component
+ * @param {(distance: number) => void} [props.setDistance] - Callback function to set the distance value
  * @returns {JSX.Element} Rendered component showing distance and scale bar
  */
-export const DistanceDisplay = ({ className }) => {
-    const [distance, setDistance] = useState(0);
-    const [roundedDistance, setRoundedDistance] = useState(0);
+export function DistanceDisplay({ children, className, setDistance }) {
     const { sceneManager } = useSceneContext();
     const animationRef = useRef(0);
-    // Función para formatear la distancia
-    const formatDistance = (dist) => {
-        if (dist < 1) {
-            return `${Math.round(dist * 100)} cm`;
-        }
-        else if (dist < 1000) {
-            return `${dist.toFixed(1)} m`;
-        }
-        return `${(dist / 1000).toFixed(1)} km`;
-    };
-    // Calcular distancia redondeada para la barra de escala
-    const calculateRoundedDistance = (dist) => {
-        if (dist < 1) {
-            return 0.5;
-        }
-        if (dist < 2) {
-            return 1;
-        }
-        if (dist < 5) {
-            return 2;
-        }
-        if (dist < 10) {
-            return 5;
-        }
-        if (dist < 20) {
-            return 10;
-        }
-        if (dist < 50) {
-            return 20;
-        }
-        if (dist < 100) {
-            return 50;
-        }
-        if (dist < 200) {
-            return 100;
-        }
-        if (dist < 500) {
-            return 200;
-        }
-        if (dist < 1000) {
-            return 500;
-        }
-        return 1000;
-    };
-    // Calcular el ancho de la barra de escala
-    const calculateScaleBarWidth = (dist) => {
-        // Factor de escala basado en la distancia actual
-        const scaleFactor = Math.min(1, 100 / dist);
-        return Math.max(50, Math.min(200, roundedDistance * scaleFactor * 100));
-    };
     useEffect(() => {
         const updateDistance = () => {
             const activeModelId = sceneManager?.getModelActiveId();
@@ -78,10 +28,7 @@ export const DistanceDisplay = ({ className }) => {
                 const modelPosition = new THREE.Vector3();
                 model.getWorldPosition(modelPosition);
                 const rawDistance = modelPosition.distanceTo(camera.position);
-                setDistance(rawDistance);
-                // Calcular distancia redondeada para la escala
-                const rounded = calculateRoundedDistance(rawDistance);
-                setRoundedDistance(rounded);
+                setDistance?.(rawDistance);
             }
             animationRef.current = requestAnimationFrame(updateDistance);
         };
@@ -89,8 +36,7 @@ export const DistanceDisplay = ({ className }) => {
         return () => {
             cancelAnimationFrame(animationRef.current);
         };
-    }, [sceneManager]);
-    const scaleBarWidth = calculateScaleBarWidth(distance);
-    return (_jsxs("div", { className: `bg-white bg-opacity-85 rounded-sm shadow-md px-3 py-2 relative ${className || ''}`, children: [_jsxs("div", { className: "flex justify-between items-center mb-1", children: [_jsx("span", { className: "text-xs font-medium text-gray-700", children: "Distancia" }), _jsx("span", { className: "text-sm font-bold text-gray-900", children: formatDistance(distance) })] }), _jsxs("div", { className: "flex items-end", children: [_jsx("div", { className: "h-[3px] bg-black mr-2", style: { width: `${scaleBarWidth}px` } }), _jsx("span", { className: "text-xs text-gray-700", children: formatDistance(roundedDistance) })] }), _jsx("div", { className: "absolute bottom-0 left-0 w-full h-[4px] bg-blue-500 rounded-b-sm" })] }));
-};
+    }, [sceneManager, setDistance]);
+    return _jsx("div", { className: className, children: children });
+}
 //# sourceMappingURL=DistanceDisplay.js.map
