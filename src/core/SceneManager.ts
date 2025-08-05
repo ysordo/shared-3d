@@ -329,16 +329,16 @@ export class SceneManager {
    * @return {OrbitControls} The configured OrbitControls instance for the active model.
    * @throws {Error} If no active model is set or if the active model does not exist in the scene.
    */
-  public setupModelOrbitControls(options: {
+  public setupModelOrbitControls(id: string, options: {
     enableRotate?: boolean;
     enableZoom?: boolean;
     enablePan?: boolean;
   }): OrbitControls {
-    if (!this.models.has(this.activeModelId!)) {
-      console.error(`[SceneManager] Model with ID: ${this.activeModelId!} does not exist.`);
+    if (!this.models.has(id)) {
+      console.error(`[SceneManager] Model with ID: ${id} does not exist.`);
       return this.setupOrbitControls(options);
     }
-    const model = this.models.get(this.activeModelId!)!;
+    const model = this.models.get(id)!;
 
     const dummyCamera = new THREE.PerspectiveCamera();
     dummyCamera.position.copy(new THREE.Vector3(0, 0, 0));

@@ -1,0 +1,1 @@
+{"version":3,"file":"OrbitControls.d.ts","sourceRoot":"","sources":["../../src/react/OrbitControls.ts"],"names":[],"mappings":"AAIA;;;;;;;GAOG;AACH,UAAU,kBAAkB;IACxB,OAAO,EAAE;QACT,YAAY,CAAC,EAAE,OAAO,CAAC;QACvB,UAAU,CAAC,EAAE,OAAO,CAAC;QACrB,SAAS,CAAC,EAAE,OAAO,CAAC;KACrB,CAAA;CACF;AAED;;;;;;;;;;GAUG;AACH,wBAAgB,aAAa,CAAC,EAC5B,OAAO,EACR,EAAE,kBAAkB,GAAG,IAAI,CAU3B"}

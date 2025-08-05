@@ -168,7 +168,7 @@ export declare class SceneManager {
      * @return {OrbitControls} The configured OrbitControls instance for the active model.
      * @throws {Error} If no active model is set or if the active model does not exist in the scene.
      */
-    setupModelOrbitControls(options: {
+    setupModelOrbitControls(id: string, options: {
         enableRotate?: boolean;
         enableZoom?: boolean;
         enablePan?: boolean;
