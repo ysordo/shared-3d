@@ -36,6 +36,6 @@ interface ModelLoaderProps {
  * />
  * ```
  */
-export declare const ModelLoader: ({ id, url, onLoaded, onStateChange, onError, preloadOnly, setAsActive }: ModelLoaderProps) => null;
+export declare function ModelLoader({ id, url, onLoaded, onStateChange, onError, preloadOnly, setAsActive }: ModelLoaderProps): null;
 export {};
 //# sourceMappingURL=ModelLoader.d.ts.map

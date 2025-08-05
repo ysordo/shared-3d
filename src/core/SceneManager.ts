@@ -89,6 +89,8 @@ export class SceneManager {
   private transitionProgress: number = 0;
   private transitionDuration: number = 1000; // ms
   private transitionModels: Map<string, THREE.Object3D> = new Map();
+  private initialCameraPositions = new Map<string, THREE.Vector3>();
+  private initialCameraTargets = new Map<string, THREE.Vector3>();
 
   /**
    * Creates an instance of SceneManager.
@@ -161,10 +163,6 @@ export class SceneManager {
       1000
     );
 
-    // 3. Configuration of the lights and shadows
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    this.scene.add(ambientLight);
-
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
     directionalLight.position.set(10, 10, 10);
     directionalLight.castShadow = true;
@@ -183,6 +181,15 @@ export class SceneManager {
     // 5. Setup resize observer to handle canvas resizing
     this.resizeObserver = new ResizeObserver(this.handleResize);
     this.resizeObserver.observe(canvas);
+  }
+
+  /**
+   * Starts the animation loop for rendering the scene.
+   * It continuously renders the scene and updates the controls if they are enabled.
+   * @return {void}
+   */
+  public getScene(): THREE.Scene {
+    return this.scene;
   }
 
   /**
@@ -374,6 +381,53 @@ export class SceneManager {
   }
 
   /**
+   * Animates the camera to the initial position for a model
+   * @param {string} modelId - ID of the model to reset camera for
+   * @param {number} duration - Animation duration in milliseconds
+   */
+  private animateCameraToInitialPosition(modelId: string, duration: number = 1000): void {
+    const initialPosition = this.initialCameraPositions.get(modelId);
+    const initialTarget = this.initialCameraTargets.get(modelId);
+    
+    if (!initialPosition || !initialTarget) {return;}
+    
+    const startPosition = this.camera.position.clone();
+    const startTarget = this.controls?.target.clone() || new THREE.Vector3();
+    
+    const startTime = performance.now();
+    
+    const animate = () => {
+      const now = performance.now();
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Easing function: easeOutCubic
+      const t = 1 - Math.pow(1 - progress, 3);
+      
+      // Interpolate position
+      this.camera.position.lerpVectors(startPosition, initialPosition, t);
+      
+      // Interpolate target
+      const currentTarget = new THREE.Vector3();
+      currentTarget.lerpVectors(startTarget, initialTarget, t);
+      
+      // Update camera and controls
+      this.camera.lookAt(currentTarget);
+      
+      if (this.controls) {
+        this.controls.target.copy(currentTarget);
+        this.controls.update();
+      }
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+    
+    animate();
+  }
+
+  /**
    * Transitions to a model with a specified ID.
    * This method handles the transition effect between the currently active model and the target model.
    * It uses a fade-in and fade-out effect to smoothly switch between models.
@@ -409,6 +463,11 @@ export class SceneManager {
           child.material.transparent = true;
         }
       });
+
+      // ANIMAR LA CÁMARA DURANTE LA TRANSICIÓN
+      if (this.transitionProgress > 0.5 && this.activeModelId !== targetId) {
+        this.animateCameraToInitialPosition(targetId, this.transitionDuration * 0.5);
+      }
 
       if (this.transitionProgress < 1) {
         requestAnimationFrame(animateTransition);
@@ -544,47 +603,72 @@ export class SceneManager {
    * @private
    */
   private addModelToScene(id: string, model: THREE.Object3D): void {
-    console.warn(`[SceneManager] Adding model with ID: ${id} to the scene.`);
+  console.warn(`[SceneManager] Adding model with ID: ${id} to the scene.`);
+  
+  // 1. Calculate the bounding box of the model
+  const box = new THREE.Box3().setFromObject(model, true);
+  
+  // 2. Create a bounding box to center the model
+  const center = new THREE.Vector3();
+  const size = new THREE.Vector3();
+  box.getCenter(center);
+  box.getSize(size);
+  
+  // 3. Center the model at the origin
+  model.position.sub(center);
+  
+  // 4. Calculate the bounding sphere of the model
+  const boundingSphere = new THREE.Sphere();
+  box.getBoundingSphere(boundingSphere);
+  const radius = boundingSphere.radius;
+  
+  // 5. Calculate the camera distance based on the bounding sphere radius
+  const fovRad = this.camera.fov * (Math.PI / 180);
+  const aspect = this.camera.aspect;
+  
+  // Calculate the horizontal field of view
+  const horizontalFov = 2 * Math.atan(Math.tan(fovRad / 2) * aspect);
+  
+  // Calculate the distance based on the bounding sphere radius
+  const distanceV = radius / Math.tan(fovRad / 2);
+  const distanceH = radius / Math.tan(horizontalFov / 2);
+  const cameraDistance = Math.max(distanceV, distanceH) * this.MARGIN;
+  
+  // 6. Position the camera
+  this.camera.position.set(0, 0, cameraDistance);
+  this.camera.lookAt(0, 0, 0);
+  
+  // Guardar posición inicial de la cámara para este modelo
+  this.initialCameraPositions.set(id, this.camera.position.clone());
+  this.initialCameraTargets.set(id, new THREE.Vector3(0, 0, 0));
+  
+  // 7. Add the model to the scene
+  this.models.set(id, model);
+  this.scene.add(model);
+  
+  console.warn(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
+}
+
+/**
+ * Resets the camera position for a specific model
+ * @param {string} modelId - ID of the model to reset camera for
+ */
+public resetCameraForModel(modelId: string): void {
+  const initialPosition = this.initialCameraPositions.get(modelId);
+  const initialTarget = this.initialCameraTargets.get(modelId);
+  
+  if (initialPosition && initialTarget) {
+    this.camera.position.copy(initialPosition);
+    this.camera.lookAt(initialTarget);
     
-    // 1. Calculate the bounding box of the model
-    const box = new THREE.Box3().setFromObject(model, true);
+    if (this.controls) {
+      this.controls.target.copy(initialTarget);
+      this.controls.update();
+    }
     
-    // 2. Create a bounding box to center the model
-    const center = new THREE.Vector3();
-    const size = new THREE.Vector3();
-    box.getCenter(center);
-    box.getSize(size);
-    
-    // 3. Center the model at the origin
-    model.position.sub(center);
-    
-    // 4. Calculate the bounding sphere of the model
-    const boundingSphere = new THREE.Sphere();
-    box.getBoundingSphere(boundingSphere);
-    const radius = boundingSphere.radius;
-    
-    // 5. Calculate the camera distance based on the bounding sphere radius
-    const fovRad = this.camera.fov * (Math.PI / 180);
-    const aspect = this.camera.aspect;
-    
-    // Calculate the horizontal field of view
-    const horizontalFov = 2 * Math.atan(Math.tan(fovRad / 2) * aspect);
-    
-    // Calculate the distance based on the bounding sphere radius
-    const distanceV = radius / Math.tan(fovRad / 2);
-    const distanceH = radius / Math.tan(horizontalFov / 2);
-    const cameraDistance = Math.max(distanceV, distanceH) * this.MARGIN;
-    
-    // 6. Position the camera
-    this.camera.position.set(0, 0, cameraDistance);
-    this.camera.lookAt(0, 0, 0);
-    
-    // 7. Add the model to the scene
-    this.models.set(id, model);
-    this.scene.add(model);
-    
-    console.warn(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
+    console.warn(`[SceneManager] Camera reset for model: ${modelId}`);
   }
+}
 
   /**
    * Retrieves a model by its ID.
@@ -660,6 +744,15 @@ export class SceneManager {
         }
       });
     });
+  }
+
+  /**
+   * Gets the Three.js scene object.
+   * This is the main container for all objects, lights, and cameras in the scene.
+   * @returns {THREE.Scene} The Three.js scene object.
+   */
+  public getCamera(): THREE.PerspectiveCamera {
+    return this.camera;
   }
 
   /**

@@ -17,7 +17,7 @@ import { useSceneContext } from './SceneContext';
  * />
  * ```
  */
-export const ModelLoader = ({ id, url, onLoaded, onStateChange, onError, preloadOnly = false, setAsActive = false }) => {
+export function ModelLoader({ id, url, onLoaded, onStateChange, onError, preloadOnly = false, setAsActive = false }) {
     const { sceneManager } = useSceneContext();
     const hasLoadedRef = useRef(false);
     useEffect(() => {
@@ -43,5 +43,6 @@ export const ModelLoader = ({ id, url, onLoaded, onStateChange, onError, preload
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, url, sceneManager, preloadOnly, setAsActive]);
     return null;
-};
+}
+;
 //# sourceMappingURL=ModelLoader.js.map

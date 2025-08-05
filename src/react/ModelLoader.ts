@@ -41,7 +41,7 @@ interface ModelLoaderProps {
  * />
  * ```
  */
-export const ModelLoader = ({
+export function ModelLoader({
   id,
   url,
   onLoaded,
@@ -49,7 +49,7 @@ export const ModelLoader = ({
   onError,
   preloadOnly = false,
   setAsActive = false
-}: ModelLoaderProps) => {
+}: ModelLoaderProps): null {
   const { sceneManager } = useSceneContext();
   const hasLoadedRef = useRef(false);
 

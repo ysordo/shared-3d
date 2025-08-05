@@ -101,6 +101,8 @@ export class SceneManager {
         this.transitionProgress = 0;
         this.transitionDuration = 1000; // ms
         this.transitionModels = new Map();
+        this.initialCameraPositions = new Map();
+        this.initialCameraTargets = new Map();
         /**
          * Handles canvas resizing by updating the renderer size, camera aspect ratio,
          * and recalculating camera position for all models in the scene.
@@ -167,9 +169,6 @@ export class SceneManager {
             this.scene.background = null;
         }
         this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-        // 3. Configuration of the lights and shadows
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        this.scene.add(ambientLight);
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
         directionalLight.position.set(10, 10, 10);
         directionalLight.castShadow = true;
@@ -183,6 +182,14 @@ export class SceneManager {
         // 5. Setup resize observer to handle canvas resizing
         this.resizeObserver = new ResizeObserver(this.handleResize);
         this.resizeObserver.observe(canvas);
+    }
+    /**
+     * Starts the animation loop for rendering the scene.
+     * It continuously renders the scene and updates the controls if they are enabled.
+     * @return {void}
+     */
+    getScene() {
+        return this.scene;
     }
     /**
      * Gets the ID of the currently active model in the scene.
@@ -292,6 +299,43 @@ export class SceneManager {
         });
     }
     /**
+     * Animates the camera to the initial position for a model
+     * @param {string} modelId - ID of the model to reset camera for
+     * @param {number} duration - Animation duration in milliseconds
+     */
+    animateCameraToInitialPosition(modelId, duration = 1000) {
+        const initialPosition = this.initialCameraPositions.get(modelId);
+        const initialTarget = this.initialCameraTargets.get(modelId);
+        if (!initialPosition || !initialTarget) {
+            return;
+        }
+        const startPosition = this.camera.position.clone();
+        const startTarget = this.controls?.target.clone() || new THREE.Vector3();
+        const startTime = performance.now();
+        const animate = () => {
+            const now = performance.now();
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Easing function: easeOutCubic
+            const t = 1 - Math.pow(1 - progress, 3);
+            // Interpolate position
+            this.camera.position.lerpVectors(startPosition, initialPosition, t);
+            // Interpolate target
+            const currentTarget = new THREE.Vector3();
+            currentTarget.lerpVectors(startTarget, initialTarget, t);
+            // Update camera and controls
+            this.camera.lookAt(currentTarget);
+            if (this.controls) {
+                this.controls.target.copy(currentTarget);
+                this.controls.update();
+            }
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        };
+        animate();
+    }
+    /**
      * Transitions to a model with a specified ID.
      * This method handles the transition effect between the currently active model and the target model.
      * It uses a fade-in and fade-out effect to smoothly switch between models.
@@ -325,6 +369,10 @@ export class SceneManager {
                     child.material.transparent = true;
                 }
             });
+            // ANIMAR LA CÁMARA DURANTE LA TRANSICIÓN
+            if (this.transitionProgress > 0.5 && this.activeModelId !== targetId) {
+                this.animateCameraToInitialPosition(targetId, this.transitionDuration * 0.5);
+            }
             if (this.transitionProgress < 1) {
                 requestAnimationFrame(animateTransition);
             }
@@ -485,10 +533,30 @@ export class SceneManager {
         // 6. Position the camera
         this.camera.position.set(0, 0, cameraDistance);
         this.camera.lookAt(0, 0, 0);
+        // Guardar posición inicial de la cámara para este modelo
+        this.initialCameraPositions.set(id, this.camera.position.clone());
+        this.initialCameraTargets.set(id, new THREE.Vector3(0, 0, 0));
         // 7. Add the model to the scene
         this.models.set(id, model);
         this.scene.add(model);
         console.warn(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
+    }
+    /**
+     * Resets the camera position for a specific model
+     * @param {string} modelId - ID of the model to reset camera for
+     */
+    resetCameraForModel(modelId) {
+        const initialPosition = this.initialCameraPositions.get(modelId);
+        const initialTarget = this.initialCameraTargets.get(modelId);
+        if (initialPosition && initialTarget) {
+            this.camera.position.copy(initialPosition);
+            this.camera.lookAt(initialTarget);
+            if (this.controls) {
+                this.controls.target.copy(initialTarget);
+                this.controls.update();
+            }
+            console.warn(`[SceneManager] Camera reset for model: ${modelId}`);
+        }
     }
     /**
      * Retrieves a model by its ID.
@@ -557,6 +625,14 @@ export class SceneManager {
                 }
             });
         });
+    }
+    /**
+     * Gets the Three.js scene object.
+     * This is the main container for all objects, lights, and cameras in the scene.
+     * @returns {THREE.Scene} The Three.js scene object.
+     */
+    getCamera() {
+        return this.camera;
     }
     /**
      * Starts the animation loop for rendering the scene.

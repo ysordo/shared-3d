@@ -6,7 +6,7 @@
 
 # Class: CacheManager
 
-Defined in: [core/CacheManager.ts:27](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/CacheManager.ts#L27)
+Defined in: [core/CacheManager.ts:27](https://github.com/ysordo/shared-3d/blob/b750310afe185bd40b1dfb3440389c48aa09489c/src/core/CacheManager.ts#L27)
 
 CacheManager class to handle caching of 3D models using IndexedDB and Cache Storage API.
 It provides methods to get, save, and clear cached models.
@@ -49,7 +49,7 @@ await CacheManager.clearExpiredModels();
 
 > `static` **clearExpiredModels**(): `Promise`\<`void`\>
 
-Defined in: [core/CacheManager.ts:91](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/CacheManager.ts#L91)
+Defined in: [core/CacheManager.ts:91](https://github.com/ysordo/shared-3d/blob/b750310afe185bd40b1dfb3440389c48aa09489c/src/core/CacheManager.ts#L91)
 
 Clears expired models from the cache.
 It checks all cached models in IndexedDB and removes those that are older than 30 days.
@@ -67,7 +67,7 @@ A promise that resolves when the cleanup is complete.
 
 > `static` **getModel**(`url`): `Promise`\<`null` \| `ArrayBuffer`\>
 
-Defined in: [core/CacheManager.ts:36](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/CacheManager.ts#L36)
+Defined in: [core/CacheManager.ts:36](https://github.com/ysordo/shared-3d/blob/b750310afe185bd40b1dfb3440389c48aa09489c/src/core/CacheManager.ts#L36)
 
 Retrieves a 3D model from the cache.
 It first checks IndexedDB for a cached model and then checks the Cache Storage API.
@@ -94,7 +94,7 @@ The cached model data or null if not found.
 
 > `static` **saveModel**(`url`, `data`): `Promise`\<`void`\>
 
-Defined in: [core/CacheManager.ts:72](https://github.com/ysordo/shared-3d/blob/b6432fb3e17dac484f77d6ff1862cd9a4f0ddf38/src/core/CacheManager.ts#L72)
+Defined in: [core/CacheManager.ts:72](https://github.com/ysordo/shared-3d/blob/b750310afe185bd40b1dfb3440389c48aa09489c/src/core/CacheManager.ts#L72)
 
 Saves a 3D model to the cache.
 It saves the model data in IndexedDB and also in Cache Storage API.

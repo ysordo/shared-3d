@@ -13,6 +13,10 @@
 
 - [SceneProviderProps](interfaces/SceneProviderProps.md)
 
+## Type Aliases
+
+- [LoadState](type-aliases/LoadState.md)
+
 ## Variables
 
 - [SceneContext](variables/SceneContext.md)

@@ -78,6 +78,8 @@ export declare class SceneManager {
     private transitionProgress;
     private transitionDuration;
     private transitionModels;
+    private initialCameraPositions;
+    private initialCameraTargets;
     /**
      * Creates an instance of SceneManager.
      * Initializes the Three.js scene, camera, renderer, and optional post-processing effects.
@@ -113,6 +115,12 @@ export declare class SceneManager {
         pixelRatio?: number;
         background?: THREE.Color;
     });
+    /**
+     * Starts the animation loop for rendering the scene.
+     * It continuously renders the scene and updates the controls if they are enabled.
+     * @return {void}
+     */
+    getScene(): THREE.Scene;
     /**
      * Gets the ID of the currently active model in the scene.
      * If no model is active, it returns null.
@@ -177,6 +185,12 @@ export declare class SceneManager {
         url: string;
     }[]): void;
     /**
+     * Animates the camera to the initial position for a model
+     * @param {string} modelId - ID of the model to reset camera for
+     * @param {number} duration - Animation duration in milliseconds
+     */
+    private animateCameraToInitialPosition;
+    /**
      * Transitions to a model with a specified ID.
      * This method handles the transition effect between the currently active model and the target model.
      * It uses a fade-in and fade-out effect to smoothly switch between models.
@@ -210,6 +224,11 @@ export declare class SceneManager {
      */
     private addModelToScene;
     /**
+     * Resets the camera position for a specific model
+     * @param {string} modelId - ID of the model to reset camera for
+     */
+    resetCameraForModel(modelId: string): void;
+    /**
      * Retrieves a model by its ID.
      * @param {string} id - Unique identifier for the model.
      * @returns {THREE.Object3D | undefined} The model if found, otherwise undefined.
@@ -240,6 +259,12 @@ export declare class SceneManager {
      * @returns {void}
      */
     setWireframe(id: string, enabled: boolean): void;
+    /**
+     * Gets the Three.js scene object.
+     * This is the main container for all objects, lights, and cameras in the scene.
+     * @returns {THREE.Scene} The Three.js scene object.
+     */
+    getCamera(): THREE.PerspectiveCamera;
     /**
      * Starts the animation loop for rendering the scene.
      * It uses requestAnimationFrame to continuously render the scene and update controls if available.
