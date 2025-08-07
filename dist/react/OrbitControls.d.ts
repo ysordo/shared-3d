@@ -7,7 +7,8 @@
  * @typedef {Object} OrbitControlsProps
  */
 interface OrbitControlsProps {
-    options: {
+    id: string;
+    options?: {
         enableRotate?: boolean;
         enableZoom?: boolean;
         enablePan?: boolean;
@@ -24,6 +25,6 @@ interface OrbitControlsProps {
  * @returns {null} This component does not render anything directly
  * @throws {Error} If the SceneManager is not available in the context
  */
-export declare function OrbitControls({ options }: OrbitControlsProps): null;
+export declare function OrbitControls({ id, options }: OrbitControlsProps): null;
 export {};
 //# sourceMappingURL=OrbitControls.d.ts.map

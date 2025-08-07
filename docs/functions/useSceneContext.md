@@ -8,7 +8,7 @@
 
 > **useSceneContext**(): `object`
 
-Defined in: [react/SceneContext.ts:35](https://github.com/ysordo/shared-3d/blob/b750310afe185bd40b1dfb3440389c48aa09489c/src/react/SceneContext.ts#L35)
+Defined in: [react/SceneContext.ts:35](https://github.com/ysordo/shared-3d/blob/b007a73212fa558f7ac5535b031797e40cc1b17a/src/react/SceneContext.ts#L35)
 
 ## Returns
 

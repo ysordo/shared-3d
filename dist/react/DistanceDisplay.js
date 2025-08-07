@@ -1,7 +1,6 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import { useEffect, useRef } from 'react';
-import * as THREE from 'three';
 import { useSceneContext } from './SceneContext';
 /**
  * Component to display the distance from the camera to the active model in a 3D scene.
@@ -12,24 +11,32 @@ import { useSceneContext } from './SceneContext';
  * @param {(distance: number) => void} [props.setDistance] - Callback function to set the distance value
  * @returns {JSX.Element} Rendered component showing distance and scale bar
  */
-export function DistanceDisplay({ children, className, setDistance }) {
+export function DistanceDisplay({ children, className, setDistance, }) {
     const { sceneManager } = useSceneContext();
     const animationRef = useRef(0);
     useEffect(() => {
         const updateDistance = () => {
-            const activeModelId = sceneManager?.getModelActiveId();
-            if (!activeModelId) {
-                animationRef.current = requestAnimationFrame(updateDistance);
-                return;
-            }
-            const model = sceneManager?.getModel(activeModelId);
-            const camera = sceneManager?.getCamera();
-            if (model && camera) {
-                const modelPosition = new THREE.Vector3();
-                model.getWorldPosition(modelPosition);
-                const rawDistance = modelPosition.distanceTo(camera.position);
+            const control = sceneManager?.getOrbitControls();
+            if (control) {
+                const rawDistance = control.getDistance();
                 setDistance?.(rawDistance);
             }
+            /* const activeModelId = sceneManager?.getModelActiveId();
+            if (!activeModelId) {
+              animationRef.current = requestAnimationFrame(updateDistance);
+              return;
+            }
+      
+            const model = sceneManager?.getModel(activeModelId);
+            const camera = sceneManager?.getCamera();
+      
+            if (model && camera) {
+              const modelPosition = new THREE.Vector3();
+              model.getWorldPosition(modelPosition);
+      
+              const rawDistance = modelPosition.distanceTo(camera.position);
+              setDistance?.(rawDistance);
+            }*/
             animationRef.current = requestAnimationFrame(updateDistance);
         };
         animationRef.current = requestAnimationFrame(updateDistance);

@@ -8,7 +8,7 @@
 
 > **useScene**(): `object`
 
-Defined in: [react/useScene.ts:4](https://github.com/ysordo/shared-3d/blob/b750310afe185bd40b1dfb3440389c48aa09489c/src/react/useScene.ts#L4)
+Defined in: [react/useScene.ts:4](https://github.com/ysordo/shared-3d/blob/b007a73212fa558f7ac5535b031797e40cc1b17a/src/react/useScene.ts#L4)
 
 ## Returns
 

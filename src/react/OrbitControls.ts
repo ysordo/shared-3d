@@ -11,7 +11,8 @@ import { useSceneContext } from './SceneContext';
  * @typedef {Object} OrbitControlsProps
  */
 interface OrbitControlsProps {
-    options: {
+    id: string;
+    options?: {
     enableRotate?: boolean;
     enableZoom?: boolean;
     enablePan?: boolean;
@@ -30,15 +31,22 @@ interface OrbitControlsProps {
  * @throws {Error} If the SceneManager is not available in the context
  */
 export function OrbitControls({
-  options
+    id,
+    options
 }: OrbitControlsProps): null {
   const { sceneManager } = useSceneContext();
+  const defaultOptions = {
+    enableRotate: false,
+    enableZoom: false,
+    enablePan: false,
+  };
+  options = { ...defaultOptions, ...options };
   
   useEffect(() => {
-    if (sceneManager) {
-        sceneManager.setupModelOrbitControls(sceneManager.getModelActiveId()!, options);
-    }
-  }, [sceneManager, options]);
+    if (!sceneManager || !id) { return; }
+
+    sceneManager.setupModelOrbitControls(id, options);
+  }, [sceneManager, options, id]);
   
   return null;
 }

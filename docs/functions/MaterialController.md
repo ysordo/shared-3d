@@ -8,7 +8,7 @@
 
 > **MaterialController**(`props`): `null`
 
-Defined in: [react/MaterialController.ts:28](https://github.com/ysordo/shared-3d/blob/b750310afe185bd40b1dfb3440389c48aa09489c/src/react/MaterialController.ts#L28)
+Defined in: [react/MaterialController.ts:28](https://github.com/ysordo/shared-3d/blob/b007a73212fa558f7ac5535b031797e40cc1b17a/src/react/MaterialController.ts#L28)
 
 Component to control the material of the active model in a 3D scene.
 It applies the specified material type and options to the active model.

@@ -8,7 +8,7 @@
 
 > **SceneProvider**(`props`): `Element`
 
-Defined in: [react/SceneProvider.tsx:82](https://github.com/ysordo/shared-3d/blob/b750310afe185bd40b1dfb3440389c48aa09489c/src/react/SceneProvider.tsx#L82)
+Defined in: [react/SceneProvider.tsx:82](https://github.com/ysordo/shared-3d/blob/b007a73212fa558f7ac5535b031797e40cc1b17a/src/react/SceneProvider.tsx#L82)
 
 SceneProvider component that initializes and provides the SceneManager context.
 

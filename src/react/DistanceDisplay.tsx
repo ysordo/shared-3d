@@ -1,6 +1,5 @@
 'use client';
 import { type JSX, useEffect, useRef } from 'react';
-import * as THREE from 'three';
 import { useSceneContext } from './SceneContext';
 
 /**
@@ -25,13 +24,22 @@ type DistanceDisplayProps = {
  * @param {(distance: number) => void} [props.setDistance] - Callback function to set the distance value
  * @returns {JSX.Element} Rendered component showing distance and scale bar
  */
-export function DistanceDisplay({ children, className, setDistance }: DistanceDisplayProps): JSX.Element {
+export function DistanceDisplay({
+  children,
+  className,
+  setDistance,
+}: DistanceDisplayProps): JSX.Element {
   const { sceneManager } = useSceneContext();
   const animationRef = useRef<number>(0);
 
   useEffect(() => {
     const updateDistance = () => {
-      const activeModelId = sceneManager?.getModelActiveId();
+      const control = sceneManager?.getOrbitControls();
+      if (control) {
+        const rawDistance = control.getDistance();
+        setDistance?.(rawDistance);
+      }
+      /* const activeModelId = sceneManager?.getModelActiveId();
       if (!activeModelId) {
         animationRef.current = requestAnimationFrame(updateDistance);
         return;
@@ -46,7 +54,7 @@ export function DistanceDisplay({ children, className, setDistance }: DistanceDi
 
         const rawDistance = modelPosition.distanceTo(camera.position);
         setDistance?.(rawDistance);
-      }
+      }*/
 
       animationRef.current = requestAnimationFrame(updateDistance);
     };

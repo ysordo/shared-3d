@@ -12,13 +12,20 @@ import { useSceneContext } from './SceneContext';
  * @returns {null} This component does not render anything directly
  * @throws {Error} If the SceneManager is not available in the context
  */
-export function OrbitControls({ options }) {
+export function OrbitControls({ id, options }) {
     const { sceneManager } = useSceneContext();
+    const defaultOptions = {
+        enableRotate: false,
+        enableZoom: false,
+        enablePan: false,
+    };
+    options = { ...defaultOptions, ...options };
     useEffect(() => {
-        if (sceneManager) {
-            sceneManager.setupModelOrbitControls(sceneManager.getModelActiveId(), options);
+        if (!sceneManager || !id) {
+            return;
         }
-    }, [sceneManager, options]);
+        sceneManager.setupModelOrbitControls(id, options);
+    }, [sceneManager, options, id]);
     return null;
 }
 //# sourceMappingURL=OrbitControls.js.map

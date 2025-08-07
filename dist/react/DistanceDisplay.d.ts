@@ -20,6 +20,6 @@ type DistanceDisplayProps = {
  * @param {(distance: number) => void} [props.setDistance] - Callback function to set the distance value
  * @returns {JSX.Element} Rendered component showing distance and scale bar
  */
-export declare function DistanceDisplay({ children, className, setDistance }: DistanceDisplayProps): JSX.Element;
+export declare function DistanceDisplay({ children, className, setDistance, }: DistanceDisplayProps): JSX.Element;
 export {};
 //# sourceMappingURL=DistanceDisplay.d.ts.map

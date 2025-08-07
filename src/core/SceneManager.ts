@@ -91,6 +91,9 @@ export class SceneManager {
   private transitionModels: Map<string, THREE.Object3D> = new Map();
   private initialCameraPositions = new Map<string, THREE.Vector3>();
   private initialCameraTargets = new Map<string, THREE.Vector3>();
+  private modelBoundingRadii = new Map<string, number>();
+  private NEAR_MARGIN = 0.1; // Margen adicional para evitar clipping
+  private FAR_MULTIPLIER = 10; // Multiplicador para el plano far
 
   /**
    * Creates an instance of SceneManager.
@@ -340,21 +343,47 @@ export class SceneManager {
     }
     const model = this.models.get(id)!;
 
-    const dummyCamera = new THREE.PerspectiveCamera();
-    dummyCamera.position.copy(new THREE.Vector3(0, 0, 0));
-
-    this.controls = new OrbitControls(dummyCamera, this.canvas);
+    // 1. Use the Royal Chamber for Controls
+    this.controls = new OrbitControls(this.camera, this.canvas);
     Object.assign(this.controls, options);
 
-    this.controls.target.copy(dummyCamera.position);
+    // Save the initial position of the model
+    const initialModelPosition = model.position.clone();
+    const initialModelRotation = model.rotation.clone();
+
+    // Config initial target and position of the controls
+    this.controls.target.copy(initialModelPosition);
 
     this.controls.addEventListener('change', () => {
-      model.rotation.x = this.controls!.getPolarAngle();
-      model.rotation.y = this.controls!.getAzimuthalAngle();
-      model.position.copy(this.controls!.target).multiplyScalar(-1);
-      model.updateMatrixWorld();
-  });
+      // 2. Update rotation directly to the model
+      if (options.enableRotate !== false) {
+        const deltaAzimuth = this.controls!.getAzimuthalAngle() - initialModelRotation.y;
+        const deltaPolar = this.controls!.getPolarAngle() - initialModelRotation.x;
+        model.rotation.y = initialModelRotation.y + deltaAzimuth;
+        model.rotation.x = initialModelRotation.x + deltaPolar;
+      }
 
+      // 3. Update pan directly to the model
+      if (options.enablePan !== false) {
+        const deltaPosition = new THREE.Vector3().subVectors(
+          this.controls!.target,
+          initialModelPosition
+        );
+        model.position.copy(initialModelPosition).add(deltaPosition);
+      }
+
+      model.updateMatrixWorld();
+    });
+
+    return this.controls;
+  }
+
+  /**
+   * Gets the current OrbitControls instance.
+   * This method returns the OrbitControls instance if it has been set up,
+   * otherwise it returns undefined.
+   */
+  public getOrbitControls(): OrbitControls | undefined {
     return this.controls;
   }
 
@@ -445,7 +474,7 @@ export class SceneManager {
       const elapsed = performance.now() - startTime;
       this.transitionProgress = Math.min(elapsed / this.transitionDuration, 1);
 
-      // Aplicar efecto de fundido durante la transición
+      // Apply molten effect during the transition
       if (startModel) {
         startModel.visible = this.transitionProgress < 0.8;
         startModel.traverse(child => {
@@ -464,21 +493,24 @@ export class SceneManager {
         }
       });
 
-      // ANIMAR LA CÁMARA DURANTE LA TRANSICIÓN
+      // Encourage the camera during the transition
       if (this.transitionProgress > 0.5 && this.activeModelId !== targetId) {
-        this.animateCameraToInitialPosition(targetId, this.transitionDuration * 0.5);
+         this.animateCameraToInitialPosition(targetId, this.transitionDuration * 0.5);
+    
+        // Adjust plans immediately when changing model
+        this.adjustClippingPlanes();
       }
 
       if (this.transitionProgress < 1) {
         requestAnimationFrame(animateTransition);
       } else {
-        // Finalizar transición
+        // Finish transition
         if (startModel) {startModel.visible = false;}
         targetModel.visible = true;
         this.activeModelId = targetId;
         this.transitionProgress = 0;
         
-        // Restablecer opacidad
+        // Restore opacity
         targetModel.traverse(child => {
           if (child instanceof THREE.Mesh) {
             child.material.opacity = 1;
@@ -622,6 +654,9 @@ export class SceneManager {
   box.getBoundingSphere(boundingSphere);
   const radius = boundingSphere.radius;
   
+   // Save the radius of Bounding Sphere to use at the clipping
+    this.modelBoundingRadii.set(id, radius);
+
   // 5. Calculate the camera distance based on the bounding sphere radius
   const fovRad = this.camera.fov * (Math.PI / 180);
   const aspect = this.camera.aspect;
@@ -648,6 +683,41 @@ export class SceneManager {
   
   console.warn(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
 }
+
+/**
+ * Adjusts the camera clipping planes based on the active model's bounding sphere.
+ * It calculates the near and far clipping planes based on the model's radius and distance from the camera.
+ * This helps to avoid clipping issues when rendering large models.
+ * @returns {void}
+ */
+private adjustClippingPlanes(): void {
+    if (!this.activeModelId) {return;}
+    
+    const radius = this.modelBoundingRadii.get(this.activeModelId);
+    if (!radius) {return;}
+
+    const model = this.models.get(this.activeModelId);
+    if (!model) {return;}
+
+    // Calculate distance from the camera to the center of the model
+    const modelCenter = new THREE.Vector3();
+    model.getWorldPosition(modelCenter);
+    const distance = this.camera.position.distanceTo(modelCenter);
+
+    // Calculate new cuts of cuts
+    const near = Math.max(0.001, distance - radius - this.NEAR_MARGIN);
+    const far = distance + radius * this.FAR_MULTIPLIER;
+
+    // Update camera only if there are significant changes
+    if (
+      Math.abs(this.camera.near - near) > 0.001 ||
+      Math.abs(this.camera.far - far) > 0.001
+    ) {
+      this.camera.near = near;
+      this.camera.far = far;
+      this.camera.updateProjectionMatrix();
+    }
+  }
 
 /**
  * Resets the camera position for a specific model
@@ -761,21 +831,24 @@ public resetCameraForModel(modelId: string): void {
    * If post-processing is enabled, it renders through the composer, otherwise directly through the renderer.
    * @returns {void}
    */
-  public animate(): void {
-    const render = () => {
-      requestAnimationFrame(render);
+    public animate(): void {
+        const render = () => {
+        requestAnimationFrame(render);
+        
+        if (this.controls) { this.controls.update(); }
+        
+        // Adjust clipping plans before rendering
+        this.adjustClippingPlanes();
+        
+        if (this.composer) {
+          this.composer.render();
+        } else {
+          this.renderer.render(this.scene, this.camera);
+        }
+      };
       
-      if (this.controls) {this.controls.update();}
-      
-      if (this.composer) {
-        this.composer.render();
-      } else {
-        this.renderer.render(this.scene, this.camera);
-      }
-    };
-    
-    render();
-  }
+      render();
+    }
 
   /**
    * Disposes of the scene manager resources.

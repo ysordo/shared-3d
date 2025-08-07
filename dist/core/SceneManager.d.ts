@@ -80,6 +80,9 @@ export declare class SceneManager {
     private transitionModels;
     private initialCameraPositions;
     private initialCameraTargets;
+    private modelBoundingRadii;
+    private NEAR_MARGIN;
+    private FAR_MULTIPLIER;
     /**
      * Creates an instance of SceneManager.
      * Initializes the Three.js scene, camera, renderer, and optional post-processing effects.
@@ -174,6 +177,12 @@ export declare class SceneManager {
         enablePan?: boolean;
     }): OrbitControls;
     /**
+     * Gets the current OrbitControls instance.
+     * This method returns the OrbitControls instance if it has been set up,
+     * otherwise it returns undefined.
+     */
+    getOrbitControls(): OrbitControls | undefined;
+    /**
      * Preloads models by their IDs and URLs.
      * This method loads models in the background without adding them to the scene immediately.
      * It allows for faster transitions later by preloading models that will be used frequently.
@@ -223,6 +232,13 @@ export declare class SceneManager {
      * @private
      */
     private addModelToScene;
+    /**
+     * Adjusts the camera clipping planes based on the active model's bounding sphere.
+     * It calculates the near and far clipping planes based on the model's radius and distance from the camera.
+     * This helps to avoid clipping issues when rendering large models.
+     * @returns {void}
+     */
+    private adjustClippingPlanes;
     /**
      * Resets the camera position for a specific model
      * @param {string} modelId - ID of the model to reset camera for
