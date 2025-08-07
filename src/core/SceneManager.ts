@@ -343,36 +343,72 @@ export class SceneManager {
     }
     const model = this.models.get(id)!;
 
-    // 1. Use the Royal Chamber for Controls
+    // Usar la cámara real para los controles
     this.controls = new OrbitControls(this.camera, this.canvas);
+    
+    // Configurar botones del ratón: izquierdo para rotar, derecho para pan
+    this.controls.mouseButtons = {
+      LEFT: THREE.MOUSE.ROTATE,
+      MIDDLE: THREE.MOUSE.DOLLY, // Rueda del ratón para zoom
+      RIGHT: THREE.MOUSE.PAN     // Clic derecho para pan
+    };
+
     Object.assign(this.controls, options);
 
-    // Save the initial position of the model
+    // Guardar estado inicial
     const initialModelPosition = model.position.clone();
     const initialModelRotation = model.rotation.clone();
+    const initialCameraPosition = this.camera.position.clone();
+    const initialTarget = new THREE.Vector3(0, 0, 0);
 
-    // Config initial target and position of the controls
+    // Configurar objetivo inicial
     this.controls.target.copy(initialModelPosition);
 
-    this.controls.addEventListener('change', () => {
-      // 2. Update rotation directly to the model
-      if (options.enableRotate !== false) {
-        const deltaAzimuth = this.controls!.getAzimuthalAngle() - initialModelRotation.y;
-        const deltaPolar = this.controls!.getPolarAngle() - initialModelRotation.x;
-        model.rotation.y = initialModelRotation.y + deltaAzimuth;
-        model.rotation.x = initialModelRotation.x + deltaPolar;
+    // Variables para rastrear cambios
+    let lastAzimuthalAngle = 0;
+    let lastPolarAngle = Math.PI / 2;
+    let lastTarget = initialModelPosition.clone();
+
+    this.controls.addEventListener('change', (event) => {
+      console.log('[OrbitControls] Change event:', event);
+      // Manejar rotación
+      /*if (options.enableRotate !== false) {
+        const azimuthalAngle = this.controls!.getAzimuthalAngle();
+        const polarAngle = this.controls!.getPolarAngle();
+        
+        const deltaAzimuth = azimuthalAngle - lastAzimuthalAngle;
+        const deltaPolar = polarAngle - lastPolarAngle;
+        
+        model.rotation.y += deltaAzimuth;
+        model.rotation.x += deltaPolar;
+        
+        lastAzimuthalAngle = azimuthalAngle;
+        lastPolarAngle = polarAngle;
       }
 
-      // 3. Update pan directly to the model
+      // Manejar pan
       if (options.enablePan !== false) {
-        const deltaPosition = new THREE.Vector3().subVectors(
+        const deltaPan = new THREE.Vector3().subVectors(
           this.controls!.target,
-          initialModelPosition
+          lastTarget
         );
-        model.position.copy(initialModelPosition).add(deltaPosition);
+        
+        model.position.add(deltaPan);
+        lastTarget.copy(this.controls!.target);
       }
 
-      model.updateMatrixWorld();
+      // Manejar zoom
+      if (options.enableZoom !== false) {
+        // OrbitControls maneja automáticamente el zoom
+        // Solo necesitamos actualizar la posición de la cámara
+        const direction = initialCameraPosition.clone().normalize();
+        const distance = this.camera.position.distanceTo(this.controls!.target);
+        this.camera.position.copy(direction.multiplyScalar(distance));
+        this.camera.lookAt(initialTarget);
+      }
+
+      model.updateMatrixWorld();*/
+
     });
 
     return this.controls;
