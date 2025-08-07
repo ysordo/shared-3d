@@ -31,7 +31,7 @@ export function OrbitControls({ enableRotate = false, enableZoom = false, enable
             controlsRef.current = null;
         }
         // Create new controls
-        controlsRef.current = sceneManager.setupModelOrbitControls(modelActiveId, { enableRotate, enableZoom, enablePan });
+        controlsRef.current = sceneManager.setupOrbitControls({ enableRotate, enableZoom, enablePan });
         // Cleaning when disassembling
         return () => {
             if (controlsRef.current) {

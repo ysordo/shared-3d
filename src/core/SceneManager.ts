@@ -166,10 +166,11 @@ export class SceneManager {
       1000
     );
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(10, 10, 10);
-    directionalLight.castShadow = true;
-    this.scene.add(directionalLight);
+    this.controls = new OrbitControls(this.camera, this.canvas);
+    this.controls.enableRotate = false;
+    this.controls.enableZoom = false;
+    this.controls.enablePan = false;
+
 
     // 4. Config post-processing effects if enabled
     if (config.postprocessing) {
@@ -316,102 +317,14 @@ export class SceneManager {
     enableRotate?: boolean;
     enableZoom?: boolean;
     enablePan?: boolean;
-  }): OrbitControls {
-    this.controls = new OrbitControls(this.camera, this.canvas);
-    Object.assign(this.controls, options);
-    return this.controls;
-  }
-
-  /**
-   * Sets up orbit controls for the camera based on the currently active model.
-   * This allows the user to rotate, zoom, and pan the camera around the active model.
-   * @param {Object} options - Options for configuring the orbit controls.
-   * @param {boolean} [options.enableRotate=true] - Whether to enable rotation of the camera.
-   * @param {boolean} [options.enableZoom=true] - Whether to enable zooming of the camera.
-   * @param {boolean} [options.enablePan=true] - Whether to enable panning of the camera.
-   * @return {OrbitControls} The configured OrbitControls instance for the active model.
-   * @throws {Error} If no active model is set or if the active model does not exist in the scene.
-   */
-  public setupModelOrbitControls(id: string, options: {
-    enableRotate?: boolean;
-    enableZoom?: boolean;
-    enablePan?: boolean;
-  }): OrbitControls {
-    if (!this.models.has(id)) {
-      console.error(`[SceneManager] Model with ID: ${id} does not exist.`);
-      return this.setupOrbitControls(options);
-    }
-    const model = this.models.get(id)!;
-
-    // Usar la cámara real para los controles
-    this.controls = new OrbitControls(this.camera, this.canvas);
-    
-    // Configurar botones del ratón: izquierdo para rotar, derecho para pan
-    this.controls.mouseButtons = {
-      LEFT: THREE.MOUSE.ROTATE,
-      MIDDLE: THREE.MOUSE.DOLLY, // Rueda del ratón para zoom
-      RIGHT: THREE.MOUSE.PAN     // Clic derecho para pan
-    };
-
-    Object.assign(this.controls, options);
-
-    // Guardar estado inicial
-    const initialModelPosition = model.position.clone();
-    const initialModelRotation = model.rotation.clone();
-    const initialCameraPosition = this.camera.position.clone();
-    const initialTarget = new THREE.Vector3(0, 0, 0);
-
-    // Configurar objetivo inicial
-    this.controls.target.copy(initialModelPosition);
-
-    // Variables para rastrear cambios
-    let lastAzimuthalAngle = 0;
-    let lastPolarAngle = Math.PI / 2;
-    let lastTarget = initialModelPosition.clone();
-
-    this.controls.addEventListener('change', (event) => {
-      console.log('[OrbitControls] Change event:', event);
-      // Manejar rotación
-      /*if (options.enableRotate !== false) {
-        const azimuthalAngle = this.controls!.getAzimuthalAngle();
-        const polarAngle = this.controls!.getPolarAngle();
-        
-        const deltaAzimuth = azimuthalAngle - lastAzimuthalAngle;
-        const deltaPolar = polarAngle - lastPolarAngle;
-        
-        model.rotation.y += deltaAzimuth;
-        model.rotation.x += deltaPolar;
-        
-        lastAzimuthalAngle = azimuthalAngle;
-        lastPolarAngle = polarAngle;
-      }
-
-      // Manejar pan
-      if (options.enablePan !== false) {
-        const deltaPan = new THREE.Vector3().subVectors(
-          this.controls!.target,
-          lastTarget
-        );
-        
-        model.position.add(deltaPan);
-        lastTarget.copy(this.controls!.target);
-      }
-
-      // Manejar zoom
-      if (options.enableZoom !== false) {
-        // OrbitControls maneja automáticamente el zoom
-        // Solo necesitamos actualizar la posición de la cámara
-        const direction = initialCameraPosition.clone().normalize();
-        const distance = this.camera.position.distanceTo(this.controls!.target);
-        this.camera.position.copy(direction.multiplyScalar(distance));
-        this.camera.lookAt(initialTarget);
-      }
-
-      model.updateMatrixWorld();*/
-
+  }={enableRotate: false, enableZoom: false, enablePan: false}): OrbitControls {
+    Object.assign(this.controls!, options);
+    this.controls!.addEventListener('change',(event)=>{
+      console.warn('[SceneManager] OrbitControls change event', event);
+      console.warn('[SceneManager] OrbitControls change event', this.activeModelId);
     });
-
-    return this.controls;
+    this.controls!.update();
+    return this.controls!;
   }
 
   /**

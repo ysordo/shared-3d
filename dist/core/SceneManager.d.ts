@@ -156,22 +156,7 @@ export declare class SceneManager {
      * @param {boolean} [options.enablePan=true] - Whether to enable panning of the camera.
      * @returns {OrbitControls} The configured OrbitControls instance.
      */
-    setupOrbitControls(options: {
-        enableRotate?: boolean;
-        enableZoom?: boolean;
-        enablePan?: boolean;
-    }): OrbitControls;
-    /**
-     * Sets up orbit controls for the camera based on the currently active model.
-     * This allows the user to rotate, zoom, and pan the camera around the active model.
-     * @param {Object} options - Options for configuring the orbit controls.
-     * @param {boolean} [options.enableRotate=true] - Whether to enable rotation of the camera.
-     * @param {boolean} [options.enableZoom=true] - Whether to enable zooming of the camera.
-     * @param {boolean} [options.enablePan=true] - Whether to enable panning of the camera.
-     * @return {OrbitControls} The configured OrbitControls instance for the active model.
-     * @throws {Error} If no active model is set or if the active model does not exist in the scene.
-     */
-    setupModelOrbitControls(id: string, options: {
+    setupOrbitControls(options?: {
         enableRotate?: boolean;
         enableZoom?: boolean;
         enablePan?: boolean;
