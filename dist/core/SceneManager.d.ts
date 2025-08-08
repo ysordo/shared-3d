@@ -162,6 +162,13 @@ export declare class SceneManager {
         enablePan?: boolean;
     }): OrbitControls;
     /**
+     * Cleans up the orbit controls and removes event listeners.
+     * This method is called to properly dispose of the controls when they are no longer needed.
+     * It ensures that all event listeners are removed to prevent memory leaks.
+     * @return {void}
+     */
+    cleanupControls(): void;
+    /**
      * Gets the current OrbitControls instance.
      * This method returns the OrbitControls instance if it has been set up,
      * otherwise it returns undefined.

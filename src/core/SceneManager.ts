@@ -346,8 +346,8 @@ export class SceneManager {
       lastMousePosition = {x:event.clientX, y:event.clientY};
 
       if(rotateActive){
-        model.rotation.x += deltaX * 0.01;
-        model.rotation.y += deltaY * 0.01;
+        model.rotation.y += deltaX * 0.01;
+        model.rotation.x += deltaY * 0.01;
       } else if(panActive) {
         model.position.x += deltaX * 0.01;
         model.position.y -= deltaY * 0.01;
@@ -373,6 +373,19 @@ export class SceneManager {
     });
 
     return this.controls!;
+  }
+
+  /**
+   * Cleans up the orbit controls and removes event listeners.
+   * This method is called to properly dispose of the controls when they are no longer needed.
+   * It ensures that all event listeners are removed to prevent memory leaks.
+   * @return {void}
+   */
+  public cleanupControls(): void{
+    this.controls?.dispose();
+
+    const events = ['mousedown', 'mousemove', 'mouseup', 'mouseleave', 'contextmenu'];
+    events.forEach((event)=>this.canvas.removeEventListener(event, ()=>{}));
   }
 
   /**

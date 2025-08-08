@@ -6,6 +6,7 @@
  * @typedef {Object} OrbitControlsProps
  */
 interface OrbitControlsProps {
+    id: string | null;
     enableRotate?: boolean;
     enableZoom?: boolean;
     enablePan?: boolean;
@@ -26,6 +27,6 @@ interface OrbitControlsProps {
  * The controls are automatically cleaned up when the component is unmounted or when the active model changes.
  * This component is useful for providing interactive camera controls in 3D applications.
  */
-export declare function OrbitControls({ enableRotate, enableZoom, enablePan, }: OrbitControlsProps): null;
+export declare function OrbitControls({ id, enableRotate, enableZoom, enablePan, }: OrbitControlsProps): null;
 export {};
 //# sourceMappingURL=OrbitControls.d.ts.map
