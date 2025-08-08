@@ -34,34 +34,22 @@ interface OrbitControlsProps {
  * This component is useful for providing interactive camera controls in 3D applications.
  */
 export function OrbitControls({
-    id,
-    enableRotate = false,
-    enableZoom = false,
-    enablePan = false,
+  id,
+  enableRotate = false,
+  enableZoom = false,
+  enablePan = false,
 }: OrbitControlsProps): null {
   const { sceneManager } = useSceneContext();
-  const controlsRef = useRef<OrbitControlsType | null>(null);
 
   useEffect(() => {
     if (!sceneManager || !id) {return;}
 
-    // Cleaning previous controls if they exist
-    if (controlsRef.current) {
-      sceneManager.cleanupControls();
-      controlsRef.current = null;
-    }
+    // Configurar controles
+    sceneManager.setupOrbitControls({ enableRotate, enableZoom, enablePan });
 
-    // Create new controls
-    controlsRef.current = sceneManager.setupOrbitControls(
-      { enableRotate, enableZoom, enablePan }
-    );
-
-    // Cleaning when disassembling
+    // Limpieza al desmontar o cuando cambien las dependencias
     return () => {
-      if (controlsRef.current) {
-        sceneManager.cleanupControls();
-        controlsRef.current = null;
-      }
+      sceneManager.cleanupControls();
     };
   }, [sceneManager, id, enableRotate, enableZoom, enablePan]);
   

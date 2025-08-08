@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useSceneContext } from './SceneContext';
 /**
  * Component to manage orbit controls for a 3D scene.
@@ -19,24 +19,15 @@ import { useSceneContext } from './SceneContext';
  */
 export function OrbitControls({ id, enableRotate = false, enableZoom = false, enablePan = false, }) {
     const { sceneManager } = useSceneContext();
-    const controlsRef = useRef(null);
     useEffect(() => {
         if (!sceneManager || !id) {
             return;
         }
-        // Cleaning previous controls if they exist
-        if (controlsRef.current) {
-            sceneManager.cleanupControls();
-            controlsRef.current = null;
-        }
-        // Create new controls
-        controlsRef.current = sceneManager.setupOrbitControls({ enableRotate, enableZoom, enablePan });
-        // Cleaning when disassembling
+        // Configurar controles
+        sceneManager.setupOrbitControls({ enableRotate, enableZoom, enablePan });
+        // Limpieza al desmontar o cuando cambien las dependencias
         return () => {
-            if (controlsRef.current) {
-                sceneManager.cleanupControls();
-                controlsRef.current = null;
-            }
+            sceneManager.cleanupControls();
         };
     }, [sceneManager, id, enableRotate, enableZoom, enablePan]);
     return null;

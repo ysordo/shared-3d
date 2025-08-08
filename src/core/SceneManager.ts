@@ -94,6 +94,20 @@ export class SceneManager {
   private modelBoundingRadii = new Map<string, number>();
   private NEAR_MARGIN = 0.1; // Margen adicional para evitar clipping
   private FAR_MULTIPLIER = 10; // Multiplicador para el plano far
+  private orbitEventHandlers: {
+  mousedown?: (event: MouseEvent) => void;
+  mousemove?: (event: MouseEvent) => void;
+  mouseup?: () => void;
+  mouseleave?: () => void;
+  contextmenu?: (event: MouseEvent) => void;
+} = {};
+
+private orbitState = {
+  isDragging: false,
+  lastMousePosition: { x: 0, y: 0 },
+  rotateActive: false,
+  panActive: false
+};
 
   /**
    * Creates an instance of SceneManager.
@@ -314,66 +328,71 @@ export class SceneManager {
    * @returns {OrbitControls} The configured OrbitControls instance.
    */
   public setupOrbitControls(options: {
-    enableRotate?: boolean;
-    enableZoom?: boolean;
-    enablePan?: boolean;
-  }={enableRotate: false, enableZoom: false, enablePan: false}): OrbitControls {
-    Object.assign(this.controls!, {enableZoom: options.enableZoom ?? true});
+  enableRotate?: boolean;
+  enableZoom?: boolean;
+  enablePan?: boolean;
+} = { enableRotate: false, enableZoom: false, enablePan: false }): void {
+  this.cleanupControls(); // Limpiar controles existentes primero
 
-    const model = this.models.get(this.activeModelId!)!;
-    let isDragging = false;
-    let lastMousePosition = {x:0,y:0};
-    let rotateActive = false;
-    let panActive = false;
+  const model = this.models.get(this.activeModelId!);
+  if (!model) {return;}
 
-    this.canvas.addEventListener('mousedown', (event)=>{
-      isDragging=true;
-      lastMousePosition = {x:event.clientX, y:event.clientY};
-      if(event.button === 0 && options.enableRotate) {
-        rotateActive=true;
-        panActive=false;
-      } else if(event.button === 2 && options.enablePan) {
-        panActive=true;
-        rotateActive=false;
-      }
-    });
-    this.canvas.addEventListener('mousemove', (event)=> {
-      if(!isDragging) {return;}
-
-      const deltaX = event.clientX - lastMousePosition.x;
-      const deltaY = event.clientY - lastMousePosition.y;
-
-      lastMousePosition = {x:event.clientX, y:event.clientY};
-
-      if(rotateActive){
-        model.rotation.y += deltaX * 0.01;
-        model.rotation.x += deltaY * 0.01;
-      } else if(panActive) {
-        model.position.x += deltaX * 0.01;
-        model.position.y -= deltaY * 0.01;
-      }
-
-      model.updateMatrixWorld();
-    });
+  // Configurar handlers
+  this.orbitEventHandlers.mousedown = (event) => {
+    this.orbitState.isDragging = true;
+    this.orbitState.lastMousePosition = { x: event.clientX, y: event.clientY };
     
-    this.canvas.addEventListener('mouseup', ()=>{
-      isDragging=false;
-      rotateActive=false;
-      panActive=false;
-    });
+    if (event.button === 0 && options.enableRotate) {
+      this.orbitState.rotateActive = true;
+      this.orbitState.panActive = false;
+    } else if (event.button === 2 && options.enablePan) {
+      this.orbitState.panActive = true;
+      this.orbitState.rotateActive = false;
+    }
+  };
 
-    this.canvas.addEventListener('mouseleave', ()=>{
-      isDragging=false;
-      rotateActive=false;
-      panActive=false;
-    });
+  this.orbitEventHandlers.mousemove = (event) => {
+    if (!this.orbitState.isDragging) {return;}
 
-    this.canvas.addEventListener('contextmenu', (event)=>{
-      event.preventDefault();
-    });
+    const deltaX = event.clientX - this.orbitState.lastMousePosition.x;
+    const deltaY = event.clientY - this.orbitState.lastMousePosition.y;
 
-    return this.controls!;
-  }
+    this.orbitState.lastMousePosition = { x: event.clientX, y: event.clientY };
+
+    if (this.orbitState.rotateActive) {
+      model.rotation.y += deltaX * 0.01;
+      model.rotation.x += deltaY * 0.01;
+    } else if (this.orbitState.panActive) {
+      model.position.x += deltaX * 0.01;
+      model.position.y -= deltaY * 0.01;
+    }
+
+    model.updateMatrixWorld();
+  };
+
+  this.orbitEventHandlers.mouseup = () => {
+    this.orbitState.isDragging = false;
+    this.orbitState.rotateActive = false;
+    this.orbitState.panActive = false;
+  };
+
+  this.orbitEventHandlers.mouseleave = () => {
+    this.orbitState.isDragging = false;
+    this.orbitState.rotateActive = false;
+    this.orbitState.panActive = false;
+  };
+
+  this.orbitEventHandlers.contextmenu = (event) => {
+    event.preventDefault();
+  };
+
+  // Añadir event listeners
+  this.canvas.addEventListener('mousedown', this.orbitEventHandlers.mousedown);
+  this.canvas.addEventListener('mousemove', this.orbitEventHandlers.mousemove);
+  this.canvas.addEventListener('mouseup', this.orbitEventHandlers.mouseup);
+  this.canvas.addEventListener('mouseleave', this.orbitEventHandlers.mouseleave);
+  this.canvas.addEventListener('contextmenu', this.orbitEventHandlers.contextmenu);
+}
 
   /**
    * Cleans up the orbit controls and removes event listeners.
@@ -381,12 +400,33 @@ export class SceneManager {
    * It ensures that all event listeners are removed to prevent memory leaks.
    * @return {void}
    */
-  public cleanupControls(): void{
-    this.controls?.dispose();
-
-    const events = ['mousedown', 'mousemove', 'mouseup', 'mouseleave', 'contextmenu'];
-    events.forEach((event)=>this.canvas.removeEventListener(event, ()=>{}));
+  public cleanupControls(): void {
+  // Remover todos los event listeners usando las referencias guardadas
+  if (this.orbitEventHandlers.mousedown) {
+    this.canvas.removeEventListener('mousedown', this.orbitEventHandlers.mousedown);
   }
+  if (this.orbitEventHandlers.mousemove) {
+    this.canvas.removeEventListener('mousemove', this.orbitEventHandlers.mousemove);
+  }
+  if (this.orbitEventHandlers.mouseup) {
+    this.canvas.removeEventListener('mouseup', this.orbitEventHandlers.mouseup);
+  }
+  if (this.orbitEventHandlers.mouseleave) {
+    this.canvas.removeEventListener('mouseleave', this.orbitEventHandlers.mouseleave);
+  }
+  if (this.orbitEventHandlers.contextmenu) {
+    this.canvas.removeEventListener('contextmenu', this.orbitEventHandlers.contextmenu);
+  }
+
+  // Resetear handlers y estado
+  this.orbitEventHandlers = {};
+  this.orbitState = {
+    isDragging: false,
+    lastMousePosition: { x: 0, y: 0 },
+    rotateActive: false,
+    panActive: false
+  };
+}
 
   /**
    * Gets the current OrbitControls instance.

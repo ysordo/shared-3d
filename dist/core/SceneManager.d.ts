@@ -83,6 +83,8 @@ export declare class SceneManager {
     private modelBoundingRadii;
     private NEAR_MARGIN;
     private FAR_MULTIPLIER;
+    private orbitEventHandlers;
+    private orbitState;
     /**
      * Creates an instance of SceneManager.
      * Initializes the Three.js scene, camera, renderer, and optional post-processing effects.
@@ -160,7 +162,7 @@ export declare class SceneManager {
         enableRotate?: boolean;
         enableZoom?: boolean;
         enablePan?: boolean;
-    }): OrbitControls;
+    }): void;
     /**
      * Cleans up the orbit controls and removes event listeners.
      * This method is called to properly dispose of the controls when they are no longer needed.
