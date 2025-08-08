@@ -81,12 +81,16 @@ export class OrbitControlsManager {
    * @private
    */
   private getPointerPosition(event: MouseEvent | TouchEvent): { x: number; y: number } {
-    if (event instanceof MouseEvent) {
-      return { x: event.clientX, y: event.clientY };
-    } else if (event instanceof TouchEvent && event.touches.length > 0) {
+    // Verify if the event is a touch event or mouse event
+    if ('touches' in event && event.touches.length > 0) {
       return {
         x: event.touches[0].clientX,
         y: event.touches[0].clientY
+      };
+    } else if ('clientX' in event) {
+      return { 
+        x: event.clientX, 
+        y: event.clientY 
       };
     }
     return { x: 0, y: 0 };
@@ -117,7 +121,10 @@ export class OrbitControlsManager {
    */
   private onPointerDown(e: MouseEvent | TouchEvent): void {
     // For touch events, we handle in onTouchStart
-    if (e instanceof TouchEvent) {return;}
+    if ('touches' in e) {
+      this.onTouchStart(e as TouchEvent);
+      return;
+    }
     
     if (e.button === 0 && this.enableRotate) { // Left button
       this.isRotating = true;
@@ -157,7 +164,10 @@ export class OrbitControlsManager {
    */
   private onPointerMove(e: MouseEvent | TouchEvent): void {
     // For touch events, we handle in onTouchMove
-    if (e instanceof TouchEvent) {return;}
+    if ('touches' in e) {
+      this.onTouchMove(e as TouchEvent);
+      return;
+    }
     
     const pos = this.getPointerPosition(e);
     this.currentPointerPosition.set(pos.x, pos.y);
@@ -225,7 +235,7 @@ export class OrbitControlsManager {
    * @returns {void}
    */
   private onTouchStart(e: TouchEvent): void {
-    e.preventDefault();
+   e.preventDefault();
     
     if (e.touches.length === 1) {
       if (this.enableRotate) {

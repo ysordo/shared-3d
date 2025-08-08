@@ -68,13 +68,17 @@ export class OrbitControlsManager {
      * @private
      */
     getPointerPosition(event) {
-        if (event instanceof MouseEvent) {
-            return { x: event.clientX, y: event.clientY };
-        }
-        else if (event instanceof TouchEvent && event.touches.length > 0) {
+        // Verify if the event is a touch event or mouse event
+        if ('touches' in event && event.touches.length > 0) {
             return {
                 x: event.touches[0].clientX,
                 y: event.touches[0].clientY
+            };
+        }
+        else if ('clientX' in event) {
+            return {
+                x: event.clientX,
+                y: event.clientY
             };
         }
         return { x: 0, y: 0 };
@@ -104,7 +108,8 @@ export class OrbitControlsManager {
      */
     onPointerDown(e) {
         // For touch events, we handle in onTouchStart
-        if (e instanceof TouchEvent) {
+        if ('touches' in e) {
+            this.onTouchStart(e);
             return;
         }
         if (e.button === 0 && this.enableRotate) { // Left button
@@ -145,7 +150,8 @@ export class OrbitControlsManager {
      */
     onPointerMove(e) {
         // For touch events, we handle in onTouchMove
-        if (e instanceof TouchEvent) {
+        if ('touches' in e) {
+            this.onTouchMove(e);
             return;
         }
         const pos = this.getPointerPosition(e);
