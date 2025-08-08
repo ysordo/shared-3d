@@ -108,13 +108,6 @@ export class SceneManager {
         this.modelBoundingRadii = new Map();
         this.NEAR_MARGIN = 0.1; // Margen adicional para evitar clipping
         this.FAR_MULTIPLIER = 10; // Multiplicador para el plano far
-        this.orbitEventHandlers = {};
-        this.orbitState = {
-            isDragging: false,
-            lastMousePosition: { x: 0, y: 0 },
-            rotateActive: false,
-            panActive: false
-        };
         /**
          * Handles canvas resizing by updating the renderer size, camera aspect ratio,
          * and recalculating camera position for all models in the scene.
@@ -194,14 +187,6 @@ export class SceneManager {
         // 5. Setup resize observer to handle canvas resizing
         this.resizeObserver = new ResizeObserver(this.handleResize);
         this.resizeObserver.observe(canvas);
-    }
-    /**
-     * Starts the animation loop for rendering the scene.
-     * It continuously renders the scene and updates the controls if they are enabled.
-     * @return {void}
-     */
-    getScene() {
-        return this.scene;
     }
     /**
      * Gets the ID of the currently active model in the scene.

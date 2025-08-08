@@ -76,7 +76,7 @@ export type LoadState =
  * @see {@link https://threejs.org/docs/index.html#api/en/core/LoaderUtils|LoaderUtils Documentation}
  */
 export class SceneManager {
-  private scene: THREE.Scene;
+  public scene: THREE.Scene;
   private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
   private composer?: EffectComposer;
@@ -96,20 +96,6 @@ export class SceneManager {
   private modelBoundingRadii = new Map<string, number>();
   private NEAR_MARGIN = 0.1; // Margen adicional para evitar clipping
   private FAR_MULTIPLIER = 10; // Multiplicador para el plano far
-  private orbitEventHandlers: {
-  mousedown?: (event: MouseEvent) => void;
-  mousemove?: (event: MouseEvent) => void;
-  mouseup?: () => void;
-  mouseleave?: () => void;
-  contextmenu?: (event: MouseEvent) => void;
-} = {};
-
-private orbitState = {
-  isDragging: false,
-  lastMousePosition: { x: 0, y: 0 },
-  rotateActive: false,
-  panActive: false
-};
 
   /**
    * Creates an instance of SceneManager.
@@ -200,15 +186,6 @@ private orbitState = {
     // 5. Setup resize observer to handle canvas resizing
     this.resizeObserver = new ResizeObserver(this.handleResize);
     this.resizeObserver.observe(canvas);
-  }
-
-  /**
-   * Starts the animation loop for rendering the scene.
-   * It continuously renders the scene and updates the controls if they are enabled.
-   * @return {void}
-   */
-  public getScene(): THREE.Scene {
-    return this.scene;
   }
 
   /**

@@ -43,15 +43,13 @@ export function AmbientLight({
   useEffect(() => {
     if (!sceneManager) {return;}
     
-    const scene = sceneManager.getScene();
-    
     // Crear o actualizar la luz
     if (!lightRef.current) {
       lightRef.current = new THREE.AmbientLight(color, intensity);
       lightRef.current.visible = visible;
       lightRef.current.castShadow = castShadow;
       
-      scene.add(lightRef.current);
+      sceneManager.scene.add(lightRef.current);
       
       if (onCreated) {
         onCreated(lightRef.current);
@@ -66,7 +64,7 @@ export function AmbientLight({
     return () => {
       // Limpiar al desmontar
       if (lightRef.current) {
-        scene.remove(lightRef.current);
+        sceneManager.scene.remove(lightRef.current);
         lightRef.current.dispose();
         lightRef.current = null;
       }

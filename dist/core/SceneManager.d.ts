@@ -63,7 +63,7 @@ export type LoadState = 'checking_cache' | 'cache_hit' | 'cache_miss' | 'downloa
 export declare class SceneManager {
     private canvas;
     private config;
-    private scene;
+    scene: THREE.Scene;
     private camera;
     private renderer;
     private composer?;
@@ -83,8 +83,6 @@ export declare class SceneManager {
     private modelBoundingRadii;
     private NEAR_MARGIN;
     private FAR_MULTIPLIER;
-    private orbitEventHandlers;
-    private orbitState;
     /**
      * Creates an instance of SceneManager.
      * Initializes the Three.js scene, camera, renderer, and optional post-processing effects.
@@ -120,12 +118,6 @@ export declare class SceneManager {
         pixelRatio?: number;
         background?: THREE.Color;
     });
-    /**
-     * Starts the animation loop for rendering the scene.
-     * It continuously renders the scene and updates the controls if they are enabled.
-     * @return {void}
-     */
-    getScene(): THREE.Scene;
     /**
      * Gets the ID of the currently active model in the scene.
      * If no model is active, it returns null.

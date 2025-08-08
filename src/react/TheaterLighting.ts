@@ -38,7 +38,7 @@ export function TheaterLighting ({
   height = 2.5,
   showHelpers = true
 }: TheaterLightingProps): null {
-  const { sceneManager } = useSceneContext();
+  const { sceneManager, canvas } = useSceneContext();
   const lightsRef = useRef<THREE.DirectionalLight[]>([]);
   const helpersRef = useRef<THREE.DirectionalLightHelper[]>([]);
   const ambientLightRef = useRef<THREE.AmbientLight | null>(null);
@@ -47,16 +47,12 @@ export function TheaterLighting ({
   useEffect(() => {
     if (!sceneManager) {return;}
     
-    const scene = sceneManager.getScene();
-    const activeModelId = sceneManager.getModelActiveId();
+    if (!sceneManager.activeModelId) {return;}
     
-    if (!activeModelId) {return;}
-    
-    const model = sceneManager.getModel(activeModelId);
-    if (!model) {return;}
+    const model = sceneManager.getModel(sceneManager.activeModelId);
     
     // Calcular el centro y radio del modelo
-    const box = new THREE.Box3().setFromObject(model);
+    const box = new THREE.Box3().setFromObject(model!);
     const center = new THREE.Vector3();
     box.getCenter(center);
     const size = new THREE.Vector3();
@@ -78,30 +74,30 @@ export function TheaterLighting ({
       light.position.set(x, y, z);
       light.castShadow = true;
       light.shadow.bias = -0.001;
-      light.shadow.mapSize.width = window.innerWidth * 0.5;
-      light.shadow.mapSize.height = window.innerHeight * 0.5;
+      light.shadow.mapSize.width = canvas!.clientWidth * Math.min(window.devicePixelRatio, 2);
+      light.shadow.mapSize.height = canvas!.clientHeight * Math.min(window.devicePixelRatio, 2);
       light.lookAt(center);
       
-      scene.add(light);
+      sceneManager.scene.add(light);
       lights.push(light);
       
       // Crear helper visual
       if (showHelpers) {
         const helper = new THREE.DirectionalLightHelper(light, radius * 0.2);
-        scene.add(helper);
+        sceneManager.scene.add(helper);
         helpers.push(helper);
       }
     }
     
     // Luz ambiental
     ambientLightRef.current = new THREE.AmbientLight(0xffffff, intensity * 0.15);
-    scene.add(ambientLightRef.current);
+    sceneManager.scene.add(ambientLightRef.current);
     
     // Luz de relleno
     fillLightRef.current = new THREE.DirectionalLight(0xffffff, intensity * 0.3);
     fillLightRef.current.position.set(0, height * 1.5, 0);
     fillLightRef.current.castShadow = true;
-    scene.add(fillLightRef.current);
+    sceneManager.scene.add(fillLightRef.current);
     
     // Guardar referencias
     lightsRef.current = lights;
@@ -109,22 +105,22 @@ export function TheaterLighting ({
     
     return () => {
       // Limpiar al desmontar
-      lights.forEach(light => scene.remove(light));
-      helpers.forEach(helper => scene.remove(helper));
+      lights.forEach(light => sceneManager.scene.remove(light));
+      helpers.forEach(helper => sceneManager.scene.remove(helper));
       
       if (ambientLightRef.current) {
-        scene.remove(ambientLightRef.current);
+        sceneManager.scene.remove(ambientLightRef.current);
         ambientLightRef.current.dispose();
         ambientLightRef.current = null;
       }
       
       if (fillLightRef.current) {
-        scene.remove(fillLightRef.current);
+        sceneManager.scene.remove(fillLightRef.current);
         fillLightRef.current.dispose();
         fillLightRef.current = null;
       }
     };
-  }, [sceneManager, intensity, lightCount, radiusFactor, height, showHelpers]);
+  }, [sceneManager, sceneManager?.activeModelId, intensity, lightCount, radiusFactor, height, showHelpers, canvas]);
   
   return null;
 };
