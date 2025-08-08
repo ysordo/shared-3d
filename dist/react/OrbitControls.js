@@ -17,10 +17,13 @@ import { useSceneContext } from './SceneContext';
  * The controls are automatically cleaned up when the component is unmounted or when the active model changes.
  * This component is useful for providing interactive camera controls in 3D applications.
  */
-export function OrbitControls({ id, enableRotate = false, enableZoom = false, enablePan = false, }) {
+export function OrbitControls({ enableRotate = false, enableZoom = false, enablePan = false, }) {
     const { sceneManager } = useSceneContext();
+    const id = sceneManager?.getModelActiveId();
     useEffect(() => {
         if (!sceneManager || !id) {
+            console.warn('OrbitControls: SceneManager or active model ID is not available.');
+            sceneManager?.animate();
             return;
         }
         // Configurar controles

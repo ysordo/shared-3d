@@ -11,7 +11,6 @@ import type { OrbitControls as OrbitControlsType } from 'three/examples/jsm/Addo
  * @typedef {Object} OrbitControlsProps
  */
 interface OrbitControlsProps {
-  id: string | null;
   enableRotate?: boolean;
   enableZoom?: boolean;
   enablePan?: boolean;
@@ -34,15 +33,19 @@ interface OrbitControlsProps {
  * This component is useful for providing interactive camera controls in 3D applications.
  */
 export function OrbitControls({
-  id,
   enableRotate = false,
   enableZoom = false,
   enablePan = false,
 }: OrbitControlsProps): null {
   const { sceneManager } = useSceneContext();
+  const id = sceneManager?.getModelActiveId();
 
   useEffect(() => {
-    if (!sceneManager || !id) {return;}
+    if (!sceneManager || !id ) {
+      console.warn('OrbitControls: SceneManager or active model ID is not available.');
+      sceneManager?.animate();
+      return;
+    }
 
     // Configurar controles
     sceneManager.setupOrbitControls({ enableRotate, enableZoom, enablePan });
