@@ -318,12 +318,60 @@ export class SceneManager {
     enableZoom?: boolean;
     enablePan?: boolean;
   }={enableRotate: false, enableZoom: false, enablePan: false}): OrbitControls {
-    Object.assign(this.controls!, options);
-    this.controls!.addEventListener('change',(event)=>{
-      console.warn('[SceneManager] OrbitControls change event', event);
-      console.warn('[SceneManager] OrbitControls change event', this.activeModelId);
+    Object.assign(this.controls!, {enableZoom: options.enableZoom ?? true});
+
+    const model = this.models.get(this.activeModelId!)!;
+    let isDragging = false;
+    let lastMousePosition = {x:0,y:0};
+    let rotateActive = false;
+    let panActive = false;
+
+    this.canvas.addEventListener('mousedown', (event)=>{
+      isDragging=true;
+      lastMousePosition = {x:event.clientX, y:event.clientY};
+      if(event.button === 0 && options.enableRotate) {
+        rotateActive=true;
+        panActive=false;
+      } else if(event.button === 2 && options.enablePan) {
+        panActive=true;
+        rotateActive=false;
+      }
     });
-    this.controls!.update();
+    this.canvas.addEventListener('mousemove', (event)=> {
+      if(!isDragging) {return;}
+
+      const deltaX = event.clientX - lastMousePosition.x;
+      const deltaY = event.clientY - lastMousePosition.y;
+
+      lastMousePosition = {x:event.clientX, y:event.clientY};
+
+      if(rotateActive){
+        model.rotation.x += deltaX * 0.01;
+        model.rotation.y += deltaY * 0.01;
+      } else if(panActive) {
+        model.position.x += deltaX * 0.01;
+        model.position.y -= deltaY * 0.01;
+      }
+
+      model.updateMatrixWorld();
+    });
+    
+    this.canvas.addEventListener('mouseup', ()=>{
+      isDragging=false;
+      rotateActive=false;
+      panActive=false;
+    });
+
+    this.canvas.addEventListener('mouseleave', ()=>{
+      isDragging=false;
+      rotateActive=false;
+      panActive=false;
+    });
+
+    this.canvas.addEventListener('contextmenu', (event)=>{
+      event.preventDefault();
+    });
+
     return this.controls!;
   }
 
