@@ -48,17 +48,18 @@ export function TheaterLighting({ intensity = 1.0, lightCount = 8, radiusFactor 
             const z = center.z + Math.sin(angle) * radius * radiusFactor;
             const y = center.y + height;
             // Crear luz
-            const light = new THREE.PointLight(0xffffff, intensity);
+            const light = new THREE.DirectionalLight(0xffffff, intensity);
             light.position.set(x, y, z);
             light.castShadow = true;
             light.shadow.bias = -0.001;
-            light.shadow.mapSize.width = 2048;
-            light.shadow.mapSize.height = 2048;
+            light.shadow.mapSize.width = window.innerWidth * 0.5;
+            light.shadow.mapSize.height = window.innerHeight * 0.5;
+            light.lookAt(center);
             scene.add(light);
             lights.push(light);
             // Crear helper visual
             if (showHelpers) {
-                const helper = new THREE.PointLightHelper(light, radius * 0.2);
+                const helper = new THREE.DirectionalLightHelper(light, radius * 0.2);
                 scene.add(helper);
                 helpers.push(helper);
             }

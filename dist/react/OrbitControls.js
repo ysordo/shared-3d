@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use client';
 import { useEffect } from 'react';
 import { useSceneContext } from './SceneContext';
@@ -20,18 +21,21 @@ import { useSceneContext } from './SceneContext';
 export function OrbitControls({ enableRotate = false, enableZoom = false, enablePan = false, }) {
     const { sceneManager } = useSceneContext();
     useEffect(() => {
-        if (!sceneManager || sceneManager?.getModelActiveId()) {
-            console.warn('OrbitControls: SceneManager or active model ID is not available.');
-            sceneManager?.animate();
+        if (!sceneManager) {
+            console.info('[OrbitControls] SceneManager is not available.');
+            return;
+        }
+        if (sceneManager.activeModelId === null) {
+            console.info('[OrbitControls] No active model found. Controls will not be set up.');
             return;
         }
         // Configurar controles
         sceneManager.setupOrbitControls({ enableRotate, enableZoom, enablePan });
         // Limpieza al desmontar o cuando cambien las dependencias
         return () => {
-            sceneManager.cleanupControls();
+            sceneManager.getOrbitControls()?.dispose();
         };
-    }, [sceneManager, sceneManager?.getModelActiveId(), enableRotate, enableZoom, enablePan]);
+    }, [sceneManager, sceneManager?.activeModelId, enableRotate, enableZoom, enablePan]);
     return null;
 }
 //# sourceMappingURL=OrbitControls.js.map

@@ -1,8 +1,7 @@
+/* eslint-disable no-console */
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useSceneContext } from './SceneContext';
-import type { OrbitControls as OrbitControlsType } from 'three/examples/jsm/Addons';
-
 /**
  * Props for the OrbitControls component.
  * @property {boolean} [enableRotate=false] - Enable rotation controls
@@ -40,9 +39,12 @@ export function OrbitControls({
   const { sceneManager } = useSceneContext();
 
   useEffect(() => {
-    if (!sceneManager || sceneManager?.getModelActiveId() ) {
-      console.warn('OrbitControls: SceneManager or active model ID is not available.');
-      sceneManager?.animate();
+    if (!sceneManager) {
+      console.info('[OrbitControls] SceneManager is not available.');
+      return;
+    }
+    if(sceneManager.activeModelId === null) {
+      console.info('[OrbitControls] No active model found. Controls will not be set up.');
       return;
     }
 
@@ -51,9 +53,9 @@ export function OrbitControls({
 
     // Limpieza al desmontar o cuando cambien las dependencias
     return () => {
-      sceneManager.cleanupControls();
+      sceneManager.getOrbitControls()?.dispose();
     };
-  }, [sceneManager, sceneManager?.getModelActiveId(), enableRotate, enableZoom, enablePan]);
+  }, [sceneManager, sceneManager?.activeModelId, enableRotate, enableZoom, enablePan]);
   
   return null;
 }

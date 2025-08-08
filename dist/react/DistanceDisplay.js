@@ -18,25 +18,9 @@ export function DistanceDisplay({ children, className, setDistance, }) {
         const updateDistance = () => {
             const control = sceneManager?.getOrbitControls();
             if (control) {
-                const rawDistance = control.getDistance();
+                const rawDistance = control?.controls.getDistance();
                 setDistance?.(rawDistance);
             }
-            /* const activeModelId = sceneManager?.getModelActiveId();
-            if (!activeModelId) {
-              animationRef.current = requestAnimationFrame(updateDistance);
-              return;
-            }
-      
-            const model = sceneManager?.getModel(activeModelId);
-            const camera = sceneManager?.getCamera();
-      
-            if (model && camera) {
-              const modelPosition = new THREE.Vector3();
-              model.getWorldPosition(modelPosition);
-      
-              const rawDistance = modelPosition.distanceTo(camera.position);
-              setDistance?.(rawDistance);
-            }*/
             animationRef.current = requestAnimationFrame(updateDistance);
         };
         animationRef.current = requestAnimationFrame(updateDistance);

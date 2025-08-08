@@ -8,10 +8,10 @@
 
 > **OrbitControls**(`props`): `null`
 
-Defined in: [react/OrbitControls.ts:33](https://github.com/ysordo/shared-3d/blob/b007a73212fa558f7ac5535b031797e40cc1b17a/src/react/OrbitControls.ts#L33)
+Defined in: [react/OrbitControls.ts:34](https://github.com/ysordo/shared-3d/blob/aa08df17a8d7b07be13caf0e053d835d053c41db/src/react/OrbitControls.ts#L34)
 
-Component to set up OrbitControls for a 3D model in the scene.
-This component uses the SceneContext to access the SceneManager and set up controls.
+Component to manage orbit controls for a 3D scene.
+It sets up controls based on the active model and allows customization of control options.
 
 ## Parameters
 
@@ -25,8 +25,17 @@ Component properties
 
 `null`
 
-This component does not render anything directly
+This component does not render anything directly, it sets up controls in the scene.
 
-## Throws
+## Example
 
-If the SceneManager is not available in the context
+```ts
+<OrbitControls enableRotate={true} enableZoom={true} enablePan={false} />
+```
+
+## Description
+
+The OrbitControls component sets up Three.js orbit controls for the active model in the scene.
+It allows users to rotate, zoom, and pan the camera around the model based on the provided options.
+The controls are automatically cleaned up when the component is unmounted or when the active model changes.
+This component is useful for providing interactive camera controls in 3D applications.

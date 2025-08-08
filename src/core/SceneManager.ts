@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 import * as THREE from 'three';
-import { EffectComposer, GLTFLoader, OrbitControls, RenderPass, SMAAPass, SSAARenderPass } from 'three/examples/jsm/Addons.js';
+import { EffectComposer, GLTFLoader, RenderPass, SMAAPass, SSAARenderPass } from 'three/examples/jsm/Addons.js';
 import { CacheManager } from './CacheManager';
+import { OrbitControlsManager } from './OrbitControlsManager';
 
 
 export type LoadState = 
@@ -78,14 +80,14 @@ export class SceneManager {
   private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
   private composer?: EffectComposer;
-  private controls?: OrbitControls;
+  private controls?: OrbitControlsManager;
   private models: Map<string, THREE.Object3D> = new Map();
   private loadedModels = new Map<string, Promise<THREE.Object3D>>();
   private hasModelLoaded = new Map<string, boolean>();
   private resizeObserver: ResizeObserver;
   private parallaxEffects: Map<string, (progress: number) => void> = new Map();
   private MARGIN: number = 0.8;
-  private activeModelId: string | null = null;
+  public activeModelId: string | null = null;
   private transitionProgress: number = 0;
   private transitionDuration: number = 1000; // ms
   private transitionModels: Map<string, THREE.Object3D> = new Map();
@@ -180,11 +182,10 @@ private orbitState = {
       1000
     );
 
-    this.controls = new OrbitControls(this.camera, this.canvas);
+    this.controls = new OrbitControlsManager(this.camera, canvas);
     this.controls.enableRotate = false;
-    this.controls.enableZoom = false;
     this.controls.enablePan = false;
-
+    this.controls.enableZoom = false;
 
     // 4. Config post-processing effects if enabled
     if (config.postprocessing) {
@@ -332,103 +333,9 @@ private orbitState = {
   enableZoom?: boolean;
   enablePan?: boolean;
 } = { enableRotate: false, enableZoom: false, enablePan: false }): void {
-  this.cleanupControls(); // Limpiar controles existentes primero
-
-  const model = this.models.get(this.activeModelId!);
-  //if (!model) {return;}
-
-  // Configurar handlers
-  this.orbitEventHandlers.mousedown = (event) => {
-    this.orbitState.isDragging = true;
-    this.orbitState.lastMousePosition = { x: event.clientX, y: event.clientY };
-    
-    if (event.button === 0 && options.enableRotate) {
-      this.orbitState.rotateActive = true;
-      this.orbitState.panActive = false;
-    } else if (event.button === 2 && options.enablePan) {
-      this.orbitState.panActive = true;
-      this.orbitState.rotateActive = false;
-    }
-  };
-
-  this.orbitEventHandlers.mousemove = (event) => {
-    if (!this.orbitState.isDragging) {return;}
-
-    const deltaX = event.clientX - this.orbitState.lastMousePosition.x;
-    const deltaY = event.clientY - this.orbitState.lastMousePosition.y;
-
-    this.orbitState.lastMousePosition = { x: event.clientX, y: event.clientY };
-
-    if (this.orbitState.rotateActive) {
-      model!.rotation.y += deltaX * 0.01;
-      model!.rotation.x += deltaY * 0.01;
-    } else if (this.orbitState.panActive) {
-      model!.position.x += deltaX * 0.01;
-      model!.position.y -= deltaY * 0.01;
-    }
-
-    model!.updateMatrixWorld();
-  };
-
-  this.orbitEventHandlers.mouseup = () => {
-    this.orbitState.isDragging = false;
-    this.orbitState.rotateActive = false;
-    this.orbitState.panActive = false;
-  };
-
-  this.orbitEventHandlers.mouseleave = () => {
-    this.orbitState.isDragging = false;
-    this.orbitState.rotateActive = false;
-    this.orbitState.panActive = false;
-  };
-
-  this.orbitEventHandlers.contextmenu = (event) => {
-    event.preventDefault();
-  };
-
+  this.controls!.enablePan = options.enablePan ?? false;
   this.controls!.enableZoom = options.enableZoom ?? false;
-
-
-  // Añadir event listeners
-  this.canvas.addEventListener('mousedown', this.orbitEventHandlers.mousedown);
-  this.canvas.addEventListener('mousemove', this.orbitEventHandlers.mousemove);
-  this.canvas.addEventListener('mouseup', this.orbitEventHandlers.mouseup);
-  this.canvas.addEventListener('mouseleave', this.orbitEventHandlers.mouseleave);
-  this.canvas.addEventListener('contextmenu', this.orbitEventHandlers.contextmenu);
-}
-
-  /**
-   * Cleans up the orbit controls and removes event listeners.
-   * This method is called to properly dispose of the controls when they are no longer needed.
-   * It ensures that all event listeners are removed to prevent memory leaks.
-   * @return {void}
-   */
-  public cleanupControls(): void {
-  // Remover todos los event listeners usando las referencias guardadas
-  if (this.orbitEventHandlers.mousedown) {
-    this.canvas.removeEventListener('mousedown', this.orbitEventHandlers.mousedown);
-  }
-  if (this.orbitEventHandlers.mousemove) {
-    this.canvas.removeEventListener('mousemove', this.orbitEventHandlers.mousemove);
-  }
-  if (this.orbitEventHandlers.mouseup) {
-    this.canvas.removeEventListener('mouseup', this.orbitEventHandlers.mouseup);
-  }
-  if (this.orbitEventHandlers.mouseleave) {
-    this.canvas.removeEventListener('mouseleave', this.orbitEventHandlers.mouseleave);
-  }
-  if (this.orbitEventHandlers.contextmenu) {
-    this.canvas.removeEventListener('contextmenu', this.orbitEventHandlers.contextmenu);
-  }
-
-  // Resetear handlers y estado
-  this.orbitEventHandlers = {};
-  this.orbitState = {
-    isDragging: false,
-    lastMousePosition: { x: 0, y: 0 },
-    rotateActive: false,
-    panActive: false
-  };
+  this.controls!.enableRotate = options.enableRotate ?? false;
 }
 
   /**
@@ -436,7 +343,7 @@ private orbitState = {
    * This method returns the OrbitControls instance if it has been set up,
    * otherwise it returns undefined.
    */
-  public getOrbitControls(): OrbitControls | undefined {
+  public getOrbitControls(): OrbitControlsManager | undefined {
     return this.controls;
   }
 
@@ -474,7 +381,7 @@ private orbitState = {
     if (!initialPosition || !initialTarget) {return;}
     
     const startPosition = this.camera.position.clone();
-    const startTarget = this.controls?.target.clone() || new THREE.Vector3();
+    const startTarget = this.controls?.controls!.target.clone() || new THREE.Vector3();
     
     const startTime = performance.now();
     
@@ -497,7 +404,7 @@ private orbitState = {
       this.camera.lookAt(currentTarget);
       
       if (this.controls) {
-        this.controls.target.copy(currentTarget);
+        this.controls!.controls!.target.copy(currentTarget);
         this.controls.update();
       }
       
@@ -569,6 +476,9 @@ private orbitState = {
             child.material.opacity = 1;
           }
         });
+
+        this.controls?.setModel(targetModel);
+        this.controls?.update();
       }
     };
 
@@ -600,14 +510,14 @@ private orbitState = {
       return this.models.get(id)!;
     }
 
-    console.warn(`[SceneManager] Change model using: ${id} for url: ${url}`);
+    console.info(`[SceneManager] Change model using: ${id} for url: ${url}`);
 
     const loadPromise = new Promise<THREE.Object3D>(async (resolve, reject) => {
       try {
         const cache = await CacheManager.getModel(url);
 
         if(cache) {
-          console.warn(`[SceneManager] Modelo ${id} encontrado en caché.`);
+          console.info(`[SceneManager] Modelo ${id} encontrado en caché.`);
           if(onStateChange) {onStateChange('cache_hit', `Model ${id} found in cache.`);}
           const loader = new GLTFLoader();
           loader.parse(
@@ -653,7 +563,7 @@ private orbitState = {
             reject(error);
           }
         );
-        console.warn(`[SceneManager] Model save to cache: ${url}`);
+        console.info(`[SceneManager] Model save to cache: ${url}`);
         /*[State Change]*/ if(onStateChange) {onStateChange('checking_cache', `Checking cache for model ${id}.`);}
         await CacheManager.saveModel(url, await (await fetch(url)).arrayBuffer());
         /*[State Change]*/ if(onStateChange) {onStateChange('caching', `Model ${id} cached successfully.`);}
@@ -688,7 +598,7 @@ private orbitState = {
    * @private
    */
   private addModelToScene(id: string, model: THREE.Object3D): void {
-  console.warn(`[SceneManager] Adding model with ID: ${id} to the scene.`);
+  console.info(`[SceneManager] Adding model with ID: ${id} to the scene.`);
   
   // 1. Calculate the bounding box of the model
   const box = new THREE.Box3().setFromObject(model, true);
@@ -734,7 +644,7 @@ private orbitState = {
   this.models.set(id, model);
   this.scene.add(model);
   
-  console.warn(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
+  console.info(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
 }
 
 /**
@@ -785,11 +695,11 @@ public resetCameraForModel(modelId: string): void {
     this.camera.lookAt(initialTarget);
     
     if (this.controls) {
-      this.controls.target.copy(initialTarget);
+      this.controls!.controls!.target.copy(initialTarget);
       this.controls.update();
     }
     
-    console.warn(`[SceneManager] Camera reset for model: ${modelId}`);
+    console.info(`[SceneManager] Camera reset for model: ${modelId}`);
   }
 }
 
@@ -913,7 +823,7 @@ public resetCameraForModel(modelId: string): void {
     this.resizeObserver.disconnect();
     this.renderer.dispose();
     this.models.forEach(model => this.scene.remove(model));
-    if (this.controls) {this.controls.dispose(); this.cleanupControls();}
+    if (this.controls) {this.controls.dispose();}
   }
 
   /**
@@ -965,7 +875,7 @@ public resetCameraForModel(modelId: string): void {
     const model = this.models.get(modelId);
     if (!model) {
       return () => {
-        console.warn(`[SceneManager] Model with ID "${modelId}" not found.`);
+        console.info(`[SceneManager] Model with ID "${modelId}" not found.`);
       };
     }
 
@@ -1040,7 +950,7 @@ public resetCameraForModel(modelId: string): void {
     const model = this.models.get(modelId);
     if (!model) {
       return () => {
-        console.warn(`[SceneManager] Model with ID "${modelId}" not found.`);
+        console.info(`[SceneManager] Model with ID "${modelId}" not found.`);
       };
     }
   

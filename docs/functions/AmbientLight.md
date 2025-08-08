@@ -8,7 +8,7 @@
 
 > **AmbientLight**(`props`): `null`
 
-Defined in: [react/AmbientLight.ts:33](https://github.com/ysordo/shared-3d/blob/b007a73212fa558f7ac5535b031797e40cc1b17a/src/react/AmbientLight.ts#L33)
+Defined in: [react/AmbientLight.ts:33](https://github.com/ysordo/shared-3d/blob/aa08df17a8d7b07be13caf0e053d835d053c41db/src/react/AmbientLight.ts#L33)
 
 Component to create and manage an ambient light in a 3D scene.
 

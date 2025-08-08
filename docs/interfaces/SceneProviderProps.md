@@ -6,7 +6,7 @@
 
 # Interface: SceneProviderProps
 
-Defined in: [react/SceneProvider.tsx:51](https://github.com/ysordo/shared-3d/blob/b007a73212fa558f7ac5535b031797e40cc1b17a/src/react/SceneProvider.tsx#L51)
+Defined in: [react/SceneProvider.tsx:51](https://github.com/ysordo/shared-3d/blob/aa08df17a8d7b07be13caf0e053d835d053c41db/src/react/SceneProvider.tsx#L51)
 
 Props for the SceneProvider component.
 
@@ -20,7 +20,7 @@ Props for the SceneProvider component.
 
 > `optional` **children**: `ReactNode`
 
-Defined in: [react/SceneProvider.tsx:52](https://github.com/ysordo/shared-3d/blob/b007a73212fa558f7ac5535b031797e40cc1b17a/src/react/SceneProvider.tsx#L52)
+Defined in: [react/SceneProvider.tsx:52](https://github.com/ysordo/shared-3d/blob/aa08df17a8d7b07be13caf0e053d835d053c41db/src/react/SceneProvider.tsx#L52)
 
 Optional children to render inside the provider.
 
@@ -30,7 +30,7 @@ Optional children to render inside the provider.
 
 > `optional` **className**: `string`
 
-Defined in: [react/SceneProvider.tsx:16](https://github.com/ysordo/shared-3d/blob/b007a73212fa558f7ac5535b031797e40cc1b17a/src/react/SceneProvider.tsx#L16)
+Defined in: [react/SceneProvider.tsx:16](https://github.com/ysordo/shared-3d/blob/aa08df17a8d7b07be13caf0e053d835d053c41db/src/react/SceneProvider.tsx#L16)
 
 #### Inherited from
 
@@ -42,7 +42,7 @@ Defined in: [react/SceneProvider.tsx:16](https://github.com/ysordo/shared-3d/blo
 
 > `optional` **config**: `object`
 
-Defined in: [react/SceneProvider.tsx:53](https://github.com/ysordo/shared-3d/blob/b007a73212fa558f7ac5535b031797e40cc1b17a/src/react/SceneProvider.tsx#L53)
+Defined in: [react/SceneProvider.tsx:53](https://github.com/ysordo/shared-3d/blob/aa08df17a8d7b07be13caf0e053d835d053c41db/src/react/SceneProvider.tsx#L53)
 
 Optional configuration for the scene.
 
@@ -72,7 +72,7 @@ Optional configuration for the scene.
 
 > `optional` **id**: `string`
 
-Defined in: [react/SceneProvider.tsx:15](https://github.com/ysordo/shared-3d/blob/b007a73212fa558f7ac5535b031797e40cc1b17a/src/react/SceneProvider.tsx#L15)
+Defined in: [react/SceneProvider.tsx:15](https://github.com/ysordo/shared-3d/blob/aa08df17a8d7b07be13caf0e053d835d053c41db/src/react/SceneProvider.tsx#L15)
 
 #### Inherited from
 

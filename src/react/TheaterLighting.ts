@@ -39,8 +39,8 @@ export function TheaterLighting ({
   showHelpers = true
 }: TheaterLightingProps): null {
   const { sceneManager } = useSceneContext();
-  const lightsRef = useRef<THREE.PointLight[]>([]);
-  const helpersRef = useRef<THREE.PointLightHelper[]>([]);
+  const lightsRef = useRef<THREE.DirectionalLight[]>([]);
+  const helpersRef = useRef<THREE.DirectionalLightHelper[]>([]);
   const ambientLightRef = useRef<THREE.AmbientLight | null>(null);
   const fillLightRef = useRef<THREE.DirectionalLight | null>(null);
   
@@ -64,8 +64,8 @@ export function TheaterLighting ({
     const radius = Math.max(size.x, size.y, size.z) * 0.5;
     
     // Crear el círculo de luces
-    const lights: THREE.PointLight[] = [];
-    const helpers: THREE.PointLightHelper[] = [];
+    const lights: THREE.DirectionalLight[] = [];
+    const helpers: THREE.DirectionalLightHelper[] = [];
     
     for (let i = 0; i < lightCount; i++) {
       const angle = (i / lightCount) * Math.PI * 2;
@@ -74,19 +74,20 @@ export function TheaterLighting ({
       const y = center.y + height;
       
       // Crear luz
-      const light = new THREE.PointLight(0xffffff, intensity);
+      const light = new THREE.DirectionalLight(0xffffff, intensity);
       light.position.set(x, y, z);
       light.castShadow = true;
       light.shadow.bias = -0.001;
-      light.shadow.mapSize.width = 2048;
-      light.shadow.mapSize.height = 2048;
+      light.shadow.mapSize.width = window.innerWidth * 0.5;
+      light.shadow.mapSize.height = window.innerHeight * 0.5;
+      light.lookAt(center);
       
       scene.add(light);
       lights.push(light);
       
       // Crear helper visual
       if (showHelpers) {
-        const helper = new THREE.PointLightHelper(light, radius * 0.2);
+        const helper = new THREE.DirectionalLightHelper(light, radius * 0.2);
         scene.add(helper);
         helpers.push(helper);
       }

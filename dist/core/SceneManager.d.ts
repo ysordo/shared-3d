@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/Addons.js';
+import { OrbitControlsManager } from './OrbitControlsManager';
 export type LoadState = 'checking_cache' | 'cache_hit' | 'cache_miss' | 'downloading' | 'parsing' | 'caching' | 'adding_to_scene' | 'model_ready' | 'error';
 /**
  * SceneManager class that manages a 3D scene using Three.js.
@@ -74,7 +74,7 @@ export declare class SceneManager {
     private resizeObserver;
     private parallaxEffects;
     private MARGIN;
-    private activeModelId;
+    activeModelId: string | null;
     private transitionProgress;
     private transitionDuration;
     private transitionModels;
@@ -164,18 +164,11 @@ export declare class SceneManager {
         enablePan?: boolean;
     }): void;
     /**
-     * Cleans up the orbit controls and removes event listeners.
-     * This method is called to properly dispose of the controls when they are no longer needed.
-     * It ensures that all event listeners are removed to prevent memory leaks.
-     * @return {void}
-     */
-    cleanupControls(): void;
-    /**
      * Gets the current OrbitControls instance.
      * This method returns the OrbitControls instance if it has been set up,
      * otherwise it returns undefined.
      */
-    getOrbitControls(): OrbitControls | undefined;
+    getOrbitControls(): OrbitControlsManager | undefined;
     /**
      * Preloads models by their IDs and URLs.
      * This method loads models in the background without adding them to the scene immediately.
