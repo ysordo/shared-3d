@@ -335,7 +335,7 @@ private orbitState = {
   this.cleanupControls(); // Limpiar controles existentes primero
 
   const model = this.models.get(this.activeModelId!);
-  if (!model) {return;}
+  //if (!model) {return;}
 
   // Configurar handlers
   this.orbitEventHandlers.mousedown = (event) => {
@@ -360,14 +360,14 @@ private orbitState = {
     this.orbitState.lastMousePosition = { x: event.clientX, y: event.clientY };
 
     if (this.orbitState.rotateActive) {
-      model.rotation.y += deltaX * 0.01;
-      model.rotation.x += deltaY * 0.01;
+      model!.rotation.y += deltaX * 0.01;
+      model!.rotation.x += deltaY * 0.01;
     } else if (this.orbitState.panActive) {
-      model.position.x += deltaX * 0.01;
-      model.position.y -= deltaY * 0.01;
+      model!.position.x += deltaX * 0.01;
+      model!.position.y -= deltaY * 0.01;
     }
 
-    model.updateMatrixWorld();
+    model!.updateMatrixWorld();
   };
 
   this.orbitEventHandlers.mouseup = () => {
@@ -385,6 +385,9 @@ private orbitState = {
   this.orbitEventHandlers.contextmenu = (event) => {
     event.preventDefault();
   };
+
+  this.controls!.enableZoom = options.enableZoom ?? false;
+
 
   // Añadir event listeners
   this.canvas.addEventListener('mousedown', this.orbitEventHandlers.mousedown);
@@ -910,7 +913,7 @@ public resetCameraForModel(modelId: string): void {
     this.resizeObserver.disconnect();
     this.renderer.dispose();
     this.models.forEach(model => this.scene.remove(model));
-    if (this.controls) {this.controls.dispose();}
+    if (this.controls) {this.controls.dispose(); this.cleanupControls();}
   }
 
   /**

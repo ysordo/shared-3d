@@ -256,9 +256,7 @@ export class SceneManager {
     setupOrbitControls(options = { enableRotate: false, enableZoom: false, enablePan: false }) {
         this.cleanupControls(); // Limpiar controles existentes primero
         const model = this.models.get(this.activeModelId);
-        if (!model) {
-            return;
-        }
+        //if (!model) {return;}
         // Configurar handlers
         this.orbitEventHandlers.mousedown = (event) => {
             this.orbitState.isDragging = true;
@@ -302,6 +300,7 @@ export class SceneManager {
         this.orbitEventHandlers.contextmenu = (event) => {
             event.preventDefault();
         };
+        this.controls.enableZoom = options.enableZoom ?? false;
         // Añadir event listeners
         this.canvas.addEventListener('mousedown', this.orbitEventHandlers.mousedown);
         this.canvas.addEventListener('mousemove', this.orbitEventHandlers.mousemove);
@@ -778,6 +777,7 @@ export class SceneManager {
         this.models.forEach(model => this.scene.remove(model));
         if (this.controls) {
             this.controls.dispose();
+            this.cleanupControls();
         }
     }
     /**

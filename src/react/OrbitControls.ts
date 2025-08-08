@@ -38,10 +38,9 @@ export function OrbitControls({
   enablePan = false,
 }: OrbitControlsProps): null {
   const { sceneManager } = useSceneContext();
-  const id = sceneManager?.getModelActiveId();
 
   useEffect(() => {
-    if (!sceneManager || !id ) {
+    if (!sceneManager || sceneManager?.getModelActiveId() ) {
       console.warn('OrbitControls: SceneManager or active model ID is not available.');
       sceneManager?.animate();
       return;
@@ -54,7 +53,7 @@ export function OrbitControls({
     return () => {
       sceneManager.cleanupControls();
     };
-  }, [sceneManager, id, enableRotate, enableZoom, enablePan]);
+  }, [sceneManager, sceneManager?.getModelActiveId(), enableRotate, enableZoom, enablePan]);
   
   return null;
 }
