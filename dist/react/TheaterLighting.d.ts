@@ -1,7 +1,7 @@
 /**
  * Props for the TheaterLighting component.
  * @property {number} [intensity=1.0] - Intensity of the lights
- * @property {number} [lightCount=8] - Number of lights in the theater setup
+ * @property {number} [lightCount=8] - Number of lights in the circle
  * @property {number} [radiusFactor=1.8] - Factor to adjust the radius of the light circle
  * @property {number} [height=2.5] - Height of the lights above the model
  * @property {boolean} [showHelpers=true] - Whether to show light helpers
@@ -15,11 +15,10 @@ interface TheaterLightingProps {
     showHelpers?: boolean;
 }
 /**
- * Component to create a theater lighting setup around the active model in a 3D scene.
- * It creates multiple point lights arranged in a circle and adds ambient and fill lights.
+ * Component to create and manage theater-style lighting in a 3D scene.
  * @param {TheaterLightingProps} props - Component properties
  * @param {number} [props.intensity=1.0] - Intensity of the lights
- * @param {number} [props.lightCount=8] - Number of lights in the theater setup
+ * @param {number} [props.lightCount=8] - Number of lights in the circle
  * @param {number} [props.radiusFactor=1.8] - Factor to adjust the radius of the light circle
  * @param {number} [props.height=2.5] - Height of the lights above the model
  * @param {boolean} [props.showHelpers=true] - Whether to show light helpers

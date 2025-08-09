@@ -83,6 +83,7 @@ export declare class SceneManager {
     private modelBoundingRadii;
     private NEAR_MARGIN;
     private FAR_MULTIPLIER;
+    private eventDispatcher;
     /**
      * Creates an instance of SceneManager.
      * Initializes the Three.js scene, camera, renderer, and optional post-processing effects.
@@ -186,6 +187,49 @@ export declare class SceneManager {
      * @returns {void}
      */
     transitionToModel(targetId: string): void;
+    /**
+     * Dispatches an event to the scene.
+     * This method allows for custom events to be dispatched within the scene,
+     * enabling interaction with other components or systems that listen for these events.
+     * @param {THREE.Event} event - The event to dispatch.
+     * @returns {void}
+     * @example
+     * sceneManager.dispatchEvent({ type: 'customEvent', detail: { message: 'Hello, World!' } });
+     */
+    dispatchEvent(event: THREE.Event): void;
+    /**
+     * Event listener management methods.
+     * These methods allow adding, checking, and removing event listeners for custom events.
+     * @param {string} type - The type of event to listen for.
+     * @param {function} listener - The function to call when the event is triggered.
+     * @returns {void}
+     * @example
+     * sceneManager.addEventListener('customEvent', (event) => {
+     *   console.log('Custom event triggered:', event);
+     * });
+     */
+    addEventListener(type: string, listener: (event: THREE.Event) => void): void;
+    /**
+     * Checks if an event listener is already registered for a specific event type.
+     * This method returns true if the listener is found, otherwise false.
+     * @param {string} type - The type of event to check for.
+     * @param {function} listener - The function to check for as an event listener.
+     * @returns {boolean} True if the listener is registered, false otherwise.
+     * @example
+     * const isRegistered = sceneManager.hasEventListener('customEvent', myListener);
+     * console.log('Is listener registered?', isRegistered);
+     */
+    hasEventListener(type: string, listener: (event: THREE.Event) => void): boolean;
+    /**
+     * Removes an event listener for a specific event type.
+     * This method allows for cleanup of event listeners that are no longer needed.
+     * @param {string} type - The type of event to remove the listener from.
+     * @param {function} listener - The function to remove as an event listener.
+     * @returns {void}
+     * @example
+     * sceneManager.removeEventListener('customEvent', myListener);
+     */
+    removeEventListener(type: string, listener: (event: THREE.Event) => void): void;
     /**
      * Loads a 3D model from a given URL and adds it to the scene.
      * If the model is already loaded, it returns the existing model.
