@@ -41,7 +41,7 @@ export function TheaterLighting ({
   const { sceneManager } = useSceneContext();
   
   useEffect(() => {
-    ()=>sceneManager?.createTheatreLighting(intensity,lightCount,radiusFactor,height,showHelpers);
+    sceneManager?.createTheatreLighting(intensity,lightCount,radiusFactor,height,showHelpers);
     return ()=> {
       sceneManager?.removeTheatreLighting();
     };

@@ -15,7 +15,7 @@ import { useSceneContext } from './SceneContext';
 export function TheaterLighting({ intensity = 1.0, lightCount = 8, radiusFactor = 1.8, height = 2.5, showHelpers = true }) {
     const { sceneManager } = useSceneContext();
     useEffect(() => {
-        () => sceneManager?.createTheatreLighting(intensity, lightCount, radiusFactor, height, showHelpers);
+        sceneManager?.createTheatreLighting(intensity, lightCount, radiusFactor, height, showHelpers);
         return () => {
             sceneManager?.removeTheatreLighting();
         };
