@@ -83,6 +83,10 @@ export declare class SceneManager {
     private modelBoundingRadii;
     private NEAR_MARGIN;
     private FAR_MULTIPLIER;
+    private lightsRef;
+    private helpersRef;
+    private fillLightRef;
+    private ambientLightRef;
     /**
      * Creates an instance of SceneManager.
      * Initializes the Three.js scene, camera, renderer, and optional post-processing effects.
@@ -202,6 +206,14 @@ export declare class SceneManager {
      * @returns {boolean} True if the model is loaded, false otherwise.
      */
     hasModel(id: string): boolean;
+    /**
+     *
+     */
+    createTheatreLighting(intensity?: number, lightCount?: number, radiusFactor?: number, height?: number, showHelpers?: boolean): boolean;
+    /**
+     *
+     */
+    removeTheatreLighting(): () => void;
     /**
      * Adds a model to the scene and positions the camera to fit the model.
      * It calculates the bounding box of the model, centers it, and adjusts the camera distance accordingly.

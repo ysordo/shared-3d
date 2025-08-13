@@ -108,6 +108,16 @@ export class SceneManager {
         this.modelBoundingRadii = new Map();
         this.NEAR_MARGIN = 0.1; // Margen adicional para evitar clipping
         this.FAR_MULTIPLIER = 10; // Multiplicador para el plano far
+        this.lightsRef = [];
+        this.helpersRef = [];
+        this.fillLightRef = null;
+        this.ambientLightRef = {
+            get: new THREE.AmbientLight(),
+            set(color, intensity) {
+                this.get.intensity = intensity;
+                this.get.color = new THREE.Color(color);
+            },
+        };
         /**
          * Handles canvas resizing by updating the renderer size, camera aspect ratio,
          * and recalculating camera position for all models in the scene.
@@ -413,6 +423,11 @@ export class SceneManager {
                         /*[State Change]*/ if (onStateChange) {
                             onStateChange('adding_to_scene', `Adding model ${id} to scene.`);
                         }
+                        model.traverse((child) => {
+                            if (child instanceof THREE.Mesh) {
+                                child.geometry.computeBoundingBox();
+                            }
+                        });
                         this.addModelToScene(id, model);
                         /*[State Change]*/ if (onStateChange) {
                             onStateChange('model_ready', `Model ${id} loaded from cache.`);
@@ -438,6 +453,7 @@ export class SceneManager {
                                 child.geometry.computeBoundingBox();
                             }
                         });
+                        this.addModelToScene(id, model);
                         /*[State Change]*/ if (onStateChange) {
                             onStateChange('model_ready', `Model ${id} loaded successfully.`);
                         }
@@ -483,6 +499,85 @@ export class SceneManager {
         return this.hasModelLoaded.get(id) || false;
     }
     /**
+     *
+     */
+    createTheatreLighting(intensity = 1.0, lightCount = 8, radiusFactor = 1.8, height = 2.5, showHelpers = false) {
+        const { canvas } = this;
+        if (!this.hasModel(this.activeModelId)) {
+            return false;
+        }
+        // Calcular el centro y radio del modelo
+        const box = new THREE.Box3().setFromObject(this.models.get(this.activeModelId));
+        const center = new THREE.Vector3();
+        box.getCenter(center);
+        const size = new THREE.Vector3();
+        box.getSize(size);
+        const radius = Math.max(size.x, size.y, size.z) * 0.5;
+        // Crear el círculo de luces
+        const lights = [];
+        const helpers = [];
+        for (let i = 0; i < lightCount; i++) {
+            const angle = (i / lightCount) * Math.PI * 2;
+            const x = center.x + Math.cos(angle) * radius * radiusFactor;
+            const z = center.z + Math.sin(angle) * radius * radiusFactor;
+            const y = center.y + height;
+            // Crear luz
+            const light = new THREE.DirectionalLight(0xffffff, intensity);
+            light.position.set(x, y, z);
+            light.castShadow = true;
+            light.shadow.bias = -0.001;
+            light.shadow.mapSize.width = canvas.clientWidth * Math.min(window.devicePixelRatio, 2);
+            light.shadow.mapSize.height = canvas.clientHeight * Math.min(window.devicePixelRatio, 2);
+            light.lookAt(center);
+            this.scene.add(light);
+            lights.push(light);
+            // Crear helper visual
+            if (showHelpers) {
+                const helper = new THREE.DirectionalLightHelper(light, radius * 0.2);
+                this.scene.add(helper);
+                helpers.push(helper);
+            }
+        }
+        // Luz ambiental
+        this.ambientLightRef.set(0xffffff, intensity * 0.15);
+        this.scene.add(this.ambientLightRef.get);
+        // Luz de relleno
+        this.fillLightRef = new THREE.DirectionalLight(0xffffff, intensity * 0.3);
+        this.fillLightRef.position.set(0, height * 1.5, 0);
+        this.fillLightRef.castShadow = true;
+        this.scene.add(this.fillLightRef);
+        // Guardar referencias
+        this.lightsRef = lights;
+        this.helpersRef = helpers;
+        return true;
+    }
+    /**
+     *
+     */
+    removeTheatreLighting() {
+        return () => {
+            // Limpiar al desmontar
+            if (this.lightsRef) {
+                this.lightsRef.forEach(light => this.scene.remove(light));
+                this.lightsRef.forEach(light => light.dispose());
+                this.lightsRef = [];
+            }
+            if (this.helpersRef) {
+                this.helpersRef.forEach(helper => this.scene.remove(helper));
+                this.helpersRef.forEach(helper => helper.dispose());
+                this.helpersRef = [];
+            }
+            if (this.ambientLightRef.get) {
+                this.scene.remove(this.ambientLightRef.get);
+            }
+            if (this.fillLightRef) {
+                this.scene.remove(this.fillLightRef);
+                this.fillLightRef.dispose();
+                this.fillLightRef = null;
+            }
+        };
+    }
+    /**
      * Adds a model to the scene and positions the camera to fit the model.
      * It calculates the bounding box of the model, centers it, and adjusts the camera distance accordingly.
      * @param {string} id - Unique identifier for the model.
@@ -492,6 +587,7 @@ export class SceneManager {
      */
     addModelToScene(id, model) {
         console.info(`[SceneManager] Adding model with ID: ${id} to the scene.`);
+        const container = new THREE.Group();
         // 1. Calculate the bounding box of the model
         const box = new THREE.Box3().setFromObject(model, true);
         // 2. Create a bounding box to center the model
@@ -500,7 +596,11 @@ export class SceneManager {
         box.getCenter(center);
         box.getSize(size);
         // 3. Center the model at the origin
-        model.position.sub(center);
+        //model.position.sub(center);
+        container.position.copy(center.negate());
+        container.add(model);
+        // Actualizar matrices
+        container.updateMatrixWorld(true);
         // 4. Calculate the bounding sphere of the model
         const boundingSphere = new THREE.Sphere();
         box.getBoundingSphere(boundingSphere);
@@ -523,8 +623,8 @@ export class SceneManager {
         this.initialCameraPositions.set(id, this.camera.position.clone());
         this.initialCameraTargets.set(id, new THREE.Vector3(0, 0, 0));
         // 7. Add the model to the scene
-        this.models.set(id, model);
-        this.scene.add(model);
+        this.models.set(id, container);
+        this.scene.add(container);
         console.info(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
     }
     /**
