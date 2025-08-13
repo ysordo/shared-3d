@@ -41,13 +41,11 @@ export function TheaterLighting ({
   const { sceneManager } = useSceneContext();
   
   useEffect(() => {
-    let animationFrameId = requestAnimationFrame(()=>sceneManager?.createTheatreLighting(intensity,lightCount,radiusFactor,height,showHelpers) && cancelAnimationFrame(animationFrameId));
-    sceneManager?.scene.updateWorldMatrix(true,true);
+    ()=>sceneManager?.createTheatreLighting(intensity,lightCount,radiusFactor,height,showHelpers);
     return ()=> {
       sceneManager?.removeTheatreLighting();
-      cancelAnimationFrame(animationFrameId);
     };
-  }, [sceneManager, intensity, lightCount, radiusFactor, height, showHelpers]);
+  }, [sceneManager?.activeModelId!, intensity, lightCount, radiusFactor, height, showHelpers, sceneManager]);
   
   return null;
 };

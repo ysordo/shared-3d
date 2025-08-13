@@ -418,6 +418,7 @@ export class SceneManager {
   public transitionToModel(targetId: string): void {
     if (!this.models.has(targetId) || this.activeModelId === targetId) {return;}
 
+    this.activeModelId = targetId;
     const startTime = performance.now();
     const startModel = this.activeModelId ? this.models.get(this.activeModelId)! : null;
     const targetModel = this.models.get(targetId)!;
@@ -459,7 +460,7 @@ export class SceneManager {
         // Finish transition
         if (startModel) {startModel.visible = false;}
         targetModel.visible = true;
-        this.activeModelId = targetId;
+        //this.activeModelId = targetId;
         this.transitionProgress = 0;
         
         // Restore opacity
@@ -601,63 +602,70 @@ export class SceneManager {
     height: number = 2.5,
     showHelpers:boolean = false
   ): boolean{
-        const {canvas} = this;
-        if(!this.hasModel(this.activeModelId!)){
-          return false;
-        }
-        // Calcular el centro y radio del modelo
-        const box = new THREE.Box3().setFromObject(this.models.get(this.activeModelId!)!);
-        const center = new THREE.Vector3();
-        box.getCenter(center);
-        const size = new THREE.Vector3();
-        box.getSize(size);
-        const radius = Math.max(size.x, size.y, size.z) * 0.5;
-        
-        
-        // Crear el círculo de luces
-        const lights: THREE.DirectionalLight[] = [];
-        const helpers: THREE.DirectionalLightHelper[] = [];
-        
-        for (let i = 0; i < lightCount; i++) {
-          const angle = (i / lightCount) * Math.PI * 2;
-          const x = center.x + Math.cos(angle) * radius * radiusFactor;
-          const z = center.z + Math.sin(angle) * radius * radiusFactor;
-          const y = center.y + height;
-          
-          // Crear luz
-          const light = new THREE.DirectionalLight(0xffffff, intensity);
-          light.position.set(x, y, z);
-          light.castShadow = true;
-          light.shadow.bias = -0.001;
-          light.shadow.mapSize.width = canvas.clientWidth * Math.min(window.devicePixelRatio, 2);
-          light.shadow.mapSize.height = canvas.clientHeight * Math.min(window.devicePixelRatio, 2);
-          light.lookAt(center);
-          
-          this.scene.add(light);
-          lights.push(light);
-          
-          // Crear helper visual
-          if (showHelpers) {
-            const helper = new THREE.DirectionalLightHelper(light, radius * 0.2);
-            this.scene.add(helper);
-            helpers.push(helper);
-          }
-        }
-        
-        // Luz ambiental
-        this.ambientLightRef.set(0xffffff, intensity * 0.15);
-        this.scene.add(this.ambientLightRef.get);
-        
-        // Luz de relleno
-        this.fillLightRef = new THREE.DirectionalLight(0xffffff, intensity * 0.3);
-        this.fillLightRef.position.set(0, height * 1.5, 0);
-        this.fillLightRef.castShadow = true;
-        this.scene.add(this.fillLightRef);
-        
-        // Guardar referencias
-        this.lightsRef = lights;
-        this.helpersRef = helpers;
-        return true;
+    console.info('[SceneManager] Create Theatre Lighting');
+    const {canvas} = this;
+    if(!this.hasModel(this.activeModelId!)){
+      return false;
+    }
+    console.info(`[SceneManager] Active Model ${this.activeModelId}`);
+    // Calculate the center and radio of the model
+    const box = new THREE.Box3().setFromObject(this.models.get(this.activeModelId!)!);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const radius = Math.max(size.x, size.y, size.z) * 0.5;
+    
+    
+    // Create the circle of lights
+    const lights: THREE.DirectionalLight[] = [];
+    const helpers: THREE.DirectionalLightHelper[] = [];
+    
+    for (let i = 0; i < lightCount; i++) {
+      const angle = (i / lightCount) * Math.PI * 2;
+      const x = center.x + Math.cos(angle) * radius * radiusFactor;
+      const z = center.z + Math.sin(angle) * radius * radiusFactor;
+      const y = center.y + height;
+      
+      // Crear luz
+      const light = new THREE.DirectionalLight(0xffffff, intensity);
+      light.position.set(x, y, z);
+      light.castShadow = true;
+      light.shadow.bias = -0.001;
+      light.shadow.mapSize.width = canvas.clientWidth * Math.min(window.devicePixelRatio, 2);
+      light.shadow.mapSize.height = canvas.clientHeight * Math.min(window.devicePixelRatio, 2);
+      light.lookAt(center);
+      
+      console.info(`[SceneManager] Create Directional Light in position: (${x},${y},${z})`);
+
+      this.scene.add(light);
+      lights.push(light);
+      
+      // Crear helper visual
+      if (showHelpers) {
+        const helper = new THREE.DirectionalLightHelper(light, radius * 0.2);
+        this.scene.add(helper);
+        helpers.push(helper);
+      }
+    }
+    
+    console.info('[SceneManager] Add Ambient Light');
+    // Luz ambiental
+    this.ambientLightRef.set(0xffffff, intensity * 0.15);
+    this.scene.add(this.ambientLightRef.get);
+    
+    console.info('[SceneManager] Add Fill Light');
+    // Luz de relleno
+    this.fillLightRef = new THREE.DirectionalLight(0xffffff, intensity * 0.3);
+    this.fillLightRef.position.set(0, height * 1.5, 0);
+    this.fillLightRef.castShadow = true;
+    this.scene.add(this.fillLightRef);
+    
+    // Guardar referencias
+    this.lightsRef = lights;
+    this.helpersRef = helpers;
+    console.info('[SceneManager] Create Theatre Lighting finish');
+    return true;
   }
 
   /**
@@ -667,13 +675,17 @@ export class SceneManager {
     return () => {
           // Limpiar al desmontar
           if(this.lightsRef){
-            this.lightsRef.forEach(light => this.scene.remove(light));
-            this.lightsRef.forEach(light => light.dispose());
+            this.lightsRef.forEach(light => {
+              this.scene.remove(light);
+              light.dispose();
+            });
             this.lightsRef = [];
           }
           if(this.helpersRef){
-            this.helpersRef.forEach(helper => this.scene.remove(helper));
-            this.helpersRef.forEach(helper => helper.dispose());
+            this.helpersRef.forEach(helper => {
+              this.scene.remove(helper);
+              helper.dispose();
+            });
             this.helpersRef = [];
           }
           

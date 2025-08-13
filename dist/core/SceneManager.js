@@ -332,6 +332,7 @@ export class SceneManager {
         if (!this.models.has(targetId) || this.activeModelId === targetId) {
             return;
         }
+        this.activeModelId = targetId;
         const startTime = performance.now();
         const startModel = this.activeModelId ? this.models.get(this.activeModelId) : null;
         const targetModel = this.models.get(targetId);
@@ -370,7 +371,7 @@ export class SceneManager {
                     startModel.visible = false;
                 }
                 targetModel.visible = true;
-                this.activeModelId = targetId;
+                //this.activeModelId = targetId;
                 this.transitionProgress = 0;
                 // Restore opacity
                 targetModel.traverse(child => {
@@ -502,18 +503,20 @@ export class SceneManager {
      *
      */
     createTheatreLighting(intensity = 1.0, lightCount = 8, radiusFactor = 1.8, height = 2.5, showHelpers = false) {
+        console.info('[SceneManager] Create Theatre Lighting');
         const { canvas } = this;
         if (!this.hasModel(this.activeModelId)) {
             return false;
         }
-        // Calcular el centro y radio del modelo
+        console.info(`[SceneManager] Active Model ${this.activeModelId}`);
+        // Calculate the center and radio of the model
         const box = new THREE.Box3().setFromObject(this.models.get(this.activeModelId));
         const center = new THREE.Vector3();
         box.getCenter(center);
         const size = new THREE.Vector3();
         box.getSize(size);
         const radius = Math.max(size.x, size.y, size.z) * 0.5;
-        // Crear el círculo de luces
+        // Create the circle of lights
         const lights = [];
         const helpers = [];
         for (let i = 0; i < lightCount; i++) {
@@ -529,6 +532,7 @@ export class SceneManager {
             light.shadow.mapSize.width = canvas.clientWidth * Math.min(window.devicePixelRatio, 2);
             light.shadow.mapSize.height = canvas.clientHeight * Math.min(window.devicePixelRatio, 2);
             light.lookAt(center);
+            console.info(`[SceneManager] Create Directional Light in position: (${x},${y},${z})`);
             this.scene.add(light);
             lights.push(light);
             // Crear helper visual
@@ -538,9 +542,11 @@ export class SceneManager {
                 helpers.push(helper);
             }
         }
+        console.info('[SceneManager] Add Ambient Light');
         // Luz ambiental
         this.ambientLightRef.set(0xffffff, intensity * 0.15);
         this.scene.add(this.ambientLightRef.get);
+        console.info('[SceneManager] Add Fill Light');
         // Luz de relleno
         this.fillLightRef = new THREE.DirectionalLight(0xffffff, intensity * 0.3);
         this.fillLightRef.position.set(0, height * 1.5, 0);
@@ -549,6 +555,7 @@ export class SceneManager {
         // Guardar referencias
         this.lightsRef = lights;
         this.helpersRef = helpers;
+        console.info('[SceneManager] Create Theatre Lighting finish');
         return true;
     }
     /**
@@ -558,13 +565,17 @@ export class SceneManager {
         return () => {
             // Limpiar al desmontar
             if (this.lightsRef) {
-                this.lightsRef.forEach(light => this.scene.remove(light));
-                this.lightsRef.forEach(light => light.dispose());
+                this.lightsRef.forEach(light => {
+                    this.scene.remove(light);
+                    light.dispose();
+                });
                 this.lightsRef = [];
             }
             if (this.helpersRef) {
-                this.helpersRef.forEach(helper => this.scene.remove(helper));
-                this.helpersRef.forEach(helper => helper.dispose());
+                this.helpersRef.forEach(helper => {
+                    this.scene.remove(helper);
+                    helper.dispose();
+                });
                 this.helpersRef = [];
             }
             if (this.ambientLightRef.get) {
