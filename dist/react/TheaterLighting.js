@@ -13,14 +13,12 @@ import { useSceneContext } from './SceneContext';
  * @returns {null} This component does not render anything directly
  */
 export function TheaterLighting({ intensity = 1.0, lightCount = 8, radiusFactor = 1.8, height = 2.5, showHelpers = true }) {
-    const { sceneManager, canvas } = useSceneContext();
+    const { sceneManager } = useSceneContext();
     useEffect(() => {
-        if (!sceneManager) {
-            return;
-        }
-        let animationFrameId = requestAnimationFrame(() => sceneManager.createTheatreLighting(intensity, lightCount, radiusFactor, height, showHelpers) && cancelAnimationFrame(animationFrameId));
+        let animationFrameId = requestAnimationFrame(() => sceneManager?.createTheatreLighting(intensity, lightCount, radiusFactor, height, showHelpers) && cancelAnimationFrame(animationFrameId));
+        sceneManager?.scene.updateWorldMatrix(true, true);
         return () => {
-            sceneManager.removeTheatreLighting();
+            sceneManager?.removeTheatreLighting();
             cancelAnimationFrame(animationFrameId);
         };
     }, [sceneManager, intensity, lightCount, radiusFactor, height, showHelpers]);

@@ -38,13 +38,13 @@ export function TheaterLighting ({
   height = 2.5,
   showHelpers = true
 }: TheaterLightingProps): null {
-  const { sceneManager, canvas } = useSceneContext();
+  const { sceneManager } = useSceneContext();
   
   useEffect(() => {
-    if (!sceneManager) {return;}
-    let animationFrameId = requestAnimationFrame(()=>sceneManager.createTheatreLighting(intensity,lightCount,radiusFactor,height,showHelpers) && cancelAnimationFrame(animationFrameId));
+    let animationFrameId = requestAnimationFrame(()=>sceneManager?.createTheatreLighting(intensity,lightCount,radiusFactor,height,showHelpers) && cancelAnimationFrame(animationFrameId));
+    sceneManager?.scene.updateWorldMatrix(true,true);
     return ()=> {
-      sceneManager.removeTheatreLighting();
+      sceneManager?.removeTheatreLighting();
       cancelAnimationFrame(animationFrameId);
     };
   }, [sceneManager, intensity, lightCount, radiusFactor, height, showHelpers]);
