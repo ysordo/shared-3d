@@ -34,7 +34,6 @@ export class OrbitControlsManager {
         this.model = model;
         // Events setup
         this.setupEvents();
-        model.updateWorldMatrix(true, true);
     }
     setupEvents() {
         // Mouse events

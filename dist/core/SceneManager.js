@@ -253,6 +253,7 @@ export class SceneManager {
     setupOrbitControls(options = { enableRotate: false, enableZoom: false, enablePan: false }) {
         this.controls.enablePan = options.enablePan ?? false;
         this.controls.enableZoom = options.enableZoom ?? false;
+        this.controls.controls.enableZoom = options.enableZoom ?? false;
         this.controls.enableRotate = options.enableRotate ?? false;
     }
     /**

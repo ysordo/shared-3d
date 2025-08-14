@@ -327,6 +327,7 @@ export class SceneManager {
 } = { enableRotate: false, enableZoom: false, enablePan: false }): void {
   this.controls!.enablePan = options.enablePan ?? false;
   this.controls!.enableZoom = options.enableZoom ?? false;
+  this.controls!.controls!.enableZoom = options.enableZoom ?? false;
   this.controls!.enableRotate = options.enableRotate ?? false;
 }
 
