@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { EffectComposer, GLTFLoader, RenderPass, SMAAPass, SSAARenderPass } from 'three/examples/jsm/Addons.js';
 import { CacheManager } from './CacheManager';
 import { OrbitControlsManager } from './OrbitControlsManager';
+import { ParallaxManager } from './ParallaxManager';
 /**
  * SceneManager class that manages a 3D scene using Three.js.
  * It handles rendering, model loading, camera controls, and post-processing effects.
@@ -197,15 +198,10 @@ export class SceneManager {
         // 5. Setup resize observer to handle canvas resizing
         this.resizeObserver = new ResizeObserver(this.handleResize);
         this.resizeObserver.observe(canvas);
-    }
-    /**
-     * Gets the ID of the currently active model in the scene.
-     * If no model is active, it returns null.
-     * @returns {string | null} The ID of the active model or null if no model is active.
-     * @memberof SceneManager
-     */
-    getModelActiveId() {
-        return this.activeModelId;
+        // 6. Create a ParallaxManager instance if needed
+        if (config.parallax) {
+            this.parallaxManager = new ParallaxManager(this.camera);
+        }
     }
     /**
      * Sets up post-processing effects for the scene.
@@ -255,6 +251,8 @@ export class SceneManager {
         this.controls.enableZoom = options.enableZoom ?? false;
         this.controls.controls.enableZoom = options.enableZoom ?? false;
         this.controls.enableRotate = options.enableRotate ?? false;
+        this.controls.controls.maxDistance = options.maxDistance ?? Infinity;
+        this.controls.controls.minDistance = options.minDistance ?? 0;
     }
     /**
      * Gets the current OrbitControls instance.
@@ -637,6 +635,9 @@ export class SceneManager {
         // 7. Add the model to the scene
         this.models.set(id, container);
         this.scene.add(container);
+        if (this.config.parallax) {
+            this.parallaxManager?.register(id, container, this.transitionDuration / 1000);
+        }
         console.info(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
     }
     /**
@@ -802,143 +803,11 @@ export class SceneManager {
             this.controls.dispose();
         }
     }
-    /**
-     * Sets up a parallax effect for all models in the scene.
-     * The effect is applied based on the scroll progress and can be configured for different axes.
-     * @param {number} [intensity=0.1] - Intensity of the parallax effect.
-     * @param {'x' | 'y' | 'z' | 'xy' | 'xyz'} [axis='y'] - Axis or axes to apply the parallax effect.
-     * @returns {(scrollProgress: number) => void} Function to apply the parallax effect based on scroll progress.
-     */
-    setupParallaxEffect(intensity = 0.1, axis = 'y') {
-        const originalPositions = new Map();
-        // Guardar posiciones originales
-        this.models.forEach((model, id) => {
-            originalPositions.set(id, model.position.clone());
-        });
-        // Función para aplicar efecto parallax
-        return (scrollProgress) => {
-            this.models.forEach((model, id) => {
-                const originalPos = originalPositions.get(id);
-                if (!originalPos) {
-                    return;
-                }
-                const offset = scrollProgress * intensity;
-                if (axis.includes('x')) {
-                    model.position.x = originalPos.x + offset;
-                }
-                if (axis.includes('y')) {
-                    model.position.y = originalPos.y + offset;
-                }
-                if (axis.includes('z')) {
-                    model.position.z = originalPos.z + offset;
-                }
-            });
-        };
-    }
-    /**
-     * Creates a parallax effect for a specific model.
-     * The effect is applied based on the scroll progress and can be configured for different axes.
-     * @param {string} modelId - Unique identifier for the model.
-     * @param {number} [intensity=0.1] - Intensity of the parallax effect.
-     * @param {'x' | 'y' | 'z' | 'xy' | 'xyz'} [axis='y'] - Axis or axes to apply the parallax effect.
-     * @returns {(progress: number) => void} Function to apply the parallax effect based on progress.
-     */
-    createParallaxEffect(modelId, intensity = 0.1, axis = 'y') {
-        const model = this.models.get(modelId);
-        if (!model) {
-            return () => {
-                console.info(`[SceneManager] Model with ID "${modelId}" not found.`);
-            };
+    handleParallaxEffects(onProgress) {
+        if (this.parallaxManager && this.activeModelId) {
+            this.parallaxManager.idActive = this.activeModelId;
+            this.parallaxManager.parallaxEffect = onProgress;
         }
-        const originalPosition = model.position.clone();
-        const effect = (progress) => {
-            if (!this.models.has(modelId)) {
-                return;
-            }
-            const offset = progress * intensity;
-            model.position.copy(originalPosition);
-            if (axis.includes('x')) {
-                model.position.x += offset;
-            }
-            if (axis.includes('y')) {
-                model.position.y += offset;
-            }
-            if (axis.includes('z')) {
-                model.position.z += offset;
-            }
-        };
-        this.parallaxEffects.set(modelId, effect);
-        return effect;
-    }
-    /**
-     * Applies a parallax effect to a specific model based on its ID and progress.
-     * This function retrieves the effect from the map and applies it.
-     * @param {string} modelId - Unique identifier for the model.
-     * @param {number} progress - Progress value to apply the parallax effect.
-     * @returns {void}
-     */
-    applyParallaxEffect(modelId, progress) {
-        const effect = this.parallaxEffects.get(modelId);
-        if (effect) {
-            effect(progress);
-        }
-    }
-    /**
-     * Applies the active parallax effect to the currently active model.
-     * This function checks if there is an active model and applies the parallax effect to it.
-     * @param {number} progress - Progress value to apply the parallax effect.
-     * @returns {void}
-     * @see {@link SceneManager.applyParallaxEffect}
-     * @example
-     * sceneManager.applyActiveParallax(0.5); // Applies the parallax effect
-     * to the active model with a progress of 0.5.
-     */
-    applyActiveParallax(progress) {
-        if (this.activeModelId) {
-            this.applyParallaxEffect(this.activeModelId, progress);
-        }
-    }
-    /**
-     * Applies all registered parallax effects based on the provided progress value.
-     * This function iterates through all parallax effects and applies them.
-     * @param {number} progress - Progress value to apply the parallax effects.
-     * @returns {void}
-     */
-    applyAllParallaxEffects(progress) {
-        this.parallaxEffects.forEach(effect => effect(progress));
-    }
-    /**
-     * Creates a rotation effect for a specific model based on its ID and intensity.
-     * The effect rotates the model around a specified axis based on the progress value.
-     * @param {string} modelId - Unique identifier for the model.
-     * @param {number} [intensity=0.01] - Intensity of the rotation effect.
-     * @param {'x' | 'y' | 'z'} [axis='y'] - Axis to rotate the model around.
-     * @returns {(progress: number) => void} Function to apply the rotation effect based on progress.
-     */
-    createRotationEffect(modelId, intensity = 0.01, axis = 'y') {
-        const model = this.models.get(modelId);
-        if (!model) {
-            return () => {
-                console.info(`[SceneManager] Model with ID "${modelId}" not found.`);
-            };
-        }
-        const effect = (progress) => {
-            if (!this.models.has(modelId)) {
-                return;
-            }
-            const rotation = progress * intensity;
-            if (axis === 'x') {
-                model.rotation.x = rotation;
-            }
-            if (axis === 'y') {
-                model.rotation.y = rotation;
-            }
-            if (axis === 'z') {
-                model.rotation.z = rotation;
-            }
-        };
-        this.parallaxEffects.set(`${modelId}-rotation`, effect);
-        return effect;
     }
 }
 //# sourceMappingURL=SceneManager.js.map

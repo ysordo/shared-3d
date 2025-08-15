@@ -9,6 +9,10 @@ interface OrbitControlsProps {
     enableRotate?: boolean;
     enableZoom?: boolean;
     enablePan?: boolean;
+    distance?: {
+        min?: number;
+        max?: number;
+    };
 }
 /**
  * Component to manage orbit controls for a 3D scene.
@@ -26,6 +30,6 @@ interface OrbitControlsProps {
  * The controls are automatically cleaned up when the component is unmounted or when the active model changes.
  * This component is useful for providing interactive camera controls in 3D applications.
  */
-export declare function OrbitControls({ enableRotate, enableZoom, enablePan, }: OrbitControlsProps): null;
+export declare function OrbitControls({ enableRotate, enableZoom, enablePan, distance }: OrbitControlsProps): null;
 export {};
 //# sourceMappingURL=OrbitControls.d.ts.map

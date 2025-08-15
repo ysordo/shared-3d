@@ -18,7 +18,7 @@ import { useSceneContext } from './SceneContext';
  * The controls are automatically cleaned up when the component is unmounted or when the active model changes.
  * This component is useful for providing interactive camera controls in 3D applications.
  */
-export function OrbitControls({ enableRotate = false, enableZoom = false, enablePan = false, }) {
+export function OrbitControls({ enableRotate = false, enableZoom = false, enablePan = false, distance = { min: 0, max: Infinity } }) {
     const { sceneManager } = useSceneContext();
     useEffect(() => {
         if (!sceneManager) {
@@ -30,12 +30,12 @@ export function OrbitControls({ enableRotate = false, enableZoom = false, enable
             return;
         }
         // Configurar controles
-        sceneManager.setupOrbitControls({ enableRotate, enableZoom, enablePan });
+        sceneManager.setupOrbitControls({ enableRotate, enableZoom, enablePan, maxDistance: distance.max, minDistance: distance.min });
         // Limpieza al desmontar o cuando cambien las dependencias
         return () => {
             sceneManager.getOrbitControls()?.dispose();
         };
-    }, [sceneManager, sceneManager?.activeModelId, enableRotate, enableZoom, enablePan]);
+    }, [sceneManager, sceneManager?.activeModelId, enableRotate, enableZoom, enablePan, distance.max, distance.min]);
     return null;
 }
 //# sourceMappingURL=OrbitControls.js.map

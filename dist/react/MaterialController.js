@@ -14,8 +14,8 @@ export function MaterialController({ materialType, materialOptions, wireframe = 
     const { sceneManager } = useSceneContext();
     useEffect(() => {
         if (sceneManager) {
-            sceneManager.setMaterial(sceneManager.getModelActiveId(), materialType, materialOptions);
-            sceneManager.setWireframe(sceneManager.getModelActiveId(), wireframe);
+            sceneManager.setMaterial(sceneManager.activeModelId, materialType, materialOptions);
+            sceneManager.setWireframe(sceneManager.activeModelId, wireframe);
         }
     }, [materialType, materialOptions, wireframe, sceneManager]);
     return null;
