@@ -63,6 +63,6 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
-  "license": "ISC",
+  "license": "MIT",
   "packageManager": "pnpm@10.12.4"
 }

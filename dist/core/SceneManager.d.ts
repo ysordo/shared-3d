@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControlsManager } from './OrbitControlsManager';
+import { AnimationManager } from './AnimationManager';
 export type LoadState = 'checking_cache' | 'cache_hit' | 'cache_miss' | 'downloading' | 'parsing' | 'caching' | 'adding_to_scene' | 'model_ready' | 'error';
 /**
  * SceneManager class that manages a 3D scene using Three.js.
@@ -88,6 +89,8 @@ export declare class SceneManager {
     private helpersRef;
     private fillLightRef;
     private ambientLightRef;
+    private animationManagers;
+    private clock;
     /**
      * Creates an instance of SceneManager.
      * Initializes the Three.js scene, camera, renderer, and optional post-processing effects.
@@ -220,6 +223,8 @@ export declare class SceneManager {
      * @private
      */
     private addModelToScene;
+    setupAnimations(modelId: string, model: THREE.Object3D, animations: THREE.AnimationClip[]): void;
+    getAnimationManager(modelId?: string): AnimationManager | null;
     /**
      * Adjusts the camera clipping planes based on the active model's bounding sphere.
      * It calculates the near and far clipping planes based on the model's radius and distance from the camera.

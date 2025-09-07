@@ -1,9 +1,11 @@
 /* eslint-disable no-console */
 import * as THREE from 'three';
+import type { GLTF} from 'three/examples/jsm/Addons.js';
 import { EffectComposer, GLTFLoader, RenderPass, SMAAPass, SSAARenderPass } from 'three/examples/jsm/Addons.js';
 import { CacheManager } from './CacheManager';
 import { OrbitControlsManager } from './OrbitControlsManager';
 import { ParallaxManager } from './ParallaxManager';
+import { AnimationManager } from './AnimationManager';
 
 
 export type LoadState = 
@@ -113,6 +115,8 @@ export class SceneManager {
         this.get.color= new THREE.Color(color);
     },
   };
+   private animationManagers: Map<string, AnimationManager> = new Map();
+   private clock: THREE.Clock;
 
   /**
    * Creates an instance of SceneManager.
@@ -154,7 +158,8 @@ export class SceneManager {
     } = {}
   ) {
     const pixelRatio = config.pixelRatio || Math.min(window.devicePixelRatio, 2);
-    
+    this.clock = new THREE.Clock();
+
     // 1. Initialization of the renderer
     this.renderer = new THREE.WebGLRenderer({
       canvas: canvas,
@@ -529,7 +534,7 @@ export class SceneManager {
                     child.geometry.computeBoundingBox();
                   }
                 });
-                this.addModelToScene(id, model);
+                this.addModelToScene(id, model, gltf);
                 /*[State Change]*/ if(onStateChange) {onStateChange('model_ready', `Model ${id} loaded from cache.`);}
                 this.hasModelLoaded.set(id, true);
                 resolve(model);
@@ -553,7 +558,7 @@ export class SceneManager {
                 child.geometry.computeBoundingBox();
               }
             });
-            this.addModelToScene(id, model);
+            this.addModelToScene(id, model, gltf);
             /*[State Change]*/ if(onStateChange) {onStateChange('model_ready', `Model ${id} loaded successfully.`);}
             this.hasModelLoaded.set(id, true);
             resolve(model);
@@ -713,7 +718,7 @@ export class SceneManager {
    * @returns {void}
    * @private
    */
-  private addModelToScene(id: string, model: THREE.Object3D): void {
+  private addModelToScene(id: string, model: THREE.Object3D, gltf: GLTF): void {
   console.info(`[SceneManager] Adding model with ID: ${id} to the scene.`);
   const container = new THREE.Group();
   
@@ -767,8 +772,22 @@ export class SceneManager {
   if(this.config.parallax){
     this.parallaxManager?.register(id, container, this.transitionDuration/1000);
   }
+   if (gltf.animations.length > 0) {
+            this.setupAnimations(id, model, gltf.animations);
+          }
 
   console.info(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
+}
+
+setupAnimations(modelId: string, model: THREE.Object3D, animations: THREE.AnimationClip[]) {
+  const manager = new AnimationManager(model, animations);
+  this.animationManagers.set(modelId, manager);
+}
+
+getAnimationManager(modelId?: string): AnimationManager | null {
+  const id = modelId ?? this.activeModelId;
+  if (!id) {return null;}
+  return this.animationManagers.get(id) || null;
 }
 
 /**
@@ -927,6 +946,9 @@ public resetCameraForModel(modelId: string): void {
         // Adjust clipping plans before rendering
         this.adjustClippingPlanes();
         
+        const delta = this.clock.getDelta();
+        this?.animationManagers?.get(this!.activeModelId!)?.update(delta);
+
         if (this.composer) {
           this.composer.render();
         } else {

@@ -4,6 +4,7 @@ import { EffectComposer, GLTFLoader, RenderPass, SMAAPass, SSAARenderPass } from
 import { CacheManager } from './CacheManager';
 import { OrbitControlsManager } from './OrbitControlsManager';
 import { ParallaxManager } from './ParallaxManager';
+import { AnimationManager } from './AnimationManager';
 /**
  * SceneManager class that manages a 3D scene using Three.js.
  * It handles rendering, model loading, camera controls, and post-processing effects.
@@ -119,6 +120,7 @@ export class SceneManager {
                 this.get.color = new THREE.Color(color);
             },
         };
+        this.animationManagers = new Map();
         /**
          * Handles canvas resizing by updating the renderer size, camera aspect ratio,
          * and recalculating camera position for all models in the scene.
@@ -166,6 +168,7 @@ export class SceneManager {
             }
         };
         const pixelRatio = config.pixelRatio || Math.min(window.devicePixelRatio, 2);
+        this.clock = new THREE.Clock();
         // 1. Initialization of the renderer
         this.renderer = new THREE.WebGLRenderer({
             canvas: canvas,
@@ -428,7 +431,7 @@ export class SceneManager {
                                 child.geometry.computeBoundingBox();
                             }
                         });
-                        this.addModelToScene(id, model);
+                        this.addModelToScene(id, model, gltf);
                         /*[State Change]*/ if (onStateChange) {
                             onStateChange('model_ready', `Model ${id} loaded from cache.`);
                         }
@@ -453,7 +456,7 @@ export class SceneManager {
                                 child.geometry.computeBoundingBox();
                             }
                         });
-                        this.addModelToScene(id, model);
+                        this.addModelToScene(id, model, gltf);
                         /*[State Change]*/ if (onStateChange) {
                             onStateChange('model_ready', `Model ${id} loaded successfully.`);
                         }
@@ -595,7 +598,7 @@ export class SceneManager {
      * @returns {void}
      * @private
      */
-    addModelToScene(id, model) {
+    addModelToScene(id, model, gltf) {
         console.info(`[SceneManager] Adding model with ID: ${id} to the scene.`);
         const container = new THREE.Group();
         // 1. Calculate the bounding box of the model
@@ -638,7 +641,21 @@ export class SceneManager {
         if (this.config.parallax) {
             this.parallaxManager?.register(id, container, this.transitionDuration / 1000);
         }
+        if (gltf.animations.length > 0) {
+            this.setupAnimations(id, model, gltf.animations);
+        }
         console.info(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
+    }
+    setupAnimations(modelId, model, animations) {
+        const manager = new AnimationManager(model, animations);
+        this.animationManagers.set(modelId, manager);
+    }
+    getAnimationManager(modelId) {
+        const id = modelId ?? this.activeModelId;
+        if (!id) {
+            return null;
+        }
+        return this.animationManagers.get(id) || null;
     }
     /**
      * Adjusts the camera clipping planes based on the active model's bounding sphere.
@@ -780,6 +797,8 @@ export class SceneManager {
             }
             // Adjust clipping plans before rendering
             this.adjustClippingPlanes();
+            const delta = this.clock.getDelta();
+            this?.animationManagers?.get(this.activeModelId)?.update(delta);
             if (this.composer) {
                 this.composer.render();
             }
