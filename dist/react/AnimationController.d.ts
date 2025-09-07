@@ -3,6 +3,6 @@ interface AnimationControllerProps {
     className?: string;
     children: React.ReactNode;
 }
-declare const AnimationController: React.FC<AnimationControllerProps>;
-export default AnimationController;
+export declare const AnimationController: React.FC<AnimationControllerProps>;
+export {};
 //# sourceMappingURL=AnimationController.d.ts.map

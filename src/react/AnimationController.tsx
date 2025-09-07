@@ -7,7 +7,7 @@ interface AnimationControllerProps {
   children: React.ReactNode;
 }
 
-const AnimationController: React.FC<AnimationControllerProps> = ({
+export const AnimationController: React.FC<AnimationControllerProps> = ({
   className = '',
   children,
 }) => {
@@ -44,4 +44,3 @@ const AnimationController: React.FC<AnimationControllerProps> = ({
   );
 };
 
-export default AnimationController;

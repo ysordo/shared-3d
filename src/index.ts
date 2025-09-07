@@ -9,6 +9,7 @@ export * from './core/CacheManager';
 // ./react/*.(ts|tsx)
 export * from './react/AmbientLight';
 export * from './react/AmbientLightController';
+export * from './react/AnimationController';
 export * from './react/DistanceDisplay';
 export * from './react/MaterialController';
 export * from './react/ModelLoader';

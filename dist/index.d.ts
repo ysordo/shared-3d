@@ -7,6 +7,7 @@ export * from './core/SceneManager';
 export * from './core/CacheManager';
 export * from './react/AmbientLight';
 export * from './react/AmbientLightController';
+export * from './react/AnimationController';
 export * from './react/DistanceDisplay';
 export * from './react/MaterialController';
 export * from './react/ModelLoader';
