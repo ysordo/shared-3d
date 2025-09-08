@@ -5,11 +5,13 @@ import { useSceneContext } from './SceneContext';
 interface AnimationControllerProps {
   className?: string;
   children: React.ReactNode;
+  state?: (v: boolean) => void;
 }
 
 export const AnimationController: React.FC<AnimationControllerProps> = ({
   className = '',
   children,
+  state,
 }) => {
   const [disabled, setDisabled] = useState(false);
   const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
@@ -18,23 +20,27 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
   useEffect(() => {
     if (sceneManager && disabled) {
       if (direction === 'forward') {
-        sceneManager
-          ?.getAnimationManager()
-          ?.playForward(() => setDisabled(false));
+        sceneManager?.getAnimationManager()?.playForward(() => {
+          setDisabled(false);
+          state?.(false);
+          setDirection('backward');
+        });
       } else {
-        sceneManager
-          ?.getAnimationManager()
-          ?.playBackward(() => setDisabled(false));
+        sceneManager?.getAnimationManager()?.playBackward(() => {
+          setDisabled(false);
+          state?.(false);
+          setDirection('forward');
+        });
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [direction]);
   const handleClick = () => {
     if (sceneManager?.getAnimationManager()?.isBusy()) {
       return;
     }
     setDisabled(true);
-    setDirection((old) => (old === 'forward' ? 'backward' : 'forward'));
+    state?.(true);
   };
 
   return (
@@ -43,4 +49,3 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
     </button>
   );
 };
-
