@@ -24,7 +24,7 @@ export const AnimationController = ({ className = '', children, state, }) => {
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [direction]);
+    }, [disabled]);
     const handleClick = () => {
         if (sceneManager?.getAnimationManager()?.isBusy()) {
             return;
