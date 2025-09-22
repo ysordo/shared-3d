@@ -391,7 +391,7 @@ export class SceneManager {
     const model = new ModelManager();
 
     const promise =  model.loadModel(url, true,
-      (model)=> this.addModelToScene(id, model),
+      undefined,
       (xhr) => {
         if (onStateChange) {
           const k = 1024;
@@ -401,10 +401,10 @@ export class SceneManager {
         }
       }
     );
-
     this.loadedModels.set(id, 
      promise
-    );    
+    );
+    promise.then(()=>this.addModelToScene(id, model));   
     return promise;
   }
 
