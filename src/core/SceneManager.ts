@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 import * as THREE from 'three';
-import type { EffectComposer} from 'three/examples/jsm/Addons.js';
-import { RenderPass, SMAAPass, SSAARenderPass } from 'three/examples/jsm/Addons.js';
+import type { GLTF, EffectComposer} from 'three/examples/jsm/Addons.js';
+import { GLTFLoader, RenderPass, SMAAPass, SSAARenderPass } from 'three/examples/jsm/Addons.js';
+import { CacheManager } from './CacheManager';
 import { OrbitControlsManager } from './OrbitControlsManager';
 import { ParallaxManager } from './ParallaxManager';
-import type { AnimationManager } from './AnimationManager';
-import { ModelManager } from './ModelManager';
+import { AnimationManager } from './AnimationManager';
 import { CameraManager } from './CameraManager';
 
 
@@ -39,6 +39,7 @@ export type LoadState =
  * @property {Map<string, boolean>} hasModelLoaded - Map to track if a model has been loaded.
  * @property {ResizeObserver} resizeObserver - Observer to handle canvas resizing.
  * @property {Map<string, (progress: number) => void>} parallaxEffects - Map of parallax effects for models.
+ * @property {number} MARGIN - Margin factor for camera distance calculations.
  * @param {HTMLCanvasElement} canvas - The canvas element where the scene will be rendered.
  * @param {Object} [config] - Configuration options for the scene.
  * @param {boolean} [config.antialias=true] - Whether to enable antialiasing in the renderer.
@@ -89,11 +90,13 @@ export class SceneManager {
   private renderer: THREE.WebGLRenderer;
   private composer?: EffectComposer;
   private controls?: OrbitControlsManager;
-  private models: Map<string, ModelManager> = new Map();
+  private models: Map<string, THREE.Object3D> = new Map();
   private loadedModels = new Map<string, Promise<THREE.Object3D>>();
   private hasModelLoaded = new Map<string, boolean>();
   private resizeObserver: ResizeObserver;
+  private parallaxEffects: Map<string, (progress: number) => void> = new Map();
   private parallaxManager?: ParallaxManager;
+  private MARGIN: number = 0.8;
   public activeModelId: string | null = null;
   private transitionProgress: number = 0;
   public transitionDuration: number = 1000; // ms
@@ -101,6 +104,8 @@ export class SceneManager {
   private initialCameraPositions = new Map<string, THREE.Vector3>();
   private initialCameraTargets = new Map<string, THREE.Vector3>();
   private modelBoundingRadii = new Map<string, number>();
+  private NEAR_MARGIN = 0.1; // Margen adicional para evitar clipping
+  private FAR_MULTIPLIER = 10; // Multiplicador para el plano far
   private lightsRef : THREE.DirectionalLight[] = [];
   private helpersRef: THREE.DirectionalLightHelper[] = [];
   private fillLightRef: THREE.DirectionalLight | null = null;
@@ -111,6 +116,7 @@ export class SceneManager {
         this.get.color= new THREE.Color(color);
     },
   };
+   private animationManagers: Map<string, AnimationManager> = new Map();
    private clock: THREE.Clock;
 
   /**
@@ -193,6 +199,7 @@ export class SceneManager {
     this.camera.postProcessingEnabled = config.postprocessing || false;
     this.camera.setupPostProcessing(this.scene, this.renderer);
 
+
     // 5. Setup resize observer to handle canvas resizing
     this.resizeObserver = new ResizeObserver(this.handleResize);
     this.resizeObserver.observe(canvas);
@@ -221,8 +228,7 @@ export class SceneManager {
       false
     );
     
-    // 2. Update camera aspect ratio    
-    this.camera.resize(new THREE.Box3().setFromObject(this.models.get(this.activeModelId!)?.model!!), pixelRatio);
+    this.camera.resize(new THREE.Box3().setFromObject(this.models.get(this.activeModelId!)!), pixelRatio);
   };
 
   /**
@@ -301,8 +307,8 @@ export class SceneManager {
 
       // Apply molten effect during the transition
       if (startModel) {
-        startModel!.model!.visible = this.transitionProgress < 0.8;
-        startModel!.model!.traverse(child => {
+        startModel.visible = this.transitionProgress < 0.8;
+        startModel.traverse(child => {
           if (child instanceof THREE.Mesh) {
             child.material.opacity = 1 - this.transitionProgress;
             child.material.transparent = true;
@@ -310,8 +316,8 @@ export class SceneManager {
         });
       }
 
-      targetModel!.model!.visible = this.transitionProgress > 0.2;
-      targetModel!.model!.traverse(child => {
+      targetModel.visible = this.transitionProgress > 0.2;
+      targetModel.traverse(child => {
         if (child instanceof THREE.Mesh) {
           child.material.opacity = this.transitionProgress;
           child.material.transparent = true;
@@ -330,7 +336,7 @@ export class SceneManager {
         // Adjust plans immediately when changing model
         const model = this.models.get(this.activeModelId!);
         const modelCenter = new THREE.Vector3();
-        model!.model!.getWorldPosition(modelCenter);
+        model!.getWorldPosition(modelCenter);
         this.camera.adjustClippingPlanes(modelCenter,this.modelBoundingRadii.get(this.activeModelId!));
       }
 
@@ -338,23 +344,24 @@ export class SceneManager {
         requestAnimationFrame(animateTransition);
       } else {
         // Finish transition
-        if (startModel) {startModel!.model!.visible = false;}
-        targetModel!.model!.visible = true;
+        if (startModel) {startModel.visible = false;}
+        targetModel.visible = true;
         //this.activeModelId = targetId;
         this.transitionProgress = 0;
         
         // Restore opacity
-        targetModel!.model!.traverse(child => {
+        targetModel.traverse(child => {
           if (child instanceof THREE.Mesh) {
             child.material.opacity = 1;
           }
         });
+
         this.camera.reset(
           this.controls,
           this.initialCameraPositions.get(targetId),
           this.initialCameraTargets.get(targetId),
         );
-        this.controls?.setModel(targetModel.model!);
+        this.controls?.setModel(targetModel);
         this.controls?.update();
       }
     };
@@ -378,36 +385,93 @@ export class SceneManager {
   ): Promise<THREE.Object3D> {
     // Si ya está cargando este modelo, retorna la promesa existente
     if (this.loadedModels.has(id)) {
-      return (await this.loadedModels.get(id))!;
+      return this.loadedModels.get(id)!;
     }
 
     // Si el modelo ya está cargado, retórnalo directamente
     if (this.hasModelLoaded.get(id) && this.models.has(id)) {
       if(onStateChange) {onStateChange('model_ready', `Model ${id} is already loaded.`);}
-      return this.models.get(id)?.model!;
+      return this.models.get(id)!;
     }
 
     console.info(`[SceneManager] Change model using: ${id} for url: ${url}`);
-    const model = new ModelManager();
 
-    const promise =  model.loadModel(url, true,
-      (xhr) => {
-        if (onStateChange) {
-          const k = 1024;
-          const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-          const i = Math.floor(Math.log(xhr.loaded) / Math.log(k));
-          onStateChange('downloading',`Download: ${(xhr.loaded / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`);
+    const loadPromise = new Promise<THREE.Object3D>(async (resolve, reject) => {
+      try {
+        const cache = await CacheManager.getModel(url);
+
+        if(cache) {
+          console.info(`[SceneManager] Modelo ${id} encontrado en caché.`);
+          if(onStateChange) {onStateChange('cache_hit', `Model ${id} found in cache.`);}
+          const loader = new GLTFLoader();
+          loader.parse(
+            cache,
+            url,
+            (gltf) => {
+                /*[State Change]*/ if(onStateChange) {onStateChange('parsing', `Parsing model ${id} from cache.`);}
+                const model = gltf instanceof THREE.Object3D ? gltf : gltf.scene;
+                /*[State Change]*/ if(onStateChange) {onStateChange('adding_to_scene', `Adding model ${id} to scene.`);}
+                model.traverse((child) => {
+                  if (child instanceof THREE.Mesh) {
+                    child.geometry.computeBoundingBox();
+                  }
+                });
+                this.addModelToScene(id, model, gltf);
+                /*[State Change]*/ if(onStateChange) {onStateChange('model_ready', `Model ${id} loaded from cache.`);}
+                this.hasModelLoaded.set(id, true);
+                resolve(model);
+            },
+            (error) => {
+              reject(error);
+            }
+          );
         }
+        else{
+        const loader = new GLTFLoader();
+        
+        loader.load(
+          url,
+          (gltf) => {
+            /*[State Change]*/ if(onStateChange) {onStateChange('parsing', `Parsing model ${id} from URL.`);}
+            const model = gltf instanceof THREE.Object3D ? gltf : gltf.scene;
+            /*[State Change]*/ if(onStateChange) {onStateChange('adding_to_scene', `Adding model ${id} to scene.`);}
+            model.traverse((child) => {
+              if (child instanceof THREE.Mesh) {
+                child.geometry.computeBoundingBox();
+              }
+            });
+            this.addModelToScene(id, model, gltf);
+            /*[State Change]*/ if(onStateChange) {onStateChange('model_ready', `Model ${id} loaded successfully.`);}
+            this.hasModelLoaded.set(id, true);
+            resolve(model);
+          },
+          (xhr) => {
+            if (onStateChange) {
+              const k = 1024;
+              const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+              const i = Math.floor(Math.log(xhr.loaded) / Math.log(k));
+              onStateChange('downloading',`Download: ${(xhr.loaded / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`);
+            }
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+        console.info(`[SceneManager] Model save to cache: ${url}`);
+        /*[State Change]*/ if(onStateChange) {onStateChange('checking_cache', `Checking cache for model ${id}.`);}
+        await CacheManager.saveModel(url, await (await fetch(url)).arrayBuffer());
+        /*[State Change]*/ if(onStateChange) {onStateChange('caching', `Model ${id} cached successfully.`);}
+      
       }
-    );
-    this.loadedModels.set(id, 
-     promise
-    );
-    promise.then((obj3D)=>{
-      this.addModelToScene(id, obj3D);
-      this.models.set(id, model);
+      } catch (error) {
+        console.error(`[SceneManager] Error loading model ${id}:`, error);
+        /*[State Change]*/ if(onStateChange) {onStateChange('error', `Error loading model ${id}: ${error}`);}
+        reject(error);
+      }
     });
-    return promise;
+
+    this.loadedModels.set(id, loadPromise);
+    return loadPromise;
   }
 
   /**
@@ -436,7 +500,7 @@ export class SceneManager {
     }
     console.info(`[SceneManager] Active Model ${this.activeModelId}`);
     // Calculate the center and radio of the model
-    const box = new THREE.Box3().setFromObject(this.models.get(this.activeModelId!)!.model!);
+    const box = new THREE.Box3().setFromObject(this.models.get(this.activeModelId!)!);
     const center = new THREE.Vector3();
     box.getCenter(center);
     const size = new THREE.Vector3();
@@ -536,8 +600,9 @@ export class SceneManager {
    * @returns {void}
    * @private
    */
-  private addModelToScene(id: string, model: THREE.Object3D): void {
+  private addModelToScene(id: string, model: THREE.Object3D, gltf: GLTF): void {
   console.info(`[SceneManager] Adding model with ID: ${id} to the scene.`);
+  const container = new THREE.Group();
   
   // 1. Calculate the bounding box of the model
   const box = new THREE.Box3().setFromObject(model, true);
@@ -548,34 +613,43 @@ export class SceneManager {
   box.getSize(size);
   
   // 3. Center the model at the origin
-  model.position.sub(center);
+  //model.position.sub(center);
+  container.position.copy(center.negate());
+  container.add(model);
   
   // Actualizar matrices
-  model.updateMatrixWorld(true);
-  
+  container.updateMatrixWorld(true);
   const {radius, position} = this.camera.recalculate(box);
   
    // Save the radius of Bounding Sphere to use at the clipping
     this.modelBoundingRadii.set(id, radius);
-
-  
   
   // Guardar posición inicial de la cámara para este modelo
   this.initialCameraPositions.set(id, position);
   this.initialCameraTargets.set(id, new THREE.Vector3(0, 0, 0));
   
   // 7. Add the model to the scene
-  this.scene.add(model);
+  this.models.set(id, container);
+  this.scene.add(container);
   if(this.config.parallax){
-    this.parallaxManager?.register(id, model, this.transitionDuration/1000);
+    this.parallaxManager?.register(id, container, this.transitionDuration/1000);
   }
+   if (gltf.animations.length > 0) {
+            this.setupAnimations(id, model, gltf.animations);
+          }
+
   console.info(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
+}
+
+setupAnimations(modelId: string, model: THREE.Object3D, animations: THREE.AnimationClip[]) {
+  const manager = new AnimationManager(model, animations);
+  this.animationManagers.set(modelId, manager);
 }
 
 getAnimationManager(modelId?: string): AnimationManager | null {
   const id = modelId ?? this.activeModelId;
   if (!id) {return null;}
-  return this.models.get(id)?.animate!;
+  return this.animationManagers.get(id) || null;
 }
 
   /**
@@ -584,7 +658,7 @@ getAnimationManager(modelId?: string): AnimationManager | null {
    * @returns {THREE.Object3D | undefined} The model if found, otherwise undefined.
    */
   public getModel(id: string): THREE.Object3D | undefined {
-    return this.models.get(id)?.model!;
+    return this.models.get(id);
   }
 
   /**
@@ -596,7 +670,7 @@ getAnimationManager(modelId?: string): AnimationManager | null {
    */
   public updateModel(id: string, updater: (model: THREE.Object3D) => void): void {
     const model = this.models.get(id);
-    if (model) {updater(model.model!);}
+    if (model) {updater(model);}
   }
 
   /**
@@ -678,11 +752,11 @@ getAnimationManager(modelId?: string): AnimationManager | null {
         // Adjust clipping plans before rendering
         const model = this.models.get(this.activeModelId!);
         const modelCenter = new THREE.Vector3();
-        model!.model!.getWorldPosition(modelCenter);
+        model!.getWorldPosition(modelCenter);
         this.camera.adjustClippingPlanes(modelCenter,this.modelBoundingRadii.get(this.activeModelId!));
         
         const delta = this.clock.getDelta();
-        this?.models?.get(this!.activeModelId!)?.animate?.update(delta);
+        this?.animationManagers?.get(this!.activeModelId!)?.update(delta);
 
         if (this.composer) {
           this.composer.render();
@@ -703,10 +777,7 @@ getAnimationManager(modelId?: string): AnimationManager | null {
   public dispose(): void {
     this.resizeObserver.disconnect();
     this.renderer.dispose();
-    this.models.forEach(model => {
-      this.scene.remove(model.model!);
-      model.dispose();
-    });
+    this.models.forEach(model => this.scene.remove(model));
     if (this.controls) {this.controls.dispose();}
   }
 

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControlsManager } from './OrbitControlsManager';
-import type { AnimationManager } from './AnimationManager';
+import { AnimationManager } from './AnimationManager';
 export type LoadState = 'checking_cache' | 'cache_hit' | 'cache_miss' | 'downloading' | 'parsing' | 'caching' | 'adding_to_scene' | 'model_ready' | 'error';
 /**
  * SceneManager class that manages a 3D scene using Three.js.
@@ -16,6 +16,7 @@ export type LoadState = 'checking_cache' | 'cache_hit' | 'cache_miss' | 'downloa
  * @property {Map<string, boolean>} hasModelLoaded - Map to track if a model has been loaded.
  * @property {ResizeObserver} resizeObserver - Observer to handle canvas resizing.
  * @property {Map<string, (progress: number) => void>} parallaxEffects - Map of parallax effects for models.
+ * @property {number} MARGIN - Margin factor for camera distance calculations.
  * @param {HTMLCanvasElement} canvas - The canvas element where the scene will be rendered.
  * @param {Object} [config] - Configuration options for the scene.
  * @param {boolean} [config.antialias=true] - Whether to enable antialiasing in the renderer.
@@ -72,7 +73,9 @@ export declare class SceneManager {
     private loadedModels;
     private hasModelLoaded;
     private resizeObserver;
+    private parallaxEffects;
     private parallaxManager?;
+    private MARGIN;
     activeModelId: string | null;
     private transitionProgress;
     transitionDuration: number;
@@ -80,10 +83,13 @@ export declare class SceneManager {
     private initialCameraPositions;
     private initialCameraTargets;
     private modelBoundingRadii;
+    private NEAR_MARGIN;
+    private FAR_MULTIPLIER;
     private lightsRef;
     private helpersRef;
     private fillLightRef;
     private ambientLightRef;
+    private animationManagers;
     private clock;
     /**
      * Creates an instance of SceneManager.
@@ -203,6 +209,7 @@ export declare class SceneManager {
      * @private
      */
     private addModelToScene;
+    setupAnimations(modelId: string, model: THREE.Object3D, animations: THREE.AnimationClip[]): void;
     getAnimationManager(modelId?: string): AnimationManager | null;
     /**
      * Retrieves a model by its ID.
