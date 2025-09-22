@@ -257,9 +257,9 @@ export class SceneManager {
             if (this.transitionProgress > 0.5 && this.activeModelId !== targetId) {
                 this.camera.toAnimIPos(this.controls, this.initialCameraPositions.get(targetId), this.initialCameraTargets.get(targetId), this.transitionDuration * 0.5);
                 // Adjust plans immediately when changing model
-                const model = this.models.get(this.activeModelId);
+                //const model = this.models.get(this.activeModelId!);
                 const modelCenter = new THREE.Vector3();
-                model.getWorldPosition(modelCenter);
+                targetModel.getWorldPosition(modelCenter);
                 this.camera.adjustClippingPlanes(modelCenter, this.modelBoundingRadii.get(this.activeModelId));
             }
             if (this.transitionProgress < 1) {
@@ -632,7 +632,7 @@ export class SceneManager {
             // Adjust clipping plans before rendering
             const model = this.models.get(this.activeModelId);
             const modelCenter = new THREE.Vector3();
-            model.getWorldPosition(modelCenter);
+            model?.getWorldPosition(modelCenter);
             this.camera.adjustClippingPlanes(modelCenter, this.modelBoundingRadii.get(this.activeModelId));
             const delta = this.clock.getDelta();
             this?.animationManagers?.get(this.activeModelId)?.update(delta);

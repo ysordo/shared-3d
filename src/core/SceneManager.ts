@@ -334,9 +334,9 @@ export class SceneManager {
         );
     
         // Adjust plans immediately when changing model
-        const model = this.models.get(this.activeModelId!);
+        //const model = this.models.get(this.activeModelId!);
         const modelCenter = new THREE.Vector3();
-        model!.getWorldPosition(modelCenter);
+        targetModel.getWorldPosition(modelCenter);
         this.camera.adjustClippingPlanes(modelCenter,this.modelBoundingRadii.get(this.activeModelId!));
       }
 
@@ -752,7 +752,7 @@ getAnimationManager(modelId?: string): AnimationManager | null {
         // Adjust clipping plans before rendering
         const model = this.models.get(this.activeModelId!);
         const modelCenter = new THREE.Vector3();
-        model!.getWorldPosition(modelCenter);
+        model?.getWorldPosition(modelCenter);
         this.camera.adjustClippingPlanes(modelCenter,this.modelBoundingRadii.get(this.activeModelId!));
         
         const delta = this.clock.getDelta();
