@@ -227,8 +227,9 @@ export class SceneManager {
       canvas.clientHeight * pixelRatio,
       false
     );
-    
-    this.camera.resize(new THREE.Box3().setFromObject(this.models.get(this.activeModelId!)!), pixelRatio);
+    this.models.forEach(model=>
+      this.camera.resize(new THREE.Box3().setFromObject(model), pixelRatio)
+    );
   };
 
   /**
