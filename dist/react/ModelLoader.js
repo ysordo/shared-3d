@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { useSceneContext } from './SceneContext';
+import { useSceneContext } from './hooks/SceneContext';
 /**
  * Component to load a 3D model into the scene.
  * It uses the SceneManager from the SceneContext to load the model.

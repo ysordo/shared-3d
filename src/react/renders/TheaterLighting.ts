@@ -1,7 +1,6 @@
 'use client';
-import { useEffect, useRef } from 'react';
-import type * as THREE from 'three';
-import { useSceneContext } from './SceneContext';
+import { useEffect } from 'react';
+import { useSceneContext } from '../hooks/SceneContext';
 
 /**
  * Props for the TheaterLighting component.
@@ -41,10 +40,11 @@ export function TheaterLighting ({
   const { sceneManager } = useSceneContext();
   
   useEffect(() => {
-    sceneManager?.createTheatreLighting(intensity,lightCount,radiusFactor,height,showHelpers);
+    sceneManager?.createTheatreLighting?.(intensity,lightCount,radiusFactor,height,showHelpers);
     return ()=> {
-      sceneManager?.removeTheatreLighting();
+      sceneManager?.removeTheatreLighting?.();
     };
+     
   }, [sceneManager?.activeModelId!, intensity, lightCount, radiusFactor, height, showHelpers, sceneManager]);
   
   return null;

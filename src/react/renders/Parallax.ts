@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useSceneContext, type THREE } from '..';
+import { useSceneContext, type THREE } from '../..';
 
 interface ParallaxProps {
     onEffect: (progress: number, effect: (arg0: (mesh: THREE.Object3D)=> void) => void)=>void

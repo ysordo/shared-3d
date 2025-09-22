@@ -1,0 +1,35 @@
+/**
+ * Props for the OrbitControls component.
+ * @property {boolean} [enableRotate=false] - Enable rotation controls
+ * @property {boolean} [enableZoom=false] - Enable zoom controls
+ * @property {boolean} [enablePan=false] - Enable pan controls
+ * @typedef {Object} OrbitControlsProps
+ */
+interface OrbitControlsProps {
+    enableRotate?: boolean;
+    enableZoom?: boolean;
+    enablePan?: boolean;
+    distance?: {
+        min?: number;
+        max?: number;
+    };
+}
+/**
+ * Component to manage orbit controls for a 3D scene.
+ * It sets up controls based on the active model and allows customization of control options.
+ * @param {OrbitControlsProps} props - Component properties
+ * @param {boolean} [props.enableRotate=false] - Enable rotation controls
+ * @param {boolean} [props.enableZoom=false] - Enable zoom controls
+ * @param {boolean} [props.enablePan=false] - Enable pan controls
+ * @returns {null} This component does not render anything directly, it sets up controls in the scene.
+ * @example
+ * <OrbitControls enableRotate={true} enableZoom={true} enablePan={false} />
+ * @description
+ * The OrbitControls component sets up Three.js orbit controls for the active model in the scene.
+ * It allows users to rotate, zoom, and pan the camera around the model based on the provided options.
+ * The controls are automatically cleaned up when the component is unmounted or when the active model changes.
+ * This component is useful for providing interactive camera controls in 3D applications.
+ */
+export declare function OrbitControls({ enableRotate, enableZoom, enablePan, distance }: OrbitControlsProps): null;
+export {};
+//# sourceMappingURL=OrbitControls.d.ts.map

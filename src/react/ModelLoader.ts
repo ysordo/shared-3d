@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { useSceneContext } from './SceneContext';
+import { useSceneContext } from './hooks/SceneContext';
 import type * as THREE from 'three';
 import type { LoadState } from '../core/SceneManager';
 

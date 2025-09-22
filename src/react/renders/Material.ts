@@ -1,7 +1,7 @@
 'use client';
 import type * as THREE from 'three';
 import { useEffect } from 'react';
-import { useSceneContext } from './SceneContext';
+import { useSceneContext } from '../hooks/SceneContext';
 
 /**
  * Props for the MaterialController component.

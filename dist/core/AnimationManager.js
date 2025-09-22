@@ -3,55 +3,59 @@ import * as THREE from 'three';
 export class AnimationManager {
     constructor(gltfScene, animations) {
         this.mixer = null;
-        this.action = null;
+        this.actions = {};
         this.isAnimating = false;
         this.handleFinish = () => {
             this.isAnimating = false;
-            if (this.onFinish) {
-                this.onFinish();
-            }
+            this.onFinish?.();
             this.mixer?.removeEventListener('finished', this.handleFinish);
         };
         if (animations.length > 0) {
             this.mixer = new THREE.AnimationMixer(gltfScene);
-            this.action = this.mixer.clipAction(animations[0]);
+            this.setupActions(animations);
         }
+    }
+    setupActions(animations) {
+        animations.forEach(clip => {
+            this.actions[clip.name] = this.mixer.clipAction(clip);
+        });
     }
     update(delta) {
-        if (this.mixer) {
-            this.mixer.update(delta);
-        }
+        this.mixer?.update(delta);
     }
-    playForward(onFinish) {
-        if (!this.action || this.isAnimating) {
+    playForward(key, onFinish) {
+        this.playAnimation(key, 1, 0, onFinish);
+    }
+    playBackward(key, onFinish) {
+        const action = this.actions[key];
+        this.playAnimation(key, -1, action?.getClip().duration || 0, onFinish);
+    }
+    playAnimation(key, timeScale, startTime, onFinish) {
+        const action = this.actions[key];
+        if (!action || this.isAnimating) {
             return;
         }
         this.isAnimating = true;
         this.onFinish = onFinish;
-        this.action.reset();
-        this.action.paused = false;
-        this.action.timeScale = 1; // hacia adelante
-        this.action.clampWhenFinished = true;
-        this.action.setLoop(THREE.LoopOnce, 1);
-        this.action.play();
+        this.configureAction(action, timeScale, startTime);
+        action.play();
         this.mixer?.addEventListener('finished', this.handleFinish);
     }
-    playBackward(onFinish) {
-        if (!this.action || this.isAnimating) {
-            return;
-        }
-        this.isAnimating = true;
-        this.onFinish = onFinish;
-        this.action.paused = false;
-        this.action.timeScale = -1; // hacia atrás
-        this.action.time = this.action.getClip().duration; // empezar en el final
-        this.action.clampWhenFinished = true;
-        this.action.setLoop(THREE.LoopOnce, 1);
-        this.action.play();
-        this.mixer?.addEventListener('finished', this.handleFinish);
+    configureAction(action, timeScale, startTime) {
+        action.reset();
+        action.paused = false;
+        action.timeScale = timeScale;
+        action.time = startTime;
+        action.clampWhenFinished = true;
+        action.setLoop(THREE.LoopOnce, 1);
     }
     isBusy() {
         return this.isAnimating;
+    }
+    dispose() {
+        this.mixer?.removeEventListener('finished', this.handleFinish);
+        this.mixer = null;
+        this.actions = {};
     }
 }
 //# sourceMappingURL=AnimationManager.js.map

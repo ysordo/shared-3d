@@ -1,62 +1,78 @@
 // src/managers/AnimationManager.ts
 import * as THREE from 'three';
 
+interface AnimationActions {
+    [key: string]: THREE.AnimationAction;
+}
+
 export class AnimationManager {
-  private mixer: THREE.AnimationMixer | null = null;
-  private action: THREE.AnimationAction | null = null;
-  private isAnimating: boolean = false;
-  private onFinish?: () => void;
+    private mixer: THREE.AnimationMixer | null = null;
+    private actions: AnimationActions = {};
+    private isAnimating: boolean = false;
+    private onFinish?: () => void;
 
-  constructor(gltfScene: THREE.Object3D, animations: THREE.AnimationClip[]) {
-    if (animations.length > 0) {
-      this.mixer = new THREE.AnimationMixer(gltfScene);
-      this.action = this.mixer.clipAction(animations[0]);
+    constructor(gltfScene: THREE.Object3D, animations: THREE.AnimationClip[]) {
+        if (animations.length > 0) {
+            this.mixer = new THREE.AnimationMixer(gltfScene);
+            this.setupActions(animations);
+        }
     }
-  }
 
-  update(delta: number) {
-    if (this.mixer) {
-      this.mixer.update(delta);
+    private setupActions(animations: THREE.AnimationClip[]): void {
+        animations.forEach(clip => {
+            this.actions[clip.name] = this.mixer!.clipAction(clip);
+        });
     }
-  }
 
-  playForward(onFinish?: () => void) {
-    if (!this.action || this.isAnimating) {return;}
-    this.isAnimating = true;
-    this.onFinish = onFinish;
+    update(delta: number): void {
+        this.mixer?.update(delta);
+    }
 
-    this.action.reset();
-    this.action.paused = false;
-    this.action.timeScale = 1; // hacia adelante
-    this.action.clampWhenFinished = true;
-    this.action.setLoop(THREE.LoopOnce, 1);
-    this.action.play();
+    playForward(key: string, onFinish?: () => void): void {
+        this.playAnimation(key, 1, 0, onFinish);
+    }
 
-    this.mixer?.addEventListener('finished', this.handleFinish);
-  }
+    playBackward(key: string, onFinish?: () => void): void {
+        const action = this.actions[key];
+        this.playAnimation(key, -1, action?.getClip().duration || 0, onFinish);
+    }
 
-  playBackward(onFinish?: () => void) {
-    if (!this.action || this.isAnimating) {return;}
-    this.isAnimating = true;
-    this.onFinish = onFinish;
+    private playAnimation(key: string, timeScale: number, startTime: number, onFinish?: () => void): void {
+        const action = this.actions[key];
+        
+        if (!action || this.isAnimating) {return;}
 
-    this.action.paused = false;
-    this.action.timeScale = -1; // hacia atrás
-    this.action.time = this.action.getClip().duration; // empezar en el final
-    this.action.clampWhenFinished = true;
-    this.action.setLoop(THREE.LoopOnce, 1);
-    this.action.play();
+        this.isAnimating = true;
+        this.onFinish = onFinish;
 
-    this.mixer?.addEventListener('finished', this.handleFinish);
-  }
+        this.configureAction(action, timeScale, startTime);
+        action.play();
 
-  private handleFinish = () => {
-    this.isAnimating = false;
-    if (this.onFinish) {this.onFinish();}
-    this.mixer?.removeEventListener('finished', this.handleFinish);
-  };
+        this.mixer?.addEventListener('finished', this.handleFinish);
+    }
 
-  isBusy() {
-    return this.isAnimating;
-  }
+    private configureAction(action: THREE.AnimationAction, timeScale: number, startTime: number): void {
+        action.reset();
+        action.paused = false;
+        action.timeScale = timeScale;
+        action.time = startTime;
+        action.clampWhenFinished = true;
+        action.setLoop(THREE.LoopOnce, 1);
+    }
+
+    private handleFinish = (): void => {
+        this.isAnimating = false;
+        this.onFinish?.();
+        this.mixer?.removeEventListener('finished', this.handleFinish);
+    };
+
+    isBusy(): boolean {
+        return this.isAnimating;
+    }
+
+    dispose(): void {
+        this.mixer?.removeEventListener('finished', this.handleFinish);
+        this.mixer = null;
+        this.actions = {};
+    }
 }

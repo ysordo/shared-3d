@@ -1,6 +1,6 @@
 // src/components/AnimationController.tsx
 import React, { useEffect, useState } from 'react';
-import { useSceneContext } from './SceneContext';
+import { useSceneContext } from '../hooks/SceneContext';
 
 interface AnimationControllerProps {
   className?: string;
@@ -8,7 +8,7 @@ interface AnimationControllerProps {
   state?: (v: boolean) => void;
 }
 
-export const AnimationController: React.FC<AnimationControllerProps> = ({
+const AnimationController: React.FC<AnimationControllerProps> = ({
   className = '',
   children,
   state,
@@ -20,13 +20,13 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
   useEffect(() => {
     if (sceneManager && disabled) {
       if (direction === 'forward') {
-        sceneManager?.getAnimationManager()?.playForward(() => {
+        sceneManager?.getAnimationManager()?.playForward('0',() => {
           setDisabled(false);
           state?.(false);
           setDirection('backward');
         });
       } else {
-        sceneManager?.getAnimationManager()?.playBackward(() => {
+        sceneManager?.getAnimationManager()?.playBackward('0',() => {
           setDisabled(false);
           state?.(false);
           setDirection('forward');
@@ -44,8 +44,16 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
   };
 
   return (
-    <button onClick={handleClick} disabled={disabled} className={className}>
+    <button
+      onClick={handleClick}
+      disabled={disabled}
+      className={className}
+      name={direction}>
       {children}
     </button>
   );
+};
+
+export const Animation = {
+  ButtonController: AnimationController,
 };

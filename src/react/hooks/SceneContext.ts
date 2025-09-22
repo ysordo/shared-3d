@@ -1,6 +1,6 @@
 'use client';
 import { createContext, useContext } from 'react';
-import type { SceneManager } from '../core/SceneManager';
+import type { SceneManager } from '../../core/SceneManager';
 
 /**
  * Context to handle the scene and canvas in the React application.

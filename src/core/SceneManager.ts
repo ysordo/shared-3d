@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
 import * as THREE from 'three';
-import type { GLTF} from 'three/examples/jsm/Addons.js';
-import { EffectComposer, GLTFLoader, RenderPass, SMAAPass, SSAARenderPass } from 'three/examples/jsm/Addons.js';
-import { CacheManager } from './CacheManager';
+import type { EffectComposer} from 'three/examples/jsm/Addons.js';
+import { RenderPass, SMAAPass, SSAARenderPass } from 'three/examples/jsm/Addons.js';
 import { OrbitControlsManager } from './OrbitControlsManager';
 import { ParallaxManager } from './ParallaxManager';
-import { AnimationManager } from './AnimationManager';
+import type { AnimationManager } from './AnimationManager';
+import { ModelManager } from './ModelManager';
+import { CameraManager } from './CameraManager';
 
 
 export type LoadState = 
@@ -38,7 +39,6 @@ export type LoadState =
  * @property {Map<string, boolean>} hasModelLoaded - Map to track if a model has been loaded.
  * @property {ResizeObserver} resizeObserver - Observer to handle canvas resizing.
  * @property {Map<string, (progress: number) => void>} parallaxEffects - Map of parallax effects for models.
- * @property {number} MARGIN - Margin factor for camera distance calculations.
  * @param {HTMLCanvasElement} canvas - The canvas element where the scene will be rendered.
  * @param {Object} [config] - Configuration options for the scene.
  * @param {boolean} [config.antialias=true] - Whether to enable antialiasing in the renderer.
@@ -85,17 +85,15 @@ export type LoadState =
  */
 export class SceneManager {
   public scene: THREE.Scene;
-  private camera: THREE.PerspectiveCamera;
+  private camera: CameraManager;
   private renderer: THREE.WebGLRenderer;
   private composer?: EffectComposer;
   private controls?: OrbitControlsManager;
-  private models: Map<string, THREE.Object3D> = new Map();
+  private models: Map<string, ModelManager> = new Map();
   private loadedModels = new Map<string, Promise<THREE.Object3D>>();
   private hasModelLoaded = new Map<string, boolean>();
   private resizeObserver: ResizeObserver;
-  private parallaxEffects: Map<string, (progress: number) => void> = new Map();
   private parallaxManager?: ParallaxManager;
-  private MARGIN: number = 0.8;
   public activeModelId: string | null = null;
   private transitionProgress: number = 0;
   public transitionDuration: number = 1000; // ms
@@ -103,8 +101,6 @@ export class SceneManager {
   private initialCameraPositions = new Map<string, THREE.Vector3>();
   private initialCameraTargets = new Map<string, THREE.Vector3>();
   private modelBoundingRadii = new Map<string, number>();
-  private NEAR_MARGIN = 0.1; // Margen adicional para evitar clipping
-  private FAR_MULTIPLIER = 10; // Multiplicador para el plano far
   private lightsRef : THREE.DirectionalLight[] = [];
   private helpersRef: THREE.DirectionalLightHelper[] = [];
   private fillLightRef: THREE.DirectionalLight | null = null;
@@ -115,7 +111,6 @@ export class SceneManager {
         this.get.color= new THREE.Color(color);
     },
   };
-   private animationManagers: Map<string, AnimationManager> = new Map();
    private clock: THREE.Clock;
 
   /**
@@ -184,11 +179,9 @@ export class SceneManager {
       this.scene.background = null;
     }
     
-    this.camera = new THREE.PerspectiveCamera(
-      75,
-      canvas.clientWidth / canvas.clientHeight,
-      0.1,
-      1000
+    this.camera = new CameraManager(
+      canvas,
+      'MainCamera',
     );
 
     this.controls = new OrbitControlsManager(this.camera, canvas);
@@ -197,14 +190,8 @@ export class SceneManager {
     this.controls.enableZoom = false;
 
     // 4. Config post-processing effects if enabled
-    if (config.postprocessing) {
-      this.composer = new EffectComposer(this.renderer);
-      this.composer.setSize(
-        canvas.clientWidth * pixelRatio,
-        canvas.clientHeight * pixelRatio
-      );
-      this.setupPostProcessing();
-    }
+    this.camera.postProcessingEnabled = config.postprocessing || false;
+    this.camera.setupPostProcessing(this.scene, this.renderer);
 
     // 5. Setup resize observer to handle canvas resizing
     this.resizeObserver = new ResizeObserver(this.handleResize);
@@ -214,43 +201,6 @@ export class SceneManager {
     if(config.parallax){
       this.parallaxManager = new ParallaxManager(this.camera);
     }
-  }
-
-  /**
-   * Sets up post-processing effects for the scene.
-   * This includes configuring the renderer's tone mapping, shadow maps,
-   * and adding passes for rendering and anti-aliasing.
-   * @returns {void}
-   * @private
-   */
-  private setupPostProcessing(): void {
-    const {canvas} = this;
-    if (!this.composer) {return;}
-
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    this.renderer.shadowMap.enabled = true;
-
-    // 1. Send to the composer the render pass
-    const renderPass = new RenderPass(this.scene, this.camera);
-    this.composer?.addPass(renderPass);
-
-    // SMAA (Subpixel Morphological Antialiasing) and SSAA (Super Sampling Anti Aliasing)
-    // These passes are used to improve the visual quality of the scene.
-    // SMAA is a post-processing effect that reduces aliasing artifacts.
-    // SSAA is a technique that renders the scene at a higher resolution and then downsamples
-    // it to the display resolution, providing a smoother appearance.
-    // Both passes are added to the composer to be applied during rendering.
-    const smaaPass = new SMAAPass();
-    smaaPass.enabled = true;
-    smaaPass.renderToScreen = true;
-    smaaPass.setSize(canvas.clientWidth * this.renderer.getPixelRatio(), canvas.clientHeight * this.renderer.getPixelRatio());
-    this.composer?.addPass(smaaPass);
-    
-    const ssaaPass = new SSAARenderPass(this.scene, this.camera);
-    ssaaPass.sampleLevel = 2;
-    this.composer?.addPass(ssaaPass);
   }
 
   /**
@@ -271,48 +221,8 @@ export class SceneManager {
       false
     );
     
-    // 2. Update camera aspect ratio
-    const newAspect = canvas.clientWidth / canvas.clientHeight;
-    this.camera.aspect = newAspect;
-    this.camera.updateProjectionMatrix();
-    
-    // 3. Recalculate camera position for all models
-    this.models.forEach(model => {
-      const box = new THREE.Box3().setFromObject(model);
-      const boundingSphere = new THREE.Sphere();
-      box.getBoundingSphere(boundingSphere);
-      const radius = boundingSphere.radius;
-      
-      const fovRad = this.camera.fov * (Math.PI / 180);
-      const horizontalFov = 2 * Math.atan(Math.tan(fovRad / 2) * newAspect);
-      
-      const distanceV = radius / Math.tan(fovRad / 2);
-      const distanceH = radius / Math.tan(horizontalFov / 2);
-      const cameraDistance = Math.max(distanceV, distanceH) * this.MARGIN;
-      
-      // Change camera position based on the bounding sphere
-      const currentLookAt = new THREE.Vector3();
-      this.camera.getWorldDirection(currentLookAt);
-      
-      this.camera.position.copy(currentLookAt.multiplyScalar(-cameraDistance));
-      this.camera.lookAt(0, 0, 0);
-    });
-    
-    // 4. Upadate post-processing composer size
-    // If composer is defined, update its size and reset it to force a re-render
-    // This is useful for effects like TAA (Temporal Anti-Aliasing) or SSAA (Super Sampling Anti Aliasing)
-    // that require the composer to be aware of the new canvas size.
-    // This ensures that the post-processing effects are applied correctly after a resize.
-    // This is especially important for effects that depend on the canvas size, like TAA or SSAA.
-    // If the composer is not defined, this step is skipped.
-    if (this.composer) {
-      this.composer.setSize(
-        canvas.clientWidth * pixelRatio,
-        canvas.clientHeight * pixelRatio
-      );
-      this.composer.reset();
-      this.composer.render();
-    }
+    // 2. Update camera aspect ratio    
+    this.camera.resize(new THREE.Box3().setFromObject(this.models.get(this.activeModelId!)?.model!!), pixelRatio);
   };
 
   /**
@@ -371,53 +281,6 @@ export class SceneManager {
   }
 
   /**
-   * Animates the camera to the initial position for a model
-   * @param {string} modelId - ID of the model to reset camera for
-   * @param {number} duration - Animation duration in milliseconds
-   */
-  private animateCameraToInitialPosition(modelId: string, duration: number = 1000): void {
-    const initialPosition = this.initialCameraPositions.get(modelId);
-    const initialTarget = this.initialCameraTargets.get(modelId);
-    
-    if (!initialPosition || !initialTarget) {return;}
-    
-    const startPosition = this.camera.position.clone();
-    const startTarget = this.controls?.controls!.target.clone() || new THREE.Vector3();
-    
-    const startTime = performance.now();
-    
-    const animate = () => {
-      const now = performance.now();
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      
-      // Easing function: easeOutCubic
-      const t = 1 - Math.pow(1 - progress, 3);
-      
-      // Interpolate position
-      this.camera.position.lerpVectors(startPosition, initialPosition, t);
-      
-      // Interpolate target
-      const currentTarget = new THREE.Vector3();
-      currentTarget.lerpVectors(startTarget, initialTarget, t);
-      
-      // Update camera and controls
-      this.camera.lookAt(currentTarget);
-      
-      if (this.controls) {
-        this.controls!.controls!.target.copy(currentTarget);
-        this.controls.update();
-      }
-      
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
-    
-    animate();
-  }
-
-  /**
    * Transitions to a model with a specified ID.
    * This method handles the transition effect between the currently active model and the target model.
    * It uses a fade-in and fade-out effect to smoothly switch between models.
@@ -438,8 +301,8 @@ export class SceneManager {
 
       // Apply molten effect during the transition
       if (startModel) {
-        startModel.visible = this.transitionProgress < 0.8;
-        startModel.traverse(child => {
+        startModel!.model!.visible = this.transitionProgress < 0.8;
+        startModel!.model!.traverse(child => {
           if (child instanceof THREE.Mesh) {
             child.material.opacity = 1 - this.transitionProgress;
             child.material.transparent = true;
@@ -447,8 +310,8 @@ export class SceneManager {
         });
       }
 
-      targetModel.visible = this.transitionProgress > 0.2;
-      targetModel.traverse(child => {
+      targetModel!.model!.visible = this.transitionProgress > 0.2;
+      targetModel!.model!.traverse(child => {
         if (child instanceof THREE.Mesh) {
           child.material.opacity = this.transitionProgress;
           child.material.transparent = true;
@@ -457,29 +320,41 @@ export class SceneManager {
 
       // Encourage the camera during the transition
       if (this.transitionProgress > 0.5 && this.activeModelId !== targetId) {
-         this.animateCameraToInitialPosition(targetId, this.transitionDuration * 0.5);
+         this.camera.toAnimIPos(
+          this.controls,
+          this.initialCameraPositions.get(targetId),
+          this.initialCameraTargets.get(targetId),
+          this.transitionDuration * 0.5
+        );
     
         // Adjust plans immediately when changing model
-        this.adjustClippingPlanes();
+        const model = this.models.get(this.activeModelId!);
+        const modelCenter = new THREE.Vector3();
+        model!.model!.getWorldPosition(modelCenter);
+        this.camera.adjustClippingPlanes(modelCenter,this.modelBoundingRadii.get(this.activeModelId!));
       }
 
       if (this.transitionProgress < 1) {
         requestAnimationFrame(animateTransition);
       } else {
         // Finish transition
-        if (startModel) {startModel.visible = false;}
-        targetModel.visible = true;
+        if (startModel) {startModel!.model!.visible = false;}
+        targetModel!.model!.visible = true;
         //this.activeModelId = targetId;
         this.transitionProgress = 0;
         
         // Restore opacity
-        targetModel.traverse(child => {
+        targetModel!.model!.traverse(child => {
           if (child instanceof THREE.Mesh) {
             child.material.opacity = 1;
           }
         });
-
-        this.controls?.setModel(targetModel);
+        this.camera.reset(
+          this.controls,
+          this.initialCameraPositions.get(targetId),
+          this.initialCameraTargets.get(targetId),
+        );
+        this.controls?.setModel(targetModel.model!);
         this.controls?.update();
       }
     };
@@ -503,93 +378,34 @@ export class SceneManager {
   ): Promise<THREE.Object3D> {
     // Si ya está cargando este modelo, retorna la promesa existente
     if (this.loadedModels.has(id)) {
-      return this.loadedModels.get(id)!;
+      return (await this.loadedModels.get(id))!;
     }
 
     // Si el modelo ya está cargado, retórnalo directamente
     if (this.hasModelLoaded.get(id) && this.models.has(id)) {
       if(onStateChange) {onStateChange('model_ready', `Model ${id} is already loaded.`);}
-      return this.models.get(id)!;
+      return this.models.get(id)?.model!;
     }
 
     console.info(`[SceneManager] Change model using: ${id} for url: ${url}`);
+    const model = new ModelManager();
 
-    const loadPromise = new Promise<THREE.Object3D>(async (resolve, reject) => {
-      try {
-        const cache = await CacheManager.getModel(url);
-
-        if(cache) {
-          console.info(`[SceneManager] Modelo ${id} encontrado en caché.`);
-          if(onStateChange) {onStateChange('cache_hit', `Model ${id} found in cache.`);}
-          const loader = new GLTFLoader();
-          loader.parse(
-            cache,
-            url,
-            (gltf) => {
-                /*[State Change]*/ if(onStateChange) {onStateChange('parsing', `Parsing model ${id} from cache.`);}
-                const model = gltf instanceof THREE.Object3D ? gltf : gltf.scene;
-                /*[State Change]*/ if(onStateChange) {onStateChange('adding_to_scene', `Adding model ${id} to scene.`);}
-                model.traverse((child) => {
-                  if (child instanceof THREE.Mesh) {
-                    child.geometry.computeBoundingBox();
-                  }
-                });
-                this.addModelToScene(id, model, gltf);
-                /*[State Change]*/ if(onStateChange) {onStateChange('model_ready', `Model ${id} loaded from cache.`);}
-                this.hasModelLoaded.set(id, true);
-                resolve(model);
-            },
-            (error) => {
-              reject(error);
-            }
-          );
+    const promise =  model.loadModel(url, true,
+      (model)=> this.addModelToScene(id, model),
+      (xhr) => {
+        if (onStateChange) {
+          const k = 1024;
+          const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+          const i = Math.floor(Math.log(xhr.loaded) / Math.log(k));
+          onStateChange('downloading',`Download: ${(xhr.loaded / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`);
         }
-        else{
-        const loader = new GLTFLoader();
-        
-        loader.load(
-          url,
-          (gltf) => {
-            /*[State Change]*/ if(onStateChange) {onStateChange('parsing', `Parsing model ${id} from URL.`);}
-            const model = gltf instanceof THREE.Object3D ? gltf : gltf.scene;
-            /*[State Change]*/ if(onStateChange) {onStateChange('adding_to_scene', `Adding model ${id} to scene.`);}
-            model.traverse((child) => {
-              if (child instanceof THREE.Mesh) {
-                child.geometry.computeBoundingBox();
-              }
-            });
-            this.addModelToScene(id, model, gltf);
-            /*[State Change]*/ if(onStateChange) {onStateChange('model_ready', `Model ${id} loaded successfully.`);}
-            this.hasModelLoaded.set(id, true);
-            resolve(model);
-          },
-          (xhr) => {
-            if (onStateChange) {
-              const k = 1024;
-              const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-              const i = Math.floor(Math.log(xhr.loaded) / Math.log(k));
-              onStateChange('downloading',`Download: ${(xhr.loaded / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`);
-            }
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-        console.info(`[SceneManager] Model save to cache: ${url}`);
-        /*[State Change]*/ if(onStateChange) {onStateChange('checking_cache', `Checking cache for model ${id}.`);}
-        await CacheManager.saveModel(url, await (await fetch(url)).arrayBuffer());
-        /*[State Change]*/ if(onStateChange) {onStateChange('caching', `Model ${id} cached successfully.`);}
-      
       }
-      } catch (error) {
-        console.error(`[SceneManager] Error loading model ${id}:`, error);
-        /*[State Change]*/ if(onStateChange) {onStateChange('error', `Error loading model ${id}: ${error}`);}
-        reject(error);
-      }
-    });
+    );
 
-    this.loadedModels.set(id, loadPromise);
-    return loadPromise;
+    this.loadedModels.set(id, 
+     promise
+    );    
+    return promise;
   }
 
   /**
@@ -618,7 +434,7 @@ export class SceneManager {
     }
     console.info(`[SceneManager] Active Model ${this.activeModelId}`);
     // Calculate the center and radio of the model
-    const box = new THREE.Box3().setFromObject(this.models.get(this.activeModelId!)!);
+    const box = new THREE.Box3().setFromObject(this.models.get(this.activeModelId!)!.model!);
     const center = new THREE.Vector3();
     box.getCenter(center);
     const size = new THREE.Vector3();
@@ -718,12 +534,11 @@ export class SceneManager {
    * @returns {void}
    * @private
    */
-  private addModelToScene(id: string, model: THREE.Object3D, gltf: GLTF): void {
+  private addModelToScene(id: string, model: ModelManager): void {
   console.info(`[SceneManager] Adding model with ID: ${id} to the scene.`);
-  const container = new THREE.Group();
   
   // 1. Calculate the bounding box of the model
-  const box = new THREE.Box3().setFromObject(model, true);
+  const box = new THREE.Box3().setFromObject(model.model!, true);
   // 2. Create a bounding box to center the model
   const center = new THREE.Vector3();
   const size = new THREE.Vector3();
@@ -731,119 +546,35 @@ export class SceneManager {
   box.getSize(size);
   
   // 3. Center the model at the origin
-  //model.position.sub(center);
-  container.position.copy(center.negate());
-  container.add(model);
+  model.model!.position.sub(center);
   
   // Actualizar matrices
-  container.updateMatrixWorld(true);
+  model.model!.updateMatrixWorld(true);
   
-  // 4. Calculate the bounding sphere of the model
-  const boundingSphere = new THREE.Sphere();
-  box.getBoundingSphere(boundingSphere);
-  const radius = boundingSphere.radius;
+  const {radius, position} = this.camera.recalculate(box);
   
    // Save the radius of Bounding Sphere to use at the clipping
     this.modelBoundingRadii.set(id, radius);
 
-  // 5. Calculate the camera distance based on the bounding sphere radius
-  const fovRad = this.camera.fov * (Math.PI / 180);
-  const aspect = this.camera.aspect;
   
-  // Calculate the horizontal field of view
-  const horizontalFov = 2 * Math.atan(Math.tan(fovRad / 2) * aspect);
-  
-  // Calculate the distance based on the bounding sphere radius
-  const distanceV = radius / Math.tan(fovRad / 2);
-  const distanceH = radius / Math.tan(horizontalFov / 2);
-  const cameraDistance = Math.max(distanceV, distanceH) * this.MARGIN;
-  
-  // 6. Position the camera
-  this.camera.position.set(0, 0, cameraDistance);
-  this.camera.lookAt(0, 0, 0);
   
   // Guardar posición inicial de la cámara para este modelo
-  this.initialCameraPositions.set(id, this.camera.position.clone());
+  this.initialCameraPositions.set(id, position);
   this.initialCameraTargets.set(id, new THREE.Vector3(0, 0, 0));
   
   // 7. Add the model to the scene
-  this.models.set(id, container);
-  this.scene.add(container);
+  this.models.set(id, model);
+  this.scene.add(model.model!);
   if(this.config.parallax){
-    this.parallaxManager?.register(id, container, this.transitionDuration/1000);
+    this.parallaxManager?.register(id, model.model!, this.transitionDuration/1000);
   }
-   if (gltf.animations.length > 0) {
-            this.setupAnimations(id, model, gltf.animations);
-          }
-
   console.info(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
-}
-
-setupAnimations(modelId: string, model: THREE.Object3D, animations: THREE.AnimationClip[]) {
-  const manager = new AnimationManager(model, animations);
-  this.animationManagers.set(modelId, manager);
 }
 
 getAnimationManager(modelId?: string): AnimationManager | null {
   const id = modelId ?? this.activeModelId;
   if (!id) {return null;}
-  return this.animationManagers.get(id) || null;
-}
-
-/**
- * Adjusts the camera clipping planes based on the active model's bounding sphere.
- * It calculates the near and far clipping planes based on the model's radius and distance from the camera.
- * This helps to avoid clipping issues when rendering large models.
- * @returns {void}
- */
-private adjustClippingPlanes(): void {
-    if (!this.activeModelId) {return;}
-    
-    const radius = this.modelBoundingRadii.get(this.activeModelId);
-    if (!radius) {return;}
-
-    const model = this.models.get(this.activeModelId);
-    if (!model) {return;}
-
-    // Calculate distance from the camera to the center of the model
-    const modelCenter = new THREE.Vector3();
-    model.getWorldPosition(modelCenter);
-    const distance = this.camera.position.distanceTo(modelCenter);
-
-    // Calculate new cuts of cuts
-    const near = Math.max(0.001, distance - radius - this.NEAR_MARGIN);
-    const far = distance + radius * this.FAR_MULTIPLIER;
-
-    // Update camera only if there are significant changes
-    if (
-      Math.abs(this.camera.near - near) > 0.001 ||
-      Math.abs(this.camera.far - far) > 0.001
-    ) {
-      this.camera.near = near;
-      this.camera.far = far;
-      this.camera.updateProjectionMatrix();
-    }
-  }
-
-/**
- * Resets the camera position for a specific model
- * @param {string} modelId - ID of the model to reset camera for
- */
-public resetCameraForModel(modelId: string): void {
-  const initialPosition = this.initialCameraPositions.get(modelId);
-  const initialTarget = this.initialCameraTargets.get(modelId);
-  
-  if (initialPosition && initialTarget) {
-    this.camera.position.copy(initialPosition);
-    this.camera.lookAt(initialTarget);
-    
-    if (this.controls) {
-      this.controls!.controls!.target.copy(initialTarget);
-      this.controls.update();
-    }
-    
-    console.info(`[SceneManager] Camera reset for model: ${modelId}`);
-  }
+  return this.models.get(id)?.animate!;
 }
 
   /**
@@ -852,7 +583,7 @@ public resetCameraForModel(modelId: string): void {
    * @returns {THREE.Object3D | undefined} The model if found, otherwise undefined.
    */
   public getModel(id: string): THREE.Object3D | undefined {
-    return this.models.get(id);
+    return this.models.get(id)?.model!;
   }
 
   /**
@@ -864,7 +595,7 @@ public resetCameraForModel(modelId: string): void {
    */
   public updateModel(id: string, updater: (model: THREE.Object3D) => void): void {
     const model = this.models.get(id);
-    if (model) {updater(model);}
+    if (model) {updater(model.model!);}
   }
 
   /**
@@ -944,10 +675,13 @@ public resetCameraForModel(modelId: string): void {
         if (this.controls) { this.controls.update(); }
         
         // Adjust clipping plans before rendering
-        this.adjustClippingPlanes();
+        const model = this.models.get(this.activeModelId!);
+        const modelCenter = new THREE.Vector3();
+        model!.model!.getWorldPosition(modelCenter);
+        this.camera.adjustClippingPlanes(modelCenter,this.modelBoundingRadii.get(this.activeModelId!));
         
         const delta = this.clock.getDelta();
-        this?.animationManagers?.get(this!.activeModelId!)?.update(delta);
+        this?.models?.get(this!.activeModelId!)?.animate?.update(delta);
 
         if (this.composer) {
           this.composer.render();
@@ -968,7 +702,10 @@ public resetCameraForModel(modelId: string): void {
   public dispose(): void {
     this.resizeObserver.disconnect();
     this.renderer.dispose();
-    this.models.forEach(model => this.scene.remove(model));
+    this.models.forEach(model => {
+      this.scene.remove(model.model!);
+      model.dispose();
+    });
     if (this.controls) {this.controls.dispose();}
   }
 

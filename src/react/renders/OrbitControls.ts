@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 'use client';
 import { useEffect } from 'react';
-import { useSceneContext } from './SceneContext';
+import { useSceneContext } from '../hooks/SceneContext';
 /**
  * Props for the OrbitControls component.
  * @property {boolean} [enableRotate=false] - Enable rotation controls

@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { useSceneContext } from './SceneContext';
+import { useSceneContext } from '../hooks/SceneContext';
 
 /**
  * Props for the AmbientLight component.

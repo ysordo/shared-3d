@@ -1,6 +1,6 @@
 'use client';
 import { type JSX, useState } from 'react';
-import { AmbientLight } from './AmbientLight';
+import { AmbientLight } from '../renders/AmbientLight';
 
 /**
  * Props for the AmbientLightController component.

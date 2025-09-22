@@ -1,9 +1,9 @@
 'use client';
 import type { ForwardedRef, JSX } from 'react';
 import { useRef, useState, useEffect, forwardRef } from 'react';
-import { SceneManager } from '../core/SceneManager';
+import { SceneManager } from '../../core/SceneManager';
 import { SceneContext } from './SceneContext';
-import { type THREE} from '..';
+import { type THREE } from '../..';
 import { useCacheCleanup } from './useCacheCleanup';
 /**
  * Props for the SceneRenderer component.

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControlsManager } from './OrbitControlsManager';
-import { AnimationManager } from './AnimationManager';
+import type { AnimationManager } from './AnimationManager';
 export type LoadState = 'checking_cache' | 'cache_hit' | 'cache_miss' | 'downloading' | 'parsing' | 'caching' | 'adding_to_scene' | 'model_ready' | 'error';
 /**
  * SceneManager class that manages a 3D scene using Three.js.
@@ -16,7 +16,6 @@ export type LoadState = 'checking_cache' | 'cache_hit' | 'cache_miss' | 'downloa
  * @property {Map<string, boolean>} hasModelLoaded - Map to track if a model has been loaded.
  * @property {ResizeObserver} resizeObserver - Observer to handle canvas resizing.
  * @property {Map<string, (progress: number) => void>} parallaxEffects - Map of parallax effects for models.
- * @property {number} MARGIN - Margin factor for camera distance calculations.
  * @param {HTMLCanvasElement} canvas - The canvas element where the scene will be rendered.
  * @param {Object} [config] - Configuration options for the scene.
  * @param {boolean} [config.antialias=true] - Whether to enable antialiasing in the renderer.
@@ -73,9 +72,7 @@ export declare class SceneManager {
     private loadedModels;
     private hasModelLoaded;
     private resizeObserver;
-    private parallaxEffects;
     private parallaxManager?;
-    private MARGIN;
     activeModelId: string | null;
     private transitionProgress;
     transitionDuration: number;
@@ -83,13 +80,10 @@ export declare class SceneManager {
     private initialCameraPositions;
     private initialCameraTargets;
     private modelBoundingRadii;
-    private NEAR_MARGIN;
-    private FAR_MULTIPLIER;
     private lightsRef;
     private helpersRef;
     private fillLightRef;
     private ambientLightRef;
-    private animationManagers;
     private clock;
     /**
      * Creates an instance of SceneManager.
@@ -127,14 +121,6 @@ export declare class SceneManager {
         background?: THREE.Color;
         parallax?: boolean;
     });
-    /**
-     * Sets up post-processing effects for the scene.
-     * This includes configuring the renderer's tone mapping, shadow maps,
-     * and adding passes for rendering and anti-aliasing.
-     * @returns {void}
-     * @private
-     */
-    private setupPostProcessing;
     /**
      * Handles canvas resizing by updating the renderer size, camera aspect ratio,
      * and recalculating camera position for all models in the scene.
@@ -177,12 +163,6 @@ export declare class SceneManager {
         url: string;
     }[]): void;
     /**
-     * Animates the camera to the initial position for a model
-     * @param {string} modelId - ID of the model to reset camera for
-     * @param {number} duration - Animation duration in milliseconds
-     */
-    private animateCameraToInitialPosition;
-    /**
      * Transitions to a model with a specified ID.
      * This method handles the transition effect between the currently active model and the target model.
      * It uses a fade-in and fade-out effect to smoothly switch between models.
@@ -223,20 +203,7 @@ export declare class SceneManager {
      * @private
      */
     private addModelToScene;
-    setupAnimations(modelId: string, model: THREE.Object3D, animations: THREE.AnimationClip[]): void;
     getAnimationManager(modelId?: string): AnimationManager | null;
-    /**
-     * Adjusts the camera clipping planes based on the active model's bounding sphere.
-     * It calculates the near and far clipping planes based on the model's radius and distance from the camera.
-     * This helps to avoid clipping issues when rendering large models.
-     * @returns {void}
-     */
-    private adjustClippingPlanes;
-    /**
-     * Resets the camera position for a specific model
-     * @param {string} modelId - ID of the model to reset camera for
-     */
-    resetCameraForModel(modelId: string): void;
     /**
      * Retrieves a model by its ID.
      * @param {string} id - Unique identifier for the model.

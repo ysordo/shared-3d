@@ -1,6 +1,6 @@
 'use client';
 import { useEffect } from 'react';
-import { CacheManager } from '../core/CacheManager';
+import { CacheManager } from '../../core/CacheManager';
 
 export const useCacheCleanup = () => {
   useEffect(() => {
