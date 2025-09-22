@@ -26,15 +26,13 @@ export class ModelManager {
         this.gltfLoader.setDRACOLoader(this.dracoLoader);
     }
 
-    private handleModelLoaded(resolve: (value: THREE.Object3D) => void, gltf: GLTF, onLoad?: (model: ModelManager)=> void): void {
+    private handleModelLoaded(resolve: (value: THREE.Object3D) => void, gltf: GLTF): void {
         this.model = gltf.scene as THREE.Object3D;
         
         if (gltf.animations?.length > 0) {
             this.animate = new AnimationManager(this.model, gltf.animations);
             this.animKey = this.createAnimationDictionary(gltf.animations);
         }
-        
-        onLoad?.call?.(this,this);
 
         resolve(this.model);
     }
@@ -46,7 +44,7 @@ export class ModelManager {
         }, {});
     }
 
-    async loadModel(url: string, useCache: boolean = true, onLoad?: (model: ModelManager)=> void, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D> {
+    async loadModel(url: string, useCache: boolean = true, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D> {
         // Si ya tenemos este modelo cargado, verificar si hay actualizaciones
         if (this.currentModelUrl === url && useCache) {
             const hasUpdates = await CacheManager.validateAndUpdateCache(url);
@@ -71,7 +69,7 @@ export class ModelManager {
                 }
                 
                 const callback = (gltf: GLTF) => {
-                    this.handleModelLoaded(resolve, gltf, onLoad);
+                    this.handleModelLoaded(resolve, gltf);
                 };
                 
                 if (modelData) {

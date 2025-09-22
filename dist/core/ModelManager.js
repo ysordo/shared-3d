@@ -13,13 +13,12 @@ export class ModelManager {
         this.gltfLoader = new GLTFLoader();
         this.gltfLoader.setDRACOLoader(this.dracoLoader);
     }
-    handleModelLoaded(resolve, gltf, onLoad) {
+    handleModelLoaded(resolve, gltf) {
         this.model = gltf.scene;
         if (gltf.animations?.length > 0) {
             this.animate = new AnimationManager(this.model, gltf.animations);
             this.animKey = this.createAnimationDictionary(gltf.animations);
         }
-        onLoad?.call?.(this, this);
         resolve(this.model);
     }
     createAnimationDictionary(animations) {
@@ -28,7 +27,7 @@ export class ModelManager {
             return dict;
         }, {});
     }
-    async loadModel(url, useCache = true, onLoad, onProgress) {
+    async loadModel(url, useCache = true, onProgress) {
         // Si ya tenemos este modelo cargado, verificar si hay actualizaciones
         if (this.currentModelUrl === url && useCache) {
             const hasUpdates = await CacheManager.validateAndUpdateCache(url);
@@ -50,7 +49,7 @@ export class ModelManager {
                     modelData = await CacheManager.getModel(url);
                 }
                 const callback = (gltf) => {
-                    this.handleModelLoaded(resolve, gltf, onLoad);
+                    this.handleModelLoaded(resolve, gltf);
                 };
                 if (modelData) {
                     // Usar datos del caché

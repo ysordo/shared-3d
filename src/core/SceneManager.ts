@@ -391,7 +391,6 @@ export class SceneManager {
     const model = new ModelManager();
 
     const promise =  model.loadModel(url, true,
-      undefined,
       (xhr) => {
         if (onStateChange) {
           const k = 1024;
@@ -404,7 +403,10 @@ export class SceneManager {
     this.loadedModels.set(id, 
      promise
     );
-    promise.then(()=>this.addModelToScene(id, model));   
+    promise.then((obj3D)=>{
+      this.addModelToScene(id, obj3D);
+      this.models.set(id, model);
+    });
     return promise;
   }
 
@@ -534,11 +536,11 @@ export class SceneManager {
    * @returns {void}
    * @private
    */
-  private addModelToScene(id: string, model: ModelManager): void {
+  private addModelToScene(id: string, model: THREE.Object3D): void {
   console.info(`[SceneManager] Adding model with ID: ${id} to the scene.`);
   
   // 1. Calculate the bounding box of the model
-  const box = new THREE.Box3().setFromObject(model.model!, true);
+  const box = new THREE.Box3().setFromObject(model, true);
   // 2. Create a bounding box to center the model
   const center = new THREE.Vector3();
   const size = new THREE.Vector3();
@@ -546,10 +548,10 @@ export class SceneManager {
   box.getSize(size);
   
   // 3. Center the model at the origin
-  model.model!.position.sub(center);
+  model.position.sub(center);
   
   // Actualizar matrices
-  model.model!.updateMatrixWorld(true);
+  model.updateMatrixWorld(true);
   
   const {radius, position} = this.camera.recalculate(box);
   
@@ -563,10 +565,9 @@ export class SceneManager {
   this.initialCameraTargets.set(id, new THREE.Vector3(0, 0, 0));
   
   // 7. Add the model to the scene
-  this.models.set(id, model);
-  this.scene.add(model.model!);
+  this.scene.add(model);
   if(this.config.parallax){
-    this.parallaxManager?.register(id, model.model!, this.transitionDuration/1000);
+    this.parallaxManager?.register(id, model, this.transitionDuration/1000);
   }
   console.info(`[SceneManager] Model with ID: ${id} added to the scene and camera positioned.`);
 }

@@ -13,7 +13,7 @@ export declare class ModelManager {
     constructor();
     private handleModelLoaded;
     private createAnimationDictionary;
-    loadModel(url: string, useCache?: boolean, onLoad?: (model: ModelManager) => void, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
+    loadModel(url: string, useCache?: boolean, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
     /**
      * Método para forzar la verificación de actualizaciones del modelo actual
      */
