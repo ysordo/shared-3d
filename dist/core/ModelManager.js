@@ -13,12 +13,13 @@ export class ModelManager {
         this.gltfLoader = new GLTFLoader();
         this.gltfLoader.setDRACOLoader(this.dracoLoader);
     }
-    handleModelLoaded(resolve, gltf) {
+    handleModelLoaded(resolve, gltf, onLoad) {
         this.model = gltf.scene;
         if (gltf.animations?.length > 0) {
             this.animate = new AnimationManager(this.model, gltf.animations);
             this.animKey = this.createAnimationDictionary(gltf.animations);
         }
+        onLoad?.call?.(this, this);
         resolve(this.model);
     }
     createAnimationDictionary(animations) {
@@ -49,8 +50,7 @@ export class ModelManager {
                     modelData = await CacheManager.getModel(url);
                 }
                 const callback = (gltf) => {
-                    this.handleModelLoaded(resolve, gltf);
-                    onLoad?.bind?.(this);
+                    this.handleModelLoaded(resolve, gltf, onLoad);
                 };
                 if (modelData) {
                     // Usar datos del caché

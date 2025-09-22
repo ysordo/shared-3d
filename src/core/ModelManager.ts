@@ -26,7 +26,7 @@ export class ModelManager {
         this.gltfLoader.setDRACOLoader(this.dracoLoader);
     }
 
-    private handleModelLoaded(resolve: (value: THREE.Object3D) => void, gltf: GLTF): void {
+    private handleModelLoaded(resolve: (value: THREE.Object3D) => void, gltf: GLTF, onLoad?: (model: ModelManager)=> void): void {
         this.model = gltf.scene as THREE.Object3D;
         
         if (gltf.animations?.length > 0) {
@@ -34,6 +34,8 @@ export class ModelManager {
             this.animKey = this.createAnimationDictionary(gltf.animations);
         }
         
+        onLoad?.call?.(this,this);
+
         resolve(this.model);
     }
 
@@ -69,8 +71,7 @@ export class ModelManager {
                 }
                 
                 const callback = (gltf: GLTF) => {
-                    this.handleModelLoaded(resolve, gltf);
-                    onLoad?.bind?.(this);
+                    this.handleModelLoaded(resolve, gltf, onLoad);
                 };
                 
                 if (modelData) {
