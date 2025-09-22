@@ -50,7 +50,7 @@ export class ModelManager {
                 }
                 const callback = (gltf) => {
                     this.handleModelLoaded(resolve, gltf);
-                    onLoad?.(this);
+                    onLoad?.bind?.(this);
                 };
                 if (modelData) {
                     // Usar datos del caché

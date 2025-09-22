@@ -70,7 +70,7 @@ export class ModelManager {
                 
                 const callback = (gltf: GLTF) => {
                     this.handleModelLoaded(resolve, gltf);
-                    onLoad?.(this);
+                    onLoad?.bind?.(this);
                 };
                 
                 if (modelData) {
