@@ -19,8 +19,8 @@ export class AnimationManager {
     }
 
     private setupActions(animations: THREE.AnimationClip[]): void {
-        animations.forEach(clip => {
-            this.actions[clip.name] = this.mixer!.clipAction(clip);
+        animations.forEach((clip, index) => {
+            this.actions[index] = this.mixer!.clipAction(clip);
         });
     }
 

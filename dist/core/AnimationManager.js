@@ -16,8 +16,8 @@ export class AnimationManager {
         }
     }
     setupActions(animations) {
-        animations.forEach(clip => {
-            this.actions[clip.name] = this.mixer.clipAction(clip);
+        animations.forEach((clip, index) => {
+            this.actions[index] = this.mixer.clipAction(clip);
         });
     }
     update(delta) {

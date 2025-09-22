@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/Addons.js';
+import { DRACOLoader, GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { CacheManager } from './CacheManager';
 import { OrbitControlsManager } from './OrbitControlsManager';
 import { ParallaxManager } from './ParallaxManager';
@@ -308,6 +308,8 @@ export class SceneManager {
             return this.models.get(id);
         }
         console.info(`[SceneManager] Change model using: ${id} for url: ${url}`);
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath('draco/');
         const loadPromise = new Promise(async (resolve, reject) => {
             try {
                 const cache = await CacheManager.getModel(url);
@@ -317,6 +319,7 @@ export class SceneManager {
                         onStateChange('cache_hit', `Model ${id} found in cache.`);
                     }
                     const loader = new GLTFLoader();
+                    loader.setDRACOLoader(dracoLoader);
                     loader.parse(cache, url, (gltf) => {
                         /*[State Change]*/ if (onStateChange) {
                             onStateChange('parsing', `Parsing model ${id} from cache.`);
@@ -342,6 +345,7 @@ export class SceneManager {
                 }
                 else {
                     const loader = new GLTFLoader();
+                    loader.setDRACOLoader(dracoLoader);
                     loader.load(url, (gltf) => {
                         /*[State Change]*/ if (onStateChange) {
                             onStateChange('parsing', `Parsing model ${id} from URL.`);
