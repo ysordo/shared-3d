@@ -327,7 +327,7 @@ export class SceneManager {
         }
         console.info(`[SceneManager] Change model using: ${id} for url: ${url}`);
         const dracoLoader = new DRACOLoader();
-        dracoLoader.setDecoderPath('draco/decoders/');
+        dracoLoader.setDecoderPath('/draco/decoders/');
         const useDraco = url.includes('draco') || url.includes('compressed');
         const loadPromise = new Promise(async (resolve, reject) => {
             try {
