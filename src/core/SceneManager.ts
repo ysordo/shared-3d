@@ -208,6 +208,29 @@ export class SceneManager {
     if(config.parallax){
       this.parallaxManager = new ParallaxManager(this.camera);
     }
+
+     // ✅ LUZ PRINCIPAL - Alta calidad
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(5, 10, 7);
+    directionalLight.castShadow = true;
+    
+    // ✅ SOMBRAS DE ALTA DEFINICIÓN
+    directionalLight.shadow.mapSize.width = 2048;
+    directionalLight.shadow.mapSize.height = 2048;
+    directionalLight.shadow.camera.near = 0.5;
+    directionalLight.shadow.camera.far = 50;
+    directionalLight.shadow.bias = -0.001;
+    
+    // ✅ LUZ AMBIENTAL para detalles
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+    
+    this.scene.add(directionalLight);
+    this.scene.add(ambientLight);
+    
+    // ✅ LUZ DE RELLENO para mejor definición
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight.position.set(-5, 5, -5);
+    this.scene.add(fillLight);
   }
 
   /**
@@ -397,7 +420,9 @@ export class SceneManager {
 
     console.info(`[SceneManager] Change model using: ${id} for url: ${url}`);
     const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('draco/');
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+    const useDraco = url.includes('draco') || url.includes('compressed');
+
 
     const loadPromise = new Promise<THREE.Object3D>(async (resolve, reject) => {
       try {
@@ -407,7 +432,9 @@ export class SceneManager {
           console.info(`[SceneManager] Modelo ${id} encontrado en caché.`);
           if(onStateChange) {onStateChange('cache_hit', `Model ${id} found in cache.`);}
           const loader = new GLTFLoader();
-          loader.setDRACOLoader(dracoLoader);
+          if (useDraco) {
+            loader.setDRACOLoader(dracoLoader);
+          }
           loader.parse(
             cache,
             url,
@@ -418,6 +445,10 @@ export class SceneManager {
                 model.traverse((child) => {
                   if (child instanceof THREE.Mesh) {
                     child.geometry.computeBoundingBox();
+    
+                    // Optimizaciones críticas:
+                    child.geometry.computeVertexNormals(); // Para sombreado suave
+                    child.geometry.attributes.position.needsUpdate = true;
                   }
                 });
                 this.addModelToScene(id, model, gltf);
@@ -432,8 +463,10 @@ export class SceneManager {
         }
         else{
         const loader = new GLTFLoader();
-        loader.setDRACOLoader(dracoLoader);
-        
+        if (useDraco) {
+          loader.setDRACOLoader(dracoLoader);
+        }
+              
         loader.load(
           url,
           (gltf) => {
@@ -443,6 +476,10 @@ export class SceneManager {
             model.traverse((child) => {
               if (child instanceof THREE.Mesh) {
                 child.geometry.computeBoundingBox();
+    
+                // Optimizaciones críticas:
+                child.geometry.computeVertexNormals(); // Para sombreado suave
+                child.geometry.attributes.position.needsUpdate = true;
               }
             });
             this.addModelToScene(id, model, gltf);

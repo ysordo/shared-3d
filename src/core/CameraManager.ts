@@ -1,6 +1,6 @@
 import type { Box3, Scene, WebGLRenderer } from 'three';
 import { ACESFilmicToneMapping, PCFSoftShadowMap, PerspectiveCamera, Sphere, Vector3 } from 'three';
-import { EffectComposer} from 'three/examples/jsm/Addons';
+import { EffectComposer, FXAAShader, ShaderPass} from 'three/examples/jsm/Addons';
 import { RenderPass, SMAAPass, SSAARenderPass } from 'three/examples/jsm/Addons';
 import type { OrbitControlsManager } from './OrbitControlsManager';
 
@@ -54,14 +54,12 @@ export class CameraManager extends PerspectiveCamera {
         render.shadowMap.enabled = true;
         const renderPass = new RenderPass(scene, this);
         this.composer?.addPass(renderPass);
-        const smaaPass = new SMAAPass();
-        smaaPass.enabled = true;
-        smaaPass.renderToScreen = true;
-        smaaPass.setSize(canvas.clientWidth * render.getPixelRatio(), canvas.clientHeight * render.getPixelRatio());
-        this.composer?.addPass(smaaPass);
-        const ssaaPass = new SSAARenderPass(scene, this);
-        ssaaPass.sampleLevel = 2;
-        this.composer?.addPass(ssaaPass);
+        const fxaaPass = new ShaderPass(FXAAShader);
+        fxaaPass.uniforms['resolution'].value.set(
+            1 / canvas.clientWidth, 
+            1 / canvas.clientHeight
+        );
+        this.composer?.addPass(fxaaPass);
     }
 
     public reset(controls?: OrbitControlsManager, pos?: Vector3, target?: Vector3): void {
