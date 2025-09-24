@@ -420,7 +420,7 @@ export class SceneManager {
 
     console.info(`[SceneManager] Change model using: ${id} for url: ${url}`);
     const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('draco/versioned/decoders/1.5.6/');
+    dracoLoader.setDecoderPath('../../draco/versioned/decoders/1.5.6/');
     const useDraco = url.includes('draco') || url.includes('compressed');
 
 
