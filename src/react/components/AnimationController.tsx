@@ -69,10 +69,46 @@ const AnimationMultiplyController: React.FC<
   const [list, setList] = useState<string[]>([]);
   const { sceneManager } = useSceneContext();
   useEffect(() => {
+    console.log('🔄 AnimationMultiplyController useEffect triggered');
+    console.log('SceneManager:', sceneManager);
+    console.log('ActiveModelId:', sceneManager?.activeModelId);
+
     if (sceneManager && sceneManager.activeModelId) {
-      setList(Object.keys(sceneManager?.getAnimationManager?.()?.actions!));
+      console.log('✅ SceneManager and activeModelId available');
+
+      const animationManager = sceneManager.getAnimationManager?.();
+      console.log('AnimationManager:', animationManager);
+
+      if (animationManager) {
+        console.log('✅ AnimationManager available');
+
+        const actions = animationManager.actions;
+        console.log('Actions object:', actions);
+        console.log('Actions type:', typeof actions);
+
+        if (actions && typeof actions === 'object') {
+          console.log('✅ Actions is a valid object');
+          try {
+            const actionKeys = Object.keys(actions);
+            console.log('✅ Action keys:', actionKeys);
+            setList(actionKeys);
+          } catch (error) {
+            console.error('❌ Error in Object.keys:', error);
+            setList([]);
+          }
+        } else {
+          console.warn('⚠️ Actions is not a valid object:', actions);
+          setList([]);
+        }
+      } else {
+        console.warn('⚠️ AnimationManager not available');
+        setList([]);
+      }
+    } else {
+      console.warn('⚠️ SceneManager or activeModelId not available');
+      setList([]);
     }
-  }, [sceneManager, sceneManager?.activeModelId!]);
+  }, [sceneManager, sceneManager?.activeModelId]);
   if (list.length > 0) {
     if (typeof children === 'function') {
       const ls = list.map((v) => ({ name: v, button: AnimationController }));
