@@ -7,7 +7,7 @@ interface AnimationActions {
 
 export class AnimationManager {
     private mixer: THREE.AnimationMixer | null = null;
-    private actions: AnimationActions = {};
+    public actions: AnimationActions = {};
     private isAnimating: boolean = false;
     private onFinish?: () => void;
 
@@ -19,8 +19,8 @@ export class AnimationManager {
     }
 
     private setupActions(animations: THREE.AnimationClip[]): void {
-        animations.forEach((clip, index) => {
-            this.actions[index] = this.mixer!.clipAction(clip);
+        animations.forEach((clip) => {
+            this.actions[clip.name] = this.mixer!.clipAction(clip);
         });
     }
 

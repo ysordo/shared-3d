@@ -1,24 +1,24 @@
-import { jsx as _jsx } from "react/jsx-runtime";
+import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
 // src/components/AnimationController.tsx
 import { useEffect, useState } from 'react';
 import { useSceneContext } from '../hooks/SceneContext';
-const AnimationController = ({ className = '', children, state, }) => {
+const AnimationController = ({ className = '', children, state, id = '0', }) => {
     const [disabled, setDisabled] = useState(false);
     const [direction, setDirection] = useState('forward');
     const { sceneManager } = useSceneContext();
     useEffect(() => {
         if (sceneManager && disabled) {
             if (direction === 'forward') {
-                sceneManager?.getAnimationManager()?.playForward('0', () => {
+                sceneManager?.getAnimationManager()?.playForward(id, () => {
                     setDisabled(false);
-                    state?.(false);
+                    state?.({ status: false, dir: 'backward' });
                     setDirection('backward');
                 });
             }
             else {
-                sceneManager?.getAnimationManager()?.playBackward('0', () => {
+                sceneManager?.getAnimationManager()?.playBackward(id, () => {
                     setDisabled(false);
-                    state?.(false);
+                    state?.({ status: false, dir: 'forward' });
                     setDirection('forward');
                 });
             }
@@ -30,11 +30,26 @@ const AnimationController = ({ className = '', children, state, }) => {
             return;
         }
         setDisabled(true);
-        state?.(true);
+        state?.({ status: true, dir: direction });
     };
-    return (_jsx("button", { onClick: handleClick, disabled: disabled, className: className, name: direction, children: children }));
+    return (_jsx("button", { id: `anim-${id.toLowerCase()}`, onClick: handleClick, disabled: disabled, className: className, name: direction, children: children }));
+};
+const AnimationMultiplyController = ({ children }) => {
+    const [list, setList] = useState([]);
+    const { sceneManager } = useSceneContext();
+    useEffect(() => {
+        if (sceneManager) {
+            setList(Object.keys(sceneManager?.getAnimationManager?.()?.actions));
+        }
+    }, [sceneManager]);
+    if (typeof children === 'function') {
+        const ls = list.map((v) => ({ name: v, button: AnimationController }));
+        return _jsx(_Fragment, { children: children?.(ls) });
+    }
+    return _jsx(_Fragment, { children: children });
 };
 export const Animation = {
     ButtonController: AnimationController,
+    MultiplyController: AnimationMultiplyController,
 };
 //# sourceMappingURL=AnimationController.js.map

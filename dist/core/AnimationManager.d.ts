@@ -1,7 +1,10 @@
 import * as THREE from 'three';
+interface AnimationActions {
+    [key: string]: THREE.AnimationAction;
+}
 export declare class AnimationManager {
     private mixer;
-    private actions;
+    actions: AnimationActions;
     private isAnimating;
     private onFinish?;
     constructor(gltfScene: THREE.Object3D, animations: THREE.AnimationClip[]);
@@ -15,4 +18,5 @@ export declare class AnimationManager {
     isBusy(): boolean;
     dispose(): void;
 }
+export {};
 //# sourceMappingURL=AnimationManager.d.ts.map
