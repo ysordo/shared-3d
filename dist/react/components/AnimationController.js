@@ -38,15 +38,22 @@ const AnimationMultiplyController = ({ children }) => {
     const [list, setList] = useState([]);
     const { sceneManager } = useSceneContext();
     useEffect(() => {
-        if (sceneManager) {
+        if (sceneManager && sceneManager.activeModelId) {
             setList(Object.keys(sceneManager?.getAnimationManager?.()?.actions));
         }
-    }, [sceneManager]);
-    if (typeof children === 'function') {
-        const ls = list.map((v) => ({ name: v, button: AnimationController }));
-        return _jsx(_Fragment, { children: children?.(ls) });
+    }, [sceneManager, sceneManager?.activeModelId]);
+    if (list.length > 0) {
+        if (typeof children === 'function') {
+            const ls = list.map((v) => ({ name: v, button: AnimationController }));
+            return _jsx(_Fragment, { children: children?.(ls) });
+        }
+        else {
+            return children;
+        }
     }
-    return _jsx(_Fragment, { children: children });
+    else {
+        return null;
+    }
 };
 export const Animation = {
     ButtonController: AnimationController,

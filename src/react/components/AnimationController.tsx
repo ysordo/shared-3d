@@ -69,16 +69,20 @@ const AnimationMultiplyController: React.FC<
   const [list, setList] = useState<string[]>([]);
   const { sceneManager } = useSceneContext();
   useEffect(() => {
-    if (sceneManager) {
+    if (sceneManager && sceneManager.activeModelId) {
       setList(Object.keys(sceneManager?.getAnimationManager?.()?.actions!));
     }
-  }, [sceneManager]);
-
-  if (typeof children === 'function') {
-    const ls = list.map((v) => ({ name: v, button: AnimationController }));
-    return <>{children?.(ls)}</>;
+  }, [sceneManager, sceneManager?.activeModelId!]);
+  if (list.length > 0) {
+    if (typeof children === 'function') {
+      const ls = list.map((v) => ({ name: v, button: AnimationController }));
+      return <>{children?.(ls)}</>;
+    } else {
+      return children;
+    }
+  } else {
+    return null;
   }
-  return <>{children}</>;
 };
 
 export const Animation = {
