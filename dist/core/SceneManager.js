@@ -200,12 +200,15 @@ export class SceneManager {
      * @returns {OrbitControls} The configured OrbitControls instance.
      */
     setupOrbitControls(options = { enableRotate: false, enableZoom: false, enablePan: false }) {
-        this.controls.enablePan = options.enablePan ?? false;
+        if (!this.controls) {
+            return;
+        }
+        this.controls.ePan = options.enablePan ?? false;
         this.controls.enableZoom = options.enableZoom ?? false;
-        this.controls.controls.enableZoom = options.enableZoom ?? false;
-        this.controls.enableRotate = options.enableRotate ?? false;
-        this.controls.controls.maxDistance = options.maxDistance ?? Infinity;
-        this.controls.controls.minDistance = options.minDistance ?? 0;
+        this.controls.eRotate = options.enableRotate ?? false;
+        this.controls.maxDistance = options.maxDistance ?? Infinity;
+        this.controls.minDistance = options.minDistance ?? 0;
+        this.controls.update();
     }
     /**
      * Gets the current OrbitControls instance.

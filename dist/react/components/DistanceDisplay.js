@@ -18,7 +18,7 @@ export function DistanceDisplay({ children, className, setDistance, }) {
         const updateDistance = () => {
             const control = sceneManager?.getOrbitControls();
             if (control) {
-                const rawDistance = control?.controls.getDistance();
+                const rawDistance = control.getDistance();
                 setDistance?.(rawDistance);
             }
             animationRef.current = requestAnimationFrame(updateDistance);

@@ -271,12 +271,13 @@ export class SceneManager {
   maxDistance?: number;
   minDistance?: number
 } = { enableRotate: false, enableZoom: false, enablePan: false }): void {
-  this.controls!.enablePan = options.enablePan ?? false;
-  this.controls!.enableZoom = options.enableZoom ?? false;
-  this.controls!.controls!.enableZoom = options.enableZoom ?? false;
-  this.controls!.enableRotate = options.enableRotate ?? false;
-  this.controls!.controls!.maxDistance = options.maxDistance ?? Infinity;
-  this.controls!.controls!.minDistance = options.minDistance ?? 0;
+  if (!this.controls) {return;}
+  this.controls.ePan = options.enablePan ?? false;
+  this.controls.enableZoom = options.enableZoom ?? false;
+  this.controls.eRotate = options.enableRotate ?? false;
+  this.controls.maxDistance = options.maxDistance ?? Infinity;
+  this.controls.minDistance = options.minDistance ?? 0;
+  this.controls.update();
 }
 
   /**

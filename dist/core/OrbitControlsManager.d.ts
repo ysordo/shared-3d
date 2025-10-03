@@ -1,12 +1,13 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { THREE } from '..';
-export declare class OrbitControlsManager {
+export declare class OrbitControlsManager extends OrbitControls {
+    camera: THREE.Camera;
+    domElement: HTMLElement;
     private model?;
-    private camera;
-    private domElement;
-    controls: OrbitControls | null;
     enableRotate: boolean;
+    eRotate: boolean;
     enablePan: boolean;
+    ePan: boolean;
     enableZoom: boolean;
     private isRotating;
     private isPanning;
@@ -15,7 +16,7 @@ export declare class OrbitControlsManager {
     private startPointerPosition;
     private currentPointerPosition;
     private previousTouchDistance;
-    constructor(camera: THREE.Camera, rendererDomElement: HTMLElement);
+    constructor(camera: THREE.Camera, domElement: HTMLElement);
     setModel(model: THREE.Object3D): void;
     private setupEvents;
     /**
@@ -255,29 +256,6 @@ export declare class OrbitControlsManager {
      * @returns {void}
      */
     private handleZoom;
-    /**
-     * Updates the orbit controls.
-     * This method is called to update the orbit controls state.
-     * It ensures that the controls are updated based on the current camera position and model state.
-     * @description
-     * This method is responsible for updating the orbit controls.
-     * It checks if the orbit controls are initialized and calls their update method.
-     * This is typically called in the animation loop to ensure that the controls reflect any changes
-     * made to the camera or model during the rendering process.
-     * It allows the controls to respond to user input and update the camera position accordingly.
-     * @example
-     * // Example usage in the animation loop
-     * function animate() {
-     *   requestAnimationFrame(animate);
-     *   orbitControlsManager.update();
-     *   renderer.render(scene, camera);
-     * }
-     * animate();
-     * @memberof OrbitControlsManager
-     * @public
-     * @returns {void}
-     */
-    update(): void;
     /**
      * Disposes of the orbit controls manager.
      * This method removes all event listeners and cleans up the orbit controls.

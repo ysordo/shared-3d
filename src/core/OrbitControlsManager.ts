@@ -1,13 +1,12 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { THREE } from '..';
 
-export class OrbitControlsManager {
+export class OrbitControlsManager extends OrbitControls {
   private model?: THREE.Object3D<THREE.Object3DEventMap>;
-  private camera: THREE.Camera;
-  private domElement: HTMLElement;
-  public controls: OrbitControls | null = null;
-  public enableRotate: boolean=true;
-  public enablePan: boolean=true;
+  public enableRotate: boolean=false;  
+  public eRotate: boolean=true;
+  public enablePan: boolean=false;  
+  public ePan: boolean=true;
   public enableZoom: boolean=true;
   private isRotating: boolean = false;
   private isPanning: boolean = false;
@@ -19,27 +18,10 @@ export class OrbitControlsManager {
 
   
 
-  constructor(camera: THREE.Camera, rendererDomElement: HTMLElement) {
-    this.camera = camera;
-    this.domElement = rendererDomElement;
-    
-    // Initial configuration
-    this.enableRotate = true;
-    this.enablePan = true;
-    this.enableZoom = true;
-    
-    // State variables
-    this.isRotating = false;
-    this.isPanning = false;
-    this.startMousePosition = new THREE.Vector2();
-    this.currentMousePosition = new THREE.Vector2();
-    
-    // Configure only OrbitControls for Zoom
-    this.controls = new OrbitControls(camera, rendererDomElement);
-    this.controls.enableRotate = false;
-    this.controls.enablePan = false;
-    this.controls.enableZoom = this.enableZoom;
+  constructor(public camera: THREE.Camera, public domElement: HTMLElement) {
+    super(camera, domElement);
   }
+
   public setModel(model: THREE.Object3D): void {
     this.model = model;
     // Events setup
@@ -126,12 +108,12 @@ export class OrbitControlsManager {
       return;
     }
     
-    if (e.button === 0 && this.enableRotate) { // Left button
+    if (e.button === 0 && this.eRotate) { // Left button
       this.isRotating = true;
       const pos = this.getPointerPosition(e);
       this.startPointerPosition.set(pos.x, pos.y);
       e.preventDefault();
-    } else if (e.button === 2 && this.enablePan) { // Right button
+    } else if (e.button === 2 && this.ePan) { // Right button
       this.isPanning = true;
       const pos = this.getPointerPosition(e);
       this.startPointerPosition.set(pos.x, pos.y);
@@ -238,13 +220,13 @@ export class OrbitControlsManager {
    e.preventDefault();
     
     if (e.touches.length === 1) {
-      if (this.enableRotate) {
+      if (this.eRotate) {
         this.isRotating = true;
         const pos = this.getPointerPosition(e);
         this.startPointerPosition.set(pos.x, pos.y);
       }
     } else if (e.touches.length === 2) {
-      if (this.enablePan) {
+      if (this.ePan) {
         this.isPanning = true;
         // Calculate average position between the two fingers
         const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
@@ -480,34 +462,6 @@ export class OrbitControlsManager {
   }
   
   /**
-   * Updates the orbit controls.
-   * This method is called to update the orbit controls state.
-   * It ensures that the controls are updated based on the current camera position and model state.
-   * @description
-   * This method is responsible for updating the orbit controls.
-   * It checks if the orbit controls are initialized and calls their update method.
-   * This is typically called in the animation loop to ensure that the controls reflect any changes
-   * made to the camera or model during the rendering process.
-   * It allows the controls to respond to user input and update the camera position accordingly.
-   * @example
-   * // Example usage in the animation loop
-   * function animate() {
-   *   requestAnimationFrame(animate);
-   *   orbitControlsManager.update();
-   *   renderer.render(scene, camera);
-   * }
-   * animate();
-   * @memberof OrbitControlsManager
-   * @public
-   * @returns {void}
-   */
-  public update(): void {
-    if (this.controls) {
-      this.controls.update();
-    }
-  }
-  
-  /**
    * Disposes of the orbit controls manager.
    * This method removes all event listeners and cleans up the orbit controls.
    * It ensures that there are no memory leaks or lingering event listeners after the controls are no longer needed.
@@ -537,8 +491,6 @@ export class OrbitControlsManager {
     this.domElement.removeEventListener('touchend', this.onTouchEnd);
     this.domElement.removeEventListener('touchcancel', this.onTouchEnd);
     
-    if (this.controls) {
-      this.controls.dispose();
-    }
+    super.dispose();
   }
 }

@@ -60,7 +60,7 @@ export class CameraManager extends PerspectiveCamera {
             this.position.copy(pos);
             this.lookAt(target);
             if (controls) {
-                controls.controls.target.copy(target);
+                controls.target.copy(target);
                 controls.update();
             }
         }
@@ -70,7 +70,7 @@ export class CameraManager extends PerspectiveCamera {
             return;
         }
         const startPosition = this.position.clone();
-        const startTarget = controls?.controls.target.clone() || new Vector3();
+        const startTarget = controls.target.clone() || new Vector3();
         const startTime = performance.now();
         const animate = () => {
             const now = performance.now();
@@ -82,7 +82,7 @@ export class CameraManager extends PerspectiveCamera {
             currentTarget.lerpVectors(startTarget, target, t);
             this.lookAt(currentTarget);
             if (controls) {
-                controls.controls.target.copy(currentTarget);
+                controls.target.copy(currentTarget);
                 controls.update();
             }
             if (progress < 1) {
