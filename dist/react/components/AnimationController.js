@@ -38,42 +38,29 @@ const AnimationMultiplyController = ({ children }) => {
     const [list, setList] = useState([]);
     const { sceneManager } = useSceneContext();
     useEffect(() => {
-        console.log('🔄 AnimationMultiplyController useEffect triggered');
-        console.log('SceneManager:', sceneManager);
-        console.log('ActiveModelId:', sceneManager?.activeModelId);
         if (sceneManager && sceneManager.activeModelId) {
-            console.log('✅ SceneManager and activeModelId available');
             const animationManager = sceneManager.getAnimationManager?.();
-            console.log('AnimationManager:', animationManager);
             if (animationManager) {
-                console.log('✅ AnimationManager available');
                 const actions = animationManager.actions;
-                console.log('Actions object:', actions);
-                console.log('Actions type:', typeof actions);
                 if (actions && typeof actions === 'object') {
-                    console.log('✅ Actions is a valid object');
                     try {
                         const actionKeys = Object.keys(actions);
-                        console.log('✅ Action keys:', actionKeys);
                         setList(actionKeys);
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     }
                     catch (error) {
-                        console.error('❌ Error in Object.keys:', error);
                         setList([]);
                     }
                 }
                 else {
-                    console.warn('⚠️ Actions is not a valid object:', actions);
                     setList([]);
                 }
             }
             else {
-                console.warn('⚠️ AnimationManager not available');
                 setList([]);
             }
         }
         else {
-            console.warn('⚠️ SceneManager or activeModelId not available');
             setList([]);
         }
     }, [sceneManager, sceneManager?.activeModelId]);
