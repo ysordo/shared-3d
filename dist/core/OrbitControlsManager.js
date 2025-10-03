@@ -46,7 +46,7 @@ export class OrbitControlsManager extends OrbitControls {
         }
         e.preventDefault();
         e.stopPropagation();
-        const zoomDelta = e.deltaY > 0 ? -this.zoomSpeed : this.zoomSpeed;
+        const zoomDelta = e.deltaY > 0 ? this.zoomSpeed : -this.zoomSpeed;
         this.applyCameraZoom(zoomDelta);
     }
     applyCameraZoom(zoomDelta) {

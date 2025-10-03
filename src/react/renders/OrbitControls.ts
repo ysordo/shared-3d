@@ -14,6 +14,7 @@ interface OrbitControlsProps {
   enableZoom?: boolean;
   enablePan?: boolean;
   distance?: {min?: number, max?:number}
+  zoomSpeed?: number;
 }
 
 /**
@@ -36,7 +37,8 @@ export function OrbitControls({
   enableRotate = false,
   enableZoom = false,
   enablePan = false,
-  distance = {min:0, max: Infinity}
+  distance = {min:0, max: Infinity},
+  zoomSpeed = 1,
 }: OrbitControlsProps): null {
   const { sceneManager } = useSceneContext();
 
@@ -51,7 +53,7 @@ export function OrbitControls({
     }
 
     // Configurar controles
-    sceneManager.setupOrbitControls({ enableRotate: enableRotate, enableZoom:enableZoom, enablePan:enablePan, maxDistance: distance.max, minDistance: distance.min });
+    sceneManager.setupOrbitControls({ enableRotate: enableRotate, enableZoom:enableZoom, enablePan:enablePan, maxDistance: distance.max, minDistance: distance.min, zoomSpeed: zoomSpeed });
 
     // Limpieza al desmontar o cuando cambien las dependencias
     return () => {

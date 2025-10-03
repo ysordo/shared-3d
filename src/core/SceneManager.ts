@@ -270,6 +270,7 @@ export class SceneManager {
   enablePan?: boolean;
   maxDistance?: number;
   minDistance?: number
+  zoomSpeed?: number
 }): void {
   if (!this.controls) {return;}
   this.controls.ePan = options.enablePan ?? false;
@@ -277,6 +278,7 @@ export class SceneManager {
   this.controls.eRotate = options.enableRotate ?? false;
   this.controls.maxDistance = options.maxDistance ?? Infinity;
   this.controls.minDistance = options.minDistance ?? 0;
+  this.controls.zoomSpeed = options.zoomSpeed ?? 1;
   this.controls.update();
 }
 

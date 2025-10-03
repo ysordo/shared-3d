@@ -150,6 +150,7 @@ export declare class SceneManager {
         enablePan?: boolean;
         maxDistance?: number;
         minDistance?: number;
+        zoomSpeed?: number;
     }): void;
     /**
      * Gets the current OrbitControls instance.
