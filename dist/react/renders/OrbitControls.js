@@ -30,7 +30,7 @@ export function OrbitControls({ enableRotate = false, enableZoom = false, enable
             return;
         }
         // Configurar controles
-        sceneManager.setupOrbitControls({ enableRotate, enableZoom, enablePan, maxDistance: distance.max, minDistance: distance.min });
+        sceneManager.setupOrbitControls({ enableRotate: enableRotate, enableZoom: enableZoom, enablePan: enablePan, maxDistance: distance.max, minDistance: distance.min });
         // Limpieza al desmontar o cuando cambien las dependencias
         return () => {
             sceneManager.getOrbitControls()?.dispose();

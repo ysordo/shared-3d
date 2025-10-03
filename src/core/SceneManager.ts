@@ -270,7 +270,7 @@ export class SceneManager {
   enablePan?: boolean;
   maxDistance?: number;
   minDistance?: number
-} = { enableRotate: false, enableZoom: false, enablePan: false }): void {
+}): void {
   if (!this.controls) {return;}
   this.controls.ePan = options.enablePan ?? false;
   this.controls.enableZoom = options.enableZoom ?? false;

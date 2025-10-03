@@ -144,7 +144,7 @@ export declare class SceneManager {
      * @param {boolean} [options.enablePan=true] - Whether to enable panning of the camera.
      * @returns {OrbitControls} The configured OrbitControls instance.
      */
-    setupOrbitControls(options?: {
+    setupOrbitControls(options: {
         enableRotate?: boolean;
         enableZoom?: boolean;
         enablePan?: boolean;
