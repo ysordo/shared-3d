@@ -158,9 +158,9 @@ export class SceneManager {
         }
         this.camera = new CameraManager(canvas, 'MainCamera');
         this.controls = new OrbitControlsManager(this.camera, canvas);
-        this.controls.enableRotate = false;
-        this.controls.enablePan = false;
-        this.controls.enableZoom = false;
+        this.controls.eRotate = false;
+        this.controls.ePan = false;
+        this.controls.eZoom = false;
         // 4. Config post-processing effects if enabled
         this.camera.postProcessingEnabled = config.postprocessing || false;
         this.camera.setupPostProcessing(this.scene, this.renderer);
@@ -204,7 +204,7 @@ export class SceneManager {
             return;
         }
         this.controls.ePan = options.enablePan ?? false;
-        this.controls.enableZoom = options.enableZoom ?? false;
+        this.controls.eZoom = options.enableZoom ?? false;
         this.controls.eRotate = options.enableRotate ?? false;
         this.controls.maxDistance = options.maxDistance ?? Infinity;
         this.controls.minDistance = options.minDistance ?? 0;
