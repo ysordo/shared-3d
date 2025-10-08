@@ -26,6 +26,7 @@ export declare class RaycasterManager extends EventDispatcher {
     private interactableObjects;
     constructor(domElement: HTMLElement);
     setModel(model: THREE.Object3D): void;
+    private isObjectInteractable;
     private detectTouchDevice;
     initialize(scene: THREE.Scene, camera: THREE.Camera): void;
     setEnabled(enabled: boolean): void;
@@ -33,6 +34,9 @@ export declare class RaycasterManager extends EventDispatcher {
     private detachEvents;
     private updatePointerPosition;
     private onPointerMove;
+    private lastRaycastTime;
+    private raycastThrottleMs;
+    private throttledRaycast;
     private onPointerDown;
     private onPointerUp;
     private onClick;

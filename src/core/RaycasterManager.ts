@@ -53,14 +53,23 @@ export class RaycasterManager extends EventDispatcher {
   }
 
   public setModel(model: THREE.Object3D): void {
-    this.model = model;
+  this.model = model;
+  this.interactableObjects = [];
 
-    this.interactableObjects=[];
-
-    model.traverse((obj) => {
+  model.traverse((obj) => {
+    if (this.isObjectInteractable(obj)) {
       this.interactableObjects.push(obj);
-    });
-  }
+    }
+  });
+}
+
+private isObjectInteractable(obj: THREE.Object3D): boolean {
+  if (!obj.visible) {return false;}
+  if (obj.name.endsWith('-wireframe')) {return false;}
+  if (!(obj as any).isMesh) {return false;} // Solo meshes pueden ser intersectados
+  
+  return true;
+}
 
   private detectTouchDevice(): boolean {
     return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -148,12 +157,11 @@ export class RaycasterManager extends EventDispatcher {
 
     this.updatePointerPosition(event);
     
-    // Si estamos arrastrando, enviar datos del movimiento
+    // OPTIMIZACIÓN: Evitar raycast en cada movimiento del mouse durante drag
     if (this.isDragging && this.currentDragObject) {
       const currentPosition = new THREE.Vector2(event.clientX, event.clientY);
       const delta = new THREE.Vector2().subVectors(currentPosition, this.dragStartPosition);
       
-      // Disparar evento de arrastre con toda la información necesaria
       this.dispatchEvent({
         type: 'objectdrag',
         object: this.currentDragObject,
@@ -167,12 +175,23 @@ export class RaycasterManager extends EventDispatcher {
         originalEvent: event
       } as never);
       
-      // Actualizar posición de inicio para el próximo movimiento
       this.dragStartPosition.copy(currentPosition);
     } else {
-      // Comportamiento normal de hover
-      this.raycast();
+      // OPTIMIZACIÓN: Usar throttling para el raycast de hover
+      this.throttledRaycast();
     }
+  }
+
+  // Agregar throttling
+  private lastRaycastTime: number = 0;
+  private raycastThrottleMs: number = 16; // ~60fps
+
+  private throttledRaycast(): void {
+    const now = Date.now();
+    if (now - this.lastRaycastTime < this.raycastThrottleMs) {return;}
+    
+    this.lastRaycastTime = now;
+    this.raycast();
   }
 
   private onPointerDown(event: MouseEvent): void {
@@ -414,20 +433,28 @@ export class RaycasterManager extends EventDispatcher {
   }
 
   private performRaycast(): RaycastHit[] {
-    if (!this.scene || !this.camera || !this.model) {return [];}
+  if (!this.scene || !this.camera || !this.model) {return [];}
 
-    this.raycaster.setFromCamera(this.pointer, this.camera);
+  this.raycaster.setFromCamera(this.pointer, this.camera);
 
-    const intersects = this.raycaster.intersectObjects(this.interactableObjects, true);
-    
-    return intersects.filter((filter)=>!filter.object.name.endsWith('-wireframe')).map(intersect => ({
+  // OPTIMIZACIÓN: Configurar el raycaster para mejor performance
+  this.raycaster.params.Line!.threshold = 0.1;
+  this.raycaster.params.Points!.threshold = 0.1;
+
+  const intersects = this.raycaster.intersectObjects(this.interactableObjects, true);
+  
+  // OPTIMIZACIÓN: Filtrar más eficientemente
+  return intersects
+    .filter(intersect => !intersect.object.name.endsWith('-wireframe'))
+    .slice(0, 1) // Solo necesitamos el primer objeto
+    .map(intersect => ({
       object: intersect.object,
       point: intersect.point,
       distance: intersect.distance,
       face: intersect.face,
       faceIndex: intersect.faceIndex
     }));
-  }
+}
 
   private clearHoverState(): void {
     if (this.lastHoverObject) {
