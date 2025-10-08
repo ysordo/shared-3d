@@ -117,7 +117,7 @@ export class RaycasterManager extends EventDispatcher {
   }
 
   private updatePointerPosition(event: MouseEvent | TouchEvent): void {
-    const rect = this.domElement.getBoundingClientRect();
+    const rect = this.domElement;
     let clientX: number, clientY: number;
 
     if ('touches' in event && event.touches.length > 0) {
@@ -130,8 +130,8 @@ export class RaycasterManager extends EventDispatcher {
       return;
     }
 
-    this.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-    this.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+    this.pointer.x = ((clientX - rect.clientLeft) / rect.clientWidth) * 2 - 1;
+    this.pointer.y = -((clientY - rect.clientTop) / rect.clientHeight) * 2 + 1;
   }
 
   // ========== EVENTOS PARA DISPOSITIVOS NO TÁCTILES ==========
