@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControlsManager } from './OrbitControlsManager';
 import { AnimationManager } from './AnimationManager';
+import { RaycasterManager } from './RaycasterManager';
 export type LoadState = 'checking_cache' | 'cache_hit' | 'cache_miss' | 'downloading' | 'parsing' | 'caching' | 'adding_to_scene' | 'model_ready' | 'error';
 /**
  * SceneManager class that manages a 3D scene using Three.js.
@@ -75,7 +76,6 @@ export declare class SceneManager {
     private resizeObserver;
     private parallaxEffects;
     private parallaxManager?;
-    private MARGIN;
     activeModelId: string | null;
     private transitionProgress;
     transitionDuration: number;
@@ -83,14 +83,13 @@ export declare class SceneManager {
     private initialCameraPositions;
     private initialCameraTargets;
     private modelBoundingRadii;
-    private NEAR_MARGIN;
-    private FAR_MULTIPLIER;
     private lightsRef;
     private helpersRef;
     private fillLightRef;
     private ambientLightRef;
     private animationManagers;
     private clock;
+    raycasterManager: RaycasterManager;
     /**
      * Creates an instance of SceneManager.
      * Initializes the Three.js scene, camera, renderer, and optional post-processing effects.

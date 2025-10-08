@@ -6,6 +6,7 @@ import { OrbitControlsManager } from './OrbitControlsManager';
 import { ParallaxManager } from './ParallaxManager';
 import { AnimationManager } from './AnimationManager';
 import { CameraManager } from './CameraManager';
+import { RaycasterManager } from './RaycasterManager';
 /**
  * SceneManager class that manages a 3D scene using Three.js.
  * It handles rendering, model loading, camera controls, and post-processing effects.
@@ -101,7 +102,6 @@ export class SceneManager {
         this.loadedModels = new Map();
         this.hasModelLoaded = new Map();
         this.parallaxEffects = new Map();
-        this.MARGIN = 0.8;
         this.activeModelId = null;
         this.transitionProgress = 0;
         this.transitionDuration = 1000; // ms
@@ -109,8 +109,6 @@ export class SceneManager {
         this.initialCameraPositions = new Map();
         this.initialCameraTargets = new Map();
         this.modelBoundingRadii = new Map();
-        this.NEAR_MARGIN = 0.1; // Margen adicional para evitar clipping
-        this.FAR_MULTIPLIER = 10; // Multiplicador para el plano far
         this.lightsRef = [];
         this.helpersRef = [];
         this.fillLightRef = null;
@@ -167,6 +165,8 @@ export class SceneManager {
         // 5. Setup resize observer to handle canvas resizing
         this.resizeObserver = new ResizeObserver(this.handleResize);
         this.resizeObserver.observe(canvas);
+        this.raycasterManager = new RaycasterManager(canvas);
+        this.raycasterManager.initialize(this.scene, this.camera);
         // 6. Create a ParallaxManager instance if needed
         if (config.parallax) {
             this.parallaxManager = new ParallaxManager(this.camera);

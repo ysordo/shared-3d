@@ -7,6 +7,7 @@ import { OrbitControlsManager } from './OrbitControlsManager';
 import { ParallaxManager } from './ParallaxManager';
 import { AnimationManager } from './AnimationManager';
 import { CameraManager } from './CameraManager';
+import { RaycasterManager } from './RaycasterManager';
 
 
 export type LoadState = 
@@ -96,7 +97,6 @@ export class SceneManager {
   private resizeObserver: ResizeObserver;
   private parallaxEffects: Map<string, (progress: number) => void> = new Map();
   private parallaxManager?: ParallaxManager;
-  private MARGIN: number = 0.8;
   public activeModelId: string | null = null;
   private transitionProgress: number = 0;
   public transitionDuration: number = 1000; // ms
@@ -104,8 +104,6 @@ export class SceneManager {
   private initialCameraPositions = new Map<string, THREE.Vector3>();
   private initialCameraTargets = new Map<string, THREE.Vector3>();
   private modelBoundingRadii = new Map<string, number>();
-  private NEAR_MARGIN = 0.1; // Margen adicional para evitar clipping
-  private FAR_MULTIPLIER = 10; // Multiplicador para el plano far
   private lightsRef : THREE.DirectionalLight[] = [];
   private helpersRef: THREE.DirectionalLightHelper[] = [];
   private fillLightRef: THREE.DirectionalLight | null = null;
@@ -118,6 +116,7 @@ export class SceneManager {
   };
    private animationManagers: Map<string, AnimationManager> = new Map();
    private clock: THREE.Clock;
+   public raycasterManager: RaycasterManager;
 
   /**
    * Creates an instance of SceneManager.
@@ -203,6 +202,8 @@ export class SceneManager {
     // 5. Setup resize observer to handle canvas resizing
     this.resizeObserver = new ResizeObserver(this.handleResize);
     this.resizeObserver.observe(canvas);
+    this.raycasterManager = new RaycasterManager(canvas);
+    this.raycasterManager.initialize(this.scene, this.camera);
 
     // 6. Create a ParallaxManager instance if needed
     if(config.parallax){

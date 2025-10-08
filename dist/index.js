@@ -14,6 +14,7 @@ export * from './react/components/DistanceDisplay';
 export * from './react/renders/Material';
 export * from './react/ModelLoader';
 export * from './react/renders/OrbitControls';
+export * from './react/renders/Raycaster';
 export * from './react/hooks/SceneContext';
 export * from './react/hooks/SceneProvider';
 export * from './react/renders/TheaterLighting';
