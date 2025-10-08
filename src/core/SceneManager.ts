@@ -390,6 +390,7 @@ export class SceneManager {
           this.initialCameraTargets.get(targetId),
         );
         this.controls?.setModel(targetModel);
+        this.raycasterManager.setModel(targetModel);
         this.controls?.update();
       }
     };

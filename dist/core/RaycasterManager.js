@@ -26,6 +26,9 @@ export class RaycasterManager extends EventDispatcher {
         this.onTouchMove = this.onTouchMove.bind(this);
         this.onContextMenu = this.onContextMenu.bind(this);
     }
+    setModel(model) {
+        this.model = model;
+    }
     detectTouchDevice() {
         return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     }
@@ -243,11 +246,11 @@ export class RaycasterManager extends EventDispatcher {
         }
     }
     performRaycast() {
-        if (!this.scene || !this.camera) {
+        if (!this.scene || !this.camera || !this.model) {
             return [];
         }
         this.raycaster.setFromCamera(this.pointer, this.camera);
-        const interactableObjects = this.scene.children.filter(obj => {
+        const interactableObjects = this.model.children.filter(obj => {
             return obj.userData?.interactable !== false;
         });
         const intersects = this.raycaster.intersectObjects(interactableObjects, true);

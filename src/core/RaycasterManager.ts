@@ -16,6 +16,7 @@ export class RaycasterManager extends EventDispatcher {
   private scene?: THREE.Scene;
   private camera?: THREE.Camera;
   private domElement: HTMLElement;
+  private model?: THREE.Object3D;
   
   // Estado de control
   private isEnabled: boolean = false;
@@ -43,6 +44,10 @@ export class RaycasterManager extends EventDispatcher {
     this.onTouchEnd = this.onTouchEnd.bind(this);
     this.onTouchMove = this.onTouchMove.bind(this);
     this.onContextMenu = this.onContextMenu.bind(this);
+  }
+
+  public setModel(model: THREE.Object3D): void {
+    this.model = model;
   }
 
   private detectTouchDevice(): boolean {
@@ -287,11 +292,11 @@ export class RaycasterManager extends EventDispatcher {
   }
 
   private performRaycast(): RaycastHit[] {
-    if (!this.scene || !this.camera) {return [];}
+    if (!this.scene || !this.camera || !this.model) {return [];}
 
     this.raycaster.setFromCamera(this.pointer, this.camera);
     
-    const interactableObjects = this.scene.children.filter(obj => {
+    const interactableObjects = this.model.children.filter(obj => {
       return obj.userData?.interactable !== false;
     });
 

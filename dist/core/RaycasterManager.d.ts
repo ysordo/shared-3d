@@ -13,6 +13,7 @@ export declare class RaycasterManager extends EventDispatcher {
     private scene?;
     private camera?;
     private domElement;
+    private model?;
     private isEnabled;
     private isPointerDown;
     private lastHoverObject;
@@ -20,6 +21,7 @@ export declare class RaycasterManager extends EventDispatcher {
     private lastTapTime;
     private tapDelay;
     constructor(domElement: HTMLElement);
+    setModel(model: THREE.Object3D): void;
     private detectTouchDevice;
     initialize(scene: THREE.Scene, camera: THREE.Camera): void;
     setEnabled(enabled: boolean): void;

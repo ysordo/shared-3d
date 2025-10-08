@@ -303,6 +303,7 @@ export class SceneManager {
                 });
                 this.camera.reset(this.controls, this.initialCameraPositions.get(targetId), this.initialCameraTargets.get(targetId));
                 this.controls?.setModel(targetModel);
+                this.raycasterManager.setModel(targetModel);
                 this.controls?.update();
             }
         };
