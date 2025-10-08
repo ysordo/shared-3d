@@ -18,6 +18,9 @@ export declare class RaycasterManager extends EventDispatcher {
     private isPointerDown;
     private lastHoverObject;
     private isTouchDevice;
+    private isDragging;
+    private dragStartPosition;
+    private currentDragObject;
     private lastTapTime;
     private tapDelay;
     constructor(domElement: HTMLElement);

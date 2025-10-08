@@ -1,7 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import { useSceneContext } from '../hooks/SceneContext';
-export function Raycaster({ enabled = true, onObjectClick, onObjectHoverIn, onObjectHoverOut, onObjectHoverMove, }) {
+export function Raycaster({ enabled = true, onObjectClick, onObjectHoverIn, onObjectHoverOut, onObjectHoverMove, onObjectDragStart, onObjectDrag, onObjectDragEnd, }) {
     const { sceneManager } = useSceneContext();
     useEffect(() => {
         if (!sceneManager) {
@@ -13,7 +13,7 @@ export function Raycaster({ enabled = true, onObjectClick, onObjectHoverIn, onOb
             console.info('[Raycaster] RaycasterManager is not available.');
             return;
         }
-        // Configurar event listeners
+        // Configurar event listeners existentes...
         const clickHandler = (event) => {
             onObjectClick?.(event.object, event.point, event.distance, event.originalEvent);
         };
@@ -26,6 +26,17 @@ export function Raycaster({ enabled = true, onObjectClick, onObjectHoverIn, onOb
         const hoverMoveHandler = (event) => {
             onObjectHoverMove?.(event.object, event.point, event.distance, event.originalEvent);
         };
+        // Nuevos manejadores de arrastre
+        const dragStartHandler = (event) => {
+            onObjectDragStart?.(event.object, event.startPosition, event.originalEvent);
+        };
+        const dragHandler = (event) => {
+            onObjectDrag?.(event.object, event.startPosition, event.currentPosition, event.delta, event.normalizedDelta, event.originalEvent);
+        };
+        const dragEndHandler = (event) => {
+            onObjectDragEnd?.(event.object, event.startPosition, event.endPosition, event.totalDelta, event.originalEvent);
+        };
+        // Registrar todos los event listeners
         if (onObjectClick) {
             raycasterManager.addEventListener('objectclick', clickHandler);
         }
@@ -38,10 +49,18 @@ export function Raycaster({ enabled = true, onObjectClick, onObjectHoverIn, onOb
         if (onObjectHoverMove) {
             raycasterManager.addEventListener('objecthovermove', hoverMoveHandler);
         }
-        // Activar/desactivar el raycaster
+        if (onObjectDragStart) {
+            raycasterManager.addEventListener('objectdragstart', dragStartHandler);
+        }
+        if (onObjectDrag) {
+            raycasterManager.addEventListener('objectdrag', dragHandler);
+        }
+        if (onObjectDragEnd) {
+            raycasterManager.addEventListener('objectdragend', dragEndHandler);
+        }
         raycasterManager.setEnabled(enabled);
         return () => {
-            // Limpiar event listeners
+            // Limpiar todos los event listeners
             if (onObjectClick) {
                 raycasterManager.removeEventListener('objectclick', clickHandler);
             }
@@ -54,7 +73,15 @@ export function Raycaster({ enabled = true, onObjectClick, onObjectHoverIn, onOb
             if (onObjectHoverMove) {
                 raycasterManager.removeEventListener('objecthovermove', hoverMoveHandler);
             }
-            // Desactivar el raycaster al desmontar
+            if (onObjectDragStart) {
+                raycasterManager.removeEventListener('objectdragstart', dragStartHandler);
+            }
+            if (onObjectDrag) {
+                raycasterManager.removeEventListener('objectdrag', dragHandler);
+            }
+            if (onObjectDragEnd) {
+                raycasterManager.removeEventListener('objectdragend', dragEndHandler);
+            }
             raycasterManager.setEnabled(false);
         };
     }, [
@@ -64,6 +91,9 @@ export function Raycaster({ enabled = true, onObjectClick, onObjectHoverIn, onOb
         onObjectHoverIn,
         onObjectHoverOut,
         onObjectHoverMove,
+        onObjectDragStart,
+        onObjectDrag,
+        onObjectDragEnd,
     ]);
     return null;
 }

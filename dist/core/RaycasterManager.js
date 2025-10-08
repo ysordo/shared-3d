@@ -9,6 +9,9 @@ export class RaycasterManager extends EventDispatcher {
         this.isPointerDown = false;
         this.lastHoverObject = null;
         this.isTouchDevice = false;
+        this.isDragging = false;
+        this.dragStartPosition = new THREE.Vector2();
+        this.currentDragObject = null;
         // Para evitar dobles clics en dispositivos táctiles
         this.lastTapTime = 0;
         this.tapDelay = 300; // ms
@@ -104,19 +107,67 @@ export class RaycasterManager extends EventDispatcher {
             return;
         }
         this.updatePointerPosition(event);
-        this.raycast();
+        // Si estamos arrastrando, enviar datos del movimiento
+        if (this.isDragging && this.currentDragObject) {
+            const currentPosition = new THREE.Vector2(event.clientX, event.clientY);
+            const delta = new THREE.Vector2().subVectors(currentPosition, this.dragStartPosition);
+            // Disparar evento de arrastre con toda la información necesaria
+            this.dispatchEvent({
+                type: 'objectdrag',
+                object: this.currentDragObject,
+                startPosition: this.dragStartPosition.clone(),
+                currentPosition: currentPosition,
+                delta: delta,
+                normalizedDelta: new THREE.Vector2(delta.x / this.domElement.clientWidth, delta.y / this.domElement.clientHeight),
+                originalEvent: event
+            });
+            // Actualizar posición de inicio para el próximo movimiento
+            this.dragStartPosition.copy(currentPosition);
+        }
+        else {
+            // Comportamiento normal de hover
+            this.raycast();
+        }
     }
     onPointerDown(event) {
         if (!this.isEnabled || this.isTouchDevice) {
             return;
         }
         this.isPointerDown = true;
+        this.updatePointerPosition(event);
+        const hits = this.performRaycast();
+        if (hits.length > 0) {
+            this.isDragging = true;
+            this.currentDragObject = hits[0].object;
+            this.dragStartPosition.set(event.clientX, event.clientY);
+            // Disparar evento de inicio de arrastre con posición inicial
+            this.dispatchEvent({
+                type: 'objectdragstart',
+                object: this.currentDragObject,
+                startPosition: this.dragStartPosition.clone(),
+                originalEvent: event
+            });
+        }
         event.preventDefault();
     }
     onPointerUp(event) {
         if (!this.isEnabled || this.isTouchDevice) {
             return;
         }
+        if (this.isDragging && this.currentDragObject) {
+            const finalPosition = new THREE.Vector2(event.clientX, event.clientY);
+            // Disparar evento de fin de arrastre
+            this.dispatchEvent({
+                type: 'objectdragend',
+                object: this.currentDragObject,
+                startPosition: this.dragStartPosition.clone(),
+                endPosition: finalPosition,
+                totalDelta: new THREE.Vector2().subVectors(finalPosition, this.dragStartPosition),
+                originalEvent: event
+            });
+        }
+        this.isDragging = false;
+        this.currentDragObject = null;
         this.isPointerDown = false;
     }
     onClick(event) {
@@ -145,8 +196,18 @@ export class RaycasterManager extends EventDispatcher {
         if (event.touches.length === 1) {
             this.isPointerDown = true;
             this.updatePointerPosition(event);
-            // Para dispositivos táctiles, hacemos hover inmediatamente
-            this.raycast();
+            const hits = this.performRaycast();
+            if (hits.length > 0) {
+                this.isDragging = true;
+                this.currentDragObject = hits[0].object;
+                this.dragStartPosition.set(event.touches[0].clientX, event.touches[0].clientY);
+                this.dispatchEvent({
+                    type: 'objectdragstart',
+                    object: this.currentDragObject,
+                    startPosition: this.dragStartPosition.clone(),
+                    originalEvent: event
+                });
+            }
         }
     }
     onTouchEnd(event) {
@@ -155,9 +216,22 @@ export class RaycasterManager extends EventDispatcher {
         }
         event.preventDefault();
         event.stopPropagation();
+        if (event.touches.length === 0 && this.isDragging && this.currentDragObject) {
+            const finalPosition = new THREE.Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
+            this.dispatchEvent({
+                type: 'objectdragend',
+                object: this.currentDragObject,
+                startPosition: this.dragStartPosition.clone(),
+                endPosition: finalPosition,
+                totalDelta: new THREE.Vector2().subVectors(finalPosition, this.dragStartPosition),
+                originalEvent: event
+            });
+        }
+        this.isDragging = false;
+        this.currentDragObject = null;
+        this.isPointerDown = false;
         if (event.touches.length === 0 && this.isPointerDown) {
             this.isPointerDown = false;
-            // Simular click en dispositivos táctiles
             this.handleTap(event);
         }
     }
@@ -167,7 +241,21 @@ export class RaycasterManager extends EventDispatcher {
         }
         event.preventDefault();
         event.stopPropagation();
-        if (event.touches.length === 1) {
+        if (event.touches.length === 1 && this.isDragging && this.currentDragObject) {
+            const currentPosition = new THREE.Vector2(event.touches[0].clientX, event.touches[0].clientY);
+            const delta = new THREE.Vector2().subVectors(currentPosition, this.dragStartPosition);
+            this.dispatchEvent({
+                type: 'objectdrag',
+                object: this.currentDragObject,
+                startPosition: this.dragStartPosition.clone(),
+                currentPosition: currentPosition,
+                delta: delta,
+                normalizedDelta: new THREE.Vector2(delta.x / this.domElement.clientWidth, delta.y / this.domElement.clientHeight),
+                originalEvent: event
+            });
+            this.dragStartPosition.copy(currentPosition);
+        }
+        else if (event.touches.length === 1) {
             this.updatePointerPosition(event);
             this.raycast();
         }
