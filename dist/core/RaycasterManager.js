@@ -98,8 +98,8 @@ export class RaycasterManager extends EventDispatcher {
         else {
             return;
         }
-        this.pointer.x = ((clientX - rect.clientLeft) / rect.clientWidth) * 2 - 1;
-        this.pointer.y = -((clientY - rect.clientTop) / rect.clientHeight) * 2 + 1;
+        this.pointer.x = ((clientX - rect.offsetLeft) / rect.offsetWidth) * 2 - 1;
+        this.pointer.y = -((clientY - rect.offsetTop) / rect.offsetHeight) * 2 + 1;
     }
     // ========== EVENTOS PARA DISPOSITIVOS NO TÁCTILES ==========
     onPointerMove(event) {
@@ -339,7 +339,7 @@ export class RaycasterManager extends EventDispatcher {
         }
         this.raycaster.setFromCamera(this.pointer, this.camera);
         const interactableObjects = this.model.children.filter(obj => {
-            return obj.userData?.interactable !== false;
+            return obj.userData?.interactable !== false && obj.renderOrder <= 10;
         });
         const intersects = this.raycaster.intersectObjects(interactableObjects, true);
         return intersects.map(intersect => ({
