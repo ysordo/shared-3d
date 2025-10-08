@@ -23,6 +23,7 @@ export declare class RaycasterManager extends EventDispatcher {
     private currentDragObject;
     private lastTapTime;
     private tapDelay;
+    private interactableObjects;
     constructor(domElement: HTMLElement);
     setModel(model: THREE.Object3D): void;
     private detectTouchDevice;

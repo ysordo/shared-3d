@@ -32,6 +32,8 @@ export class RaycasterManager extends EventDispatcher {
   private lastTapTime: number = 0;
   private tapDelay: number = 300; // ms
 
+  private interactableObjects: THREE.Object3D[] = [];
+
   constructor(domElement: HTMLElement) {
     super();
     this.raycaster = new THREE.Raycaster();
@@ -52,6 +54,12 @@ export class RaycasterManager extends EventDispatcher {
 
   public setModel(model: THREE.Object3D): void {
     this.model = model;
+
+    this.interactableObjects=[];
+
+    model.traverse((obj) => {
+      this.interactableObjects.push(obj);
+    });
   }
 
   private detectTouchDevice(): boolean {
@@ -409,18 +417,10 @@ export class RaycasterManager extends EventDispatcher {
     if (!this.scene || !this.camera || !this.model) {return [];}
 
     this.raycaster.setFromCamera(this.pointer, this.camera);
-    
-    const interactableObjects: THREE.Object3D[] = [];
-  
-    this.model.traverse((obj) => {
-      if (obj.userData?.interactable !== false && obj.renderOrder <= 10) {
-        interactableObjects.push(obj);
-      }
-    });
 
-    const intersects = this.raycaster.intersectObjects(interactableObjects, true);
+    const intersects = this.raycaster.intersectObjects(this.interactableObjects, true);
     
-    return intersects.map(intersect => ({
+    return intersects.filter((filter)=>!filter.object.name.endsWith('-wireframe')).map(intersect => ({
       object: intersect.object,
       point: intersect.point,
       distance: intersect.distance,

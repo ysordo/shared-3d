@@ -15,6 +15,7 @@ export class RaycasterManager extends EventDispatcher {
         // Para evitar dobles clics en dispositivos táctiles
         this.lastTapTime = 0;
         this.tapDelay = 300; // ms
+        this.interactableObjects = [];
         this.raycaster = new THREE.Raycaster();
         this.pointer = new THREE.Vector2();
         this.domElement = domElement;
@@ -31,6 +32,10 @@ export class RaycasterManager extends EventDispatcher {
     }
     setModel(model) {
         this.model = model;
+        this.interactableObjects = [];
+        model.traverse((obj) => {
+            this.interactableObjects.push(obj);
+        });
     }
     detectTouchDevice() {
         return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -338,14 +343,8 @@ export class RaycasterManager extends EventDispatcher {
             return [];
         }
         this.raycaster.setFromCamera(this.pointer, this.camera);
-        const interactableObjects = [];
-        this.model.traverse((obj) => {
-            if (obj.userData?.interactable !== false && obj.renderOrder <= 10) {
-                interactableObjects.push(obj);
-            }
-        });
-        const intersects = this.raycaster.intersectObjects(interactableObjects, true);
-        return intersects.map(intersect => ({
+        const intersects = this.raycaster.intersectObjects(this.interactableObjects, true);
+        return intersects.filter((filter) => !filter.object.name.endsWith('-wireframe')).map(intersect => ({
             object: intersect.object,
             point: intersect.point,
             distance: intersect.distance,
