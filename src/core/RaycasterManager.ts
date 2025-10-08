@@ -410,8 +410,12 @@ export class RaycasterManager extends EventDispatcher {
 
     this.raycaster.setFromCamera(this.pointer, this.camera);
     
-    const interactableObjects = this.model.children.filter(obj => {
-      return obj.userData?.interactable !== false && obj.renderOrder <= 10;
+    const interactableObjects: THREE.Object3D[] = [];
+  
+    this.model.traverse((obj) => {
+      if (obj.userData?.interactable !== false && obj.renderOrder <= 10) {
+        interactableObjects.push(obj);
+      }
     });
 
     const intersects = this.raycaster.intersectObjects(interactableObjects, true);

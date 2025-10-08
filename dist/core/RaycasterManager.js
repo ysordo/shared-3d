@@ -338,8 +338,11 @@ export class RaycasterManager extends EventDispatcher {
             return [];
         }
         this.raycaster.setFromCamera(this.pointer, this.camera);
-        const interactableObjects = this.model.children.filter(obj => {
-            return obj.userData?.interactable !== false && obj.renderOrder <= 10;
+        const interactableObjects = [];
+        this.model.traverse((obj) => {
+            if (obj.userData?.interactable !== false && obj.renderOrder <= 10) {
+                interactableObjects.push(obj);
+            }
         });
         const intersects = this.raycaster.intersectObjects(interactableObjects, true);
         return intersects.map(intersect => ({
