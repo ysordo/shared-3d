@@ -56,6 +56,19 @@ export interface SceneProviderProps extends SceneRendererProps {
     shadows?: boolean;
     pixelRatio?: number;
     background?: THREE.Color;
+    hdriManager?: {
+      path: string | string[];
+      config:
+        | 'refraction'
+        | 'reflection'
+        | {
+            mapping?: number;
+            flipY?: boolean;
+            generateMipmaps?: boolean;
+            minFilter?: number;
+            magFilter?: number;
+          };
+    };
   };
 }
 

@@ -46,7 +46,7 @@ export class CameraManager extends PerspectiveCamera {
         }
         this.composer = new EffectComposer(render);
         render.toneMapping = ACESFilmicToneMapping;
-        render.toneMappingExposure = 1;
+        render.toneMappingExposure = 0.6;
         render.shadowMap.type = PCFSoftShadowMap;
         render.shadowMap.enabled = true;
         const renderPass = new RenderPass(scene, this);

@@ -90,6 +90,7 @@ export declare class SceneManager {
     private animationManagers;
     private clock;
     raycasterManager: RaycasterManager;
+    private hdriManager?;
     /**
      * Creates an instance of SceneManager.
      * Initializes the Three.js scene, camera, renderer, and optional post-processing effects.
@@ -125,6 +126,16 @@ export declare class SceneManager {
         pixelRatio?: number;
         background?: THREE.Color;
         parallax?: boolean;
+        hdriManager?: {
+            path: string | string[];
+            config: 'refraction' | 'reflection' | {
+                mapping?: number;
+                flipY?: boolean;
+                generateMipmaps?: boolean;
+                minFilter?: number;
+                magFilter?: number;
+            };
+        };
     });
     /**
      * Handles canvas resizing by updating the renderer size, camera aspect ratio,

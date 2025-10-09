@@ -8,6 +8,7 @@ import { ParallaxManager } from './ParallaxManager';
 import { AnimationManager } from './AnimationManager';
 import { CameraManager } from './CameraManager';
 import { RaycasterManager } from './RaycasterManager';
+import { HDRIsManager } from './HDRIsManager';
 
 
 export type LoadState = 
@@ -117,7 +118,7 @@ export class SceneManager {
    private animationManagers: Map<string, AnimationManager> = new Map();
    private clock: THREE.Clock;
    public raycasterManager: RaycasterManager;
-
+   private hdriManager?: HDRIsManager;
   /**
    * Creates an instance of SceneManager.
    * Initializes the Three.js scene, camera, renderer, and optional post-processing effects.
@@ -155,6 +156,19 @@ export class SceneManager {
       pixelRatio?: number;
       background?: THREE.Color;
       parallax?: boolean;
+      hdriManager?: {
+      path: string | string[];
+      config:
+        | 'refraction'
+        | 'reflection'
+        | {
+            mapping?: number;
+            flipY?: boolean;
+            generateMipmaps?: boolean;
+            minFilter?: number;
+            magFilter?: number;
+          };
+    };
     } = {}
   ) {
     const pixelRatio = config.pixelRatio || Math.min(window.devicePixelRatio, 2);
@@ -223,15 +237,30 @@ export class SceneManager {
     directionalLight.shadow.bias = -0.001;
     
     // ✅ LUZ AMBIENTAL para detalles
-    const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     
     this.scene.add(directionalLight);
     this.scene.add(ambientLight);
-    
-    // ✅ LUZ DE RELLENO para mejor definición
-    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
-    fillLight.position.set(-5, 5, -5);
-    this.scene.add(fillLight);
+
+    if(config.hdriManager){
+      this.hdriManager = new HDRIsManager();
+      const hdriConfig = typeof config.hdriManager.config === 'object'
+        ? config.hdriManager.config 
+        : config.hdriManager.config  === 'refraction' 
+          ? HDRIsManager.refractionConfig()
+          : HDRIsManager.reflectionConfig();
+      if (typeof config.hdriManager.path === 'object'){
+        this.hdriManager.preload(config.hdriManager.path, hdriConfig).then((texture)=> {
+          this.scene.background = texture[0];
+          this.scene.environment = texture[0];
+        });
+      }else {
+        this.hdriManager.load(config.hdriManager.path, hdriConfig).then(texture=>{
+          this.scene.background = texture;
+          this.scene.environment = texture;
+        });
+      }
+    }
   }
 
   /**
