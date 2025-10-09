@@ -18,9 +18,9 @@ export class OrbitControlsManager extends OrbitControls {
   private currentPointerPosition: THREE.Vector2 = new THREE.Vector2();
   private previousTouchDistance: number = 0;
 
-  
+  private hdriSphere?: THREE.Object3D;  
 
-  constructor(public scene: THREE.Scene, public camera: THREE.Camera, public domElement: HTMLElement) {
+  constructor(public camera: THREE.Camera, public domElement: HTMLElement) {
     super(camera, domElement);
 
     this.enableRotate=false;  
@@ -32,6 +32,10 @@ export class OrbitControlsManager extends OrbitControls {
     this.model = model;
     // Events setup
     this.setupEvents();
+  }
+
+  public setHdriSphere(sphere: THREE.Object3D): void {
+      this.hdriSphere = sphere;
   }
    private setupEvents() {
     // Mouse events
@@ -231,18 +235,22 @@ export class OrbitControlsManager extends OrbitControls {
     const rotation = {y: delta.x * 0.005, x: delta.y * 0.005};
     // Apply rotation to the model
     this.model!.rotation.y += rotation.y; // Horizontal rotation
-    this.scene.rotation.y += rotation.y;
     this.model!.rotation.x += rotation.x; // Vertical rotation
-    this.scene.rotation.x += rotation.x;
     
+    if (this.hdriSphere) {
+        this.hdriSphere.rotation.y += rotation.y;
+        this.hdriSphere.rotation.x += rotation.x;
+        
+        // Limitar rotación vertical del HDRI también
+        this.hdriSphere.rotation.x = Math.max(
+            -Math.PI / 2, 
+            Math.min(Math.PI / 2, this.hdriSphere.rotation.x)
+        );
+    }
     // Limiting vertical rotation to avoid flipping
     this.model!.rotation.x = Math.max(
       -Math.PI/2, 
       Math.min(Math.PI/2, this.model!.rotation.x)
-    );
-    this.scene.rotation.x = Math.max(
-      -Math.PI/2, 
-      Math.min(Math.PI/2, this.scene.rotation.x)
     );
   }
   

@@ -137,6 +137,7 @@ export declare class SceneManager {
             };
         };
     });
+    private setupHDRISkybox;
     /**
      * Handles canvas resizing by updating the renderer size, camera aspect ratio,
      * and recalculating camera position for all models in the scene.

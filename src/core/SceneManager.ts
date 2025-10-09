@@ -203,7 +203,7 @@ export class SceneManager {
       'MainCamera',
     );
 
-    this.controls = new OrbitControlsManager(this.scene, this.camera, canvas);
+    this.controls = new OrbitControlsManager(this.camera, canvas);
     this.controls.eRotate = false;
     this.controls.ePan = false;
     this.controls.eZoom = false;
@@ -251,17 +251,32 @@ export class SceneManager {
           : HDRIsManager.reflectionConfig();
       if (typeof config.hdriManager.path === 'object'){
         this.hdriManager.preload(config.hdriManager.path, hdriConfig).then((texture)=> {
-          this.scene.background = texture[0];
-          this.scene.environment = texture[0];
+          const hdriSphere = this.setupHDRISkybox(texture[0]);
+          this.controls?.setHdriSphere?.(hdriSphere);
         });
       }else {
         this.hdriManager.load(config.hdriManager.path, hdriConfig).then(texture=>{
-          this.scene.background = texture;
-          this.scene.environment = texture;
+          const hdriSphere = this.setupHDRISkybox(texture);
+          this.controls?.setHdriSphere?.(hdriSphere);
         });
       }
     }
   }
+  private setupHDRISkybox(texture: THREE.Texture) {
+    const geometry = new THREE.SphereGeometry(500, 60, 40);
+    geometry.scale(-1, 1, 1);
+    
+    const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        side: THREE.BackSide
+    });
+    
+    const hdriSphere = new THREE.Mesh(geometry, material);
+    this.scene.add(hdriSphere);
+    this.scene.environment = texture;
+    
+    return hdriSphere;
+}
 
   /**
    * Handles canvas resizing by updating the renderer size, camera aspect ratio,
