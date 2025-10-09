@@ -65,7 +65,7 @@ export class RaycasterManager extends EventDispatcher {
 
 private isObjectInteractable(obj: THREE.Object3D): boolean {
   if (!obj.visible) {return false;}
-  if (obj.name.endsWith('-wireframe')) {return false;}
+  if (obj.userData.isNotRaycaster) {return false;}
   if (!(obj as any).isMesh) {return false;} // Solo meshes pueden ser intersectados
   
   return true;

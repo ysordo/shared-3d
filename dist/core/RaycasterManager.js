@@ -46,7 +46,7 @@ export class RaycasterManager extends EventDispatcher {
         if (!obj.visible) {
             return false;
         }
-        if (obj.name.endsWith('-wireframe')) {
+        if (obj.userData.isNotRaycaster) {
             return false;
         }
         if (!obj.isMesh) {

@@ -168,7 +168,7 @@ export class OrbitControlsManager extends OrbitControls {
                 // Zoom con 2 dedos (dedos separados)
                 const currentDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
                 if (this.previousTouchDistance > 0) {
-                    const zoomDelta = (currentDistance + this.previousTouchDistance) * this.zoomSpeed;
+                    const zoomDelta = (this.previousTouchDistance - currentDistance) * this.zoomSpeed;
                     this.applyCameraZoom(zoomDelta);
                 }
                 this.previousTouchDistance = currentDistance;

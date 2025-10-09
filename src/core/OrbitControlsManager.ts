@@ -198,7 +198,7 @@ export class OrbitControlsManager extends OrbitControls {
         );
         
         if (this.previousTouchDistance > 0) {
-          const zoomDelta = (currentDistance + this.previousTouchDistance) * this.zoomSpeed;
+          const zoomDelta = (this.previousTouchDistance - currentDistance) * this.zoomSpeed;
           this.applyCameraZoom(zoomDelta);
         }
         this.previousTouchDistance = currentDistance;
