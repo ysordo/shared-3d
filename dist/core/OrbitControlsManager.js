@@ -1,8 +1,9 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { THREE } from '..';
 export class OrbitControlsManager extends OrbitControls {
-    constructor(camera, domElement) {
+    constructor(scene, camera, domElement) {
         super(camera, domElement);
+        this.scene = scene;
         this.camera = camera;
         this.domElement = domElement;
         this.eRotate = true;
@@ -194,11 +195,15 @@ export class OrbitControlsManager extends OrbitControls {
     }
     handleModelRotation() {
         const delta = new THREE.Vector2().subVectors(this.currentPointerPosition, this.startPointerPosition);
+        const rotation = { y: delta.x * 0.005, x: delta.y * 0.005 };
         // Apply rotation to the model
-        this.model.rotation.y += delta.x * 0.005; // Horizontal rotation
-        this.model.rotation.x += delta.y * 0.005; // Vertical rotation
+        this.model.rotation.y += rotation.y; // Horizontal rotation
+        this.scene.rotation.y += rotation.y;
+        this.model.rotation.x += rotation.x; // Vertical rotation
+        this.scene.rotation.x += rotation.x;
         // Limiting vertical rotation to avoid flipping
         this.model.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.model.rotation.x));
+        this.scene.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.scene.rotation.x));
     }
     handleModelPan() {
         const delta = new THREE.Vector2().subVectors(this.currentPointerPosition, this.startPointerPosition);

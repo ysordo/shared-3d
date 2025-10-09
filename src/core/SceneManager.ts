@@ -203,7 +203,7 @@ export class SceneManager {
       'MainCamera',
     );
 
-    this.controls = new OrbitControlsManager(this.camera, canvas);
+    this.controls = new OrbitControlsManager(this.scene, this.camera, canvas);
     this.controls.eRotate = false;
     this.controls.ePan = false;
     this.controls.eZoom = false;

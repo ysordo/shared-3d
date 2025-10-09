@@ -156,7 +156,7 @@ export class SceneManager {
             this.scene.background = null;
         }
         this.camera = new CameraManager(canvas, 'MainCamera');
-        this.controls = new OrbitControlsManager(this.camera, canvas);
+        this.controls = new OrbitControlsManager(this.scene, this.camera, canvas);
         this.controls.eRotate = false;
         this.controls.ePan = false;
         this.controls.eZoom = false;
