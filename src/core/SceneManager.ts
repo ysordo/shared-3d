@@ -264,39 +264,35 @@ export class SceneManager {
     }
   }
   private setupHDRISkybox(texture: THREE.Texture): THREE.Object3D {
-      console.log('🔄 Setting up HDRI Skybox as rotatable background...');
-      
-      // ✅ DEFINIR CONSTANTE PARA EL RADIO DEL SKYBOX
-      const SKYBOX_RADIUS = 1000;
-      
-      const geometry = new THREE.SphereGeometry(SKYBOX_RADIUS, 64, 64);
-      
-      const material = new THREE.MeshBasicMaterial({
-          map: texture,
-          envMap: texture,
-          side: THREE.BackSide,
-          fog: false,
-      });
+    console.log('🔄 Setting up cubic HDRI Skybox...');
+    
+    const SKYBOX_RADIUS = 1000;
+    
+    // ✅ USAR CUBO EN LUGAR DE ESFERA - evita la curvatura
+    const geometry = new THREE.BoxGeometry(SKYBOX_RADIUS, SKYBOX_RADIUS, SKYBOX_RADIUS);
+    
+    const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        side: THREE.BackSide, // Ver desde adentro
+        fog: false,
+    });
 
-      const skybox = new THREE.Mesh(geometry, material);
-      
-      // Marcar como skybox para identificarlo
-      skybox.name = 'HDRI_Skybox';
-      skybox.userData.radius = SKYBOX_RADIUS; // ✅ Guardar el radio
-      
-      // Posicionar en la cámara inicialmente
-      skybox.position.copy(this.camera.position);
-      skybox.renderOrder = -1;
+    const skybox = new THREE.Mesh(geometry, material);
+    
+    // Marcar como skybox
+    skybox.name = 'HDRI_Skybox';
+    skybox.userData.isSkybox = true;
+    skybox.userData.radius = SKYBOX_RADIUS;
+    skybox.renderOrder = -1;
+    skybox.position.copy(this.camera.position);
 
-      this.scene.add(skybox);
-      
-      // Configurar environment map para reflejos
-      this.scene.environment = texture;
-      this.scene.background = null;
-      
-      console.log('✅ HDRI Skybox created as camera-following background');
-      return skybox;
-  }
+    this.scene.add(skybox);
+    this.scene.environment = texture;
+    this.scene.background = null;
+    
+    console.log('✅ Cubic HDRI Skybox created');
+    return skybox;
+}
 
   /**
    * Handles canvas resizing by updating the renderer size, camera aspect ratio,
