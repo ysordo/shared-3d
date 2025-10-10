@@ -174,8 +174,8 @@ export class SceneManager {
         }
         // ✅ LUZ PRINCIPAL - Alta calidad
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
-        directionalLight.position.set(5, 10, 7);
         directionalLight.castShadow = true;
+        directionalLight.name = 'PRINCIPAL_LIGHT';
         // ✅ SOMBRAS DE ALTA DEFINICIÓN
         directionalLight.shadow.mapSize.width = 2048;
         directionalLight.shadow.mapSize.height = 2048;
@@ -183,7 +183,8 @@ export class SceneManager {
         directionalLight.shadow.camera.far = 50;
         directionalLight.shadow.bias = -0.001;
         // ✅ LUZ AMBIENTAL para detalles
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+        ambientLight.name = 'AMBIENT_LIGHT';
         this.scene.add(directionalLight);
         this.scene.add(ambientLight);
         if (config.hdriManager) {
@@ -209,13 +210,12 @@ export class SceneManager {
     }
     setupHDRISkybox(texture) {
         console.log('🔄 Setting up HDRI Skybox as rotatable background...');
-        const geometry = new THREE.SphereGeometry(10); // Radio más pequeño
+        const geometry = new THREE.SphereGeometry(50); // Radio más pequeño
         //geometry.scale(-1, 1, 1); // Voltear para ver interior
         const material = new THREE.MeshBasicMaterial({
             map: texture,
             envMap: texture,
             side: THREE.BackSide,
-            transparent: false
         });
         const skybox = new THREE.Mesh(geometry, material);
         // Marcar como skybox para identificarlo
@@ -289,6 +289,8 @@ export class SceneManager {
     updateSkyboxPosition(position) {
         // Obtener todos los skyboxes en la escena
         this.scene.getObjectByName('HDRI_Skybox')?.position.copy?.(position);
+        this.scene.getObjectByName('PRINCIPAL_LIGHT')?.position.copy?.(this.camera.position);
+        this.scene.getObjectByName('AMBIENT_LIGHT')?.position.copy?.(position);
     }
     transitionToModel(targetId) {
         if (!this.models.has(targetId) || this.activeModelId === targetId) {
