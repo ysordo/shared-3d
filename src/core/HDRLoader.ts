@@ -24,16 +24,6 @@ interface RGBEHeader {
 	height: number;
 }
 
-interface HDRTextureData {
-	width: number;
-	height: number;
-	data: Float32Array | Uint16Array;
-	header: string;
-	gamma: number;
-	exposure: number;
-	type: TextureDataType;
-}
-
 interface TexData {
 	width: number;
 	height: number;

@@ -1,358 +1,500 @@
 import type {
-	LoadingManager,
-	TextureDataType,
-	DataTexture,
+    LoadingManager,
+    TextureDataType,
     AnyMapping,
     MinificationTextureFilter,
-    MagnificationTextureFilter} from 'three';
+    MagnificationTextureFilter,
+	PixelFormat
+} from 'three';
 import {
-	FloatType,
-	HalfFloatType,
-	LinearFilter,
-	LinearSRGBColorSpace,
-	EquirectangularReflectionMapping,
-	EquirectangularRefractionMapping
+    DataTexture
+} from 'three';
+import {
+    FloatType,
+    HalfFloatType,
+    LinearFilter,
+    LinearSRGBColorSpace,
+    EquirectangularReflectionMapping,
+    EquirectangularRefractionMapping,
+    FileLoader
 } from 'three';
 
 import { HDRLoader } from './HDRLoader';
+import type { TexData} from './WebPHDRLoader';
+import { WebPHDRLoader } from './WebPHDRLoader';
 
 interface HDRICacheEntry {
-	texture: DataTexture;
-	url: string;
-	loaded: boolean;
-	loading: boolean;
+    texture: DataTexture;
+    url: string;
+    loaded: boolean;
+    loading: boolean;
+    loaderType: 'hdr' | 'webp';
 }
 
 interface HDRILoadingCallbacks {
-	onLoad?: (texture: DataTexture, texData: any) => void;
-	onProgress?: (event: ProgressEvent) => void;
-	onError?: (event: ErrorEvent) => void;
+    onLoad?: (texture: DataTexture, texData: any) => void;
+    onProgress?: (event: ProgressEvent) => void;
+    onError?: (event: ErrorEvent) => void;
 }
 
 interface HDRIConfig {
-	mapping?: number;
-	encoding?: number;
-	flipY?: boolean;
-	generateMipmaps?: boolean;
-	minFilter?: number;
-	magFilter?: number;
+    mapping?: number;
+    encoding?: number;
+    flipY?: boolean;
+    generateMipmaps?: boolean;
+    minFilter?: number;
+    magFilter?: number;
 }
 
 /**
- * Manager for HDR environment maps with caching and configuration options.
+ * Manager for HDR environment maps with automatic format detection (HDR/WebP).
  * 
  * ```js
  * const hdriManager = new HDRIsManager();
  * 
- * // Load an HDR environment map
+ * // Load an environment map - automatically detects format
  * const envMap = await hdriManager.load('path/to/environment.hdr');
- * scene.environment = envMap;
+ * // or
+ * const envMap = await hdriManager.load('path/to/environment_rgbm.webp');
  * 
- * // Preload multiple HDRIs
- * await hdriManager.preload([
- *   'path/to/sunset.hdr',
- *   'path/to/night.hdr',
- *   'path/to/studio.hdr'
- * ]);
+ * scene.environment = envMap;
  * ```
  */
 class HDRIsManager {
-	private loader: HDRLoader;
-	private cache: Map<string, HDRICacheEntry>;
-	private defaultConfig: HDRIConfig;
+    private hdrLoader: HDRLoader;
+    private webpLoader: WebPHDRLoader;
+    private fileLoader: FileLoader;
+    private cache: Map<string, HDRICacheEntry>;
+    private defaultConfig: HDRIConfig;
 
-	/**
-	 * Constructs a new HDRIs manager.
-	 * 
-	 * @param {LoadingManager} [manager] - The loading manager.
-	 * @param {HDRIConfig} [defaultConfig] - Default configuration for all loaded HDRIs.
-	 */
-	constructor(manager?: LoadingManager, defaultConfig: HDRIConfig = {}) {
-		this.loader = new HDRLoader(manager);
-		this.cache = new Map();
-		this.defaultConfig = {
-			mapping: EquirectangularReflectionMapping,
-			flipY: true,
-			generateMipmaps: false,
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			...defaultConfig
-		};
-	}
+    /**
+     * Constructs a new HDRIs manager with automatic format detection.
+     * 
+     * @param {LoadingManager} [manager] - The loading manager.
+     * @param {HDRIConfig} [defaultConfig] - Default configuration for all loaded HDRIs.
+     */
+    constructor(manager?: LoadingManager, defaultConfig: HDRIConfig = {}) {
+        this.hdrLoader = new HDRLoader(manager);
+        this.webpLoader = new WebPHDRLoader(manager);
+        this.fileLoader = new FileLoader(manager);
+        this.cache = new Map();
+        this.defaultConfig = {
+            mapping: EquirectangularReflectionMapping,
+            flipY: true,
+            generateMipmaps: false,
+            minFilter: LinearFilter,
+            magFilter: LinearFilter,
+            ...defaultConfig
+        };
+    }
 
-	/**
-	 * Sets the default texture type for HDRIs.
-	 * 
-	 * @param {TextureDataType} type - The texture type (HalfFloatType or FloatType).
-	 * @return {HDRIsManager} A reference to this manager.
-	 */
-	public setType(type: TextureDataType): this {
-		this.loader.setDataType(type);
-		return this;
-	}
+    /**
+     * Detects the file format based on URL and file header.
+     * 
+     * @private
+     * @param {string} url - The URL to check.
+     * @param {ArrayBuffer} [buffer] - Optional file buffer for header detection.
+     * @return {Promise<'hdr' | 'webp'>} The detected format.
+     */
+    private async detectFormat(url: string, buffer?: ArrayBuffer): Promise<'hdr' | 'webp'> {
+        // First check file extension
+        const extension = url.toLowerCase().split('.').pop();
+        
+        if (extension === 'webp') {
+            return 'webp';
+        }
+        
+        if (extension === 'hdr') {
+            return 'hdr';
+        }
 
-	/**
-	 * Sets the default configuration for all HDRIs.
-	 * 
-	 * @param {HDRIConfig} config - The configuration object.
-	 * @return {HDRIsManager} A reference to this manager.
-	 */
-	public setDefaultConfig(config: HDRIConfig): this {
-		this.defaultConfig = { ...this.defaultConfig, ...config };
-		return this;
-	}
+        // If no clear extension or ambiguous, check file header
+        if (buffer) {
+            try {
+                const header = new Uint8Array(buffer, 0, 12);
+                
+                // Check for WebP signature: 'RIFF' + file size + 'WEBP'
+                if (header[0] === 0x52 && header[1] === 0x49 && header[2] === 0x46 && header[3] === 0x46 &&
+                    header[8] === 0x57 && header[9] === 0x45 && header[10] === 0x42 && header[11] === 0x50) {
+                    return 'webp';
+                }
+                
+                // Check for HDR signature: usually starts with '#?RADIANCE'
+                const decoder = new TextDecoder();
+                const headerText = decoder.decode(header);
+                if (headerText.includes('#?RADIANCE') || headerText.includes('#?')) {
+                    return 'hdr';
+                }
+            } catch (error) {
+                console.warn('Failed to detect format from header, falling back to extension');
+            }
+        }
 
-	/**
-	 * Loads an HDR environment map.
-	 * 
-	 * @param {string} url - The URL of the HDR file.
-	 * @param {HDRIConfig} [config] - Specific configuration for this HDRI.
-	 * @param {HDRILoadingCallbacks} [callbacks] - Loading callbacks.
-	 * @return {Promise<DataTexture>} A promise that resolves with the loaded texture.
-	 */
-	public async load(
-		url: string, 
-		config?: HDRIConfig, 
-		callbacks?: HDRILoadingCallbacks
-	): Promise<DataTexture> {
-		// Check cache first
-		const cached = this.cache.get(url);
-		if (cached) {
-			if (cached.loaded) {
-				return cached.texture;
-			}
-			if (cached.loading) {
-				// Wait for the ongoing load to complete
-				return new Promise((resolve, reject) => {
-					const checkInterval = setInterval(() => {
-						const entry = this.cache.get(url);
-						if (entry && entry.loaded) {
-							clearInterval(checkInterval);
-							resolve(entry.texture);
-						}
-						if (entry && !entry.loading && !entry.loaded) {
-							clearInterval(checkInterval);
-							reject(new Error(`Failed to load HDRI: ${url}`));
-						}
-					}, 50);
-				});
-			}
-		}
+        // Default to HDR for unknown formats (backward compatibility)
+        return 'hdr';
+    }
 
-		// Mark as loading
-		this.cache.set(url, {
-			texture: {} as DataTexture,
-			url,
-			loaded: false,
-			loading: true
-		});
+    /**
+     * Gets the appropriate loader for the detected format.
+     * 
+     * @private
+     * @param {'hdr' | 'webp'} format - The detected format.
+     * @return {HDRLoader | WebPHDRLoader} The appropriate loader.
+     */
+    private getLoaderForFormat(format: 'hdr' | 'webp'): HDRLoader | WebPHDRLoader {
+        return format === 'webp' ? this.webpLoader : this.hdrLoader;
+    }
 
-		try {
-			const texture = await new Promise<DataTexture>((resolve, reject) => {
-				this.loader.load(
-					url,
-					(texture: DataTexture, texData: any) => {
-						// Apply configuration
-						this.applyConfig(texture, { ...this.defaultConfig, ...config });
-						
-						// Update cache
-						const entry: HDRICacheEntry = {
-							texture,
-							url,
-							loaded: true,
-							loading: false
-						};
-						this.cache.set(url, entry);
-						
-						// Call user callback
-						if (callbacks?.onLoad) {
-							callbacks.onLoad(texture, texData);
-						}
-						
-						resolve(texture);
-					},
-					(event: ProgressEvent) => {
-						if (callbacks?.onProgress) {
-							callbacks.onProgress(event);
-						}
-					},
-					(event: unknown) => {
-						// Remove from cache on error
-						this.cache.delete(url);
-						if (callbacks?.onError) {
-							callbacks.onError(event as ErrorEvent);
-						}
-						reject((event as ErrorEvent).error || new Error(`Failed to load HDRI: ${url}`));
-					}
-				);
-			});
+    /**
+     * Sets the default texture type for all HDRIs.
+     * 
+     * @param {TextureDataType} type - The texture type (HalfFloatType or FloatType).
+     * @return {HDRIsManager} A reference to this manager.
+     */
+    public setType(type: TextureDataType): this {
+        this.hdrLoader.setDataType(type);
+        this.webpLoader.setDataType(type);
+        return this;
+    }
 
-			return texture;
-		} catch (error) {
-			// Ensure cache is cleaned up on error
-			this.cache.delete(url);
-			throw error;
-		}
-	}
+    /**
+     * Sets the default configuration for all HDRIs.
+     * 
+     * @param {HDRIConfig} config - The configuration object.
+     * @return {HDRIsManager} A reference to this manager.
+     */
+    public setDefaultConfig(config: HDRIConfig): this {
+        this.defaultConfig = { ...this.defaultConfig, ...config };
+        return this;
+    }
 
-	/**
-	 * Preloads multiple HDR environment maps.
-	 * 
-	 * @param {string[]} urls - Array of URLs to preload.
-	 * @param {HDRIConfig} [config] - Configuration for all HDRIs.
-	 * @param {Function} [onProgress] - Progress callback.
-	 * @return {Promise<DataTexture[]>} A promise that resolves with all loaded textures.
-	 */
-	public async preload(
-		urls: string[], 
-		config?: HDRIConfig, 
-		onProgress?: (loaded: number, total: number, url: string) => void
-	): Promise<DataTexture[]> {
-		const total = urls.length;
-		let loaded = 0;
+    /**
+     * Loads an environment map with automatic format detection.
+     * 
+     * @param {string} url - The URL of the environment file (HDR or WebP).
+     * @param {HDRIConfig} [config] - Specific configuration for this environment.
+     * @param {HDRILoadingCallbacks} [callbacks] - Loading callbacks.
+     * @return {Promise<DataTexture>} A promise that resolves with the loaded texture.
+     */
+    public async load(
+        url: string, 
+        config?: HDRIConfig, 
+        callbacks?: HDRILoadingCallbacks
+    ): Promise<DataTexture> {
+        // Check cache first
+        const cached = this.cache.get(url);
+        if (cached) {
+            if (cached.loaded) {
+                return cached.texture;
+            }
+            if (cached.loading) {
+                // Wait for the ongoing load to complete
+                return new Promise((resolve, reject) => {
+                    const checkInterval = setInterval(() => {
+                        const entry = this.cache.get(url);
+                        if (entry && entry.loaded) {
+                            clearInterval(checkInterval);
+                            resolve(entry.texture);
+                        }
+                        if (entry && !entry.loading && !entry.loaded) {
+                            clearInterval(checkInterval);
+                            reject(new Error(`Failed to load environment: ${url}`));
+                        }
+                    }, 50);
+                });
+            }
+        }
 
-		const promises = urls.map(url => 
-			this.load(url, config, {
-				onLoad: () => {
-					loaded++;
-					if (onProgress) {
-						onProgress(loaded, total, url);
-					}
-				}
-			})
-		);
+        // Mark as loading
+        this.cache.set(url, {
+            texture: {} as DataTexture,
+            url,
+            loaded: false,
+            loading: true,
+            loaderType: 'hdr' // Temporary, will be updated after detection
+        });
 
-		return Promise.all(promises);
-	}
+        try {
+            // First, load the file to detect format
+            const buffer = await new Promise<ArrayBuffer>((resolve, reject) => {
+                this.fileLoader.setResponseType('arraybuffer');
+                this.fileLoader.load(
+                    url,
+                    (data: string | ArrayBuffer) => {
+                        resolve(data as ArrayBuffer);
+                    },
+                    (event: ProgressEvent) => {
+                        if (callbacks?.onProgress) {
+                            callbacks.onProgress(event);
+                        }
+                    },
+                    (event: unknown) => {
+                        reject((event as ErrorEvent).error || new Error(`Failed to load file: ${url}`));
+                    }
+                );
+            });
 
-	/**
-	 * Gets a loaded HDRI from cache.
-	 * 
-	 * @param {string} url - The URL of the HDRI.
-	 * @return {DataTexture | undefined} The cached texture or undefined if not found.
-	 */
-	public get(url: string): DataTexture | undefined {
-		const entry = this.cache.get(url);
-		return entry?.loaded ? entry.texture : undefined;
-	}
+            // Detect format
+            const format = await this.detectFormat(url, buffer);
+            const loader = this.getLoaderForFormat(format);
 
-	/**
-	 * Checks if an HDRI is loaded.
-	 * 
-	 * @param {string} url - The URL of the HDRI.
-	 * @return {boolean} True if the HDRI is loaded and cached.
-	 */
-	public isLoaded(url: string): boolean {
-		return this.cache.get(url)?.loaded || false;
-	}
+            // Update cache with detected format
+            const cacheEntry = this.cache.get(url);
+            if (cacheEntry) {
+                cacheEntry.loaderType = format;
+            }
 
-	/**
-	 * Removes an HDRI from cache and disposes its texture.
-	 * 
-	 * @param {string} url - The URL of the HDRI to dispose.
-	 * @return {boolean} True if the HDRI was found and disposed.
-	 */
-	public dispose(url: string): boolean {
-		const entry = this.cache.get(url);
-		if (entry && entry.texture) {
-			entry.texture.dispose();
-			this.cache.delete(url);
-			return true;
-		}
-		return false;
-	}
+            console.log(`🔄 Detected format: ${format.toUpperCase()} for ${url}`);
 
-	/**
-	 * Disposes all cached HDRIs and clears the cache.
-	 */
-	public disposeAll(): void {
-		for (const [url, entry] of this.cache.entries()) {
-			if (entry.texture) {
-				entry.texture.dispose();
-			}
-		}
-		this.cache.clear();
-	}
+            // Parse with the appropriate loader
+            const texture = await new Promise<DataTexture>((resolve, reject) => {
+                // For HDRLoader, we need to use its parse method directly
+                if (loader === this.hdrLoader) {
+                    try {
+                        const texData = (loader as HDRLoader).parse(buffer);
+                        const texture = new DataTexture(
+                            texData.data,
+                            texData.width,
+                            texData.height,
+							(texData as TexData & {format?: PixelFormat}).format || undefined,
+                            texData.type
+                        );
+                        
+                        this.applyConfig(texture, { ...this.defaultConfig, ...config });
+                        
+                        // Update cache
+                        const entry: HDRICacheEntry = {
+                            texture,
+                            url,
+                            loaded: true,
+                            loading: false,
+                            loaderType: format
+                        };
+                        this.cache.set(url, entry);
+                        
+                        if (callbacks?.onLoad) {
+                            callbacks.onLoad(texture, texData);
+                        }
+                        
+                        resolve(texture);
+                    } catch (error) {
+                        reject(error);
+                    }
+                } else {
+                    // For WebPHDRLoader, use async parse
+                    (loader as WebPHDRLoader).parse(buffer)
+                        .then((texData) => {
+                            const texture = new DataTexture(
+                                texData.data,
+                                texData.width,
+                                texData.height,
+                                (texData as TexData & {format?: PixelFormat}).format || undefined,
+                                texData.type
+                            );
+                            
+                            this.applyConfig(texture, { ...this.defaultConfig, ...config });
+                            
+                            // Update cache
+                            const entry: HDRICacheEntry = {
+                                texture,
+                                url,
+                                loaded: true,
+                                loading: false,
+                                loaderType: format
+                            };
+                            this.cache.set(url, entry);
+                            
+                            if (callbacks?.onLoad) {
+                                callbacks.onLoad(texture, texData);
+                            }
+                            
+                            resolve(texture);
+                        })
+                        .catch(reject);
+                }
+            });
 
-	/**
-	 * Gets the list of all cached HDRI URLs.
-	 * 
-	 * @return {string[]} Array of cached HDRI URLs.
-	 */
-	public getCachedUrls(): string[] {
-		return Array.from(this.cache.keys());
-	}
+            return texture;
+        } catch (error) {
+            // Ensure cache is cleaned up on error
+            this.cache.delete(url);
+            if (callbacks?.onError) {
+                callbacks.onError(error as ErrorEvent);
+            }
+            throw error;
+        }
+    }
 
-	/**
-	 * Gets the list of loaded HDRI URLs.
-	 * 
-	 * @return {string[]} Array of loaded HDRI URLs.
-	 */
-	public getLoadedUrls(): string[] {
-		return Array.from(this.cache.entries())
-			.filter(([_, entry]) => entry.loaded)
-			.map(([url, _]) => url);
-	}
+    /**
+     * Preloads multiple environment maps with automatic format detection.
+     * 
+     * @param {string[]} urls - Array of URLs to preload.
+     * @param {HDRIConfig} [config] - Configuration for all environments.
+     * @param {Function} [onProgress] - Progress callback.
+     * @return {Promise<DataTexture[]>} A promise that resolves with all loaded textures.
+     */
+    public async preload(
+        urls: string[], 
+        config?: HDRIConfig, 
+        onProgress?: (loaded: number, total: number, url: string, format: string) => void
+    ): Promise<DataTexture[]> {
+        const total = urls.length;
+        let loaded = 0;
 
-	/**
-	 * Applies configuration to a texture.
-	 * 
-	 * @private
-	 * @param {DataTexture} texture - The texture to configure.
-	 * @param {HDRIConfig} config - The configuration to apply.
-	 */
-	private applyConfig(texture: DataTexture, config: HDRIConfig): void {
-		if (config.mapping !== undefined) {
-			texture.mapping = config.mapping as AnyMapping;
-		}
-		if (config.flipY !== undefined) {
-			texture.flipY = config.flipY;
-		}
-		if (config.generateMipmaps !== undefined) {
-			texture.generateMipmaps = config.generateMipmaps;
-		}
-		if (config.minFilter !== undefined) {
-			texture.minFilter = config.minFilter as MinificationTextureFilter;
-		}
-		if (config.magFilter !== undefined) {
-			texture.magFilter = config.magFilter as MagnificationTextureFilter;
-		}
+        const promises = urls.map(url => 
+            this.load(url, config, {
+                onLoad: (texture, texData) => {
+                    loaded++;
+                    const cacheEntry = this.cache.get(url);
+                    const format = cacheEntry?.loaderType || 'unknown';
+                    if (onProgress) {
+                        onProgress(loaded, total, url, format);
+                    }
+                }
+            })
+        );
 
-		// Apply color space for HDR textures
-		if (texture.type === FloatType || texture.type === HalfFloatType) {
-			texture.colorSpace = LinearSRGBColorSpace;
-		}
-	}
+        return Promise.all(promises);
+    }
 
-	/**
-	 * Creates a reflection mapping configuration.
-	 * 
-	 * @return {HDRIConfig} A configuration for reflection mapping.
-	 */
-	public static reflectionConfig(): HDRIConfig {
-		return {
-			mapping: EquirectangularReflectionMapping,
-			flipY: true,
-			generateMipmaps: false,
-			minFilter: LinearFilter,
-			magFilter: LinearFilter
-		};
-	}
+    /**
+     * Gets a loaded environment map from cache.
+     * 
+     * @param {string} url - The URL of the environment.
+     * @return {DataTexture | undefined} The cached texture or undefined if not found.
+     */
+    public get(url: string): DataTexture | undefined {
+        const entry = this.cache.get(url);
+        return entry?.loaded ? entry.texture : undefined;
+    }
 
-	/**
-	 * Creates a refraction mapping configuration.
-	 * 
-	 * @return {HDRIConfig} A configuration for refraction mapping.
-	 */
-	public static refractionConfig(): HDRIConfig {
-		return {
-			mapping: EquirectangularRefractionMapping,
-			flipY: true,
-			generateMipmaps: false,
-			minFilter: LinearFilter,
-			magFilter: LinearFilter
-		};
-	}
+    /**
+     * Gets the format used to load a specific environment.
+     * 
+     * @param {string} url - The URL of the environment.
+     * @return {'hdr' | 'webp' | undefined} The format used or undefined if not loaded.
+     */
+    public getFormat(url: string): 'hdr' | 'webp' | undefined {
+        return this.cache.get(url)?.loaderType;
+    }
+
+    /**
+     * Checks if an environment is loaded.
+     * 
+     * @param {string} url - The URL of the environment.
+     * @return {boolean} True if the environment is loaded and cached.
+     */
+    public isLoaded(url: string): boolean {
+        return this.cache.get(url)?.loaded || false;
+    }
+
+    /**
+     * Removes an environment from cache and disposes its texture.
+     * 
+     * @param {string} url - The URL of the environment to dispose.
+     * @return {boolean} True if the environment was found and disposed.
+     */
+    public dispose(url: string): boolean {
+        const entry = this.cache.get(url);
+        if (entry && entry.texture) {
+            entry.texture.dispose();
+            this.cache.delete(url);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Disposes all cached environments and clears the cache.
+     */
+    public disposeAll(): void {
+        for (const [url, entry] of this.cache.entries()) {
+            if (entry.texture) {
+                entry.texture.dispose();
+            }
+        }
+        this.cache.clear();
+    }
+
+    /**
+     * Gets the list of all cached environment URLs.
+     * 
+     * @return {string[]} Array of cached environment URLs.
+     */
+    public getCachedUrls(): string[] {
+        return Array.from(this.cache.keys());
+    }
+
+    /**
+     * Gets the list of loaded environment URLs with their formats.
+     * 
+     * @return {Array<{url: string, format: string}>} Array of loaded environments.
+     */
+    public getLoadedEnvironments(): Array<{url: string, format: string}> {
+        return Array.from(this.cache.entries())
+            .filter(([_, entry]) => entry.loaded)
+            .map(([url, entry]) => ({ url, format: entry.loaderType }));
+    }
+
+    /**
+     * Applies configuration to a texture.
+     * 
+     * @private
+     * @param {DataTexture} texture - The texture to configure.
+     * @param {HDRIConfig} config - The configuration to apply.
+     */
+    private applyConfig(texture: DataTexture, config: HDRIConfig): void {
+        if (config.mapping !== undefined) {
+            texture.mapping = config.mapping as AnyMapping;
+        }
+        if (config.flipY !== undefined) {
+            texture.flipY = config.flipY;
+        }
+        if (config.generateMipmaps !== undefined) {
+            texture.generateMipmaps = config.generateMipmaps;
+        }
+        if (config.minFilter !== undefined) {
+            texture.minFilter = config.minFilter as MinificationTextureFilter;
+        }
+        if (config.magFilter !== undefined) {
+            texture.magFilter = config.magFilter as MagnificationTextureFilter;
+        }
+
+        // Apply color space for HDR textures
+        if (texture.type === FloatType || texture.type === HalfFloatType) {
+            texture.colorSpace = LinearSRGBColorSpace;
+        }
+    }
+
+    /**
+     * Creates a reflection mapping configuration.
+     * 
+     * @return {HDRIConfig} A configuration for reflection mapping.
+     */
+    public static reflectionConfig(): HDRIConfig {
+        return {
+            mapping: EquirectangularReflectionMapping,
+            flipY: true,
+            generateMipmaps: false,
+            minFilter: LinearFilter,
+            magFilter: LinearFilter
+        };
+    }
+
+    /**
+     * Creates a refraction mapping configuration.
+     * 
+     * @return {HDRIConfig} A configuration for refraction mapping.
+     */
+    public static refractionConfig(): HDRIConfig {
+        return {
+            mapping: EquirectangularRefractionMapping,
+            flipY: true,
+            generateMipmaps: false,
+            minFilter: LinearFilter,
+            magFilter: LinearFilter
+        };
+    }
 }
 
 export { HDRIsManager };
