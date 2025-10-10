@@ -97,11 +97,18 @@ export class CameraManager extends PerspectiveCamera {
         };
         animate();
     }
-    public adjustClippingPlanes(center: Vector3, radius?: number): void {
+    public adjustClippingPlanes(center: Vector3, radius?: number, skyboxRadius?: number): void {
         if (!radius) {return;}
+        
         const distance = this.position.distanceTo(center);
         const near = Math.max(0.001, distance - radius - this.NEAR_MARGIN);
-        const far = distance + radius * this.FAR_MULTIPLIER;
+        
+        let far = distance + radius * this.FAR_MULTIPLIER;
+        
+        if (skyboxRadius) {
+            far = Math.max(far, skyboxRadius * 1.1); // 10% más que el radio del skybox
+        }
+        
         if (Math.abs(this.near - near) > 0.001 || Math.abs(this.far - far) > 0.001) {
             this.near = near;
             this.far = far;

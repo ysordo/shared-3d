@@ -18,7 +18,7 @@ export declare class CameraManager extends PerspectiveCamera {
     setupPostProcessing(scene: Scene, render: WebGLRenderer): void;
     reset(controls?: OrbitControlsManager, pos?: Vector3, target?: Vector3): void;
     toAnimIPos(controls?: OrbitControlsManager, pos?: Vector3, target?: Vector3, duration?: number): void;
-    adjustClippingPlanes(center: Vector3, radius?: number): void;
+    adjustClippingPlanes(center: Vector3, radius?: number, skyboxRadius?: number): void;
     recalculate(box: Box3): {
         radius: number;
         position: Vector3;

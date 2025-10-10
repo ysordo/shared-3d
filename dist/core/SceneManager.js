@@ -210,22 +210,26 @@ export class SceneManager {
     }
     setupHDRISkybox(texture) {
         console.log('🔄 Setting up HDRI Skybox as rotatable background...');
-        const geometry = new THREE.SphereGeometry(50); // Radio más pequeño
-        //geometry.scale(-1, 1, 1); // Voltear para ver interior
+        // ✅ DEFINIR CONSTANTE PARA EL RADIO DEL SKYBOX
+        const SKYBOX_RADIUS = 1000;
+        const geometry = new THREE.SphereGeometry(SKYBOX_RADIUS, 64, 64);
         const material = new THREE.MeshBasicMaterial({
             map: texture,
             envMap: texture,
             side: THREE.BackSide,
+            fog: false,
         });
         const skybox = new THREE.Mesh(geometry, material);
         // Marcar como skybox para identificarlo
         skybox.name = 'HDRI_Skybox';
+        skybox.userData.radius = SKYBOX_RADIUS; // ✅ Guardar el radio
         // Posicionar en la cámara inicialmente
         skybox.position.copy(this.camera.position);
+        skybox.renderOrder = -1;
         this.scene.add(skybox);
         // Configurar environment map para reflejos
         this.scene.environment = texture;
-        this.scene.background = null; // Importante: no usar background
+        this.scene.background = null;
         console.log('✅ HDRI Skybox created as camera-following background');
         return skybox;
     }
@@ -716,7 +720,7 @@ export class SceneManager {
             const model = this.models.get(this.activeModelId);
             const modelCenter = new THREE.Vector3();
             model?.getWorldPosition(modelCenter);
-            this.camera.adjustClippingPlanes(modelCenter, this.modelBoundingRadii.get(this.activeModelId));
+            this.camera.adjustClippingPlanes(modelCenter, this.modelBoundingRadii.get(this.activeModelId), this.scene.getObjectByName('HDRI_Skybox')?.userData?.radius);
             this.updateSkyboxPosition(modelCenter);
             const delta = this.clock.getDelta();
             this?.animationManagers?.get(this.activeModelId)?.update(delta);
