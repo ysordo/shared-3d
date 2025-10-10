@@ -187,6 +187,7 @@ export declare class SceneManager {
      * @param {string} targetId - The ID of the model to transition to.
      * @returns {void}
      */
+    private updateSkyboxPosition;
     transitionToModel(targetId: string): void;
     /**
      * Loads a 3D model from a given URL and adds it to the scene.

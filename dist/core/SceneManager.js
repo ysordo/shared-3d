@@ -208,19 +208,22 @@ export class SceneManager {
         }
     }
     setupHDRISkybox(texture) {
-        // Crear un cubemap desde el HDR equirectangular
-        const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(1024);
-        cubeRenderTarget.fromEquirectangularTexture(this.renderer, texture);
-        const geometry = new THREE.BoxGeometry(1000, 1000, 1000);
+        console.log('🔄 Setting up HDRI Skybox as rotatable background...');
+        const geometry = new THREE.SphereGeometry(1000, 64, 64);
         geometry.scale(-1, 1, 1);
         const material = new THREE.MeshBasicMaterial({
-            envMap: cubeRenderTarget.texture,
-            side: THREE.BackSide,
-            wireframe: true,
+            map: texture,
+            side: THREE.BackSide
         });
         const skybox = new THREE.Mesh(geometry, material);
+        // Marcar como skybox para identificarlo
+        skybox.userData.isSkybox = true;
+        // Posicionar inicialmente en la cámara
+        skybox.position.copy(this.camera.position);
         this.scene.add(skybox);
-        this.scene.environment = cubeRenderTarget.texture;
+        this.scene.environment = texture;
+        this.scene.background = null;
+        console.log('✅ HDRI Skybox created as camera-following background');
         return skybox;
     }
     /**
@@ -280,6 +283,15 @@ export class SceneManager {
      * @param {string} targetId - The ID of the model to transition to.
      * @returns {void}
      */
+    updateSkyboxPosition(position) {
+        // Obtener todos los skyboxes en la escena
+        this.scene.children.forEach(child => {
+            if (child.userData?.isSkybox) {
+                // Mantener el skybox en la posición de la cámara
+                child.position.copy(position);
+            }
+        });
+    }
     transitionToModel(targetId) {
         if (!this.models.has(targetId) || this.activeModelId === targetId) {
             return;
@@ -288,6 +300,9 @@ export class SceneManager {
         const startTime = performance.now();
         const startModel = this.activeModelId ? this.models.get(this.activeModelId) : null;
         const targetModel = this.models.get(targetId);
+        const p = new THREE.Vector3();
+        targetModel.getWorldPosition(p);
+        this.updateSkyboxPosition(p);
         const animateTransition = () => {
             const elapsed = performance.now() - startTime;
             this.transitionProgress = Math.min(elapsed / this.transitionDuration, 1);
