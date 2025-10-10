@@ -263,19 +263,24 @@ export class SceneManager {
     }
   }
   private setupHDRISkybox(texture: THREE.Texture) {
-    const geometry = new THREE.SphereGeometry(500, 60, 40);
+    // Crear un cubemap desde el HDR equirectangular
+    const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(1024);
+    cubeRenderTarget.fromEquirectangularTexture(this.renderer, texture);
+    
+    const geometry = new THREE.BoxGeometry(1000, 1000, 1000);
     geometry.scale(-1, 1, 1);
     
     const material = new THREE.MeshBasicMaterial({
-        map: texture,
-        side: THREE.BackSide
+        envMap: cubeRenderTarget.texture,
+        side: THREE.BackSide,
+        wireframe: true,
     });
     
-    const hdriSphere = new THREE.Mesh(geometry, material);
-    this.scene.add(hdriSphere);
-    this.scene.environment = texture;
+    const skybox = new THREE.Mesh(geometry, material);
+    this.scene.add(skybox);
+    this.scene.environment = cubeRenderTarget.texture;
     
-    return hdriSphere;
+    return skybox;
 }
 
   /**
