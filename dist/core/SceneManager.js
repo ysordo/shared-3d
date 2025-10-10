@@ -209,17 +209,20 @@ export class SceneManager {
         }
     }
     setupHDRISkybox(texture) {
-        console.log('🔄 Setting up cubic HDRI Skybox...');
-        const SKYBOX_RADIUS = 1000;
-        // ✅ USAR CUBO EN LUGAR DE ESFERA - evita la curvatura
-        const geometry = new THREE.BoxGeometry(SKYBOX_RADIUS, SKYBOX_RADIUS, SKYBOX_RADIUS);
+        console.log('🔄 Setting up spherical HDRI Skybox...');
+        // ✅ RADIO MUY GRANDE para minimizar curvatura
+        const SKYBOX_RADIUS = 5000; // Aumentar significativamente
+        // ✅ MÁS SEGMENTOS para mejor calidad
+        const geometry = new THREE.SphereGeometry(SKYBOX_RADIUS, 256, 256);
+        // ✅ CONFIGURAR TEXTURA CORRECTAMENTE
+        texture.mapping = THREE.EquirectangularReflectionMapping;
         const material = new THREE.MeshBasicMaterial({
             map: texture,
-            side: THREE.BackSide, // Ver desde adentro
+            side: THREE.BackSide,
             fog: false,
+            depthWrite: false, // ✅ Importante para skybox
         });
         const skybox = new THREE.Mesh(geometry, material);
-        // Marcar como skybox
         skybox.name = 'HDRI_Skybox';
         skybox.userData.isSkybox = true;
         skybox.userData.radius = SKYBOX_RADIUS;
@@ -228,7 +231,7 @@ export class SceneManager {
         this.scene.add(skybox);
         this.scene.environment = texture;
         this.scene.background = null;
-        console.log('✅ Cubic HDRI Skybox created');
+        console.log('✅ Spherical HDRI Skybox created (minimal curvature)');
         return skybox;
     }
     /**

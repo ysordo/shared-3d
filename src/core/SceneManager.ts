@@ -264,35 +264,38 @@ export class SceneManager {
     }
   }
   private setupHDRISkybox(texture: THREE.Texture): THREE.Object3D {
-    console.log('🔄 Setting up cubic HDRI Skybox...');
-    
-    const SKYBOX_RADIUS = 1000;
-    
-    // ✅ USAR CUBO EN LUGAR DE ESFERA - evita la curvatura
-    const geometry = new THREE.BoxGeometry(SKYBOX_RADIUS, SKYBOX_RADIUS, SKYBOX_RADIUS);
-    
-    const material = new THREE.MeshBasicMaterial({
-        map: texture,
-        side: THREE.BackSide, // Ver desde adentro
-        fog: false,
-    });
+      console.log('🔄 Setting up spherical HDRI Skybox...');
+      
+      // ✅ RADIO MUY GRANDE para minimizar curvatura
+      const SKYBOX_RADIUS = 5000; // Aumentar significativamente
+      
+      // ✅ MÁS SEGMENTOS para mejor calidad
+      const geometry = new THREE.SphereGeometry(SKYBOX_RADIUS, 256, 256);
+      
+      // ✅ CONFIGURAR TEXTURA CORRECTAMENTE
+      texture.mapping = THREE.EquirectangularReflectionMapping;
+      
+      const material = new THREE.MeshBasicMaterial({
+          map: texture,
+          side: THREE.BackSide,
+          fog: false,
+          depthWrite: false, // ✅ Importante para skybox
+      });
 
-    const skybox = new THREE.Mesh(geometry, material);
-    
-    // Marcar como skybox
-    skybox.name = 'HDRI_Skybox';
-    skybox.userData.isSkybox = true;
-    skybox.userData.radius = SKYBOX_RADIUS;
-    skybox.renderOrder = -1;
-    skybox.position.copy(this.camera.position);
+      const skybox = new THREE.Mesh(geometry, material);
+      skybox.name = 'HDRI_Skybox';
+      skybox.userData.isSkybox = true;
+      skybox.userData.radius = SKYBOX_RADIUS;
+      skybox.renderOrder = -1;
+      skybox.position.copy(this.camera.position);
 
-    this.scene.add(skybox);
-    this.scene.environment = texture;
-    this.scene.background = null;
-    
-    console.log('✅ Cubic HDRI Skybox created');
-    return skybox;
-}
+      this.scene.add(skybox);
+      this.scene.environment = texture;
+      this.scene.background = null;
+      
+      console.log('✅ Spherical HDRI Skybox created (minimal curvature)');
+      return skybox;
+  }
 
   /**
    * Handles canvas resizing by updating the renderer size, camera aspect ratio,
