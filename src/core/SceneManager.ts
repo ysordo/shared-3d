@@ -265,7 +265,7 @@ export class SceneManager {
   private setupHDRISkybox(texture: THREE.Texture): THREE.Object3D {
     console.log('🔄 Setting up HDRI Skybox as rotatable background...');
     
-    const geometry = new THREE.SphereGeometry(500, 64, 64); // Radio más pequeño
+    const geometry = new THREE.SphereGeometry(10); // Radio más pequeño
     //geometry.scale(-1, 1, 1); // Voltear para ver interior
     
     const material = new THREE.MeshBasicMaterial({
@@ -278,7 +278,6 @@ export class SceneManager {
     const skybox = new THREE.Mesh(geometry, material);
     
     // Marcar como skybox para identificarlo
-    skybox.userData.isSkybox = true;
     skybox.name = 'HDRI_Skybox';
     
     // Posicionar en la cámara inicialmente
@@ -863,15 +862,15 @@ getAnimationManager(modelId?: string): AnimationManager | null {
         
         if (this.controls) { this.controls.update(); }
         
-        this.updateSkyboxPosition(this.camera.position);
-
-
+        
+        
         // Adjust clipping plans before rendering
         const model = this.models.get(this.activeModelId!);
         const modelCenter = new THREE.Vector3();
         model?.getWorldPosition(modelCenter);
         this.camera.adjustClippingPlanes(modelCenter,this.modelBoundingRadii.get(this.activeModelId!));
         
+        this.updateSkyboxPosition(modelCenter);
         const delta = this.clock.getDelta();
         this?.animationManagers?.get(this!.activeModelId!)?.update(delta);
 
