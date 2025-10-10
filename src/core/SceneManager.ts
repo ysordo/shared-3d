@@ -266,7 +266,7 @@ export class SceneManager {
     console.log('🔄 Setting up HDRI Skybox as rotatable background...');
     
     const geometry = new THREE.SphereGeometry(10); // Radio más pequeño
-    geometry.scale(-1, 1, 1); // Voltear para ver interior
+    //geometry.scale(-1, 1, 1); // Voltear para ver interior
     
     const material = new THREE.MeshBasicMaterial({
         map: texture,
