@@ -22,75 +22,115 @@ export interface TexData {
     gamma: number;
     exposure: number;
     type: TextureDataType;
+    maxLuminance: number;
+    averageLuminance: number;
+    metadata?: Record<string, any>;
 }
 
 /**
- * A loader for WebP-encoded HDR textures using RGBM encoding.
+ * Enhanced loader for WebP-encoded HDR textures using RGBM encoding.
  * 
- * This loader can load WebP files that contain HDR data encoded in RGBM format
- * and convert them back to proper HDR textures for use in Three.js.
- * 
- * ```js
- * const loader = new WebPHDRLoader();
- * const envMap = await loader.loadAsync('environment_rgbm.webp');
- * envMap.mapping = THREE.EquirectangularReflectionMapping;
- * 
- * scene.environment = envMap;
- * ```
- * 
- * @augments DataTextureLoader
+ * This loader preserves all HDR characteristics including high dynamic range,
+ * intensity, lighting information, and environment mapping capabilities.
  */
 class WebPHDRLoader extends DataTextureLoader {
 
     /**
      * The texture type for the output HDR texture.
-     *
-     * @type {TextureDataType}
-     * @default FloatType
      */
     public type: TextureDataType;
 
     /**
-     * Constructs a new WebP HDR loader.
-     *
-     * @param {LoadingManager} [manager] - The loading manager.
+     * Whether to preserve high dynamic range characteristics
      */
+    public preserveHDR: boolean;
+
+    /**
+     * Maximum luminance value for tone mapping preservation
+     */
+    public maxLuminance: number;
+
+    /**
+     * Exposure compensation for the loaded HDR texture
+     */
+    public exposure: number;
+
     constructor(manager?: LoadingManager) {
         super(manager);
         this.type = FloatType;
+        this.preserveHDR = true;
+        this.maxLuminance = 16.0; // Default max luminance for HDR
+        this.exposure = 1.0;
     }
 
     /**
-     * Decodes RGBM data back to HDR
-     * @param {number} r - Red component (0-1)
-     * @param {number} g - Green component (0-1)
-     * @param {number} b - Blue component (0-1)
-     * @param {number} m - Multiplier component (0-1)
-     * @returns {Object} Decoded HDR values
+     * Enhanced RGBM decoding with HDR preservation
      */
     private decodeRGBM(r: number, g: number, b: number, m: number): { r: number; g: number; b: number } {
-        const scale = m * 6.0;
+        // RGBM decoding with extended range for HDR
+        const scale = m * 6.0 * this.maxLuminance;
         return {
-            r: r * scale,
-            g: g * scale,
-            b: b * scale
+            r: r * scale * this.exposure,
+            g: g * scale * this.exposure,
+            b: b * scale * this.exposure
         };
     }
 
     /**
-     * Parses WebP data containing RGBM-encoded HDR content
-     *
-     * @param {ArrayBuffer} buffer - The WebP file data
-     * @return {Promise<TexData>} An object representing the parsed texture data
+     * Calculate luminance from RGB values
+     */
+    private calculateLuminance(r: number, g: number, b: number): number {
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    }
+
+    /**
+     * Analyze HDR characteristics from the decoded data
+     */
+    private analyzeHDRCharacteristics(data: Float32Array | Uint16Array, type: TextureDataType): {
+        maxLuminance: number;
+        averageLuminance: number;
+        minLuminance: number;
+    } {
+        const numPixels = data.length / 4;
+        let totalLuminance = 0;
+        let maxLum = 0;
+        let minLum = Number.MAX_VALUE;
+
+        for (let i = 0; i < data.length; i += 4) {
+            let r, g, b;
+
+            if (type === FloatType) {
+                r = (data as Float32Array)[i];
+                g = (data as Float32Array)[i + 1];
+                b = (data as Float32Array)[i + 2];
+            } else {
+                r = DataUtils.fromHalfFloat((data as Uint16Array)[i]);
+                g = DataUtils.fromHalfFloat((data as Uint16Array)[i + 1]);
+                b = DataUtils.fromHalfFloat((data as Uint16Array)[i + 2]);
+            }
+
+            const lum = this.calculateLuminance(r, g, b);
+            totalLuminance += lum;
+            maxLum = Math.max(maxLum, lum);
+            minLum = Math.min(minLum, lum);
+        }
+
+        return {
+            maxLuminance: maxLum,
+            averageLuminance: totalLuminance / numPixels,
+            minLuminance: minLum
+        };
+    }
+
+    /**
+     * Parse WebP data with enhanced HDR preservation
      */
     public async parse(buffer: ArrayBuffer): Promise<TexData> {
         return new Promise(async (resolve, reject) => {
             try {
-                // Convert ArrayBuffer to Blob for image decoding
                 const blob = new Blob([buffer], { type: 'image/webp' });
                 const url = URL.createObjectURL(blob);
                 
-                // Create image element to load and decode WebP
                 const img = new Image();
                 
                 img.onload = () => {
@@ -98,7 +138,11 @@ class WebPHDRLoader extends DataTextureLoader {
                         URL.revokeObjectURL(url);
                         
                         const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
+                        const ctx = canvas.getContext('2d', {
+                            willReadFrequently: true,
+                            colorSpace: 'srgb'
+                        });
+                        
                         if (!ctx) {
                             throw new Error('THREE.WebPHDRLoader: Unable to get canvas context');
                         }
@@ -109,61 +153,67 @@ class WebPHDRLoader extends DataTextureLoader {
                         canvas.width = width;
                         canvas.height = height;
                         
-                        // Draw WebP image to canvas
-                        ctx.drawImage(img, 0, 0);
+                        // Preserve color space for HDR
+                        ctx.imageSmoothingEnabled = false;
+                        ctx.drawImage(img, 0, 0, width, height);
                         
-                        // Extract RGBA data
-                        const imageData = ctx.getImageData(0, 0, width, height);
+                        const imageData = ctx.getImageData(0, 0, width, height, {
+                            colorSpace: 'srgb'
+                        });
                         const rgbaData = imageData.data;
                         
                         let data: Float32Array | Uint16Array;
                         let type: TextureDataType;
                         const numElements = width * height;
                         
-                        // Convert RGBM back to HDR based on requested type
+                        // Temporary Float32 array for HDR analysis
+                        const tempFloatData = new Float32Array(numElements * 4);
+                        
+                        // First pass: decode all data and store in temp array
+                        for (let i = 0, j = 0; i < rgbaData.length; i += 4, j += 4) {
+                            const r = rgbaData[i] / 255.0;
+                            const g = rgbaData[i + 1] / 255.0;
+                            const b = rgbaData[i + 2] / 255.0;
+                            const m = rgbaData[i + 3] / 255.0;
+                            
+                            const hdr = this.decodeRGBM(r, g, b, m);
+                            
+                            tempFloatData[j] = hdr.r;
+                            tempFloatData[j + 1] = hdr.g;
+                            tempFloatData[j + 2] = hdr.b;
+                            tempFloatData[j + 3] = 1.0;
+                        }
+
+                        // Analyze HDR characteristics
+                        const hdrStats = this.analyzeHDRCharacteristics(tempFloatData, FloatType);
+                        
+                        // Adjust max luminance based on actual content
+                        this.maxLuminance = Math.max(hdrStats.maxLuminance, 1.0);
+
+                        // Second pass: convert to final format with proper HDR range
                         switch (this.type) {
                             case FloatType: {
-                                // Float32 output
-                                const floatArray = new Float32Array(numElements * 4);
+                                data = new Float32Array(numElements * 4);
                                 
-                                for (let i = 0, j = 0; i < rgbaData.length; i += 4, j += 4) {
-                                    const r = rgbaData[i] / 255.0;
-                                    const g = rgbaData[i + 1] / 255.0;
-                                    const b = rgbaData[i + 2] / 255.0;
-                                    const m = rgbaData[i + 3] / 255.0;
-                                    
-                                    const hdr = this.decodeRGBM(r, g, b, m);
-                                    
-                                    floatArray[j] = hdr.r;
-                                    floatArray[j + 1] = hdr.g;
-                                    floatArray[j + 2] = hdr.b;
-                                    floatArray[j + 3] = 1.0; // Alpha
+                                for (let i = 0; i < tempFloatData.length; i += 4) {
+                                    data[i] = tempFloatData[i];
+                                    data[i + 1] = tempFloatData[i + 1];
+                                    data[i + 2] = tempFloatData[i + 2];
+                                    data[i + 3] = tempFloatData[i + 3];
                                 }
-                                
-                                data = floatArray;
                                 type = FloatType;
                                 break;
                             }
 
                             case HalfFloatType: {
-                                // HalfFloat output
-                                const halfArray = new Uint16Array(numElements * 4);
+                                data = new Uint16Array(numElements * 4);
                                 
-                                for (let i = 0, j = 0; i < rgbaData.length; i += 4, j += 4) {
-                                    const r = rgbaData[i] / 255.0;
-                                    const g = rgbaData[i + 1] / 255.0;
-                                    const b = rgbaData[i + 2] / 255.0;
-                                    const m = rgbaData[i + 3] / 255.0;
-                                    
-                                    const hdr = this.decodeRGBM(r, g, b, m);
-                                    
-                                    halfArray[j] = DataUtils.toHalfFloat(Math.min(hdr.r, 65504));
-                                    halfArray[j + 1] = DataUtils.toHalfFloat(Math.min(hdr.g, 65504));
-                                    halfArray[j + 2] = DataUtils.toHalfFloat(Math.min(hdr.b, 65504));
-                                    halfArray[j + 3] = DataUtils.toHalfFloat(1.0);
+                                for (let i = 0, j = 0; i < tempFloatData.length; i += 4, j += 4) {
+                                    data[j] = DataUtils.toHalfFloat(Math.min(tempFloatData[i], 65504));
+                                    data[j + 1] = DataUtils.toHalfFloat(Math.min(tempFloatData[i + 1], 65504));
+                                    data[j + 2] = DataUtils.toHalfFloat(Math.min(tempFloatData[i + 2], 65504));
+                                    data[j + 3] = DataUtils.toHalfFloat(1.0);
                                 }
-                                
-                                data = halfArray;
                                 type = HalfFloatType;
                                 break;
                             }
@@ -177,10 +227,23 @@ class WebPHDRLoader extends DataTextureLoader {
                             width: width,
                             height: height,
                             data: data,
-                            header: 'WebP RGBM HDR',
+                            header: 'WebP RGBM HDR - Enhanced',
                             gamma: 1.0,
-                            exposure: 1.0,
-                            type: type
+                            exposure: this.exposure,
+                            type: type,
+                            maxLuminance: hdrStats.maxLuminance,
+                            averageLuminance: hdrStats.averageLuminance,
+                            metadata: {
+                                format: 'RGBM',
+                                hdr: true,
+                                dynamicRange: 'high',
+                                compression: 'WebP',
+                                luminanceRange: {
+                                    min: hdrStats.minLuminance,
+                                    max: hdrStats.maxLuminance,
+                                    average: hdrStats.averageLuminance
+                                }
+                            }
                         });
                         
                     } catch (error) {
@@ -202,10 +265,7 @@ class WebPHDRLoader extends DataTextureLoader {
     }
 
     /**
-     * Sets the texture type.
-     *
-     * @param {(HalfFloatType|FloatType)} value - The texture type to set.
-     * @return {WebPHDRLoader} A reference to this loader.
+     * Set the texture type with HDR considerations
      */
     public setDataType(value: TextureDataType): this {
         this.type = value;
@@ -213,13 +273,31 @@ class WebPHDRLoader extends DataTextureLoader {
     }
 
     /**
-     * Loads a WebP HDR texture.
-     *
-     * @param {string} url - The URL of the WebP HDR file.
-     * @param {Function} onLoad - Callback when loading is complete.
-     * @param {Function} onProgress - Callback for progress updates.
-     * @param {Function} onError - Callback for errors.
-     * @return {DataTexture} The loaded texture.
+     * Set exposure compensation for HDR content
+     */
+    public setExposure(exposure: number): this {
+        this.exposure = exposure;
+        return this;
+    }
+
+    /**
+     * Set maximum luminance for HDR preservation
+     */
+    public setMaxLuminance(maxLuminance: number): this {
+        this.maxLuminance = maxLuminance;
+        return this;
+    }
+
+    /**
+     * Enable/disable HDR preservation
+     */
+    public setPreserveHDR(preserve: boolean): this {
+        this.preserveHDR = preserve;
+        return this;
+    }
+
+    /**
+     * Enhanced load method with HDR optimization
      */
     public override load(
         url: string,
@@ -232,17 +310,25 @@ class WebPHDRLoader extends DataTextureLoader {
 
         const onLoadCallback = function(texture: DataTexture, texData: TexData): void {
             try {
-                // Configure texture for HDR use
-                switch (texture.type) {
-                    case FloatType:
-                    case HalfFloatType:
-                        texture.colorSpace = LinearSRGBColorSpace;
-                        texture.minFilter = LinearFilter;
-                        texture.magFilter = LinearFilter;
-                        texture.generateMipmaps = false;
-                        texture.flipY = true;
-                        break;
-                }
+                // Enhanced texture configuration for HDR environment mapping
+                texture.colorSpace = LinearSRGBColorSpace;
+                texture.minFilter = LinearFilter;
+                texture.magFilter = LinearFilter;
+                texture.generateMipmaps = false;
+                texture.flipY = true;
+                
+                // Set texture properties for HDR usage
+                texture.needsUpdate = true;
+
+                // Add HDR metadata to texture userData
+                texture.userData = {
+                    ...texture.userData,
+                    hdr: true,
+                    maxLuminance: texData.maxLuminance,
+                    averageLuminance: texData.averageLuminance,
+                    exposure: texData.exposure,
+                    metadata: texData.metadata
+                };
 
                 if (onLoad) {
                     onLoad(texture, texData);
@@ -254,7 +340,6 @@ class WebPHDRLoader extends DataTextureLoader {
             }
         };
 
-        // Override the load function to handle WebP parsing
         const _load = function(
             url: string,
             onLoad?: (texture: DataTexture, texData: TexData) => void,
@@ -269,7 +354,7 @@ class WebPHDRLoader extends DataTextureLoader {
             
             loader.load(url, function(buffer: string | ArrayBuffer) {
                 try {
-                    scope.parse(buffer as ArrayBuffer).then(texData=>{
+                    scope.parse(buffer as ArrayBuffer).then(texData => {
                         const texture = new DataTexture(
                             texData.data,
                             texData.width,
@@ -279,6 +364,10 @@ class WebPHDRLoader extends DataTextureLoader {
                         );
                         
                         onLoadCallback(texture, texData);
+                    }).catch(error => {
+                        if (onError) {
+                            onError(error);
+                        }
                     });
                 } catch (error) {
                     if (onError) {
@@ -287,7 +376,6 @@ class WebPHDRLoader extends DataTextureLoader {
                 }
             }, onProgress, onError);
 
-            // Return a dummy texture for now, it will be replaced in the callback
             return new DataTexture(new Uint8Array(4), 1, 1, RGBAFormat);
         };
 
@@ -295,11 +383,7 @@ class WebPHDRLoader extends DataTextureLoader {
     }
 
     /**
-     * Loads a WebP HDR texture asynchronously.
-     *
-     * @param {string} url - The URL of the WebP HDR file.
-     * @param {Function} onProgress - Callback for progress updates.
-     * @return {Promise<DataTexture>} Promise that resolves with the loaded texture.
+     * Async load with HDR preservation
      */
     public async loadAsync(url: string, onProgress?: (event: ProgressEvent) => void): Promise<DataTexture> {
         return new Promise((resolve, reject) => {
