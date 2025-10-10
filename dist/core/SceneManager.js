@@ -209,12 +209,12 @@ export class SceneManager {
     }
     setupHDRISkybox(texture) {
         console.log('🔄 Setting up HDRI Skybox as rotatable background...');
-        const geometry = new THREE.SphereGeometry(10); // Radio más pequeño
-        //geometry.scale(-1, 1, 1); // Voltear para ver interior
+        const geometry = new THREE.SphereGeometry(20, 64, 64); // Radio más pequeño
+        geometry.scale(-1, 1, 1); // Voltear para ver interior
         const material = new THREE.MeshBasicMaterial({
             map: texture,
             envMap: texture,
-            side: THREE.DoubleSide,
+            side: THREE.BackSide,
             transparent: false
         });
         const skybox = new THREE.Mesh(geometry, material);
