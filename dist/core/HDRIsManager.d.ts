@@ -1,5 +1,4 @@
-import type { LoadingManager, TextureDataType } from 'three';
-import { DataTexture } from 'three';
+import type { LoadingManager, TextureDataType, DataTexture } from 'three';
 interface HDRILoadingCallbacks {
     onLoad?: (texture: DataTexture, texData: any) => void;
     onProgress?: (event: ProgressEvent) => void;
@@ -14,51 +13,37 @@ interface HDRIConfig {
     magFilter?: number;
 }
 /**
- * Manager for HDR environment maps with automatic format detection (HDR/WebP).
+ * Manager for HDR environment maps with caching and configuration options.
  *
  * ```js
  * const hdriManager = new HDRIsManager();
  *
- * // Load an environment map - automatically detects format
+ * // Load an HDR environment map
  * const envMap = await hdriManager.load('path/to/environment.hdr');
- * // or
- * const envMap = await hdriManager.load('path/to/environment_rgbm.webp');
- *
  * scene.environment = envMap;
+ *
+ * // Preload multiple HDRIs
+ * await hdriManager.preload([
+ *   'path/to/sunset.hdr',
+ *   'path/to/night.hdr',
+ *   'path/to/studio.hdr'
+ * ]);
  * ```
  */
 declare class HDRIsManager {
-    private hdrLoader;
-    private webpLoader;
-    private fileLoader;
+    private loader;
+    private loaderMin;
     private cache;
     private defaultConfig;
     /**
-     * Constructs a new HDRIs manager with automatic format detection.
+     * Constructs a new HDRIs manager.
      *
      * @param {LoadingManager} [manager] - The loading manager.
      * @param {HDRIConfig} [defaultConfig] - Default configuration for all loaded HDRIs.
      */
     constructor(manager?: LoadingManager, defaultConfig?: HDRIConfig);
     /**
-     * Detects the file format based on URL and file header.
-     *
-     * @private
-     * @param {string} url - The URL to check.
-     * @param {ArrayBuffer} [buffer] - Optional file buffer for header detection.
-     * @return {Promise<'hdr' | 'webp'>} The detected format.
-     */
-    private detectFormat;
-    /**
-     * Gets the appropriate loader for the detected format.
-     *
-     * @private
-     * @param {'hdr' | 'webp'} format - The detected format.
-     * @return {HDRLoader | WebPHDRLoader} The appropriate loader.
-     */
-    private getLoaderForFormat;
-    /**
-     * Sets the default texture type for all HDRIs.
+     * Sets the default texture type for HDRIs.
      *
      * @param {TextureDataType} type - The texture type (HalfFloatType or FloatType).
      * @return {HDRIsManager} A reference to this manager.
@@ -72,70 +57,60 @@ declare class HDRIsManager {
      */
     setDefaultConfig(config: HDRIConfig): this;
     /**
-     * Loads an environment map with automatic format detection.
+     * Loads an HDR environment map.
      *
-     * @param {string} url - The URL of the environment file (HDR or WebP).
-     * @param {HDRIConfig} [config] - Specific configuration for this environment.
+     * @param {string} url - The URL of the HDR file.
+     * @param {HDRIConfig} [config] - Specific configuration for this HDRI.
      * @param {HDRILoadingCallbacks} [callbacks] - Loading callbacks.
      * @return {Promise<DataTexture>} A promise that resolves with the loaded texture.
      */
     load(url: string, config?: HDRIConfig, callbacks?: HDRILoadingCallbacks): Promise<DataTexture>;
     /**
-     * Preloads multiple environment maps with automatic format detection.
+     * Preloads multiple HDR environment maps.
      *
      * @param {string[]} urls - Array of URLs to preload.
-     * @param {HDRIConfig} [config] - Configuration for all environments.
+     * @param {HDRIConfig} [config] - Configuration for all HDRIs.
      * @param {Function} [onProgress] - Progress callback.
      * @return {Promise<DataTexture[]>} A promise that resolves with all loaded textures.
      */
-    preload(urls: string[], config?: HDRIConfig, onProgress?: (loaded: number, total: number, url: string, format: string) => void): Promise<DataTexture[]>;
+    preload(urls: string[], config?: HDRIConfig, onProgress?: (loaded: number, total: number, url: string) => void): Promise<DataTexture[]>;
     /**
-     * Gets a loaded environment map from cache.
+     * Gets a loaded HDRI from cache.
      *
-     * @param {string} url - The URL of the environment.
+     * @param {string} url - The URL of the HDRI.
      * @return {DataTexture | undefined} The cached texture or undefined if not found.
      */
     get(url: string): DataTexture | undefined;
     /**
-     * Gets the format used to load a specific environment.
+     * Checks if an HDRI is loaded.
      *
-     * @param {string} url - The URL of the environment.
-     * @return {'hdr' | 'webp' | undefined} The format used or undefined if not loaded.
-     */
-    getFormat(url: string): 'hdr' | 'webp' | undefined;
-    /**
-     * Checks if an environment is loaded.
-     *
-     * @param {string} url - The URL of the environment.
-     * @return {boolean} True if the environment is loaded and cached.
+     * @param {string} url - The URL of the HDRI.
+     * @return {boolean} True if the HDRI is loaded and cached.
      */
     isLoaded(url: string): boolean;
     /**
-     * Removes an environment from cache and disposes its texture.
+     * Removes an HDRI from cache and disposes its texture.
      *
-     * @param {string} url - The URL of the environment to dispose.
-     * @return {boolean} True if the environment was found and disposed.
+     * @param {string} url - The URL of the HDRI to dispose.
+     * @return {boolean} True if the HDRI was found and disposed.
      */
     dispose(url: string): boolean;
     /**
-     * Disposes all cached environments and clears the cache.
+     * Disposes all cached HDRIs and clears the cache.
      */
     disposeAll(): void;
     /**
-     * Gets the list of all cached environment URLs.
+     * Gets the list of all cached HDRI URLs.
      *
-     * @return {string[]} Array of cached environment URLs.
+     * @return {string[]} Array of cached HDRI URLs.
      */
     getCachedUrls(): string[];
     /**
-     * Gets the list of loaded environment URLs with their formats.
+     * Gets the list of loaded HDRI URLs.
      *
-     * @return {Array<{url: string, format: string}>} Array of loaded environments.
+     * @return {string[]} Array of loaded HDRI URLs.
      */
-    getLoadedEnvironments(): Array<{
-        url: string;
-        format: string;
-    }>;
+    getLoadedUrls(): string[];
     /**
      * Applies configuration to a texture.
      *
