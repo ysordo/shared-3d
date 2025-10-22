@@ -188,20 +188,20 @@ export class SceneManager {
         this.scene.add(directionalLight);
         this.scene.add(ambientLight);
         if (config.hdriManager) {
-            this.hdriManager = new HDRIsManager();
             const hdriConfig = typeof config.hdriManager.config === 'object'
                 ? config.hdriManager.config
                 : config.hdriManager.config === 'refraction'
                     ? HDRIsManager.refractionConfig()
                     : HDRIsManager.reflectionConfig();
+            this.hdriManager = new HDRIsManager(undefined, hdriConfig);
             if (typeof config.hdriManager.path === 'object') {
-                this.hdriManager.preload(config.hdriManager.path, hdriConfig).then((texture) => {
+                this.hdriManager.preload(config.hdriManager.path).then((texture) => {
                     const hdriSphere = this.setupHDRISkybox(texture[0]);
                     this.controls?.setHdriSphere?.(hdriSphere);
                 });
             }
             else {
-                this.hdriManager.load(config.hdriManager.path, hdriConfig).then(texture => {
+                this.hdriManager.load(config.hdriManager.path).then(texture => {
                     const hdriSphere = this.setupHDRISkybox(texture);
                     this.controls?.setHdriSphere?.(hdriSphere);
                 });

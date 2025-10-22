@@ -29,7 +29,7 @@ class HDRIsManager {
     constructor(manager, defaultConfig = {}) {
         this.loader = new HDRLoader(manager);
         this.loaderMin = new WebPHDRLoader(manager);
-        this.loaderMin.setDataType(FloatType).setExposure(1.0).setPreserveHDR(true);
+        this.loaderMin.setDataType(FloatType).setExposure(defaultConfig.exposure ?? 0.5).setPreserveHDR(defaultConfig.reserveHDR ?? false);
         this.cache = new Map();
         this.defaultConfig = {
             mapping: EquirectangularReflectionMapping,

@@ -11,6 +11,8 @@ interface HDRIConfig {
     generateMipmaps?: boolean;
     minFilter?: number;
     magFilter?: number;
+    exposure?: number;
+    reserveHDR?: boolean;
 }
 /**
  * Manager for HDR environment maps with caching and configuration options.
