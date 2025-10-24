@@ -134,6 +134,7 @@ export declare class SceneManager {
                 generateMipmaps?: boolean;
                 minFilter?: number;
                 magFilter?: number;
+                [x: string]: unknown | undefined;
             };
         };
     });

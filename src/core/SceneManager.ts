@@ -157,17 +157,18 @@ export class SceneManager {
       background?: THREE.Color;
       parallax?: boolean;
       hdriManager?: {
-      path: string | string[];
-      config:
-        | 'refraction'
-        | 'reflection'
-        | {
-            mapping?: number;
-            flipY?: boolean;
-            generateMipmaps?: boolean;
-            minFilter?: number;
-            magFilter?: number;
-          };
+        path: string | string[];
+        config:
+          | 'refraction'
+          | 'reflection'
+          | {
+              mapping?: number;
+              flipY?: boolean;
+              generateMipmaps?: boolean;
+              minFilter?: number;
+              magFilter?: number;
+              [x: string]: unknown | undefined;
+            };
     };
     } = {}
   ) {

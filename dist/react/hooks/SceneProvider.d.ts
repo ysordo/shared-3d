@@ -39,6 +39,7 @@ export interface SceneProviderProps extends SceneRendererProps {
                 generateMipmaps?: boolean;
                 minFilter?: number;
                 magFilter?: number;
+                [x: string]: unknown | undefined;
             };
         };
     };
