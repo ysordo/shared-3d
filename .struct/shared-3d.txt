@@ -1,0 +1,15 @@
+Estructura de: shared-3d#v1.0.5/
+Generated: 24/11/2025, 2:31:54 p.m.
+==================================================
+
+├── 📁src/
+├── 📄.gitignore
+├── 📄.npmrc
+├── 📄eslint.config.js
+├── 📄LICENSE
+├── 📄package.json
+├── 📄pnpm-lock.yaml
+├── 📄README.md
+├── 📄tsconfig.build.json
+├── 📄tsconfig.json
+└── 📄typedoc.json
