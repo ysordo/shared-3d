@@ -1,9 +1,53 @@
 {
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "shared-3d",
   "entryPoints": ["./src/index.ts"],
   "out": "docs",
-  "hideGenerator": true,
+  "plugin": ["typedoc-plugin-markdown"],
+  "githubPages": true,
+  "readme": "none",
+  "entryPointStrategy": "expand",
+  "exclude": ["**/*.test.ts", "**/*.spec.ts", "**/node_modules/**"],
   "excludeExternals": true,
   "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "hideGenerator": true,
+  "disableSources": false,
   "categorizeByGroup": true,
-  "plugin": ["typedoc-plugin-markdown"]
+  "categoryOrder": [
+    "Core",
+    "Orchestrator",
+    "Plugins",
+    "Loaders",
+    "Cache",
+    "Context",
+    "Hooks",
+    "React Components",
+    "Controls",
+    "Primitives",
+    "Lib",
+    "*"
+  ],
+  "groupOrder": ["Classes", "Interfaces", "Types", "Functions", "Variables"],
+  "defaultCategory": "Other",
+  "gitRevision": "main",
+  "cleanOutputDir": true,
+  "titleLink": "https://github.com/ysordo/shared-3d",
+
+  "theme": "markdown",
+  "useCodeBlocks": true,
+  "preserveAnchorCasing": true,
+  "sort": ["source-order"],
+
+  "parametersFormat": "table",
+  "enumMembersFormat": "table",
+  "propertyMembersFormat": "table",
+  "typeDeclarationFormat": "table",
+
+  "markdownItOptions": {
+    "html": true,
+    "linkify": true,
+    "typographer": true
+  }
 }

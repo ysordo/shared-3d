@@ -1,8 +1,87 @@
 Estructura de: shared-3d#v1.0.5/
-Generated: 24/11/2025, 2:31:54 p.m.
+Generated: 26/11/2025, 1:40:48 p.m.
 ==================================================
 
+├── 📁public/
+│   └── 📁draco/
+│       ├── 📄draco_decoder.js
+│       ├── 📄draco_decoder.wasm
+│       └── 📄draco_wasm_wrapper.js
 ├── 📁src/
+│   ├── 📁context/
+│   │   ├── 📄CacheContext.tsx
+│   │   ├── 📄index.ts
+│   │   └── 📄SceneContext.tsx
+│   ├── 📁core/
+│   │   ├── 📁cache/
+│   │   │   ├── 📁utils/
+│   │   │   │   └── 📄env.ts
+│   │   │   ├── 📄CacheValidator.ts
+│   │   │   ├── 📄FileWatcher.ts
+│   │   │   ├── 📄index.ts
+│   │   │   ├── 📄ObjectCache.ts
+│   │   │   └── 📄types.ts
+│   │   ├── 📁loaders/
+│   │   │   ├── 📄GLTFLoader.ts
+│   │   │   ├── 📄HDRILoader.ts
+│   │   │   ├── 📄index.ts
+│   │   │   └── 📄WebPHDRLoader.ts
+│   │   ├── 📁orchestrator/
+│   │   │   ├── 📁plugins/
+│   │   │   │   ├── 📄AdvancedOrbitControlsPlugin.ts
+│   │   │   │   ├── 📄AdvancedRaycasterPlugin.ts
+│   │   │   │   ├── 📄index.ts
+│   │   │   │   ├── 📄OrbitControlsPlugin.ts
+│   │   │   │   ├── 📄PostProcessingPlugin.ts
+│   │   │   │   └── 📄RaycasterPlugin.ts
+│   │   │   ├── 📄index.ts
+│   │   │   ├── 📄SceneOrchestrator.ts
+│   │   │   └── 📄types.ts
+│   │   ├── 📁utils/
+│   │   │   ├── 📄index.ts
+│   │   │   └── 📄QuadWireframe.ts
+│   │   └── 📄index.ts
+│   ├── 📁hooks/
+│   │   ├── 📄index.ts
+│   │   ├── 📄useActiveModel.ts
+│   │   ├── 📄useAnimation.ts
+│   │   ├── 📄useCache.ts
+│   │   ├── 📄useHDRI.ts
+│   │   ├── 📄useModel.ts
+│   │   ├── 📄useRaycaster.ts
+│   │   └── 📄useScene.ts
+│   ├── 📁lib/
+│   │   ├── 📄index.ts
+│   │   ├── 📄three.ts
+│   │   └── 📄types.ts
+│   ├── 📁react/
+│   │   ├── 📁components/
+│   │   │   ├── 📄AdvancedDragRaycaster.tsx
+│   │   │   ├── 📄AdvancedOrbitControls.tsx
+│   │   │   ├── 📄AdvancedRaycaster.tsx
+│   │   │   ├── 📄AmbientLight.tsx
+│   │   │   ├── 📄Canvas.tsx
+│   │   │   ├── 📄DirectionalLight.tsx
+│   │   │   ├── 📄DistanceDisplay.tsx
+│   │   │   ├── 📄HDRI.tsx
+│   │   │   ├── 📄index.ts
+│   │   │   ├── 📄Model.tsx
+│   │   │   ├── 📄OrbitControls.tsx
+│   │   │   ├── 📄PointLight.tsx
+│   │   │   ├── 📄PostProcessing.tsx
+│   │   │   ├── 📄Raycaster.tsx
+│   │   │   ├── 📄SpotLight.tsx
+│   │   │   └── 📄TheaterLighting.tsx
+│   │   ├── 📁controls/
+│   │   │   ├── 📄AnimationController.tsx
+│   │   │   ├── 📄index.ts
+│   │   │   ├── 📄LightingController.tsx
+│   │   │   └── 📄MaterialController.tsx
+│   │   ├── 📁primitives/
+│   │   │   ├── 📄index.ts
+│   │   │   └── 📄SceneObject.tsx
+│   │   └── 📄index.ts
+│   └── 📄index.ts
 ├── 📄.gitignore
 ├── 📄.npmrc
 ├── 📄eslint.config.js
@@ -10,6 +89,6 @@ Generated: 24/11/2025, 2:31:54 p.m.
 ├── 📄package.json
 ├── 📄pnpm-lock.yaml
 ├── 📄README.md
-├── 📄tsconfig.build.json
 ├── 📄tsconfig.json
+├── 📄tsup.config.ts
 └── 📄typedoc.json

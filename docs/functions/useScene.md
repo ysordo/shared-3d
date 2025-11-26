@@ -2,26 +2,16 @@
 
 ***
 
-[shared-3d](../globals.md) / useScene
+[shared-3d](../README.md) / useScene
 
 # Function: useScene()
 
-> **useScene**(): `object`
+```ts
+function useScene(): SceneOrchestrator;
+```
 
-Defined in: [react/useScene.ts:4](https://github.com/ysordo/shared-3d/blob/aa08df17a8d7b07be13caf0e053d835d053c41db/src/react/useScene.ts#L4)
+Defined in: hooks/useScene.ts:5
 
 ## Returns
 
-`object`
-
-### canvas
-
-> **canvas**: `null` \| `HTMLCanvasElement`
-
-### isReady
-
-> **isReady**: `boolean` = `!!sceneManager`
-
-### sceneManager
-
-> **sceneManager**: `null` \| [`SceneManager`](../classes/SceneManager.md)
+[`SceneOrchestrator`](../classes/SceneOrchestrator.md)

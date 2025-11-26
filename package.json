@@ -1,51 +1,74 @@
 {
   "name": "shared-3d",
   "version": "1.0.5",
-  "description": "Shared 3D library for React applications using Three.js and idb-keyval for state management. This library provides a SceneManager for managing 3D scenes, models, and interactions, with support for OrbitControls and state persistence.",
+  "description": "The most advanced, beautiful and extensible React + Three.js 3D library. Zero-config, plugin-based, with intelligent caching, cinematic transitions and full TypeScript support.",
+  "keywords": [
+    "react",
+    "three.js",
+    "3d",
+    "webgl",
+    "r3f",
+    "react-three-fiber",
+    "scene",
+    "orchestrator",
+    "gltf",
+    "draco",
+    "hdri",
+    "post-processing",
+    "wireframe",
+    "animation",
+    "material",
+    "typescript",
+    "hooks",
+    "components",
+    "ui",
+    "3d-ui",
+    "cinematic"
+  ],
+  "author": "Junior Yohan Sordo García <juniorsordogarcia@gmail.com>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/ysordo/shared-3d"
   },
+  "homepage": "https://github.com/ysordo/shared-3d#readme",
+  "bugs": {
+    "url": "https://github.com/ysordo/shared-3d/issues"
+  },
   "type": "module",
-  "keywords": [
-    "react",
-    "3d",
-    "shared",
-    "library",
-    "three.js",
-    "idb-keyval",
-    "scene manager",
-    "orbit controls",
-    "state management",
-    "typescript",
-    "webgl",
-    "web development",
-    "ui",
-    "user interface"
-  ],
-  "author": "Junior Yohan Sordo García <juniorsordogarcia@gmail.com>",
-  "homepage": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./three": "./dist/lib/three.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
   "scripts": {
-    "prepublishOnly": "pnpm run build && pnpm run test",
-    "build": "tsc",
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "dev": "tsup src/index.ts --format esm --watch",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
-    "docs:generate": "typedoc"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run build",
+    "docs": "typedoc",
+    "test": "echo \"No tests yet - add vitest soon!\""
   },
   "dependencies": {
     "idb-keyval": "^6.2.2",
     "three": "^0.177.0"
   },
   "devDependencies": {
-    "@types/node": "^24.10.0",
+    "@types/node": "^24.10.1",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@types/resize-observer-browser": "^0.1.11",
@@ -56,6 +79,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "globals": "^16.3.0",
+    "tsup": "^8.3.5",
     "typedoc": "^0.28.7",
     "typedoc-plugin-markdown": "^4.7.0",
     "typescript": "^5.8.3"
@@ -64,6 +88,11 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
-  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "packageManager": "pnpm@10.12.4"
 }
