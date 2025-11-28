@@ -6,7 +6,7 @@
 
 # Class: AdvancedCameraCollisionPlugin
 
-Defined in: [core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts#L5)
+Defined in: [src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts#L5)
 
 ## Implements
 
@@ -20,7 +20,7 @@ Defined in: [core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:5](https
 new AdvancedCameraCollisionPlugin(distanceThreshold, pushBackOffset): AdvancedCameraCollisionPlugin;
 ```
 
-Defined in: [core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:9](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts#L9)
+Defined in: [src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:9](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts#L9)
 
 #### Parameters
 
@@ -41,7 +41,7 @@ Defined in: [core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:9](https
 install(__namedParameters): void;
 ```
 
-Defined in: [core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:14](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts#L14)
+Defined in: [src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:14](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts#L14)
 
 #### Parameters
 
@@ -65,7 +65,7 @@ Defined in: [core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:14](http
 dispose(): void;
 ```
 
-Defined in: [core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:52](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts#L52)
+Defined in: [src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:52](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts#L52)
 
 #### Returns
 
@@ -83,7 +83,7 @@ Defined in: [core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:52](http
 name: string = 'AdvancedCameraCollisionPlugin';
 ```
 
-Defined in: [core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:6](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts#L6)
+Defined in: [src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:6](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts#L6)
 
 #### Implementation of
 
@@ -97,7 +97,7 @@ Defined in: [core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:6](https
 readonly distanceThreshold: number = 0.6;
 ```
 
-Defined in: [core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:10](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts#L10)
+Defined in: [src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:10](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts#L10)
 
 ***
 
@@ -107,4 +107,4 @@ Defined in: [core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:10](http
 readonly pushBackOffset: number = 0.1;
 ```
 
-Defined in: [core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts#L11)
+Defined in: [src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts#L11)

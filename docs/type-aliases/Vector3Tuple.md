@@ -10,4 +10,4 @@
 type Vector3Tuple = [number, number, number];
 ```
 
-Defined in: [lib/types.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L4)
+Defined in: [src/lib/types.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L4)

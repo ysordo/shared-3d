@@ -10,7 +10,7 @@
 type PluginContext = object;
 ```
 
-Defined in: [core/orchestrator/types.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/types.ts#L4)
+Defined in: [src/core/orchestrator/types.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/types.ts#L4)
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [core/orchestrator/types.ts:4](https://github.com/ysordo/shared-3d/b
 scene: THREE.Scene;
 ```
 
-Defined in: [core/orchestrator/types.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/types.ts#L5)
+Defined in: [src/core/orchestrator/types.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/types.ts#L5)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [core/orchestrator/types.ts:5](https://github.com/ysordo/shared-3d/b
 camera: THREE.PerspectiveCamera;
 ```
 
-Defined in: [core/orchestrator/types.ts:6](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/types.ts#L6)
+Defined in: [src/core/orchestrator/types.ts:6](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/types.ts#L6)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [core/orchestrator/types.ts:6](https://github.com/ysordo/shared-3d/b
 renderer: THREE.WebGLRenderer;
 ```
 
-Defined in: [core/orchestrator/types.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/types.ts#L7)
+Defined in: [src/core/orchestrator/types.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/types.ts#L7)
 
 ***
 
@@ -50,4 +50,4 @@ Defined in: [core/orchestrator/types.ts:7](https://github.com/ysordo/shared-3d/b
 orchestrator: SceneOrchestrator;
 ```
 
-Defined in: [core/orchestrator/types.ts:8](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/types.ts#L8)
+Defined in: [src/core/orchestrator/types.ts:8](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/types.ts#L8)

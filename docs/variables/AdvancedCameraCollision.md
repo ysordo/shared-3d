@@ -10,4 +10,4 @@
 const AdvancedCameraCollision: React.FC<AdvancedCameraCollisionProps>;
 ```
 
-Defined in: [react/components/AdvancedCameraCollision.tsx:14](https://github.com/ysordo/shared-3d/blob/main/src/react/components/AdvancedCameraCollision.tsx#L14)
+Defined in: [src/react/components/AdvancedCameraCollision.tsx:14](https://github.com/ysordo/shared-3d/blob/main/src/react/components/AdvancedCameraCollision.tsx#L14)

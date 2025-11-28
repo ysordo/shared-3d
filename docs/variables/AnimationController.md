@@ -10,4 +10,4 @@
 const AnimationController: React.FC<AnimationControllerProps>;
 ```
 
-Defined in: [react/controls/AnimationController.tsx:22](https://github.com/ysordo/shared-3d/blob/main/src/react/controls/AnimationController.tsx#L22)
+Defined in: [src/react/controls/AnimationController.tsx:22](https://github.com/ysordo/shared-3d/blob/main/src/react/controls/AnimationController.tsx#L22)

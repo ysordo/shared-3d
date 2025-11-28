@@ -10,7 +10,7 @@
 type HDRIProgress = object;
 ```
 
-Defined in: [core/loaders/HDRILoader.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L7)
+Defined in: [src/core/loaders/HDRILoader.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L7)
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [core/loaders/HDRILoader.ts:7](https://github.com/ysordo/shared-3d/b
 loaded: number;
 ```
 
-Defined in: [core/loaders/HDRILoader.ts:8](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L8)
+Defined in: [src/core/loaders/HDRILoader.ts:8](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L8)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [core/loaders/HDRILoader.ts:8](https://github.com/ysordo/shared-3d/b
 total: number;
 ```
 
-Defined in: [core/loaders/HDRILoader.ts:9](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L9)
+Defined in: [src/core/loaders/HDRILoader.ts:9](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L9)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [core/loaders/HDRILoader.ts:9](https://github.com/ysordo/shared-3d/b
 percent: number;
 ```
 
-Defined in: [core/loaders/HDRILoader.ts:10](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L10)
+Defined in: [src/core/loaders/HDRILoader.ts:10](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L10)
 
 ***
 
@@ -50,4 +50,4 @@ Defined in: [core/loaders/HDRILoader.ts:10](https://github.com/ysordo/shared-3d/
 url: string;
 ```
 
-Defined in: [core/loaders/HDRILoader.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L11)
+Defined in: [src/core/loaders/HDRILoader.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L11)

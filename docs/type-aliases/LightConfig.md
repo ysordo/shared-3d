@@ -10,7 +10,7 @@
 type LightConfig = object;
 ```
 
-Defined in: [lib/types.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L11)
+Defined in: [src/lib/types.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L11)
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [lib/types.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/
 optional intensity: number;
 ```
 
-Defined in: [lib/types.ts:12](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L12)
+Defined in: [src/lib/types.ts:12](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L12)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [lib/types.ts:12](https://github.com/ysordo/shared-3d/blob/main/src/
 optional color: ColorRepresentation;
 ```
 
-Defined in: [lib/types.ts:13](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L13)
+Defined in: [src/lib/types.ts:13](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L13)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [lib/types.ts:13](https://github.com/ysordo/shared-3d/blob/main/src/
 optional position: Vector3Tuple;
 ```
 
-Defined in: [lib/types.ts:14](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L14)
+Defined in: [src/lib/types.ts:14](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L14)
 
 ***
 
@@ -50,4 +50,4 @@ Defined in: [lib/types.ts:14](https://github.com/ysordo/shared-3d/blob/main/src/
 optional castShadow: boolean;
 ```
 
-Defined in: [lib/types.ts:15](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L15)
+Defined in: [src/lib/types.ts:15](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L15)

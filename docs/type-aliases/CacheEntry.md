@@ -10,7 +10,7 @@
 type CacheEntry<T> = object;
 ```
 
-Defined in: [core/cache/types.ts:10](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L10)
+Defined in: [src/core/cache/types.ts:10](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L10)
 
 ## Type Parameters
 
@@ -26,7 +26,7 @@ Defined in: [core/cache/types.ts:10](https://github.com/ysordo/shared-3d/blob/ma
 data: T;
 ```
 
-Defined in: [core/cache/types.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L11)
+Defined in: [src/core/cache/types.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L11)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [core/cache/types.ts:11](https://github.com/ysordo/shared-3d/blob/ma
 hash: string;
 ```
 
-Defined in: [core/cache/types.ts:12](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L12)
+Defined in: [src/core/cache/types.ts:12](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L12)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [core/cache/types.ts:12](https://github.com/ysordo/shared-3d/blob/ma
 timestamp: number;
 ```
 
-Defined in: [core/cache/types.ts:13](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L13)
+Defined in: [src/core/cache/types.ts:13](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L13)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [core/cache/types.ts:13](https://github.com/ysordo/shared-3d/blob/ma
 size: number;
 ```
 
-Defined in: [core/cache/types.ts:14](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L14)
+Defined in: [src/core/cache/types.ts:14](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L14)
 
 ***
 
@@ -66,4 +66,4 @@ Defined in: [core/cache/types.ts:14](https://github.com/ysordo/shared-3d/blob/ma
 updatedAt: number;
 ```
 
-Defined in: [core/cache/types.ts:15](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L15)
+Defined in: [src/core/cache/types.ts:15](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L15)

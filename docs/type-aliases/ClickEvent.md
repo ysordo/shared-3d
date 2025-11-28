@@ -10,7 +10,7 @@
 type ClickEvent = object;
 ```
 
-Defined in: [lib/types.ts:19](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L19)
+Defined in: [src/lib/types.ts:19](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L19)
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [lib/types.ts:19](https://github.com/ysordo/shared-3d/blob/main/src/
 object: THREE.Object3D;
 ```
 
-Defined in: [lib/types.ts:20](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L20)
+Defined in: [src/lib/types.ts:20](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L20)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [lib/types.ts:20](https://github.com/ysordo/shared-3d/blob/main/src/
 point: THREE.Vector3;
 ```
 
-Defined in: [lib/types.ts:21](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L21)
+Defined in: [src/lib/types.ts:21](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L21)
 
 ***
 
@@ -40,4 +40,4 @@ Defined in: [lib/types.ts:21](https://github.com/ysordo/shared-3d/blob/main/src/
 distance: number;
 ```
 
-Defined in: [lib/types.ts:22](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L22)
+Defined in: [src/lib/types.ts:22](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L22)

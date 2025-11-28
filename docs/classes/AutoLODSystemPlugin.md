@@ -6,7 +6,7 @@
 
 # Class: AutoLODSystemPlugin
 
-Defined in: [core/orchestrator/plugins/AutoLODSystemPlugin.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AutoLODSystemPlugin.ts#L11)
+Defined in: [src/core/orchestrator/plugins/AutoLODSystemPlugin.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AutoLODSystemPlugin.ts#L11)
 
 ## Implements
 
@@ -20,7 +20,7 @@ Defined in: [core/orchestrator/plugins/AutoLODSystemPlugin.ts:11](https://github
 new AutoLODSystemPlugin(config): AutoLODSystemPlugin;
 ```
 
-Defined in: [core/orchestrator/plugins/AutoLODSystemPlugin.ts:16](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AutoLODSystemPlugin.ts#L16)
+Defined in: [src/core/orchestrator/plugins/AutoLODSystemPlugin.ts:16](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AutoLODSystemPlugin.ts#L16)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: [core/orchestrator/plugins/AutoLODSystemPlugin.ts:16](https://github
 install(__namedParameters): void;
 ```
 
-Defined in: [core/orchestrator/plugins/AutoLODSystemPlugin.ts:60](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AutoLODSystemPlugin.ts#L60)
+Defined in: [src/core/orchestrator/plugins/AutoLODSystemPlugin.ts:60](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AutoLODSystemPlugin.ts#L60)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: [core/orchestrator/plugins/AutoLODSystemPlugin.ts:60](https://github
 dispose(): void;
 ```
 
-Defined in: [core/orchestrator/plugins/AutoLODSystemPlugin.ts:100](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AutoLODSystemPlugin.ts#L100)
+Defined in: [src/core/orchestrator/plugins/AutoLODSystemPlugin.ts:100](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AutoLODSystemPlugin.ts#L100)
 
 #### Returns
 
@@ -82,7 +82,7 @@ Defined in: [core/orchestrator/plugins/AutoLODSystemPlugin.ts:100](https://githu
 name: string = 'AutoLODSystem';
 ```
 
-Defined in: [core/orchestrator/plugins/AutoLODSystemPlugin.ts:12](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AutoLODSystemPlugin.ts#L12)
+Defined in: [src/core/orchestrator/plugins/AutoLODSystemPlugin.ts:12](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AutoLODSystemPlugin.ts#L12)
 
 #### Implementation of
 

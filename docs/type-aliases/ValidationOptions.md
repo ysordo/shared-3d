@@ -10,7 +10,7 @@
 type ValidationOptions = object;
 ```
 
-Defined in: [core/cache/CacheValidator.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L7)
+Defined in: [src/core/cache/CacheValidator.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L7)
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [core/cache/CacheValidator.ts:7](https://github.com/ysordo/shared-3d
 manifest: ManifestEntry[];
 ```
 
-Defined in: [core/cache/CacheValidator.ts:8](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L8)
+Defined in: [src/core/cache/CacheValidator.ts:8](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L8)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [core/cache/CacheValidator.ts:8](https://github.com/ysordo/shared-3d
 optional onProgress: (progress, status) => void;
 ```
 
-Defined in: [core/cache/CacheValidator.ts:9](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L9)
+Defined in: [src/core/cache/CacheValidator.ts:9](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L9)
 
 #### Parameters
 
@@ -51,7 +51,7 @@ Defined in: [core/cache/CacheValidator.ts:9](https://github.com/ysordo/shared-3d
 optional onComplete: (report) => void;
 ```
 
-Defined in: [core/cache/CacheValidator.ts:10](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L10)
+Defined in: [src/core/cache/CacheValidator.ts:10](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L10)
 
 #### Parameters
 
@@ -71,4 +71,4 @@ Defined in: [core/cache/CacheValidator.ts:10](https://github.com/ysordo/shared-3
 optional forceUpdate: boolean;
 ```
 
-Defined in: [core/cache/CacheValidator.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L11)
+Defined in: [src/core/cache/CacheValidator.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L11)

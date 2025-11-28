@@ -10,7 +10,7 @@
 function generateManifest(modelsDir, outputPath?): Promise<ManifestEntry[]>;
 ```
 
-Defined in: [core/cache/generateManifest.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/generateManifest.ts#L7)
+Defined in: [src/core/cache/generateManifest.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/generateManifest.ts#L7)
 
 ## Parameters
 

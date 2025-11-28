@@ -10,7 +10,7 @@
 type ManifestEntry = object;
 ```
 
-Defined in: [core/cache/types.ts:2](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L2)
+Defined in: [src/core/cache/types.ts:2](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L2)
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [core/cache/types.ts:2](https://github.com/ysordo/shared-3d/blob/mai
 id: string;
 ```
 
-Defined in: [core/cache/types.ts:3](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L3)
+Defined in: [src/core/cache/types.ts:3](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L3)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [core/cache/types.ts:3](https://github.com/ysordo/shared-3d/blob/mai
 url: string;
 ```
 
-Defined in: [core/cache/types.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L4)
+Defined in: [src/core/cache/types.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L4)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [core/cache/types.ts:4](https://github.com/ysordo/shared-3d/blob/mai
 hash: string;
 ```
 
-Defined in: [core/cache/types.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L5)
+Defined in: [src/core/cache/types.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L5)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [core/cache/types.ts:5](https://github.com/ysordo/shared-3d/blob/mai
 size: number;
 ```
 
-Defined in: [core/cache/types.ts:6](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L6)
+Defined in: [src/core/cache/types.ts:6](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L6)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [core/cache/types.ts:6](https://github.com/ysordo/shared-3d/blob/mai
 updatedAt: number;
 ```
 
-Defined in: [core/cache/types.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L7)
+Defined in: [src/core/cache/types.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L7)

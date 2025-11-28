@@ -6,7 +6,7 @@
 
 # Class: FileWatcher
 
-Defined in: [core/cache/FileWatcher.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/FileWatcher.ts#L4)
+Defined in: [src/core/cache/FileWatcher.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/FileWatcher.ts#L4)
 
 ## Methods
 
@@ -16,7 +16,7 @@ Defined in: [core/cache/FileWatcher.ts:4](https://github.com/ysordo/shared-3d/bl
 static getInstance(): FileWatcher;
 ```
 
-Defined in: [core/cache/FileWatcher.ts:15](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/FileWatcher.ts#L15)
+Defined in: [src/core/cache/FileWatcher.ts:15](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/FileWatcher.ts#L15)
 
 #### Returns
 
@@ -30,7 +30,7 @@ Defined in: [core/cache/FileWatcher.ts:15](https://github.com/ysordo/shared-3d/b
 watch(manifest, onChange): void;
 ```
 
-Defined in: [core/cache/FileWatcher.ts:22](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/FileWatcher.ts#L22)
+Defined in: [src/core/cache/FileWatcher.ts:22](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/FileWatcher.ts#L22)
 
 #### Parameters
 
@@ -51,7 +51,7 @@ Defined in: [core/cache/FileWatcher.ts:22](https://github.com/ysordo/shared-3d/b
 dispose(): void;
 ```
 
-Defined in: [core/cache/FileWatcher.ts:84](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/FileWatcher.ts#L84)
+Defined in: [src/core/cache/FileWatcher.ts:84](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/FileWatcher.ts#L84)
 
 #### Returns
 

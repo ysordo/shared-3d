@@ -6,7 +6,7 @@
 
 # Class: LODSystemPlugin
 
-Defined in: [core/orchestrator/plugins/LODSystemPlugin.ts:15](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/LODSystemPlugin.ts#L15)
+Defined in: [src/core/orchestrator/plugins/LODSystemPlugin.ts:15](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/LODSystemPlugin.ts#L15)
 
 ## Implements
 
@@ -20,7 +20,7 @@ Defined in: [core/orchestrator/plugins/LODSystemPlugin.ts:15](https://github.com
 new LODSystemPlugin(config): LODSystemPlugin;
 ```
 
-Defined in: [core/orchestrator/plugins/LODSystemPlugin.ts:20](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/LODSystemPlugin.ts#L20)
+Defined in: [src/core/orchestrator/plugins/LODSystemPlugin.ts:20](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/LODSystemPlugin.ts#L20)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: [core/orchestrator/plugins/LODSystemPlugin.ts:20](https://github.com
 install(__namedParameters): void;
 ```
 
-Defined in: [core/orchestrator/plugins/LODSystemPlugin.ts:22](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/LODSystemPlugin.ts#L22)
+Defined in: [src/core/orchestrator/plugins/LODSystemPlugin.ts:22](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/LODSystemPlugin.ts#L22)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: [core/orchestrator/plugins/LODSystemPlugin.ts:22](https://github.com
 dispose(): void;
 ```
 
-Defined in: [core/orchestrator/plugins/LODSystemPlugin.ts:73](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/LODSystemPlugin.ts#L73)
+Defined in: [src/core/orchestrator/plugins/LODSystemPlugin.ts:73](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/LODSystemPlugin.ts#L73)
 
 #### Returns
 
@@ -82,7 +82,7 @@ Defined in: [core/orchestrator/plugins/LODSystemPlugin.ts:73](https://github.com
 name: string = 'LODSystem';
 ```
 
-Defined in: [core/orchestrator/plugins/LODSystemPlugin.ts:16](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/LODSystemPlugin.ts#L16)
+Defined in: [src/core/orchestrator/plugins/LODSystemPlugin.ts:16](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/LODSystemPlugin.ts#L16)
 
 #### Implementation of
 

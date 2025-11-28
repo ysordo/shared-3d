@@ -10,4 +10,4 @@
 const SpotLight: React.FC<SpotLightProps>;
 ```
 
-Defined in: [react/components/SpotLight.tsx:19](https://github.com/ysordo/shared-3d/blob/main/src/react/components/SpotLight.tsx#L19)
+Defined in: [src/react/components/SpotLight.tsx:19](https://github.com/ysordo/shared-3d/blob/main/src/react/components/SpotLight.tsx#L19)

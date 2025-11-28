@@ -10,7 +10,7 @@
 type CustomMaterialFactory = (originalMaterial) => THREE.Material;
 ```
 
-Defined in: [react/controls/MaterialController.tsx:10](https://github.com/ysordo/shared-3d/blob/main/src/react/controls/MaterialController.tsx#L10)
+Defined in: [src/react/controls/MaterialController.tsx:10](https://github.com/ysordo/shared-3d/blob/main/src/react/controls/MaterialController.tsx#L10)
 
 ## Parameters
 

@@ -6,7 +6,7 @@
 
 # Class: CacheValidator
 
-Defined in: [core/cache/CacheValidator.ts:14](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L14)
+Defined in: [src/core/cache/CacheValidator.ts:14](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L14)
 
 ## Constructors
 
@@ -28,7 +28,7 @@ new CacheValidator(): CacheValidator;
 static validate(options): Promise<CacheReport>;
 ```
 
-Defined in: [core/cache/CacheValidator.ts:17](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L17)
+Defined in: [src/core/cache/CacheValidator.ts:17](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L17)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [core/cache/CacheValidator.ts:17](https://github.com/ysordo/shared-3
 static reset(): void;
 ```
 
-Defined in: [core/cache/CacheValidator.ts:94](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L94)
+Defined in: [src/core/cache/CacheValidator.ts:94](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/CacheValidator.ts#L94)
 
 #### Returns
 

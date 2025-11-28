@@ -10,4 +10,4 @@
 const Canvas: ForwardRefExoticComponent<CanvasHTMLAttributes<HTMLCanvasElement> & object & RefAttributes<HTMLCanvasElement>>;
 ```
 
-Defined in: [react/components/Canvas.tsx:12](https://github.com/ysordo/shared-3d/blob/main/src/react/components/Canvas.tsx#L12)
+Defined in: [src/react/components/Canvas.tsx:12](https://github.com/ysordo/shared-3d/blob/main/src/react/components/Canvas.tsx#L12)

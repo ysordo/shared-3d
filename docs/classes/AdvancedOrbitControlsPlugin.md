@@ -6,7 +6,7 @@
 
 # Class: AdvancedOrbitControlsPlugin
 
-Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L4)
+Defined in: [src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L4)
 
 ## Implements
 
@@ -20,7 +20,7 @@ Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:4](https:/
 new AdvancedOrbitControlsPlugin(options): AdvancedOrbitControlsPlugin;
 ```
 
-Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:20](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L20)
+Defined in: [src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:20](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L20)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:20](https:
 install(__namedParameters): void;
 ```
 
-Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:26](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L26)
+Defined in: [src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:26](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L26)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:26](https:
 setPanEnabled(enabled): void;
 ```
 
-Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:39](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L39)
+Defined in: [src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:39](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L39)
 
 #### Parameters
 
@@ -84,7 +84,7 @@ Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:39](https:
 setRotateEnabled(enabled): void;
 ```
 
-Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:43](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L43)
+Defined in: [src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:43](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L43)
 
 #### Parameters
 
@@ -104,7 +104,7 @@ Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:43](https:
 setZoomEnabled(enabled): void;
 ```
 
-Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:47](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L47)
+Defined in: [src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:47](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L47)
 
 #### Parameters
 
@@ -124,7 +124,7 @@ Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:47](https:
 setAllEnabled(enabled): void;
 ```
 
-Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:51](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L51)
+Defined in: [src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:51](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L51)
 
 #### Parameters
 
@@ -144,7 +144,7 @@ Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:51](https:
 dispose(): void;
 ```
 
-Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:57](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L57)
+Defined in: [src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:57](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L57)
 
 #### Returns
 
@@ -162,7 +162,7 @@ Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:57](https:
 name: string = 'AdvancedOrbitControls';
 ```
 
-Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L5)
+Defined in: [src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L5)
 
 #### Implementation of
 

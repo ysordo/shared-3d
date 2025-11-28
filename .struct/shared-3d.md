@@ -1,5 +1,5 @@
 # Estructura de: shared-3d#v1.0.5/
-## Generated: 28/11/2025, 1:59:51 p.m.
+## Generated: 28/11/2025, 4:36:02 p.m.
 ---
 
 ```
@@ -35,7 +35,9 @@
 │   │   │   │   ├── 📄AdvancedCameraCollisionPlugin.ts
 │   │   │   │   ├── 📄AdvancedOrbitControlsPlugin.ts
 │   │   │   │   ├── 📄AdvancedRaycasterPlugin.ts
+│   │   │   │   ├── 📄AnnotationsPlugin.ts
 │   │   │   │   ├── 📄AutoLODSystemPlugin.ts
+│   │   │   │   ├── 📄HotspotPlugin.ts
 │   │   │   │   ├── 📄index.ts
 │   │   │   │   ├── 📄LODSystemPlugin.ts
 │   │   │   │   ├── 📄OrbitControlsPlugin.ts
@@ -68,21 +70,30 @@
 │   │   │   ├── 📄AdvancedOrbitControls.tsx
 │   │   │   ├── 📄AdvancedRaycaster.tsx
 │   │   │   ├── 📄AmbientLight.tsx
+│   │   │   ├── 📄AnimationTimeline.tsx
+│   │   │   ├── 📄Annotations.tsx
+│   │   │   ├── 📄ARButton.tsx
 │   │   │   ├── 📄AutoLODSystem.tsx
 │   │   │   ├── 📄Canvas.tsx
 │   │   │   ├── 📄DirectionalLight.tsx
 │   │   │   ├── 📄DistanceDisplay.tsx
+│   │   │   ├── 📄EnvironmentPreset.tsx
+│   │   │   ├── 📄ErrorBoundary3D.tsx
+│   │   │   ├── 📄GroundSurface.tsx
 │   │   │   ├── 📄HDRI.tsx
+│   │   │   ├── 📄Hotspot.tsx
 │   │   │   ├── 📄index.ts
 │   │   │   ├── 📄InstancedModel.tsx
 │   │   │   ├── 📄LODSystem.tsx
 │   │   │   ├── 📄Model.tsx
+│   │   │   ├── 📄ModelPreload.tsx
 │   │   │   ├── 📄OrbitControls.tsx
 │   │   │   ├── 📄PointLight.tsx
 │   │   │   ├── 📄PostProcessing.tsx
 │   │   │   ├── 📄Raycaster.tsx
 │   │   │   ├── 📄SpotLight.tsx
-│   │   │   └── 📄TheaterLighting.tsx
+│   │   │   ├── 📄TheaterLighting.tsx
+│   │   │   └── 📄VRButton.tsx
 │   │   ├── 📁controls/
 │   │   │   ├── 📄AnimationController.tsx
 │   │   │   ├── 📄index.ts

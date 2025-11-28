@@ -10,7 +10,7 @@
 function useHDRI(entry): object;
 ```
 
-Defined in: [hooks/useHDRI.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/hooks/useHDRI.ts#L7)
+Defined in: [src/hooks/useHDRI.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/hooks/useHDRI.ts#L7)
 
 ## Parameters
 
@@ -24,6 +24,6 @@ Defined in: [hooks/useHDRI.ts:7](https://github.com/ysordo/shared-3d/blob/main/s
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `hdri` | `Texture` \| `null` | [hooks/useHDRI.ts:27](https://github.com/ysordo/shared-3d/blob/main/src/hooks/useHDRI.ts#L27) |
-| `loading` | `boolean` | [hooks/useHDRI.ts:27](https://github.com/ysordo/shared-3d/blob/main/src/hooks/useHDRI.ts#L27) |
-| `clear()` | () => `void` | [hooks/useHDRI.ts:27](https://github.com/ysordo/shared-3d/blob/main/src/hooks/useHDRI.ts#L27) |
+| `hdri` | `Texture` \| `null` | [src/hooks/useHDRI.ts:27](https://github.com/ysordo/shared-3d/blob/main/src/hooks/useHDRI.ts#L27) |
+| `loading` | `boolean` | [src/hooks/useHDRI.ts:27](https://github.com/ysordo/shared-3d/blob/main/src/hooks/useHDRI.ts#L27) |
+| `clear()` | () => `void` | [src/hooks/useHDRI.ts:27](https://github.com/ysordo/shared-3d/blob/main/src/hooks/useHDRI.ts#L27) |

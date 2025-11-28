@@ -10,4 +10,4 @@
 const AutoLODSystem: React.FC<AutoLODSystemProps>;
 ```
 
-Defined in: [react/components/AutoLODSystem.tsx:14](https://github.com/ysordo/shared-3d/blob/main/src/react/components/AutoLODSystem.tsx#L14)
+Defined in: [src/react/components/AutoLODSystem.tsx:14](https://github.com/ysordo/shared-3d/blob/main/src/react/components/AutoLODSystem.tsx#L14)

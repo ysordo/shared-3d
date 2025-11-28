@@ -10,7 +10,7 @@
 type HDRIEvents = object;
 ```
 
-Defined in: [core/loaders/HDRILoader.ts:14](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L14)
+Defined in: [src/core/loaders/HDRILoader.ts:14](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L14)
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [core/loaders/HDRILoader.ts:14](https://github.com/ysordo/shared-3d/
 optional onProgress: (progress) => void;
 ```
 
-Defined in: [core/loaders/HDRILoader.ts:15](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L15)
+Defined in: [src/core/loaders/HDRILoader.ts:15](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L15)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: [core/loaders/HDRILoader.ts:15](https://github.com/ysordo/shared-3d/
 optional onLoaded: (texture, entry) => void;
 ```
 
-Defined in: [core/loaders/HDRILoader.ts:16](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L16)
+Defined in: [src/core/loaders/HDRILoader.ts:16](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L16)
 
 #### Parameters
 
@@ -61,7 +61,7 @@ Defined in: [core/loaders/HDRILoader.ts:16](https://github.com/ysordo/shared-3d/
 optional onError: (error, url) => void;
 ```
 
-Defined in: [core/loaders/HDRILoader.ts:17](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L17)
+Defined in: [src/core/loaders/HDRILoader.ts:17](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L17)
 
 #### Parameters
 

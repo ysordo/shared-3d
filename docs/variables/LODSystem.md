@@ -10,4 +10,4 @@
 const LODSystem: React.FC<LODSystemProps>;
 ```
 
-Defined in: [react/components/LODSystem.tsx:19](https://github.com/ysordo/shared-3d/blob/main/src/react/components/LODSystem.tsx#L19)
+Defined in: [src/react/components/LODSystem.tsx:19](https://github.com/ysordo/shared-3d/blob/main/src/react/components/LODSystem.tsx#L19)
