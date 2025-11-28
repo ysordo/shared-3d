@@ -5,7 +5,7 @@ export type Vector3Tuple = [number, number, number];
 export type ColorRepresentation = THREE.ColorRepresentation;
 
 /* === Manifest === */
-export type { ModelManifestEntry } from '../core/cache/types';
+export type { ManifestEntry, ModelManifest } from '../core/cache/types';
 
 /* === Common settings === */
 export type LightConfig = {

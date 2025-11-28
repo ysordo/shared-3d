@@ -3,8 +3,6 @@ import { get, set, del, keys } from 'idb-keyval';
 import type { CacheEntry } from './types';
 import { THREE } from '../../lib';
 
-
-
 const CACHE_PREFIX = 'shared-3d:asset:';
 
 export class ObjectCache {
@@ -12,23 +10,26 @@ export class ObjectCache {
     return `${CACHE_PREFIX}${id}`;
   }
 
-  /* === SET: now generic === */
-  static async set<T>(id: string, data: T, hash: string): Promise<void> {
+  static async set<T>(
+    id: string,
+    data: T,
+    hash: string,
+    updatedAt: number = Date.now()
+  ): Promise<void> {
     const key = await this.getKey(id);
     const entry: CacheEntry<T> = {
-      data: structuredClone ? structuredClone(data) : this.deepClone(data),
+      data,
       hash,
       timestamp: Date.now(),
       size: this.estimateSize(data),
+      updatedAt,
     };
     await set(key, entry);
   }
 
-  /* === GET: now generic === */
   static async get<T>(id: string): Promise<CacheEntry<T> | null> {
     const key = await this.getKey(id);
-    const entry = await get<CacheEntry<T>>(key);
-    return entry || null;
+    return await get<CacheEntry<T>>(key) ?? null;
   }
 
   static async has(id: string): Promise<boolean> {
@@ -37,7 +38,6 @@ export class ObjectCache {
     return all.includes(key as string);
   }
 
-  /* === DELETE: now with smart dispose === */
   static async delete(id: string): Promise<void> {
     const key = await this.getKey(id);
     const entry = await this.get(key);
@@ -53,14 +53,13 @@ export class ObjectCache {
     await Promise.all(ourKeys.map(k => del(k)));
   }
 
-  /* === SMART DISPOSE (supports Object3D and Texture) === */
   private static dispose(data: any): void {
     if (data instanceof THREE.Object3D) {
       data.traverse((child: any) => {
-        if (child.isMesh) {
+        if (child instanceof THREE.Mesh) {
           child.geometry?.dispose();
           if (Array.isArray(child.material)) {
-            ((child as THREE.Mesh).material as THREE.Material[]).forEach(m => m.dispose());
+            child.material.forEach(m => m.dispose());
           } else {
             child.material?.dispose();
           }
@@ -68,12 +67,9 @@ export class ObjectCache {
       });
     } else if (data instanceof THREE.Texture) {
       data.dispose();
-    } else if (data instanceof THREE.BufferGeometry) {
-      data.dispose();
     }
   }
 
-  /* ===ESTIMATE SIZE (improved)=== */
   private static estimateSize(data: any): number {
     if (data instanceof THREE.Object3D) {
       let size = 0;
@@ -88,17 +84,6 @@ export class ObjectCache {
       const array = data.source?.data || data.image?.data;
       return array?.byteLength || 0;
     }
-    return  0;
-  }
-
-  /* === DEEP CLONE (fallback if there is no structuredClone) === */
-  private static deepClone<T>(obj: T): T {
-    if (obj instanceof THREE.Object3D) {
-      return obj.clone() as T;
-    }
-    if (obj instanceof THREE.Texture) {
-      return obj.clone() as T;
-    }
-    return JSON.parse(JSON.stringify(obj));
+    return 0;
   }
 }

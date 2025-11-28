@@ -1,19 +1,14 @@
-import type { ModelManifestEntry } from './types';
+import type { ManifestEntry } from './types';
 import { isDev } from './utils/env';
 
-/**
- * Solo se usa en desarrollo (Vite, Webpack, Next.js, etc.)
- * Detecta cambios en archivos .glb/.gltf/.hdr y fuerza recarga del modelo
- */
 export class FileWatcher {
   private static instance: FileWatcher | null = null;
   private watchers = new Map<string, number>();
-  private manifest: ModelManifestEntry[] = [];
+  private manifest: ManifestEntry[] = [];
   private onChange?: (changedIds: string[]) => void;
 
   private constructor() {
     if (!isDev()) {return;}
-
     this.startPolling();
   }
 
@@ -24,7 +19,7 @@ export class FileWatcher {
     return FileWatcher.instance;
   }
 
-  public watch(manifest: ModelManifestEntry[], onChange: (ids: string[]) => void) {
+  public watch(manifest: ManifestEntry[], onChange: (ids: string[]) => void) {
     if (!isDev()) {return;}
 
     this.manifest = manifest;
@@ -38,10 +33,10 @@ export class FileWatcher {
     const changed: string[] = [];
 
     for (const entry of this.manifest) {
-        try {
+      try {
         const response = await fetch(entry.url, { 
-            method: 'HEAD', 
-            cache: 'no-store' 
+          method: 'HEAD', 
+          cache: 'no-store' 
         });
 
         const lastModified = response.headers.get('Last-Modified');
@@ -50,39 +45,37 @@ export class FileWatcher {
         let currentStamp: number;
 
         if (lastModified) {
-            const parsed = Date.parse(lastModified);
-            currentStamp = isNaN(parsed) ? Date.now() : parsed;
+          const parsed = Date.parse(lastModified);
+          currentStamp = isNaN(parsed) ? Date.now() : parsed;
         } else if (etag) {
-            currentStamp = this.etagToNumber(etag);
+          // Convertir ETag a número reproducible
+          const clean = etag.replace(/^W\//, '').replace(/"/g, '');
+          let hash = 0;
+          for (let i = 0; i < clean.length; i++) {
+            hash = ((hash << 5) - hash) + clean.charCodeAt(i);
+            hash = hash & hash;
+          }
+          currentStamp = hash;
         } else {
-            currentStamp = Date.now();
+          currentStamp = Date.now();
         }
 
         const previousStamp = this.watchers.get(entry.url);
 
         if (previousStamp !== undefined && previousStamp !== currentStamp) {
-            changed.push(entry.id);
+          changed.push(entry.id);
         }
 
         this.watchers.set(entry.url, currentStamp);
-        } catch { }
+      } catch {
+        // Silencioso en dev
+      }
     }
 
     if (changed.length > 0) {
-        this.onChange?.(changed);
+      this.onChange?.(changed);
     }
-    }
-
-    private etagToNumber(etag: string): number {
-    const clean = etag.replace(/^W\//, '').replace(/"/g, '');
-    let hash = 0;
-    for (let i = 0; i < clean.length; i++) {
-        const char = clean.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash;
-    }
-    return hash;
-    }
+  }
 
   private startPolling() {
     setInterval(() => this.checkForChanges(), 2000);

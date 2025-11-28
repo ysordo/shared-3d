@@ -1,11 +1,11 @@
 import { FileWatcher } from './FileWatcher';
 import { ObjectCache } from './ObjectCache';
 import { isDev } from './utils/env';
-import type { ModelManifestEntry, CacheReport } from './types';
+import type { ManifestEntry, CacheReport } from './types';
 import { keys } from 'idb-keyval';
 
 export type ValidationOptions = {
-  manifest: ModelManifestEntry[];
+  manifest: ManifestEntry[];
   onProgress?: (progress: number, status: string) => void;
   onComplete?: (report: CacheReport) => void;
   forceUpdate?: boolean;
@@ -42,7 +42,6 @@ export class CacheValidator {
     }
 
     onProgress?.(10, 'Comparando manifest con caché local...');
-
     const start = performance.now();
 
     const currentIds = new Set(manifest.map(m => m.id));
@@ -62,10 +61,16 @@ export class CacheValidator {
       }
     }
 
-    const toUpdate: ModelManifestEntry[] = [];
+    // Detectar qué hay que actualizar
+    const toUpdate: ManifestEntry[] = [];
     for (const entry of manifest) {
       const cached = await ObjectCache.get(entry.id);
-      if (!cached || cached.hash !== entry.hash) {
+
+      if (
+        !cached ||
+        cached.hash !== entry.hash ||
+        cached.updatedAt < entry.updatedAt
+      ) {
         toUpdate.push(entry);
       }
     }
