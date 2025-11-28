@@ -26,5 +26,7 @@ export { PointLight } from './PointLight';
 export { PostProcessing } from './PostProcessing';
 export { Raycaster } from './Raycaster';
 export { SpotLight } from './SpotLight';
+export { Suspense } from './Suspense';
+export { SuspenseModel } from './SuspenseModel';
 export { TheaterLighting } from './TheaterLighting';
 export { VRButton } from './VRButton';
