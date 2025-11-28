@@ -65,11 +65,13 @@ function generateDirectoryTree(startPath, outputFile, depth = 10) {
   const parsePatch = startPath.split('/');
   const json = JSON.parse(fs.readFileSync(path.resolve('./package.json')));
   parsePatch[0] = json.name + '#v' + json.version;
-  tree = `Estructura de: ${parsePatch.join('/')}\n`;
-  tree += 'Generated: ' + new Date().toLocaleString() + '\n';
-  tree += '='.repeat(50) + '\n\n';
-
+  tree = `# Estructura de: ${parsePatch.join('/')}\n`;
+  tree += '## Generated: ' + new Date().toLocaleString() + '\n';
+  tree += '-'.repeat(3) + '\n\n';
+  tree += '`'.repeat(3) + '\n\n';
+  tree += '📂' + json.name + '/\n';
   buildTree(absoluteStartPath, 0);
+  tree += '`'.repeat(3) + '\n\n';
 
   fs.writeFileSync(outputFile, tree, 'utf8');
   console.log(`✅ Estructura guardada en: ${outputFile}`);

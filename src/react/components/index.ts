@@ -1,3 +1,4 @@
+export { AdvancedCameraCollision } from './AdvancedCameraCollision';
 export { AdvancedDragRaycaster } from './AdvancedDragRaycaster';
 export { AdvancedOrbitControls } from './AdvancedOrbitControls';
 export { AdvancedRaycaster } from './AdvancedRaycaster';
@@ -6,6 +7,7 @@ export { Canvas } from './Canvas';
 export { DirectionalLight } from './DirectionalLight';
 export { DistanceDisplay } from './DistanceDisplay';
 export { HDRI } from './HDRI';
+export { InstancedModel } from './InstancedModel';
 export { Model } from './Model';
 export { OrbitControls } from './OrbitControls';
 export { PointLight } from './PointLight';

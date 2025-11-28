@@ -1,7 +1,10 @@
-Estructura de: shared-3d#v1.0.5/
-Generated: 26/11/2025, 1:40:48 p.m.
-==================================================
+# Estructura de: shared-3d#v1.0.5/
+## Generated: 27/11/2025, 6:56:01 p.m.
+---
 
+```
+
+📂shared-3d/
 ├── 📁public/
 │   └── 📁draco/
 │       ├── 📄draco_decoder.js
@@ -28,6 +31,7 @@ Generated: 26/11/2025, 1:40:48 p.m.
 │   │   │   └── 📄WebPHDRLoader.ts
 │   │   ├── 📁orchestrator/
 │   │   │   ├── 📁plugins/
+│   │   │   │   ├── 📄AdvancedCameraCollisionPlugin.ts
 │   │   │   │   ├── 📄AdvancedOrbitControlsPlugin.ts
 │   │   │   │   ├── 📄AdvancedRaycasterPlugin.ts
 │   │   │   │   ├── 📄index.ts
@@ -56,6 +60,7 @@ Generated: 26/11/2025, 1:40:48 p.m.
 │   │   └── 📄types.ts
 │   ├── 📁react/
 │   │   ├── 📁components/
+│   │   │   ├── 📄AdvancedCameraCollision.tsx
 │   │   │   ├── 📄AdvancedDragRaycaster.tsx
 │   │   │   ├── 📄AdvancedOrbitControls.tsx
 │   │   │   ├── 📄AdvancedRaycaster.tsx
@@ -90,5 +95,7 @@ Generated: 26/11/2025, 1:40:48 p.m.
 ├── 📄pnpm-lock.yaml
 ├── 📄README.md
 ├── 📄tsconfig.json
-├── 📄tsup.config.ts
+├── 📄tsup.config.js
 └── 📄typedoc.json
+```
+
