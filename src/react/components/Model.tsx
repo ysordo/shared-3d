@@ -3,10 +3,10 @@
 import type React from 'react';
 import { useEffect } from 'react';
 import { useScene } from '../../hooks/useScene';
-import type { ModelManifestEntry } from '../../core/cache/types';
+import type { ManifestEntry } from '../../core/cache/types';
 
 type ModelProps = {
-  entry: ModelManifestEntry;
+  entry: ManifestEntry;
   draco?: boolean;
 };
 

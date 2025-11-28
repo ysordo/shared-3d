@@ -10,4 +10,4 @@
 const Model: React.FC<ModelProps>;
 ```
 
-Defined in: react/components/Model.tsx:13
+Defined in: [react/components/Model.tsx:13](https://github.com/ysordo/shared-3d/blob/main/src/react/components/Model.tsx#L13)

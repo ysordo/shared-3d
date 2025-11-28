@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { ObjectCache } from '../cache/ObjectCache';
-import type { ModelManifestEntry } from '../cache/types';
+import type { ModelManifest, ManifestEntry } from '../cache/types';
 import { THREE, ThreeGLTFLoader, ThreeDRACOLoader } from '../../lib';
 
 export type GLTFLoaderOptions = {
@@ -10,7 +10,7 @@ export type GLTFLoaderOptions = {
 
 export type GLTFLoaderEvents = {
   onProgress?: (p: { loaded: number; total: number; percent: number; url: string }) => void | undefined;
-  onLoaded?: (obj: THREE.Group, entry: ModelManifestEntry) => void | undefined;
+  onLoaded?: (obj: THREE.Group, entry: ManifestEntry) => void | undefined;
   onError?: (err: Error, url: string) => void | undefined;
 };
 
@@ -40,7 +40,7 @@ export class GLTFLoader {
   }
 
   static async load(
-    entry: ModelManifestEntry,
+    entry: ManifestEntry,
     options: GLTFLoaderOptions & GLTFLoaderEvents = {}
   ): Promise<THREE.Group> {
     const { id, url, hash } = entry;
@@ -113,7 +113,7 @@ export class GLTFLoader {
   }
 
   static async preload(
-    entries: ModelManifestEntry[],
+    entries: ModelManifest,
     options: GLTFLoaderOptions = {},
     onProgress?: (completed: number, total: number) => void
   ) {

@@ -6,7 +6,7 @@
 
 # Class: GLTFLoader
 
-Defined in: core/loaders/GLTFLoader.ts:20
+Defined in: [core/loaders/GLTFLoader.ts:17](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L17)
 
 ## Constructors
 
@@ -28,13 +28,13 @@ new GLTFLoader(): GLTFLoader;
 static load(entry, options): Promise<Group<Object3DEventMap>>;
 ```
 
-Defined in: core/loaders/GLTFLoader.ts:46
+Defined in: [core/loaders/GLTFLoader.ts:42](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L42)
 
 #### Parameters
 
 | Parameter | Type |
 | ------ | ------ |
-| `entry` | [`ModelManifestEntry`](../type-aliases/ModelManifestEntry.md) |
+| `entry` | [`ManifestEntry`](../type-aliases/ManifestEntry.md) |
 | `options` | [`GLTFLoaderOptions`](../type-aliases/GLTFLoaderOptions.md) & [`GLTFLoaderEvents`](../type-aliases/GLTFLoaderEvents.md) |
 
 #### Returns
@@ -52,13 +52,13 @@ static preload(
 onProgress?): Promise<void>;
 ```
 
-Defined in: core/loaders/GLTFLoader.ts:122
+Defined in: [core/loaders/GLTFLoader.ts:115](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L115)
 
 #### Parameters
 
 | Parameter | Type |
 | ------ | ------ |
-| `entries` | [`ModelManifestEntry`](../type-aliases/ModelManifestEntry.md)[] |
+| `entries` | [`ModelManifest`](../type-aliases/ModelManifest.md) |
 | `options` | [`GLTFLoaderOptions`](../type-aliases/GLTFLoaderOptions.md) |
 | `onProgress?` | (`completed`, `total`) => `void` |
 
@@ -74,7 +74,7 @@ Defined in: core/loaders/GLTFLoader.ts:122
 static invalidate(id): Promise<void>;
 ```
 
-Defined in: core/loaders/GLTFLoader.ts:141
+Defined in: [core/loaders/GLTFLoader.ts:134](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L134)
 
 #### Parameters
 
@@ -94,7 +94,7 @@ Defined in: core/loaders/GLTFLoader.ts:141
 static clearCache(): Promise<void>;
 ```
 
-Defined in: core/loaders/GLTFLoader.ts:145
+Defined in: [core/loaders/GLTFLoader.ts:138](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L138)
 
 #### Returns
 

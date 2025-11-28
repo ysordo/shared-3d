@@ -4,7 +4,7 @@ import type React from 'react';
 import { useEffect, useRef } from 'react';
 import { useScene } from '../../hooks/useScene';
 import { GLTFLoader } from '../../core/loaders/GLTFLoader';
-import type { ModelManifestEntry } from '../../core/cache/types';
+import type { ManifestEntry } from '../../core/cache/types';
 import { THREE } from '../../lib';
 
 type InstanceData = {
@@ -16,7 +16,7 @@ type InstanceData = {
 };
 
 type InstancedModelProps = {
-  entry: ModelManifestEntry;
+  entry: ManifestEntry;
   instances: InstanceData[];
   draco?: boolean;
   castShadow?: boolean;

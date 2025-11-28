@@ -10,4 +10,4 @@
 type ColorRepresentation = THREE.ColorRepresentation;
 ```
 
-Defined in: lib/types.ts:5
+Defined in: [lib/types.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L5)

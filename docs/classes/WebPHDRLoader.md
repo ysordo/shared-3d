@@ -6,7 +6,7 @@
 
 # Class: WebPHDRLoader
 
-Defined in: core/loaders/WebPHDRLoader.ts:28
+Defined in: [core/loaders/WebPHDRLoader.ts:17](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/WebPHDRLoader.ts#L17)
 
 Loader para WebP HDR (RGBM encoding)
 Soporta .webp con metadatos HDR preservados
@@ -20,7 +20,7 @@ Ideal para environment maps ligeros y rápidos
 new WebPHDRLoader(manager?): WebPHDRLoader;
 ```
 
-Defined in: core/loaders/WebPHDRLoader.ts:34
+Defined in: [core/loaders/WebPHDRLoader.ts:23](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/WebPHDRLoader.ts#L23)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: core/loaders/WebPHDRLoader.ts:34
 setDataType(type): this;
 ```
 
-Defined in: core/loaders/WebPHDRLoader.ts:38
+Defined in: [core/loaders/WebPHDRLoader.ts:27](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/WebPHDRLoader.ts#L27)
 
 #### Parameters
 
@@ -60,7 +60,7 @@ Defined in: core/loaders/WebPHDRLoader.ts:38
 setExposure(exposure): this;
 ```
 
-Defined in: core/loaders/WebPHDRLoader.ts:43
+Defined in: [core/loaders/WebPHDRLoader.ts:32](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/WebPHDRLoader.ts#L32)
 
 #### Parameters
 
@@ -80,7 +80,7 @@ Defined in: core/loaders/WebPHDRLoader.ts:43
 setPreserveHDR(preserve): this;
 ```
 
-Defined in: core/loaders/WebPHDRLoader.ts:48
+Defined in: [core/loaders/WebPHDRLoader.ts:37](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/WebPHDRLoader.ts#L37)
 
 #### Parameters
 
@@ -104,7 +104,7 @@ load(
    onError?): DataTexture;
 ```
 
-Defined in: core/loaders/WebPHDRLoader.ts:53
+Defined in: [core/loaders/WebPHDRLoader.ts:42](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/WebPHDRLoader.ts#L42)
 
 #### Parameters
 
@@ -127,7 +127,7 @@ Defined in: core/loaders/WebPHDRLoader.ts:53
 parse(buffer): WebPHDRData;
 ```
 
-Defined in: core/loaders/WebPHDRLoader.ts:102
+Defined in: [core/loaders/WebPHDRLoader.ts:91](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/WebPHDRLoader.ts#L91)
 
 #### Parameters
 
@@ -147,4 +147,4 @@ Defined in: core/loaders/WebPHDRLoader.ts:102
 manager: LoadingManager;
 ```
 
-Defined in: core/loaders/WebPHDRLoader.ts:29
+Defined in: [core/loaders/WebPHDRLoader.ts:18](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/WebPHDRLoader.ts#L18)

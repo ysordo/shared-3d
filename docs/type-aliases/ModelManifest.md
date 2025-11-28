@@ -7,7 +7,7 @@
 # Type Alias: ModelManifest
 
 ```ts
-type ModelManifest = ModelManifestEntry[];
+type ModelManifest = ManifestEntry[];
 ```
 
-Defined in: core/cache/types.ts:19
+Defined in: [core/cache/types.ts:27](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L27)

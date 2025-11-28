@@ -6,10 +6,7 @@
 
 # Class: FileWatcher
 
-Defined in: core/cache/FileWatcher.ts:8
-
-Solo se usa en desarrollo (Vite, Webpack, Next.js, etc.)
-Detecta cambios en archivos .glb/.gltf/.hdr y fuerza recarga del modelo
+Defined in: [core/cache/FileWatcher.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/FileWatcher.ts#L4)
 
 ## Methods
 
@@ -19,7 +16,7 @@ Detecta cambios en archivos .glb/.gltf/.hdr y fuerza recarga del modelo
 static getInstance(): FileWatcher;
 ```
 
-Defined in: core/cache/FileWatcher.ts:20
+Defined in: [core/cache/FileWatcher.ts:15](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/FileWatcher.ts#L15)
 
 #### Returns
 
@@ -33,13 +30,13 @@ Defined in: core/cache/FileWatcher.ts:20
 watch(manifest, onChange): void;
 ```
 
-Defined in: core/cache/FileWatcher.ts:27
+Defined in: [core/cache/FileWatcher.ts:22](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/FileWatcher.ts#L22)
 
 #### Parameters
 
 | Parameter | Type |
 | ------ | ------ |
-| `manifest` | [`ModelManifestEntry`](../type-aliases/ModelManifestEntry.md)[] |
+| `manifest` | [`ManifestEntry`](../type-aliases/ManifestEntry.md)[] |
 | `onChange` | (`ids`) => `void` |
 
 #### Returns
@@ -54,7 +51,7 @@ Defined in: core/cache/FileWatcher.ts:27
 dispose(): void;
 ```
 
-Defined in: core/cache/FileWatcher.ts:98
+Defined in: [core/cache/FileWatcher.ts:84](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/FileWatcher.ts#L84)
 
 #### Returns
 

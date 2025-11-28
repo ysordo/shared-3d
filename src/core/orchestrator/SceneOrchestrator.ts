@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from '../loaders/GLTFLoader';
 import { HDRILoader } from '../loaders/HDRILoader';
-import type { ModelManifestEntry } from '../cache/types';
+import type { ManifestEntry } from '../cache/types';
 import type { Plugin, PluginContext } from './types';
 
 export type SceneConfig = {
@@ -111,7 +111,7 @@ export class SceneOrchestrator {
   }
 
   /* === MODELS === */
-  async setModel(entry: ModelManifestEntry, options?: { draco?: boolean }): Promise<THREE.Group> {
+  async setModel(entry: ManifestEntry, options?: { draco?: boolean }): Promise<THREE.Group> {
     console.info(`[Orchestrator] Cambiando modelo → ${entry.id}`);
 
     if (this.activeModel) {
@@ -142,7 +142,7 @@ export class SceneOrchestrator {
   }
 
   /* === HDRI === */
-  async setHDRI(entry: ModelManifestEntry): Promise<THREE.Texture> {
+  async setHDRI(entry: ManifestEntry): Promise<THREE.Texture> {
     if (this.activeHDRI) {
       this.activeHDRI.dispose();
     }

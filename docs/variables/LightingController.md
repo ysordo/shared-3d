@@ -12,4 +12,4 @@ const LightingController: React.FC<{
 }>;
 ```
 
-Defined in: react/controls/LightingController.tsx:6
+Defined in: [react/controls/LightingController.tsx:6](https://github.com/ysordo/shared-3d/blob/main/src/react/controls/LightingController.tsx#L6)

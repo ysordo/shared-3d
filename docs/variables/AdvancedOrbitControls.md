@@ -10,4 +10,4 @@
 const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps>;
 ```
 
-Defined in: react/components/AdvancedOrbitControls.tsx:35
+Defined in: [react/components/AdvancedOrbitControls.tsx:35](https://github.com/ysordo/shared-3d/blob/main/src/react/components/AdvancedOrbitControls.tsx#L35)

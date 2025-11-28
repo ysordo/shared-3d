@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, useState } from 'react';
 import { CacheValidator } from '../core/cache/CacheValidator';
-import type { ModelManifestEntry, CacheReport } from '../core/cache/types';
+import type { ModelManifest, CacheReport } from '../core/cache/types';
 
 type CacheStatus = 'idle' | 'validating' | 'ready' | 'error';
 
@@ -11,7 +11,7 @@ type CacheContextValue = {
   status: CacheStatus;
   progress: number;
   report: CacheReport | null;
-  validate: (manifest: ModelManifestEntry[]) => Promise<CacheReport>;
+  validate: (manifest: ModelManifest) => Promise<CacheReport>;
 };
 
 const CacheContext = createContext<CacheContextValue | null>(null);
@@ -21,7 +21,7 @@ export const CacheProvider = ({ children }: { children: ReactNode }) => {
   const [progress, setProgress] = useState(0);
   const [report, setReport] = useState<CacheReport | null>(null);
 
-  const validate = async (manifest: ModelManifestEntry[]) => {
+  const validate = async (manifest: ModelManifest) => {
     setStatus('validating');
     setProgress(0);
 

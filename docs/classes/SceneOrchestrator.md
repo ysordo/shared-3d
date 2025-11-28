@@ -6,7 +6,7 @@
 
 # Class: SceneOrchestrator
 
-Defined in: core/orchestrator/SceneOrchestrator.ts:18
+Defined in: [core/orchestrator/SceneOrchestrator.ts:17](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L17)
 
 ## Methods
 
@@ -16,7 +16,7 @@ Defined in: core/orchestrator/SceneOrchestrator.ts:18
 static getInstance(canvas?, config?): SceneOrchestrator;
 ```
 
-Defined in: core/orchestrator/SceneOrchestrator.ts:89
+Defined in: [core/orchestrator/SceneOrchestrator.ts:80](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L80)
 
 #### Parameters
 
@@ -37,7 +37,7 @@ Defined in: core/orchestrator/SceneOrchestrator.ts:89
 use(plugin): this;
 ```
 
-Defined in: core/orchestrator/SceneOrchestrator.ts:98
+Defined in: [core/orchestrator/SceneOrchestrator.ts:89](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L89)
 
 #### Parameters
 
@@ -57,13 +57,13 @@ Defined in: core/orchestrator/SceneOrchestrator.ts:98
 setModel(entry, options?): Promise<Group<Object3DEventMap>>;
 ```
 
-Defined in: core/orchestrator/SceneOrchestrator.ts:123
+Defined in: [core/orchestrator/SceneOrchestrator.ts:114](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L114)
 
 #### Parameters
 
 | Parameter | Type |
 | ------ | ------ |
-| `entry` | [`ModelManifestEntry`](../type-aliases/ModelManifestEntry.md) |
+| `entry` | [`ManifestEntry`](../type-aliases/ManifestEntry.md) |
 | `options?` | \{ `draco?`: `boolean`; \} |
 | `options.draco?` | `boolean` |
 
@@ -79,7 +79,7 @@ Defined in: core/orchestrator/SceneOrchestrator.ts:123
 removeModel(): void;
 ```
 
-Defined in: core/orchestrator/SceneOrchestrator.ts:147
+Defined in: [core/orchestrator/SceneOrchestrator.ts:137](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L137)
 
 #### Returns
 
@@ -93,13 +93,13 @@ Defined in: core/orchestrator/SceneOrchestrator.ts:147
 setHDRI(entry): Promise<Texture>;
 ```
 
-Defined in: core/orchestrator/SceneOrchestrator.ts:155
+Defined in: [core/orchestrator/SceneOrchestrator.ts:145](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L145)
 
 #### Parameters
 
 | Parameter | Type |
 | ------ | ------ |
-| `entry` | [`ModelManifestEntry`](../type-aliases/ModelManifestEntry.md) |
+| `entry` | [`ManifestEntry`](../type-aliases/ManifestEntry.md) |
 
 #### Returns
 
@@ -113,7 +113,7 @@ Defined in: core/orchestrator/SceneOrchestrator.ts:155
 clearHDRI(): void;
 ```
 
-Defined in: core/orchestrator/SceneOrchestrator.ts:172
+Defined in: [core/orchestrator/SceneOrchestrator.ts:162](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L162)
 
 #### Returns
 
@@ -127,7 +127,7 @@ Defined in: core/orchestrator/SceneOrchestrator.ts:172
 dispose(): void;
 ```
 
-Defined in: core/orchestrator/SceneOrchestrator.ts:182
+Defined in: [core/orchestrator/SceneOrchestrator.ts:172](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L172)
 
 #### Returns
 
@@ -141,7 +141,7 @@ Defined in: core/orchestrator/SceneOrchestrator.ts:182
 getActiveModel(): Group<Object3DEventMap> | null;
 ```
 
-Defined in: core/orchestrator/SceneOrchestrator.ts:214
+Defined in: [core/orchestrator/SceneOrchestrator.ts:198](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L198)
 
 #### Returns
 
@@ -155,7 +155,7 @@ Defined in: core/orchestrator/SceneOrchestrator.ts:214
 getActiveHDRI(): Texture | null;
 ```
 
-Defined in: core/orchestrator/SceneOrchestrator.ts:218
+Defined in: [core/orchestrator/SceneOrchestrator.ts:202](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L202)
 
 #### Returns
 
@@ -169,7 +169,7 @@ Defined in: core/orchestrator/SceneOrchestrator.ts:218
 readonly scene: Scene;
 ```
 
-Defined in: core/orchestrator/SceneOrchestrator.ts:22
+Defined in: [core/orchestrator/SceneOrchestrator.ts:20](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L20)
 
 ***
 
@@ -179,7 +179,7 @@ Defined in: core/orchestrator/SceneOrchestrator.ts:22
 readonly camera: PerspectiveCamera;
 ```
 
-Defined in: core/orchestrator/SceneOrchestrator.ts:23
+Defined in: [core/orchestrator/SceneOrchestrator.ts:21](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L21)
 
 ***
 
@@ -189,4 +189,4 @@ Defined in: core/orchestrator/SceneOrchestrator.ts:23
 readonly renderer: WebGLRenderer;
 ```
 
-Defined in: core/orchestrator/SceneOrchestrator.ts:24
+Defined in: [core/orchestrator/SceneOrchestrator.ts:22](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L22)

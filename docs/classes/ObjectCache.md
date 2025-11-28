@@ -6,7 +6,7 @@
 
 # Class: ObjectCache
 
-Defined in: core/cache/ObjectCache.ts:11
+Defined in: [core/cache/ObjectCache.ts:8](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L8)
 
 ## Constructors
 
@@ -28,10 +28,11 @@ new ObjectCache(): ObjectCache;
 static set<T>(
    id, 
    data, 
-hash): Promise<void>;
+   hash, 
+updatedAt): Promise<void>;
 ```
 
-Defined in: core/cache/ObjectCache.ts:17
+Defined in: [core/cache/ObjectCache.ts:13](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L13)
 
 #### Type Parameters
 
@@ -46,6 +47,7 @@ Defined in: core/cache/ObjectCache.ts:17
 | `id` | `string` |
 | `data` | `T` |
 | `hash` | `string` |
+| `updatedAt` | `number` |
 
 #### Returns
 
@@ -59,7 +61,7 @@ Defined in: core/cache/ObjectCache.ts:17
 static get<T>(id): Promise<CacheEntry<T> | null>;
 ```
 
-Defined in: core/cache/ObjectCache.ts:29
+Defined in: [core/cache/ObjectCache.ts:30](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L30)
 
 #### Type Parameters
 
@@ -85,7 +87,7 @@ Defined in: core/cache/ObjectCache.ts:29
 static has(id): Promise<boolean>;
 ```
 
-Defined in: core/cache/ObjectCache.ts:35
+Defined in: [core/cache/ObjectCache.ts:35](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L35)
 
 #### Parameters
 
@@ -105,7 +107,7 @@ Defined in: core/cache/ObjectCache.ts:35
 static delete(id): Promise<void>;
 ```
 
-Defined in: core/cache/ObjectCache.ts:42
+Defined in: [core/cache/ObjectCache.ts:41](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L41)
 
 #### Parameters
 
@@ -125,7 +127,7 @@ Defined in: core/cache/ObjectCache.ts:42
 static clearAll(): Promise<void>;
 ```
 
-Defined in: core/cache/ObjectCache.ts:51
+Defined in: [core/cache/ObjectCache.ts:50](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L50)
 
 #### Returns
 

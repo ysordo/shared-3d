@@ -6,7 +6,7 @@
 
 # Class: OrbitControlsPlugin
 
-Defined in: core/orchestrator/plugins/OrbitControlsPlugin.ts:4
+Defined in: [core/orchestrator/plugins/OrbitControlsPlugin.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/OrbitControlsPlugin.ts#L4)
 
 ## Implements
 
@@ -32,7 +32,7 @@ new OrbitControlsPlugin(): OrbitControlsPlugin;
 install(__namedParameters): void;
 ```
 
-Defined in: core/orchestrator/plugins/OrbitControlsPlugin.ts:8
+Defined in: [core/orchestrator/plugins/OrbitControlsPlugin.ts:8](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/OrbitControlsPlugin.ts#L8)
 
 #### Parameters
 
@@ -56,7 +56,7 @@ Defined in: core/orchestrator/plugins/OrbitControlsPlugin.ts:8
 dispose(): void;
 ```
 
-Defined in: core/orchestrator/plugins/OrbitControlsPlugin.ts:25
+Defined in: [core/orchestrator/plugins/OrbitControlsPlugin.ts:24](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/OrbitControlsPlugin.ts#L24)
 
 #### Returns
 
@@ -74,7 +74,7 @@ Defined in: core/orchestrator/plugins/OrbitControlsPlugin.ts:25
 name: string = 'OrbitControls';
 ```
 
-Defined in: core/orchestrator/plugins/OrbitControlsPlugin.ts:5
+Defined in: [core/orchestrator/plugins/OrbitControlsPlugin.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/OrbitControlsPlugin.ts#L5)
 
 #### Implementation of
 

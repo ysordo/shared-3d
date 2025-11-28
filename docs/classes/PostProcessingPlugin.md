@@ -6,7 +6,7 @@
 
 # Class: PostProcessingPlugin
 
-Defined in: core/orchestrator/plugins/PostProcessingPlugin.ts:7
+Defined in: [core/orchestrator/plugins/PostProcessingPlugin.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/PostProcessingPlugin.ts#L7)
 
 ## Implements
 
@@ -20,7 +20,7 @@ Defined in: core/orchestrator/plugins/PostProcessingPlugin.ts:7
 new PostProcessingPlugin(options): PostProcessingPlugin;
 ```
 
-Defined in: core/orchestrator/plugins/PostProcessingPlugin.ts:12
+Defined in: [core/orchestrator/plugins/PostProcessingPlugin.ts:12](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/PostProcessingPlugin.ts#L12)
 
 #### Parameters
 
@@ -43,7 +43,7 @@ Defined in: core/orchestrator/plugins/PostProcessingPlugin.ts:12
 install(__namedParameters): void;
 ```
 
-Defined in: core/orchestrator/plugins/PostProcessingPlugin.ts:16
+Defined in: [core/orchestrator/plugins/PostProcessingPlugin.ts:16](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/PostProcessingPlugin.ts#L16)
 
 #### Parameters
 
@@ -67,7 +67,7 @@ Defined in: core/orchestrator/plugins/PostProcessingPlugin.ts:16
 setBloom(strength): void;
 ```
 
-Defined in: core/orchestrator/plugins/PostProcessingPlugin.ts:51
+Defined in: [core/orchestrator/plugins/PostProcessingPlugin.ts:49](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/PostProcessingPlugin.ts#L49)
 
 #### Parameters
 
@@ -87,7 +87,7 @@ Defined in: core/orchestrator/plugins/PostProcessingPlugin.ts:51
 dispose(): void;
 ```
 
-Defined in: core/orchestrator/plugins/PostProcessingPlugin.ts:55
+Defined in: [core/orchestrator/plugins/PostProcessingPlugin.ts:53](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/PostProcessingPlugin.ts#L53)
 
 #### Returns
 
@@ -105,7 +105,7 @@ Defined in: core/orchestrator/plugins/PostProcessingPlugin.ts:55
 name: string = 'PostProcessing';
 ```
 
-Defined in: core/orchestrator/plugins/PostProcessingPlugin.ts:8
+Defined in: [core/orchestrator/plugins/PostProcessingPlugin.ts:8](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/PostProcessingPlugin.ts#L8)
 
 #### Implementation of
 

@@ -1,10 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useScene } from './useScene';
-import type { ModelManifestEntry } from '../core/cache/types';
+import type { ManifestEntry } from '../core/cache/types';
 import type { THREE } from '../lib';
 
-export const useHDRI = (entry: ModelManifestEntry | null) => {
+export const useHDRI = (entry: ManifestEntry | null) => {
   const orchestrator = useScene();
   const [hdri, setHDRI] = useState<THREE.Texture | null>(null);
   const [loading, setLoading] = useState(false);

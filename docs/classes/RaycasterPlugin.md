@@ -6,7 +6,7 @@
 
 # Class: RaycasterPlugin
 
-Defined in: core/orchestrator/plugins/RaycasterPlugin.ts:9
+Defined in: [core/orchestrator/plugins/RaycasterPlugin.ts:9](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/RaycasterPlugin.ts#L9)
 
 ## Implements
 
@@ -20,7 +20,7 @@ Defined in: core/orchestrator/plugins/RaycasterPlugin.ts:9
 new RaycasterPlugin(onEvent?): RaycasterPlugin;
 ```
 
-Defined in: core/orchestrator/plugins/RaycasterPlugin.ts:16
+Defined in: [core/orchestrator/plugins/RaycasterPlugin.ts:16](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/RaycasterPlugin.ts#L16)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: core/orchestrator/plugins/RaycasterPlugin.ts:16
 install(__namedParameters): void;
 ```
 
-Defined in: core/orchestrator/plugins/RaycasterPlugin.ts:20
+Defined in: [core/orchestrator/plugins/RaycasterPlugin.ts:20](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/RaycasterPlugin.ts#L20)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: core/orchestrator/plugins/RaycasterPlugin.ts:20
 dispose(): void;
 ```
 
-Defined in: core/orchestrator/plugins/RaycasterPlugin.ts:72
+Defined in: [core/orchestrator/plugins/RaycasterPlugin.ts:71](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/RaycasterPlugin.ts#L71)
 
 #### Returns
 
@@ -82,7 +82,7 @@ Defined in: core/orchestrator/plugins/RaycasterPlugin.ts:72
 name: string = 'Raycaster';
 ```
 
-Defined in: core/orchestrator/plugins/RaycasterPlugin.ts:10
+Defined in: [core/orchestrator/plugins/RaycasterPlugin.ts:10](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/RaycasterPlugin.ts#L10)
 
 #### Implementation of
 

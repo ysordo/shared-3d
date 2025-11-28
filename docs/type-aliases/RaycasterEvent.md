@@ -24,4 +24,4 @@ type RaycasterEvent =
 };
 ```
 
-Defined in: core/orchestrator/plugins/RaycasterPlugin.ts:4
+Defined in: [core/orchestrator/plugins/RaycasterPlugin.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/RaycasterPlugin.ts#L4)

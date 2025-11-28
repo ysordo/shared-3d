@@ -6,7 +6,7 @@
 
 # Interface: Plugin
 
-Defined in: core/orchestrator/types.ts:11
+Defined in: [core/orchestrator/types.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/types.ts#L11)
 
 ## Methods
 
@@ -16,7 +16,7 @@ Defined in: core/orchestrator/types.ts:11
 install(context): void;
 ```
 
-Defined in: core/orchestrator/types.ts:13
+Defined in: [core/orchestrator/types.ts:13](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/types.ts#L13)
 
 #### Parameters
 
@@ -36,7 +36,7 @@ Defined in: core/orchestrator/types.ts:13
 optional dispose(): void;
 ```
 
-Defined in: core/orchestrator/types.ts:14
+Defined in: [core/orchestrator/types.ts:14](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/types.ts#L14)
 
 #### Returns
 
@@ -50,4 +50,4 @@ Defined in: core/orchestrator/types.ts:14
 name: string;
 ```
 
-Defined in: core/orchestrator/types.ts:12
+Defined in: [core/orchestrator/types.ts:12](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/types.ts#L12)

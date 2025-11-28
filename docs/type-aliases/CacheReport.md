@@ -10,7 +10,7 @@
 type CacheReport = object;
 ```
 
-Defined in: core/cache/types.ts:28
+Defined in: [core/cache/types.ts:18](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L18)
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: core/cache/types.ts:28
 validated: boolean;
 ```
 
-Defined in: core/cache/types.ts:29
+Defined in: [core/cache/types.ts:19](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L19)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: core/cache/types.ts:29
 updated: string[];
 ```
 
-Defined in: core/cache/types.ts:30
+Defined in: [core/cache/types.ts:20](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L20)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: core/cache/types.ts:30
 removed: string[];
 ```
 
-Defined in: core/cache/types.ts:31
+Defined in: [core/cache/types.ts:21](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L21)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: core/cache/types.ts:31
 added: string[];
 ```
 
-Defined in: core/cache/types.ts:32
+Defined in: [core/cache/types.ts:22](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L22)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: core/cache/types.ts:32
 errors: string[];
 ```
 
-Defined in: core/cache/types.ts:33
+Defined in: [core/cache/types.ts:23](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L23)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: core/cache/types.ts:33
 durationMs: number;
 ```
 
-Defined in: core/cache/types.ts:34
+Defined in: [core/cache/types.ts:24](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L24)

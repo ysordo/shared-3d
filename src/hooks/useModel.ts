@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useScene } from './useScene';
-import type { ModelManifestEntry } from '../core/cache/types';
+import type { ManifestEntry } from '../core/cache/types';
 import type { THREE } from '../lib';
 
 type UseModelOptions = {
@@ -10,7 +10,7 @@ type UseModelOptions = {
 };
 
 export const useModel = (
-  entry: ModelManifestEntry | null,
+  entry: ManifestEntry | null,
   options: UseModelOptions = {}
 ) => {
   const { draco = false, autoLoad = true } = options;

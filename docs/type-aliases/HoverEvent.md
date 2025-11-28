@@ -10,7 +10,7 @@
 type HoverEvent = object;
 ```
 
-Defined in: lib/types.ts:25
+Defined in: [lib/types.ts:25](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L25)
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: lib/types.ts:25
 object: THREE.Object3D;
 ```
 
-Defined in: lib/types.ts:26
+Defined in: [lib/types.ts:26](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L26)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: lib/types.ts:26
 point: THREE.Vector3;
 ```
 
-Defined in: lib/types.ts:27
+Defined in: [lib/types.ts:27](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L27)

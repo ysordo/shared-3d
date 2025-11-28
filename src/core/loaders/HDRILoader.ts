@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { WebPHDRLoader } from './WebPHDRLoader';
 import { ObjectCache } from '../cache/ObjectCache';
-import type { ModelManifestEntry } from '../cache/types';
+import type { ManifestEntry, ModelManifest } from '../cache/types';
 import { THREE, ThreeRGBELoader } from '../../lib';
 
 export type HDRIProgress = {
@@ -13,7 +13,7 @@ export type HDRIProgress = {
 
 export type HDRIEvents = {
   onProgress?: (progress: HDRIProgress) => void;
-  onLoaded?: (texture: THREE.Texture, entry: ModelManifestEntry) => void;
+  onLoaded?: (texture: THREE.Texture, entry: ManifestEntry) => void;
   onError?: (error: Error, url: string) => void;
 };
 
@@ -25,7 +25,7 @@ export class HDRILoader {
    * Carga un HDRI de forma inteligente (con caché + hash)
    */
   static async load(
-    entry: ModelManifestEntry,
+    entry: ManifestEntry,
     events: HDRIEvents = {}
   ): Promise<THREE.Texture> {
     const { id, url, hash } = entry;
@@ -97,7 +97,7 @@ export class HDRILoader {
    * Precarga múltiples HDRIs
    */
   static async preload(
-    entries: ModelManifestEntry[],
+    entries: ModelManifest,
     onProgress?: (completed: number, total: number) => void
   ): Promise<void> {
     let completed = 0;

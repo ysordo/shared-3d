@@ -10,7 +10,7 @@
 type GLTFLoaderEvents = object;
 ```
 
-Defined in: core/loaders/GLTFLoader.ts:14
+Defined in: [core/loaders/GLTFLoader.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L11)
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: core/loaders/GLTFLoader.ts:14
 optional onProgress: (p) => void | undefined;
 ```
 
-Defined in: core/loaders/GLTFLoader.ts:15
+Defined in: [core/loaders/GLTFLoader.ts:12](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L12)
 
 #### Parameters
 
@@ -44,14 +44,14 @@ Defined in: core/loaders/GLTFLoader.ts:15
 optional onLoaded: (obj, entry) => void | undefined;
 ```
 
-Defined in: core/loaders/GLTFLoader.ts:16
+Defined in: [core/loaders/GLTFLoader.ts:13](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L13)
 
 #### Parameters
 
 | Parameter | Type |
 | ------ | ------ |
 | `obj` | `THREE.Group` |
-| `entry` | [`ModelManifestEntry`](ModelManifestEntry.md) |
+| `entry` | [`ManifestEntry`](ManifestEntry.md) |
 
 #### Returns
 
@@ -65,7 +65,7 @@ Defined in: core/loaders/GLTFLoader.ts:16
 optional onError: (err, url) => void | undefined;
 ```
 
-Defined in: core/loaders/GLTFLoader.ts:17
+Defined in: [core/loaders/GLTFLoader.ts:14](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L14)
 
 #### Parameters
 

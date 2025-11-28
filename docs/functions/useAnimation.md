@@ -10,7 +10,7 @@
 function useAnimation(clipName, play): void;
 ```
 
-Defined in: hooks/useAnimation.ts:6
+Defined in: [hooks/useAnimation.ts:6](https://github.com/ysordo/shared-3d/blob/main/src/hooks/useAnimation.ts#L6)
 
 ## Parameters
 

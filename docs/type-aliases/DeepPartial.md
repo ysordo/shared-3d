@@ -10,7 +10,7 @@
 type DeepPartial<T> = T extends object ? { [P in keyof T]?: DeepPartial<T[P]> } : T;
 ```
 
-Defined in: lib/types.ts:38
+Defined in: [lib/types.ts:38](https://github.com/ysordo/shared-3d/blob/main/src/lib/types.ts#L38)
 
 ## Type Parameters
 

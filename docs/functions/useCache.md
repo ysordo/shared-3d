@@ -10,7 +10,7 @@
 function useCache(): CacheContextValue;
 ```
 
-Defined in: hooks/useCache.ts:4
+Defined in: [hooks/useCache.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/hooks/useCache.ts#L4)
 
 ## Returns
 

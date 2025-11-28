@@ -6,7 +6,7 @@
 
 # Class: AdvancedOrbitControlsPlugin
 
-Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:4
+Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L4)
 
 ## Implements
 
@@ -20,7 +20,7 @@ Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:4
 new AdvancedOrbitControlsPlugin(options): AdvancedOrbitControlsPlugin;
 ```
 
-Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:21
+Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:20](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L20)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:21
 install(__namedParameters): void;
 ```
 
-Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:27
+Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:26](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L26)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:27
 setPanEnabled(enabled): void;
 ```
 
-Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:42
+Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:39](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L39)
 
 #### Parameters
 
@@ -84,7 +84,7 @@ Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:42
 setRotateEnabled(enabled): void;
 ```
 
-Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:46
+Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:43](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L43)
 
 #### Parameters
 
@@ -104,7 +104,7 @@ Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:46
 setZoomEnabled(enabled): void;
 ```
 
-Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:50
+Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:47](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L47)
 
 #### Parameters
 
@@ -124,7 +124,7 @@ Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:50
 setAllEnabled(enabled): void;
 ```
 
-Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:54
+Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:51](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L51)
 
 #### Parameters
 
@@ -144,7 +144,7 @@ Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:54
 dispose(): void;
 ```
 
-Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:60
+Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:57](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L57)
 
 #### Returns
 
@@ -162,7 +162,7 @@ Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:60
 name: string = 'AdvancedOrbitControls';
 ```
 
-Defined in: core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:5
+Defined in: [core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts#L5)
 
 #### Implementation of
 

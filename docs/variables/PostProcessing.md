@@ -10,4 +10,4 @@
 const PostProcessing: React.FC<PostProcessingProps>;
 ```
 
-Defined in: react/components/PostProcessing.tsx:17
+Defined in: [react/components/PostProcessing.tsx:17](https://github.com/ysordo/shared-3d/blob/main/src/react/components/PostProcessing.tsx#L17)

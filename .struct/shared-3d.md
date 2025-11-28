@@ -1,5 +1,5 @@
 # Estructura de: shared-3d#v1.0.5/
-## Generated: 28/11/2025, 1:05:19 p.m.
+## Generated: 28/11/2025, 1:59:51 p.m.
 ---
 
 ```
@@ -21,6 +21,7 @@
 │   │   │   │   └── 📄env.ts
 │   │   │   ├── 📄CacheValidator.ts
 │   │   │   ├── 📄FileWatcher.ts
+│   │   │   ├── 📄generateManifest.ts
 │   │   │   ├── 📄index.ts
 │   │   │   ├── 📄ObjectCache.ts
 │   │   │   └── 📄types.ts

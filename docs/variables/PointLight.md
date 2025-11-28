@@ -10,4 +10,4 @@
 const PointLight: React.FC<PointLightProps>;
 ```
 
-Defined in: react/components/PointLight.tsx:16
+Defined in: [react/components/PointLight.tsx:16](https://github.com/ysordo/shared-3d/blob/main/src/react/components/PointLight.tsx#L16)
