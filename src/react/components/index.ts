@@ -3,6 +3,7 @@ export { AdvancedDragRaycaster } from './AdvancedDragRaycaster';
 export { AdvancedOrbitControls } from './AdvancedOrbitControls';
 export { AdvancedRaycaster } from './AdvancedRaycaster';
 export { AmbientLight } from './AmbientLight';
+export { AutoLODSystem } from './AutoLODSystem';
 export { Canvas } from './Canvas';
 export { DirectionalLight } from './DirectionalLight';
 export { DistanceDisplay } from './DistanceDisplay';

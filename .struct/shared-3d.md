@@ -1,5 +1,5 @@
 # Estructura de: shared-3d#v1.0.5/
-## Generated: 27/11/2025, 6:56:01 p.m.
+## Generated: 28/11/2025, 1:05:19 p.m.
 ---
 
 ```
@@ -34,7 +34,9 @@
 │   │   │   │   ├── 📄AdvancedCameraCollisionPlugin.ts
 │   │   │   │   ├── 📄AdvancedOrbitControlsPlugin.ts
 │   │   │   │   ├── 📄AdvancedRaycasterPlugin.ts
+│   │   │   │   ├── 📄AutoLODSystemPlugin.ts
 │   │   │   │   ├── 📄index.ts
+│   │   │   │   ├── 📄LODSystemPlugin.ts
 │   │   │   │   ├── 📄OrbitControlsPlugin.ts
 │   │   │   │   ├── 📄PostProcessingPlugin.ts
 │   │   │   │   └── 📄RaycasterPlugin.ts
@@ -65,11 +67,14 @@
 │   │   │   ├── 📄AdvancedOrbitControls.tsx
 │   │   │   ├── 📄AdvancedRaycaster.tsx
 │   │   │   ├── 📄AmbientLight.tsx
+│   │   │   ├── 📄AutoLODSystem.tsx
 │   │   │   ├── 📄Canvas.tsx
 │   │   │   ├── 📄DirectionalLight.tsx
 │   │   │   ├── 📄DistanceDisplay.tsx
 │   │   │   ├── 📄HDRI.tsx
 │   │   │   ├── 📄index.ts
+│   │   │   ├── 📄InstancedModel.tsx
+│   │   │   ├── 📄LODSystem.tsx
 │   │   │   ├── 📄Model.tsx
 │   │   │   ├── 📄OrbitControls.tsx
 │   │   │   ├── 📄PointLight.tsx

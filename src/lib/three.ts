@@ -10,7 +10,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 // Reexport principal
 export { THREE };
 
-// Extras útiles (opcional, pero recomendado)
+// Useful extras (optional, but recommended)
 export {
   OrbitControls as ThreeOrbitControls,
   GLTFLoader as ThreeGLTFLoader,
@@ -21,10 +21,10 @@ export {
   UnrealBloomPass as ThreeUnrealBloomPass,
 };
 
-// Versión (útil para debugging)
+// Version (useful for debugging)
 export const THREE_VERSION = THREE.REVISION;
 
-// Patch para desarrollo
+// Patch for development environment
 if (process.env.NODE_ENV === 'development') {
   // @ts-ignore
   window.THREE = THREE;

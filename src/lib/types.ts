@@ -7,7 +7,7 @@ export type ColorRepresentation = THREE.ColorRepresentation;
 /* === Manifest === */
 export type { ModelManifestEntry } from '../core/cache/types';
 
-/* ===Common settings=== */
+/* === Common settings === */
 export type LightConfig = {
   intensity?: number;
   color?: ColorRepresentation;
