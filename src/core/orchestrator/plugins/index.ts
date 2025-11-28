@@ -1,6 +1,7 @@
 export * from './AdvancedCameraCollisionPlugin';
 export * from './AdvancedOrbitControlsPlugin';
 export * from './AdvancedRaycasterPlugin';
+export * from './AnnotationsPlugin';
 export * from './AutoLODSystemPlugin';
 export * from './LODSystemPlugin';
 export * from './OrbitControlsPlugin';
