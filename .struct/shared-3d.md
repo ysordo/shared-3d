@@ -1,5 +1,5 @@
 # Estructura de: shared-3d#v1.0.5/
-## Generated: 28/11/2025, 4:36:02 p.m.
+## Generated: 28/11/2025, 5:46:35 p.m.
 ---
 
 ```
@@ -40,6 +40,7 @@
 │   │   │   │   ├── 📄HotspotPlugin.ts
 │   │   │   │   ├── 📄index.ts
 │   │   │   │   ├── 📄LODSystemPlugin.ts
+│   │   │   │   ├── 📄MeasurementToolPlugin.ts
 │   │   │   │   ├── 📄OrbitControlsPlugin.ts
 │   │   │   │   ├── 📄PostProcessingPlugin.ts
 │   │   │   │   └── 📄RaycasterPlugin.ts
@@ -82,9 +83,11 @@
 │   │   │   ├── 📄GroundSurface.tsx
 │   │   │   ├── 📄HDRI.tsx
 │   │   │   ├── 📄Hotspot.tsx
+│   │   │   ├── 📄Hotspots.tsx
 │   │   │   ├── 📄index.ts
 │   │   │   ├── 📄InstancedModel.tsx
 │   │   │   ├── 📄LODSystem.tsx
+│   │   │   ├── 📄MeasurementTool.tsx
 │   │   │   ├── 📄Model.tsx
 │   │   │   ├── 📄ModelPreload.tsx
 │   │   │   ├── 📄OrbitControls.tsx
@@ -92,6 +95,8 @@
 │   │   │   ├── 📄PostProcessing.tsx
 │   │   │   ├── 📄Raycaster.tsx
 │   │   │   ├── 📄SpotLight.tsx
+│   │   │   ├── 📄Suspense.tsx
+│   │   │   ├── 📄SuspenseModel.tsx
 │   │   │   ├── 📄TheaterLighting.tsx
 │   │   │   └── 📄VRButton.tsx
 │   │   ├── 📁controls/
