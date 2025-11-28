@@ -51,7 +51,6 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     orchestrator.use(newPlugin);
     setPlugin(newPlugin);
 
-    // Aplicar estado inicial
     newPlugin.setAllEnabled(defaultEnabled);
 
     return () => {

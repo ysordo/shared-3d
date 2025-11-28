@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useActiveModel } from '../../hooks/useActiveModel';
-import * as THREE from 'three';
+import { THREE } from '../../lib';
 
 type AnimationItem = {
   name: string;
@@ -34,7 +34,6 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
   const [playing, setPlaying] = useState<Set<string>>(new Set());
   const [reversed, setReversed] = useState<Set<string>>(new Set());
 
-  // Inicializar mixer cuando cambia el modelo
   useEffect(() => {
     if (!model) {
       setClips([]);
@@ -47,7 +46,6 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
       setMixer(new THREE.AnimationMixer(model));
       mixer.setTime(0);
 
-      // Crear acciones
       const newActions = new Map<string, THREE.AnimationAction>();
       model.animations.forEach((clip) => {
         const action = mixer.clipAction(clip);
@@ -60,7 +58,6 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
       setActions(newActions);
     }
 
-    // Animation loop
     const clock = new THREE.Clock();
     const animate = () => {
       mixer.update(clock.getDelta());
@@ -73,14 +70,12 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
     };
   }, [model]);
 
-  // Funciones de control
   const playForward = (name: string) => {
     const action = actions.get(name);
     if (!action) {
       return;
     }
 
-    // Detener otras
     actions.forEach((a, n) => {
       if (n !== name) {
         a.fadeOut(0.2);
@@ -131,7 +126,6 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
     }
   };
 
-  // Construir lista final
   const animationList: AnimationItem[] = clips.map((clip) => ({
     name: clip.name || `Animación ${clip.uuid.slice(0, 4)}`,
     playForward: () => playForward(clip.name),

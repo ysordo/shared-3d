@@ -1,14 +1,11 @@
 /* eslint-disable no-console */
-// src/core/loaders/GLTFLoader.ts
-import * as THREE from 'three';
-import { GLTFLoader as ThreeGLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { DRACOLoader as ThreeDRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { ObjectCache } from '../cache/ObjectCache';
 import type { ModelManifestEntry } from '../cache/types';
+import { THREE, ThreeGLTFLoader, ThreeDRACOLoader } from '../../lib';
 
 export type GLTFLoaderOptions = {
-  draco?: boolean | undefined;        // ← ¡La magia!
-  decoderPath?: string | undefined;   // opcional: /draco/ por defecto
+  draco?: boolean | undefined;
+  decoderPath?: string | undefined;
 };
 
 export type GLTFLoaderEvents = {
@@ -27,7 +24,6 @@ export class GLTFLoader {
     const useDraco = options.draco === true;
 
     if (useDraco) {
-      // Solo inicializamos UNA vez
       if (!this.isDracoInitialized) {
         const path = options.decoderPath || '/draco/';
         this.dracoDecoder.setDecoderPath(path);
@@ -58,7 +54,6 @@ export class GLTFLoader {
 
     const loader = this.getLoader({ draco, decoderPath });
 
-    // Cache hit (igual para ambos)
     const cached = await ObjectCache.get<THREE.Group>(id);
     if (cached && cached.hash === hash) {
       console.info(`[GLTFLoader] Cache hit: ${id} (${draco ? 'draco' : 'standard'})`);
@@ -79,7 +74,6 @@ export class GLTFLoader {
             scene.name = id;
             scene.animations = gltf.animations || [];
 
-            // Centrado automático
             const box = new THREE.Box3().setFromObject(scene);
             scene.position.sub(box.getCenter(new THREE.Vector3()));
 
@@ -118,7 +112,6 @@ export class GLTFLoader {
     });
   }
 
-  // preload unificado
   static async preload(
     entries: ModelManifestEntry[],
     options: GLTFLoaderOptions = {},

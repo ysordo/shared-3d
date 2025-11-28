@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { useScene } from '../../hooks/useScene';
-import * as THREE from 'three';
+import { THREE } from '../../lib';
 
 export const LightingController: React.FC<{ className?: string }> = ({
   className,
@@ -18,7 +18,6 @@ export const LightingController: React.FC<{ className?: string }> = ({
     });
   };
 
-  // Guardar intensidad base
   React.useEffect(() => {
     scene.traverse((obj) => {
       if (obj instanceof THREE.Light) {

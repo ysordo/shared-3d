@@ -1,21 +1,10 @@
-import type {
-  HalfFloatType} from 'three';
-import {
-  DataTexture,
-  RGBAFormat,
-  FloatType,
-  LinearFilter,
-  LinearSRGBColorSpace,
-  FileLoader,
-  LoadingManager,
-} from 'three';
-import * as THREE from 'three';
+import { THREE } from '../../lib';
 
 export interface WebPHDRData {
   width: number;
   height: number;
   data: Float32Array | Uint16Array;
-  type: typeof FloatType | typeof HalfFloatType;
+  type: typeof THREE.FloatType | typeof THREE.HalfFloatType;
   exposure: number;
   maxLuminance: number;
 }
@@ -26,16 +15,16 @@ export interface WebPHDRData {
  * Ideal para environment maps ligeros y rápidos
  */
 export class WebPHDRLoader {
-  manager: LoadingManager;
-  private type: typeof FloatType | typeof HalfFloatType = FloatType;
+  manager: THREE.LoadingManager;
+  private type: typeof THREE.FloatType | typeof THREE.HalfFloatType = THREE.FloatType;
   private exposure = 1.0;
   private preserveHDR = true;
 
-  constructor(manager?: LoadingManager) {
-    this.manager = manager || new LoadingManager();
+  constructor(manager?: THREE.LoadingManager) {
+    this.manager = manager || new THREE.LoadingManager();
   }
 
-  setDataType(type: typeof FloatType | typeof HalfFloatType): this {
+  setDataType(type: typeof THREE.FloatType | typeof THREE.HalfFloatType): this {
     this.type = type;
     return this;
   }
@@ -52,11 +41,11 @@ export class WebPHDRLoader {
 
   load(
     url: string,
-    onLoad?: (texture: DataTexture, data: WebPHDRData) => void,
+    onLoad?: (texture: THREE.DataTexture, data: WebPHDRData) => void,
     onProgress?: (event: ProgressEvent) => void,
     onError?: (event: Event) => void
-  ): DataTexture {
-    const loader = new FileLoader(this.manager);
+  ): THREE.DataTexture {
+    const loader = new THREE.FileLoader(this.manager);
     loader.setResponseType('arraybuffer');
 
     loader.load(
@@ -64,17 +53,17 @@ export class WebPHDRLoader {
       (buffer) => {
         try {
           const result = this.parse(buffer as ArrayBuffer);
-          const texture = new DataTexture(
+          const texture = new THREE.DataTexture(
             result.data,
             result.width,
             result.height,
-            RGBAFormat,
+            THREE.RGBAFormat,
             result.type
           );
 
-          texture.colorSpace = LinearSRGBColorSpace;
-          texture.minFilter = LinearFilter;
-          texture.magFilter = LinearFilter;
+          texture.colorSpace = THREE.LinearSRGBColorSpace;
+          texture.minFilter = THREE.LinearFilter;
+          texture.magFilter = THREE.LinearFilter;
           texture.generateMipmaps = false;
           texture.needsUpdate = true;
           texture.flipY = true;
@@ -96,7 +85,7 @@ export class WebPHDRLoader {
     );
 
     // Retornamos textura vacía mientras carga
-    return new DataTexture(new Uint8Array(4), 1, 1, RGBAFormat);
+    return new THREE.DataTexture(new Uint8Array(4), 1, 1, THREE.RGBAFormat);
   }
 
   parse(buffer: ArrayBuffer): WebPHDRData {
@@ -148,7 +137,7 @@ export class WebPHDRLoader {
     const width = 1024;
     const height = 512;
     const size = width * height * 4;
-    const data = this.type === FloatType
+    const data = this.type === THREE.FloatType
       ? new Float32Array(size)
       : new Uint16Array(size);
 
@@ -172,7 +161,7 @@ export class WebPHDRLoader {
         const maxChannel = Math.max(color.r, color.g, color.b, 0.0001);
         const range = Math.min(255, Math.floor(maxChannel / maxLuminance * 255));
 
-        if (this.type === FloatType) {
+        if (this.type === THREE.FloatType) {
           data[idx] = color.r / (range + 1);
           data[idx + 1] = color.g / (range + 1);
           data[idx + 2] = color.b / (range + 1);

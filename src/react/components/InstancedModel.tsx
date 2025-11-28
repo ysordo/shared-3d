@@ -4,8 +4,8 @@ import type React from 'react';
 import { useEffect, useRef } from 'react';
 import { useScene } from '../../hooks/useScene';
 import { GLTFLoader } from '../../core/loaders/GLTFLoader';
-import * as THREE from 'three';
 import type { ModelManifestEntry } from '../../core/cache/types';
+import { THREE } from '../../lib';
 
 type InstanceData = {
   position: THREE.Vector3;
@@ -47,7 +47,6 @@ export const InstancedModel: React.FC<InstancedModelProps> = ({
         const gltf = await GLTFLoader.load(entry, { draco });
         const model = gltf.clone();
 
-        // Limpiar instancias previas
         instancedMeshes.current.forEach((mesh) => {
           scene.remove(mesh);
           mesh.geometry.dispose();
@@ -59,7 +58,6 @@ export const InstancedModel: React.FC<InstancedModelProps> = ({
         });
         instancedMeshes.current.clear();
 
-        // Crear instancias por cada mesh del modelo
         model.traverse((child) => {
           if (!(child instanceof THREE.Mesh)) {
             return;

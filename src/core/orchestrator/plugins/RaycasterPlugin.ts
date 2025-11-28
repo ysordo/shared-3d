@@ -1,5 +1,5 @@
-import * as THREE from 'three';
 import type { Plugin, PluginContext } from '../types';
+import { THREE } from '../../../lib';
 
 export type RaycasterEvent =
   | { type: 'click'; object: THREE.Object3D; point: THREE.Vector3 }
@@ -38,7 +38,6 @@ export class RaycasterPlugin implements Plugin {
     dom.addEventListener('pointermove', onPointerMove);
     dom.addEventListener('click', onClick);
 
-    // Guardar handlers para dispose
     this.dispose = () => {
       dom.removeEventListener('pointermove', onPointerMove);
       dom.removeEventListener('click', onClick);
@@ -69,7 +68,5 @@ export class RaycasterPlugin implements Plugin {
     return intersects[0] || null;
   }
 
-  dispose(): void {
-    // Será sobrescrito en install
-  }
+  dispose(): void { }
 }

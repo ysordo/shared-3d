@@ -2,7 +2,7 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import { useScene } from '../../hooks/useScene';
-import * as THREE from 'three';
+import { THREE } from '../../lib';
 
 type DistanceUnit = 'm' | 'cm' | 'mm' | 'px' | 'in' | 'ft' | 'km';
 
@@ -64,7 +64,6 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
     const update = () => {
       const dist = getCurrentDistance();
 
-      // Capturar distancia inicial solo una vez
       if (initialDistance === null && dist > 0) {
         setInitialDistance(dist);
       }

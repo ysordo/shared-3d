@@ -8,6 +8,7 @@ export { DirectionalLight } from './DirectionalLight';
 export { DistanceDisplay } from './DistanceDisplay';
 export { HDRI } from './HDRI';
 export { InstancedModel } from './InstancedModel';
+export { LODSystem } from './LODSystem';
 export { Model } from './Model';
 export { OrbitControls } from './OrbitControls';
 export { PointLight } from './PointLight';

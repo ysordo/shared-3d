@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as THREE from 'three';
 import type { Plugin, PluginContext } from '../types';
+import { THREE } from '../../../lib';
 
-// === TU CÓDIGO ORIGINAL (adaptado como clase interna) ===
 class RaycasterManager extends THREE.EventDispatcher {
   private raycaster = new THREE.Raycaster();
   private pointer = new THREE.Vector2();
@@ -191,7 +190,6 @@ class RaycasterManager extends THREE.EventDispatcher {
   private onTouchEnd = this.onPointerUp as any;
 }
 
-// === PLUGIN ===
 export class AdvancedRaycasterPlugin implements Plugin {
   name = 'AdvancedRaycaster';
   private _manager: RaycasterManager;
@@ -200,21 +198,19 @@ export class AdvancedRaycasterPlugin implements Plugin {
     private model?: THREE.Object3D,
     private onEvent?: (event: any) => void
   ) {
-    this._manager = new RaycasterManager(document.body); // será reemplazado
+    this._manager = new RaycasterManager(document.body);
   }
 
   install({ scene, camera, renderer, orchestrator }: PluginContext): void {
     this._manager = new RaycasterManager(renderer.domElement);
     this._manager.initialize(scene, camera);
 
-    // Configurar modelo interactuable
     if (this.model) {
       this._manager.setModel(this.model);
     } else if (orchestrator.getActiveModel()) {
       this._manager.setModel(orchestrator.getActiveModel()!);
     }
 
-    // Forward todos los eventos
     const events: string[] = [
       'objectclick',
       'objecthoverin',

@@ -14,7 +14,6 @@ export class OrbitControlsPlugin implements Plugin {
     this.controls.maxDistance = 50;
     this.controls.maxPolarAngle = Math.PI / 2.1;
 
-    // Auto update en el loop
     const animate = () => {
       this.controls.update();
       requestAnimationFrame(animate);

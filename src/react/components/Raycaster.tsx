@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import type React from 'react';
@@ -6,9 +5,8 @@ import { useEffect } from 'react';
 import { useScene } from '../../hooks/useScene';
 import {
   RaycasterPlugin,
-  type RaycasterEvent,
 } from '../../core/orchestrator/plugins';
-import type * as THREE from 'three';
+import type { THREE } from '../../lib';
 
 type RaycasterProps = {
   onClick?: (obj: THREE.Object3D) => void;

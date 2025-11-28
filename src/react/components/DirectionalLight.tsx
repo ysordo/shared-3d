@@ -3,7 +3,7 @@
 import type React from 'react';
 import { useEffect } from 'react';
 import { useScene } from '../../hooks/useScene';
-import * as THREE from 'three';
+import { THREE } from '../../lib';
 
 type DirectionalLightProps = {
   intensity?: number;
@@ -41,7 +41,6 @@ export const DirectionalLight: React.FC<DirectionalLightProps> = ({
 
     scene.add(light);
 
-    // Opcional: helper para desarrollo
     if (process.env.NODE_ENV === 'development') {
       const helper = new THREE.DirectionalLightHelper(light, 2);
       scene.add(helper);

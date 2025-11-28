@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
-import * as THREE from 'three';
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { WebPHDRLoader } from './WebPHDRLoader';
 import { ObjectCache } from '../cache/ObjectCache';
 import type { ModelManifestEntry } from '../cache/types';
+import { THREE, ThreeRGBELoader } from '../../lib';
 
 export type HDRIProgress = {
   loaded: number;
@@ -19,7 +18,7 @@ export type HDRIEvents = {
 };
 
 export class HDRILoader {
-  private static rgbeLoader = new RGBELoader();
+  private static rgbeLoader = new ThreeRGBELoader();
   private static webpLoader = new WebPHDRLoader();
 
   /**
@@ -32,7 +31,6 @@ export class HDRILoader {
     const { id, url, hash } = entry;
     const { onProgress, onLoaded, onError } = events;
 
-    // 1. ¿Ya está en caché y el hash coincide?
     const cached = await ObjectCache.get(id);
     if (cached && cached.hash === hash && cached.data instanceof THREE.Texture) {
       console.info(`[HDRILoader] Cache hit: ${id}`);
@@ -42,7 +40,6 @@ export class HDRILoader {
       return texture;
     }
 
-    // 2. Detectar tipo de archivo
     const isWebP = url.toLowerCase().endsWith('.webp');
     const loader = isWebP ? this.webpLoader : this.rgbeLoader;
 
@@ -53,7 +50,6 @@ export class HDRILoader {
         url,
         async (texture: THREE.Texture) => {
           try {
-            // Configuración óptima para environment map
             texture.mapping = THREE.EquirectangularReflectionMapping;
             texture.colorSpace = THREE.LinearSRGBColorSpace;
             texture.minFilter = THREE.LinearFilter;
@@ -61,7 +57,6 @@ export class HDRILoader {
             texture.generateMipmaps = false;
             texture.needsUpdate = true;
 
-            // Metadata
             texture.name = id;
             texture.userData = {
               sourceUrl: url,
@@ -70,7 +65,6 @@ export class HDRILoader {
               loadedAt: Date.now(),
             };
 
-            // Guardar en caché (¡la textura ya procesada!)
             await ObjectCache.set(id, texture, hash);
 
             onLoaded?.(texture, entry);

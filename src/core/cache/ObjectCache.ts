@@ -1,23 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// src/core/cache/ObjectCache.ts → VERSIÓN DEFINITIVA v1.0.5
 import { get, set, del, keys } from 'idb-keyval';
-import * as THREE from 'three';
 import type { CacheEntry } from './types';
+import { THREE } from '../../lib';
 
 
 
-const CACHE_PREFIX = 'shared-3d:asset:'; // ← Cambiado para incluir texturas
+const CACHE_PREFIX = 'shared-3d:asset:';
 
 export class ObjectCache {
   private static async getKey(id: string): Promise<string> {
     return `${CACHE_PREFIX}${id}`;
   }
 
-  // === SET: ahora genérico ===
+  /* === SET: now generic === */
   static async set<T>(id: string, data: T, hash: string): Promise<void> {
     const key = await this.getKey(id);
     const entry: CacheEntry<T> = {
-      data: structuredClone ? structuredClone(data) : this.deepClone(data), // ← Mejor que .clone() en algunos casos
+      data: structuredClone ? structuredClone(data) : this.deepClone(data),
       hash,
       timestamp: Date.now(),
       size: this.estimateSize(data),
@@ -25,7 +24,7 @@ export class ObjectCache {
     await set(key, entry);
   }
 
-  // === GET: ahora genérico ===
+  /* === GET: now generic === */
   static async get<T>(id: string): Promise<CacheEntry<T> | null> {
     const key = await this.getKey(id);
     const entry = await get<CacheEntry<T>>(key);
@@ -38,7 +37,7 @@ export class ObjectCache {
     return all.includes(key as string);
   }
 
-  // === DELETE: ahora con dispose inteligente ===
+  /* === DELETE: now with smart dispose === */
   static async delete(id: string): Promise<void> {
     const key = await this.getKey(id);
     const entry = await this.get(key);
@@ -54,7 +53,7 @@ export class ObjectCache {
     await Promise.all(ourKeys.map(k => del(k)));
   }
 
-  // === DISPOSE INTELIGENTE (soporta Object3D y Texture) ===
+  /* === SMART DISPOSE (supports Object3D and Texture) === */
   private static dispose(data: any): void {
     if (data instanceof THREE.Object3D) {
       data.traverse((child: any) => {
@@ -74,7 +73,7 @@ export class ObjectCache {
     }
   }
 
-  // === ESTIMAR TAMAÑO (mejorado) ===
+  /* ===ESTIMATE SIZE (improved)=== */
   private static estimateSize(data: any): number {
     if (data instanceof THREE.Object3D) {
       let size = 0;
@@ -92,7 +91,7 @@ export class ObjectCache {
     return  0;
   }
 
-  // === CLONE PROFUNDO (fallback si no hay structuredClone) ===
+  /* === DEEP CLONE (fallback if there is no structuredClone) === */
   private static deepClone<T>(obj: T): T {
     if (obj instanceof THREE.Object3D) {
       return obj.clone() as T;

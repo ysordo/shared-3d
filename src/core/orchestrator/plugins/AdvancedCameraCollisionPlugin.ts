@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts
 import type { Plugin, PluginContext } from '../types';
-import * as THREE from 'three';
+import { THREE } from '../../../lib';
 
 export class AdvancedCameraCollisionPlugin implements Plugin {
   name = 'AdvancedCameraCollisionPlugin';

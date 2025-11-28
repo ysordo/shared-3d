@@ -19,7 +19,6 @@ export class CacheValidator {
 
     onProgress?.(0, 'Iniciando validación de caché...');
 
-    // 1. Desarrollo: FileWatcher + hot reload
     if (isDev() && !forceUpdate) {
       const watcher = FileWatcher.getInstance();
       watcher.watch(manifest, (changedIds) => {
@@ -37,13 +36,11 @@ export class CacheValidator {
       return { validated: true, updated: [], removed: [], added: [], errors: [], durationMs: 0 };
     }
 
-    // 2. Producción: solo primera carga
     if (!CacheValidator.isFirstLoad && !forceUpdate) {
       onProgress?.(100, 'Caché ya validada');
       return { validated: true, updated: [], removed: [], added: [], errors: [], durationMs: 0 };
     }
 
-    // 3. Primera carga real: comparar y actualizar
     onProgress?.(10, 'Comparando manifest con caché local...');
 
     const start = performance.now();
@@ -65,7 +62,6 @@ export class CacheValidator {
       }
     }
 
-    // Detectar lo que falta o cambió
     const toUpdate: ModelManifestEntry[] = [];
     for (const entry of manifest) {
       const cached = await ObjectCache.get(entry.id);

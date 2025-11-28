@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+import { THREE } from '../../lib';
+
 export const createQuadWireframe = (
   geometry: THREE.BufferGeometry
 ): THREE.BufferGeometry => {

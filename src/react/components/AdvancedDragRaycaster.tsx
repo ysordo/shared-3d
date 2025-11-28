@@ -4,7 +4,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useScene } from '../../hooks/useScene';
 import { AdvancedRaycasterPlugin } from '../../core/orchestrator/plugins/AdvancedRaycasterPlugin';
-import * as THREE from 'three';
+import { THREE } from '../../lib';
 
 type AdvancedDragRaycasterProps = {
   children: (state: {
@@ -16,7 +16,7 @@ type AdvancedDragRaycasterProps = {
   }) => React.ReactNode;
   defaultEnabled?: boolean;
   enableRotationCompensation?: boolean;
-  transitionDuration?: number; // ← NUEVO: global!
+  transitionDuration?: number;
   onDragStart?: (object: THREE.Object3D) => void;
   onDrag?: (object: THREE.Object3D, delta: THREE.Vector3) => void;
   onDragEnd?: (object: THREE.Object3D) => void;

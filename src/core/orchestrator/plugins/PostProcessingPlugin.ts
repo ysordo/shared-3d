@@ -2,7 +2,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import type { Plugin, PluginContext } from '../types';
-import * as THREE from 'three';
+import { THREE } from '../../../lib';
 
 export class PostProcessingPlugin implements Plugin {
   name = 'PostProcessing';
@@ -28,13 +28,11 @@ export class PostProcessingPlugin implements Plugin {
     );
     this.composer.addPass(this.bloomPass);
 
-    // Sobrescribir render loop
     const originalRender = renderer.render.bind(renderer);
     renderer.render = () => {
       this.composer.render();
     };
 
-    // Resize
     const onResize = () => {
       this.composer.setSize(renderer.domElement.width, renderer.domElement.height);
       this.bloomPass.resolution.set(renderer.domElement.width, renderer.domElement.height);
@@ -52,7 +50,5 @@ export class PostProcessingPlugin implements Plugin {
     if (this.bloomPass) {this.bloomPass.strength = strength;}
   }
 
-  dispose(): void {
-    // Será sobrescrito
-  }
+  dispose(): void { }
 }

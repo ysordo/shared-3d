@@ -3,13 +3,13 @@
 import type React from 'react';
 import { useEffect } from 'react';
 import { useScene } from '../../hooks/useScene';
-import * as THREE from 'three';
+import { THREE } from '../../lib';
 
 type SpotLightProps = {
   intensity?: number;
   color?: THREE.ColorRepresentation;
   position?: [number, number, number];
-  target?: THREE.Object3D | string; // objeto o nombre
+  target?: THREE.Object3D | string;
   angle?: number;
   penumbra?: number;
   distance?: number;
@@ -46,7 +46,6 @@ export const SpotLight: React.FC<SpotLightProps> = ({
 
     scene.add(light);
 
-    // Target
     if (target) {
       if (typeof target === 'string') {
         const obj = scene.getObjectByName(target);
@@ -55,7 +54,7 @@ export const SpotLight: React.FC<SpotLightProps> = ({
         }
       } else {
         light.target = target;
-        scene.add(target); // si no está en la escena
+        scene.add(target);
       }
     }
 

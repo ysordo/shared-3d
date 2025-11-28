@@ -7,7 +7,7 @@ import { isDev } from './utils/env';
  */
 export class FileWatcher {
   private static instance: FileWatcher | null = null;
-  private watchers = new Map<string, number>(); // url → lastModified
+  private watchers = new Map<string, number>();
   private manifest: ModelManifestEntry[] = [];
   private onChange?: (changedIds: string[]) => void;
 
@@ -47,17 +47,15 @@ export class FileWatcher {
         const lastModified = response.headers.get('Last-Modified');
         const etag = response.headers.get('ETag');
 
-        // Siempre convertimos a number (timestamp en ms)
         let currentStamp: number;
 
         if (lastModified) {
             const parsed = Date.parse(lastModified);
             currentStamp = isNaN(parsed) ? Date.now() : parsed;
         } else if (etag) {
-            // ETag puede ser "abc123" o W/"abc123" → convertimos a número seguro
             currentStamp = this.etagToNumber(etag);
         } else {
-            currentStamp = Date.now(); // fallback
+            currentStamp = Date.now();
         }
 
         const previousStamp = this.watchers.get(entry.url);
@@ -67,9 +65,7 @@ export class FileWatcher {
         }
 
         this.watchers.set(entry.url, currentStamp);
-        } catch {
-        // Silencioso en dev
-        }
+        } catch { }
     }
 
     if (changed.length > 0) {
@@ -77,16 +73,13 @@ export class FileWatcher {
     }
     }
 
-    // Helper privado para convertir ETag a número reproducible
     private etagToNumber(etag: string): number {
-    // Quitamos comillas débiles si existen: W/"abc123" → abc123
     const clean = etag.replace(/^W\//, '').replace(/"/g, '');
-    // Convertimos a número usando hash simple
     let hash = 0;
     for (let i = 0; i < clean.length; i++) {
         const char = clean.charCodeAt(i);
         hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32-bit integer
+        hash = hash & hash;
     }
     return hash;
     }

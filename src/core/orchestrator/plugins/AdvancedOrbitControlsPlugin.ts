@@ -5,7 +5,6 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
   name = 'AdvancedOrbitControls';
   private controls!: OrbitControls;
 
-  // Configuración inicial
   private config = {
     enableDamping: true,
     dampingFactor: 0.05,
@@ -27,10 +26,8 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
   install({ camera, renderer }: PluginContext): void {
     this.controls = new OrbitControls(camera, renderer.domElement);
 
-    // Aplicar configuración
     Object.assign(this.controls, this.config);
 
-    // Loop de animación
     const animate = () => {
       this.controls.update();
       requestAnimationFrame(animate);
@@ -38,7 +35,7 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
     animate();
   }
 
-  // === API PÚBLICA ===
+  /* === API PÚBLICA === */
   setPanEnabled(enabled: boolean) {
     this.controls.enablePan = enabled;
   }

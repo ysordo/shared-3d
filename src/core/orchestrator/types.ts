@@ -1,5 +1,5 @@
-import type * as THREE from 'three';
 import type { SceneOrchestrator } from './SceneOrchestrator';
+import type { THREE } from '../../lib';
 
 export type PluginContext = {
   scene: THREE.Scene;

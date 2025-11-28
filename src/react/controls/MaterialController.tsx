@@ -4,8 +4,8 @@
 import type { ReactNode } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useActiveModel } from '../../hooks/useActiveModel';
-import * as THREE from 'three';
 import { createQuadWireframe } from '../../core/utils';
+import { THREE } from '../../lib';
 
 export type CustomMaterialFactory = (
   originalMaterial: THREE.Material
@@ -64,7 +64,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       return;
     }
 
-    // Preparar materiales originales y wireframe
     model.traverse((child) => {
       if (!(child instanceof THREE.Mesh)) {
         return;
@@ -107,14 +106,12 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     });
 
     if (transitionDuration === 0) {
-      // Instantáneo
       meshes.forEach((child) => applyMaterialToMesh(child, config));
       setActiveName(config.name);
       setIsTransitioning(false);
       return;
     }
 
-    // Transición secuencial (cascada)
     const delayPerMesh = transitionDuration / meshes.length;
 
     for (let i = 0; i < meshes.length; i++) {

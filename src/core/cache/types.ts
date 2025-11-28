@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type * as THREE from 'three';
+import type { THREE } from '../../lib';
 
 export type CacheEntry<T = any> = {
   data: T;
@@ -11,7 +11,7 @@ export type CacheEntry<T = any> = {
 export type ModelManifestEntry = {
   id: string;
   url: string;
-  hash: string;        // sha256 del archivo original
+  hash: string;
   size?: number;
   version?: string;
 };

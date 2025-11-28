@@ -3,7 +3,7 @@
 import type React from 'react';
 import { useEffect } from 'react';
 import { useScene } from '../../hooks/useScene';
-import * as THREE from 'three';
+import { THREE } from '../../lib';
 
 type PointLightProps = {
   intensity?: number;

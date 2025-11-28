@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useScene } from './useScene';
 import type { ModelManifestEntry } from '../core/cache/types';
-import type * as THREE from 'three';
+import type { THREE } from '../lib';
 
 type UseModelOptions = {
   draco?: boolean;

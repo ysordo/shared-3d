@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-// src/core/orchestrator/SceneOrchestrator.ts
 import * as THREE from 'three';
 import { GLTFLoader } from '../loaders/GLTFLoader';
 import { HDRILoader } from '../loaders/HDRILoader';
@@ -18,12 +17,10 @@ export type SceneConfig = {
 export class SceneOrchestrator {
   private static instance: SceneOrchestrator | null = null;
 
-  // Público: acceso directo
   public readonly scene: THREE.Scene;
   public readonly camera: THREE.PerspectiveCamera;
   public readonly renderer: THREE.WebGLRenderer;
 
-  // Estado interno
   private activeModel: THREE.Group | null = null;
   private activeHDRI: THREE.Texture | null = null;
   private canvas: HTMLCanvasElement;
@@ -34,7 +31,6 @@ export class SceneOrchestrator {
   private constructor(canvas: HTMLCanvasElement, config: SceneConfig = {}) {
     this.canvas = canvas;
 
-    // Renderer
     this.renderer = new THREE.WebGLRenderer({
       canvas,
       antialias: config.antialias ?? true,
@@ -50,7 +46,6 @@ export class SceneOrchestrator {
       this.renderer.setClearColor(config.clearColor);
     }
 
-    // Camera
     this.camera = new THREE.PerspectiveCamera(
       60,
       canvas.clientWidth / canvas.clientHeight,
@@ -59,7 +54,6 @@ export class SceneOrchestrator {
     );
     this.camera.position.set(0, 1.6, 5);
 
-    // Scene
     this.scene = new THREE.Scene();
     if (config.background instanceof THREE.Texture) {
       this.scene.background = config.background;
@@ -68,7 +62,6 @@ export class SceneOrchestrator {
       this.scene.background = new THREE.Color(config.background);
     }
 
-    // Resize handler
     this.resizeHandler = () => {
       const { clientWidth, clientHeight } = this.canvas;
       this.renderer.setSize(clientWidth, clientHeight);
@@ -77,7 +70,6 @@ export class SceneOrchestrator {
     };
     window.addEventListener('resize', this.resizeHandler);
 
-    // Animation loop
     const animate = () => {
       this.animationId = requestAnimationFrame(animate);
       this.renderer.render(this.scene, this.camera);
@@ -85,7 +77,6 @@ export class SceneOrchestrator {
     animate();
   }
 
-  // Singleton
   static getInstance(canvas?: HTMLCanvasElement, config?: SceneConfig): SceneOrchestrator {
     if (!SceneOrchestrator.instance) {
       if (!canvas) {throw new Error('Canvas is required on first initialization');}
@@ -94,7 +85,7 @@ export class SceneOrchestrator {
     return SceneOrchestrator.instance;
   }
 
-  // === PLUGIN SYSTEM ===
+  /* === PLUGIN SYSTEM === */
   use(plugin: Plugin): this {
     if (this.plugins.has(plugin.name)) {
       console.warn(`[Orchestrator] Plugin "${plugin.name}" ya está instalado`);
@@ -119,11 +110,10 @@ export class SceneOrchestrator {
     return this;
   }
 
-  // === MODELOS ===
+  /* === MODELS === */
   async setModel(entry: ModelManifestEntry, options?: { draco?: boolean }): Promise<THREE.Group> {
     console.info(`[Orchestrator] Cambiando modelo → ${entry.id}`);
 
-    // Eliminar modelo anterior
     if (this.activeModel) {
       this.scene.remove(this.activeModel);
       this.activeModel = null;
@@ -151,7 +141,7 @@ export class SceneOrchestrator {
     }
   }
 
-  // === HDRI ===
+  /* === HDRI === */
   async setHDRI(entry: ModelManifestEntry): Promise<THREE.Texture> {
     if (this.activeHDRI) {
       this.activeHDRI.dispose();
@@ -178,39 +168,33 @@ export class SceneOrchestrator {
     }
   }
 
-  // === LIMPIEZA ===
+  /* === CLEANING === */
   dispose(): void {
-    // Cancelar animation loop
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
       this.animationId = null;
     }
 
-    // Resize
     window.removeEventListener('resize', this.resizeHandler);
 
-    // Plugins
     for (const plugin of this.plugins.values()) {
       plugin.dispose?.();
     }
     this.plugins.clear();
 
-    // Modelos y HDRI
     this.removeModel();
     this.clearHDRI();
 
-    // Renderer
     this.renderer.dispose();
     this.renderer.forceContextLoss?.();
     this.canvas.width = 1;
     this.canvas.height = 1;
 
-    // Reset singleton
     SceneOrchestrator.instance = null;
     console.info('[Orchestrator] Disposed completamente');
   }
 
-  // === GETTERS ===
+  /* === GETTERS === */
   getActiveModel(): THREE.Group | null {
     return this.activeModel;
   }

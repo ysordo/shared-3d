@@ -3,7 +3,7 @@
 import type React from 'react';
 import { useEffect } from 'react';
 import { useScene } from '../../hooks/useScene';
-import * as THREE from 'three';
+import { THREE } from '../../lib';
 
 type SceneObjectProps = {
   object: THREE.Object3D;
@@ -55,7 +55,6 @@ export const SceneObject: React.FC<SceneObjectProps> = ({
       object.scale.set(...scale);
     }
 
-    // Determinar padre
     let targetParent: THREE.Object3D | null = null;
 
     if (parent === 'scene') {
@@ -79,7 +78,6 @@ export const SceneObject: React.FC<SceneObjectProps> = ({
       if (object.parent) {
         object.parent.remove(object);
       }
-      // Dispose recursivo
       object.traverse((child) => {
         if (child instanceof THREE.Mesh) {
           child.geometry?.dispose();

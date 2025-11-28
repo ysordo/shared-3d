@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useScene } from '../../hooks/useScene';
 import { AdvancedRaycasterPlugin } from '../../core/orchestrator/plugins/AdvancedRaycasterPlugin';
 import { useActiveModel } from '../../hooks/useActiveModel';
-import type * as THREE from 'three';
+import type { THREE } from '../../lib';
 
 type AdvancedRaycasterProps = {
   model?: THREE.Object3D;

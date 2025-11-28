@@ -1,7 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import { useActiveModel } from './useActiveModel';
-import * as THREE from 'three';
+import { THREE } from '../lib';
 
 export const useAnimation = (clipName: string, play: boolean = true) => {
   const model = useActiveModel();

@@ -1,13 +1,13 @@
-import type * as THREE from 'three';
+import type { THREE } from './three';
 
-// === Utilidades de tipo ===
+/* === Utilities of type === */
 export type Vector3Tuple = [number, number, number];
 export type ColorRepresentation = THREE.ColorRepresentation;
 
-// === Manifest ===
+/* === Manifest === */
 export type { ModelManifestEntry } from '../core/cache/types';
 
-// === Configuraciones comunes ===
+/* ===Common settings=== */
 export type LightConfig = {
   intensity?: number;
   color?: ColorRepresentation;
@@ -15,7 +15,7 @@ export type LightConfig = {
   castShadow?: boolean;
 };
 
-// === Eventos comunes ===
+/* === Common Events === */
 export type ClickEvent = {
   object: THREE.Object3D;
   point: THREE.Vector3;
@@ -27,14 +27,14 @@ export type HoverEvent = {
   point: THREE.Vector3;
 };
 
-// === Plugin types (reexport si no está en orchestrator) ===
+/* === Plugin types (reexport if not in orchestrator) === */
 export type { PluginContext, Plugin } from '../core/orchestrator/types';
 
-// === Material Config (reutilizable) ===
+/* === Config Material (reusable) === */
 
 export type { CustomMaterialFactory, MaterialConfig } from '../react/controls/MaterialController';
 
-// === Utilidad: Deep partial ===
+/* === Utility: Deep partial === */
 export type DeepPartial<T> = T extends object
   ? { [P in keyof T]?: DeepPartial<T[P]> }
   : T;

@@ -32,9 +32,7 @@ export const PostProcessing: React.FC<PostProcessingProps> = ({
     });
     orchestrator.use(plugin);
 
-    return () => {
-      // plugin se dispone automáticamente
-    };
+    return () => { };
   }, [enabled, bloom.strength, bloom.radius, bloom.threshold]);
 
   return null;
