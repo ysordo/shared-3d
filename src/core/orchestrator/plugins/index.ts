@@ -3,6 +3,7 @@ export * from './AdvancedOrbitControlsPlugin';
 export * from './AdvancedRaycasterPlugin';
 export * from './AnnotationsPlugin';
 export * from './AutoLODSystemPlugin';
+export * from './HotspotPlugin';
 export * from './LODSystemPlugin';
 export * from './OrbitControlsPlugin';
 export * from './RaycasterPlugin';
