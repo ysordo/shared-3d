@@ -1,9 +1,8 @@
 # Estructura de: shared-3d#v1.0.5/
-## Generated: 28/11/2025, 5:46:35 p.m.
+## Generated: 2/12/2025, 9:08:18 a.m.
 ---
 
 ```
-
 📂shared-3d/
 ├── 📁public/
 │   └── 📁draco/
@@ -119,5 +118,117 @@
 ├── 📄tsconfig.json
 ├── 📄tsup.config.js
 └── 📄typedoc.json
+```
+
+---
+
+```
+📂dist/
+├── 📄index.cjs
+├── 📄index.cjs.map
+├── 📄index.d.cts
+├── 📄index.d.ts
+├── 📄index.js
+└── 📄index.js.map
+```
+
+---
+
+```
+📂docs/
+├── 📁classes/
+│   ├── 📄AdvancedCameraCollisionPlugin.md
+│   ├── 📄AdvancedOrbitControlsPlugin.md
+│   ├── 📄AdvancedRaycasterPlugin.md
+│   ├── 📄AnnotationsPlugin.md
+│   ├── 📄AutoLODSystemPlugin.md
+│   ├── 📄CacheValidator.md
+│   ├── 📄ErrorBoundary3D.md
+│   ├── 📄FileWatcher.md
+│   ├── 📄GLTFLoader.md
+│   ├── 📄HDRILoader.md
+│   ├── 📄HotspotPlugin.md
+│   ├── 📄LODSystemPlugin.md
+│   ├── 📄MeasurementToolPlugin.md
+│   ├── 📄ObjectCache.md
+│   ├── 📄OrbitControlsPlugin.md
+│   ├── 📄PostProcessingPlugin.md
+│   ├── 📄RaycasterPlugin.md
+│   ├── 📄SceneOrchestrator.md
+│   └── 📄WebPHDRLoader.md
+├── 📁functions/
+│   ├── 📄CacheProvider.md
+│   ├── 📄generateManifest.md
+│   ├── 📄useActiveModel.md
+│   ├── 📄useAnimation.md
+│   ├── 📄useCache.md
+│   ├── 📄useHDRI.md
+│   ├── 📄useModel.md
+│   ├── 📄useRaycaster.md
+│   └── 📄useScene.md
+├── 📁interfaces/
+│   └── 📄Plugin.md
+├── 📁type-aliases/
+│   ├── 📄CacheEntry.md
+│   ├── 📄CacheReport.md
+│   ├── 📄ClickEvent.md
+│   ├── 📄ColorRepresentation.md
+│   ├── 📄CustomMaterialFactory.md
+│   ├── 📄DeepPartial.md
+│   ├── 📄GLTFLoaderEvents.md
+│   ├── 📄GLTFLoaderOptions.md
+│   ├── 📄HDRIEvents.md
+│   ├── 📄HDRIProgress.md
+│   ├── 📄HoverEvent.md
+│   ├── 📄LightConfig.md
+│   ├── 📄ManifestEntry.md
+│   ├── 📄MaterialConfig.md
+│   ├── 📄MeasurementEvent.md
+│   ├── 📄ModelManifest.md
+│   ├── 📄PluginContext.md
+│   ├── 📄RaycasterEvent.md
+│   ├── 📄SceneConfig.md
+│   ├── 📄ValidationOptions.md
+│   └── 📄Vector3Tuple.md
+├── 📁variables/
+│   ├── 📄AdvancedCameraCollision.md
+│   ├── 📄AdvancedDragRaycaster.md
+│   ├── 📄AdvancedOrbitControls.md
+│   ├── 📄AdvancedRaycaster.md
+│   ├── 📄AmbientLight.md
+│   ├── 📄AnimationController.md
+│   ├── 📄AnimationTimeline.md
+│   ├── 📄Annotations.md
+│   ├── 📄ARButton.md
+│   ├── 📄AutoLODSystem.md
+│   ├── 📄Canvas.md
+│   ├── 📄DirectionalLight.md
+│   ├── 📄DistanceDisplay.md
+│   ├── 📄EnvironmentPreset.md
+│   ├── 📄GroundSurface.md
+│   ├── 📄HDRI.md
+│   ├── 📄Hotspot.md
+│   ├── 📄Hotspots.md
+│   ├── 📄InstancedModel.md
+│   ├── 📄LightingController.md
+│   ├── 📄LODSystem.md
+│   ├── 📄MaterialController.md
+│   ├── 📄MeasurementTool.md
+│   ├── 📄Model.md
+│   ├── 📄ModelPreload.md
+│   ├── 📄OrbitControls.md
+│   ├── 📄PointLight.md
+│   ├── 📄PostProcessing.md
+│   ├── 📄Raycaster.md
+│   ├── 📄SceneObject.md
+│   ├── 📄SceneProvider.md
+│   ├── 📄SpotLight.md
+│   ├── 📄Suspense.md
+│   ├── 📄SuspenseModel.md
+│   ├── 📄TheaterLighting.md
+│   ├── 📄THREE_VERSION.md
+│   └── 📄VRButton.md
+├── 📄.nojekyll
+└── 📄README.md
 ```
 
