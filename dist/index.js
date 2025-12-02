@@ -12,7 +12,7 @@ import {
 } from "./chunk-OVHQQSEK.js";
 
 // src/context/SceneContext.tsx
-import { createContext, useContext, forwardRef, useEffect } from "react";
+import { createContext, useContext, forwardRef, useEffect, useState } from "react";
 
 // src/core/orchestrator/SceneOrchestrator.ts
 import * as THREE2 from "three";
@@ -599,6 +599,7 @@ import { jsx } from "react/jsx-runtime";
 var SceneContext = createContext(null);
 var SceneProvider = forwardRef(
   ({ children, config }, ref) => {
+    const [orchestrator, setOrchestrator] = useState(null);
     useEffect(() => {
       if (!ref) {
         return;
@@ -612,12 +613,17 @@ var SceneProvider = forwardRef(
         console.warn("SceneProvider: canvas ref no est\xE1 asignado a\xFAn");
         return;
       }
-      const orchestrator = SceneOrchestrator.getInstance(ref.current, config);
+      setOrchestrator((prev) => {
+        if (prev) {
+          return prev;
+        }
+        return SceneOrchestrator.getInstance(ref.current ?? void 0, config);
+      });
       if (process.env.NODE_ENV === "development") {
         window.__ORCHESTRATOR__ = orchestrator;
       }
     }, [ref, config]);
-    return /* @__PURE__ */ jsx(SceneContext.Provider, { value: { orchestrator: null }, children });
+    return /* @__PURE__ */ jsx(SceneContext.Provider, { value: { orchestrator }, children });
   }
 );
 SceneProvider.displayName = "SceneProvider";
@@ -635,7 +641,7 @@ var useScene = () => {
 };
 
 // src/context/CacheContext.tsx
-import { createContext as createContext2, useContext as useContext2, useState } from "react";
+import { createContext as createContext2, useContext as useContext2, useState as useState2 } from "react";
 
 // src/core/cache/utils/env.ts
 var isDev = () => {
@@ -794,9 +800,9 @@ var CacheValidator = class _CacheValidator {
 import { jsx as jsx2 } from "react/jsx-runtime";
 var CacheContext = createContext2(null);
 var CacheProvider = ({ children }) => {
-  const [status, setStatus] = useState("idle");
-  const [progress, setProgress] = useState(0);
-  const [report, setReport] = useState(null);
+  const [status, setStatus] = useState2("idle");
+  const [progress, setProgress] = useState2(0);
+  const [report, setReport] = useState2(null);
   const validate = async (manifest) => {
     setStatus("validating");
     setProgress(0);
@@ -1667,13 +1673,13 @@ var useScene2 = () => {
 };
 
 // src/hooks/useModel.ts
-import { useEffect as useEffect2, useState as useState2 } from "react";
+import { useEffect as useEffect2, useState as useState3 } from "react";
 var useModel = (entry, options = {}) => {
   const { draco = false, autoLoad = true } = options;
   const orchestrator = useScene2();
-  const [model, setModel] = useState2(null);
-  const [loading, setLoading] = useState2(false);
-  const [error, setError] = useState2(null);
+  const [model, setModel] = useState3(null);
+  const [loading, setLoading] = useState3(false);
+  const [error, setError] = useState3(null);
   useEffect2(() => {
     if (!entry || !autoLoad) {
       return;
@@ -1699,11 +1705,11 @@ var useActiveModel = () => {
 };
 
 // src/hooks/useHDRI.ts
-import { useEffect as useEffect3, useState as useState3 } from "react";
+import { useEffect as useEffect3, useState as useState4 } from "react";
 var useHDRI = (entry) => {
   const orchestrator = useScene2();
-  const [hdri, setHDRI] = useState3(null);
-  const [loading, setLoading] = useState3(false);
+  const [hdri, setHDRI] = useState4(null);
+  const [loading, setLoading] = useState4(false);
   useEffect3(() => {
     if (!entry) {
       return;
@@ -1785,7 +1791,7 @@ var AdvancedCameraCollision = ({ distanceThreshold = 0.6, pushBackOffset = 0.1, 
 };
 
 // src/react/components/AdvancedDragRaycaster.tsx
-import { useEffect as useEffect7, useState as useState4, useRef } from "react";
+import { useEffect as useEffect7, useState as useState5, useRef } from "react";
 import { Fragment, jsx as jsx3 } from "react/jsx-runtime";
 var tempVector1 = new THREE.Vector3();
 var tempVector2 = new THREE.Vector3();
@@ -1807,9 +1813,9 @@ var AdvancedDragRaycaster = ({
   const orchestrator = useScene2();
   const activeModel = orchestrator.getActiveModel();
   const camera = orchestrator.camera;
-  const [isEnabled, setIsEnabled] = useState4(defaultEnabled);
-  const [isResetting, setIsResetting] = useState4(false);
-  const [plugin, setPlugin] = useState4(null);
+  const [isEnabled, setIsEnabled] = useState5(defaultEnabled);
+  const [isResetting, setIsResetting] = useState5(false);
+  const [plugin, setPlugin] = useState5(null);
   const originalStates = useRef(/* @__PURE__ */ new Map());
   useEffect7(() => {
     if (!activeModel || !camera) {
@@ -1930,7 +1936,7 @@ var AdvancedDragRaycaster = ({
 };
 
 // src/react/components/AdvancedOrbitControls.tsx
-import { useEffect as useEffect8, useState as useState5 } from "react";
+import { useEffect as useEffect8, useState as useState6 } from "react";
 import { Fragment as Fragment2, jsx as jsx4 } from "react/jsx-runtime";
 var AdvancedOrbitControls = ({
   children,
@@ -1938,10 +1944,10 @@ var AdvancedOrbitControls = ({
   ...config
 }) => {
   const orchestrator = useScene2();
-  const [panEnabled, setPanEnabled] = useState5(defaultEnabled);
-  const [rotateEnabled, setRotateEnabled] = useState5(defaultEnabled);
-  const [zoomEnabled, setZoomEnabled] = useState5(defaultEnabled);
-  const [plugin, setPlugin] = useState5(
+  const [panEnabled, setPanEnabled] = useState6(defaultEnabled);
+  const [rotateEnabled, setRotateEnabled] = useState6(defaultEnabled);
+  const [zoomEnabled, setZoomEnabled] = useState6(defaultEnabled);
+  const [plugin, setPlugin] = useState6(
     null
   );
   useEffect8(() => {
@@ -2240,7 +2246,7 @@ var DirectionalLight = ({
 };
 
 // src/react/components/DistanceDisplay.tsx
-import { useEffect as useEffect16, useRef as useRef3, useState as useState6 } from "react";
+import { useEffect as useEffect16, useRef as useRef3, useState as useState7 } from "react";
 import { jsx as jsx6 } from "react/jsx-runtime";
 var unitConversions = {
   m: 1,
@@ -2264,8 +2270,8 @@ var DistanceDisplay = ({
 }) => {
   const orchestrator = useScene2();
   const animationRef = useRef3(0);
-  const [currentDistance, setCurrentDistance] = useState6(0);
-  const [initialDistance, setInitialDistance] = useState6(null);
+  const [currentDistance, setCurrentDistance] = useState7(0);
+  const [initialDistance, setInitialDistance] = useState7(null);
   const getCurrentDistance = () => {
     const model = orchestrator.getActiveModel();
     if (!model || !orchestrator.camera) {
@@ -2702,14 +2708,14 @@ var MeasurementTool = ({
 };
 
 // src/react/components/Model.tsx
-import { useEffect as useEffect25, useState as useState7 } from "react";
+import { useEffect as useEffect25, useState as useState8 } from "react";
 var Model = ({
   entry,
   draco = false,
   children
 }) => {
   const orchestrator = useScene2();
-  const [model, setModel] = useState7(null);
+  const [model, setModel] = useState8(null);
   useEffect25(() => {
     const load = async () => {
       const gltf = await orchestrator.setModel(entry, { draco });
@@ -2960,22 +2966,22 @@ var VRButton = () => {
 };
 
 // src/react/controls/AnimationController.tsx
-import { useEffect as useEffect34, useState as useState8 } from "react";
+import { useEffect as useEffect34, useState as useState9 } from "react";
 import { jsx as jsx10 } from "react/jsx-runtime";
 var AnimationController = ({
   children,
   className
 }) => {
   const model = useActiveModel();
-  const [clips, setClips] = useState8([]);
-  const [mixer, setMixer] = useState8(
+  const [clips, setClips] = useState9([]);
+  const [mixer, setMixer] = useState9(
     () => new THREE.AnimationMixer(null)
   );
-  const [actions, setActions] = useState8(
+  const [actions, setActions] = useState9(
     /* @__PURE__ */ new Map()
   );
-  const [playing, setPlaying] = useState8(/* @__PURE__ */ new Set());
-  const [reversed, setReversed] = useState8(/* @__PURE__ */ new Set());
+  const [playing, setPlaying] = useState9(/* @__PURE__ */ new Set());
+  const [reversed, setReversed] = useState9(/* @__PURE__ */ new Set());
   useEffect34(() => {
     if (!model) {
       setClips([]);
@@ -3061,13 +3067,13 @@ var AnimationController = ({
 };
 
 // src/react/controls/LightingController.tsx
-import React11, { useState as useState9 } from "react";
+import React11, { useState as useState10 } from "react";
 import { jsx as jsx11, jsxs as jsxs4 } from "react/jsx-runtime";
 var LightingController = ({
   className
 }) => {
   const { scene } = useScene2();
-  const [intensity, setIntensity] = useState9(1);
+  const [intensity, setIntensity] = useState10(1);
   const updateLights = (value) => {
     setIntensity(value);
     scene.traverse((obj) => {
@@ -3107,7 +3113,7 @@ var LightingController = ({
 };
 
 // src/react/controls/MaterialController.tsx
-import { useEffect as useEffect35, useState as useState10 } from "react";
+import { useEffect as useEffect35, useState as useState11 } from "react";
 
 // src/core/utils/QuadWireframe.ts
 var createQuadWireframe = (geometry) => {
@@ -3188,8 +3194,8 @@ var MaterialController = ({
   className
 }) => {
   const model = useActiveModel();
-  const [activeName, setActiveName] = useState10(null);
-  const [isTransitioning, setIsTransitioning] = useState10(false);
+  const [activeName, setActiveName] = useState11(null);
+  const [isTransitioning, setIsTransitioning] = useState11(false);
   useEffect35(() => {
     if (!model) {
       return;

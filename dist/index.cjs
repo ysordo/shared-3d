@@ -599,6 +599,7 @@ var _jsxruntime = require('react/jsx-runtime');
 var SceneContext = _react.createContext.call(void 0, null);
 var SceneProvider = _react.forwardRef.call(void 0, 
   ({ children, config }, ref) => {
+    const [orchestrator, setOrchestrator] = _react.useState.call(void 0, null);
     _react.useEffect.call(void 0, () => {
       if (!ref) {
         return;
@@ -612,12 +613,17 @@ var SceneProvider = _react.forwardRef.call(void 0,
         console.warn("SceneProvider: canvas ref no est\xE1 asignado a\xFAn");
         return;
       }
-      const orchestrator = SceneOrchestrator.getInstance(ref.current, config);
+      setOrchestrator((prev) => {
+        if (prev) {
+          return prev;
+        }
+        return SceneOrchestrator.getInstance(_nullishCoalesce(ref.current, () => ( void 0)), config);
+      });
       if (process.env.NODE_ENV === "development") {
         window.__ORCHESTRATOR__ = orchestrator;
       }
     }, [ref, config]);
-    return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, SceneContext.Provider, { value: { orchestrator: null }, children });
+    return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, SceneContext.Provider, { value: { orchestrator }, children });
   }
 );
 SceneProvider.displayName = "SceneProvider";

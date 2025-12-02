@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import type { ReactNode } from 'react';
-import React, { createContext, useContext, forwardRef, useEffect } from 'react';
+import React, { createContext, useContext, forwardRef, useEffect, useState } from 'react';
 import { SceneOrchestrator } from '../core/orchestrator/SceneOrchestrator';
 import type { SceneConfig } from '../core/orchestrator/SceneOrchestrator';
 
@@ -18,6 +19,8 @@ type SceneProviderProps = {
 
 export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
   ({ children, config }, ref) => {
+    const [orchestrator, setOrchestrator] = useState<SceneOrchestrator | null>(null);
+
     useEffect(() => {
       // Validamos cuando el ref esté listo
       if (!ref) {
@@ -38,7 +41,12 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
       }
 
       // ¡Aquí ya es seguro!
-      const orchestrator = SceneOrchestrator.getInstance(ref.current, config);
+      setOrchestrator((prev) => {
+        if (prev) {
+          return prev; // Ya inicializado
+        }
+        return SceneOrchestrator.getInstance(ref.current ?? undefined, config);
+      });
 
       // Opcional: exponer en window para debug
       if (process.env.NODE_ENV === 'development') {
@@ -47,7 +55,7 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
     }, [ref, config]);
 
     return (
-      <SceneContext.Provider value={{ orchestrator: null as any }}>
+      <SceneContext.Provider value={{ orchestrator: orchestrator as any }}>
         {children}
       </SceneContext.Provider>
     );
