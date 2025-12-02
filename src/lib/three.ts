@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -27,7 +28,6 @@ export {
 export const THREE_VERSION = THREE.REVISION;
 
 // Patch for development environment
-if (process.env.NODE_ENV === 'development') {
-  // @ts-ignore
-  window.THREE = THREE;
+if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+  (window as any).THREE = THREE;
 }
