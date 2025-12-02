@@ -33,7 +33,6 @@
 ## Functions
 
 - [CacheProvider](functions/CacheProvider.md)
-- [generateManifest](functions/generateManifest.md)
 - [useActiveModel](functions/useActiveModel.md)
 - [useAnimation](functions/useAnimation.md)
 - [useCache](functions/useCache.md)

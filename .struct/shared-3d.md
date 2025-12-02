@@ -1,5 +1,5 @@
 # Estructura de: shared-3d#v1.0.5/
-## Generated: 2/12/2025, 9:08:18 a.m.
+## Generated: 2/12/2025, 11:48:23 a.m.
 ---
 
 ```
@@ -16,11 +16,13 @@
 │   │   └── 📄SceneContext.tsx
 │   ├── 📁core/
 │   │   ├── 📁cache/
+│   │   │   ├── 📁server/
+│   │   │   │   ├── 📄generateManifest.ts
+│   │   │   │   └── 📄index.server.ts
 │   │   │   ├── 📁utils/
 │   │   │   │   └── 📄env.ts
 │   │   │   ├── 📄CacheValidator.ts
 │   │   │   ├── 📄FileWatcher.ts
-│   │   │   ├── 📄generateManifest.ts
 │   │   │   ├── 📄index.ts
 │   │   │   ├── 📄ObjectCache.ts
 │   │   │   └── 📄types.ts
@@ -124,12 +126,25 @@
 
 ```
 📂dist/
+├── 📄chunk-AV5IKSIK.js
+├── 📄chunk-AV5IKSIK.js.map
+├── 📄chunk-CCABIOVK.cjs
+├── 📄chunk-CCABIOVK.cjs.map
 ├── 📄index.cjs
 ├── 📄index.cjs.map
 ├── 📄index.d.cts
 ├── 📄index.d.ts
 ├── 📄index.js
-└── 📄index.js.map
+├── 📄index.js.map
+├── 📄lib.cjs
+├── 📄lib.cjs.map
+├── 📄lib.d.cts
+├── 📄lib.d.ts
+├── 📄lib.js
+├── 📄lib.js.map
+├── 📄SceneOrchestrator-ggVNOHrm.d.cts
+├── 📄SceneOrchestrator-ggVNOHrm.d.ts
+└── 📄server.cjs
 ```
 
 ---
@@ -158,7 +173,6 @@
 │   └── 📄WebPHDRLoader.md
 ├── 📁functions/
 │   ├── 📄CacheProvider.md
-│   ├── 📄generateManifest.md
 │   ├── 📄useActiveModel.md
 │   ├── 📄useAnimation.md
 │   ├── 📄useCache.md

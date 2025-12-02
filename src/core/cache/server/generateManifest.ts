@@ -2,7 +2,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import type { ManifestEntry } from './types';
+import type { ManifestEntry } from '../types';
 
 export async function generateManifest(
   modelsDir: string = 'public/models',

@@ -1,0 +1,12 @@
+export { f as ClickEvent, e as ColorRepresentation, g as CustomMaterialFactory, D as DeepPartial, H as HoverEvent, L as LightConfig, M as ManifestEntry, h as MaterialConfig, b as ModelManifest, P as Plugin, c as PluginContext, T as THREE_VERSION, V as Vector3Tuple } from './SceneOrchestrator-ggVNOHrm.cjs';
+import * as THREE from 'three';
+export { THREE };
+export { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+export { GLTFLoader as ThreeGLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+export { DRACOLoader as ThreeDRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+export { RGBELoader as ThreeRGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+export { EXRLoader as ThreeEXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
+export { EffectComposer as ThreeEffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+export { RenderPass as ThreeRenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+export { UnrealBloomPass as ThreeUnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import 'react';
