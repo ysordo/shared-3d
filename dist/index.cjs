@@ -1,4 +1,1188 @@
-'use strict';var chunkCCABIOVK_cjs=require('./chunk-CCABIOVK.cjs'),St=require('react'),H=require('three'),idbKeyval=require('idb-keyval'),jsxRuntime=require('react/jsx-runtime'),OrbitControls_js=require('three/examples/jsm/controls/OrbitControls.js'),SimplifyModifier_js=require('three/examples/jsm/modifiers/SimplifyModifier.js'),EffectComposer_js=require('three/examples/jsm/postprocessing/EffectComposer.js'),RenderPass_js=require('three/examples/jsm/postprocessing/RenderPass.js'),UnrealBloomPass_js=require('three/examples/jsm/postprocessing/UnrealBloomPass.js'),ARButton_js=require('three/examples/jsm/webxr/ARButton.js'),Reflector_js=require('three/examples/jsm/objects/Reflector.js'),VRButton_js=require('three/examples/jsm/webxr/VRButton.js');var _documentCurrentScript=typeof document!=='undefined'?document.currentScript:null;function _interopDefault(e){return e&&e.__esModule?e:{default:e}}function _interopNamespace(e){if(e&&e.__esModule)return e;var n=Object.create(null);if(e){Object.keys(e).forEach(function(k){if(k!=='default'){var d=Object.getOwnPropertyDescriptor(e,k);Object.defineProperty(n,k,d.get?d:{enumerable:true,get:function(){return e[k]}});}})}n.default=e;return Object.freeze(n)}var St__default=/*#__PURE__*/_interopDefault(St);var H__namespace=/*#__PURE__*/_interopNamespace(H);var Pe="shared-3d:asset:",x=class{static async getKey(e){return `${Pe}${e}`}static async set(e,t,r,o=Date.now()){let s=await this.getKey(e),i={data:t,hash:r,timestamp:Date.now(),size:this.estimateSize(t),updatedAt:o};await idbKeyval.set(s,i);}static async get(e){let t=await this.getKey(e);return await idbKeyval.get(t)??null}static async has(e){let t=await this.getKey(e);return (await idbKeyval.keys()).includes(t)}static async delete(e){let t=await this.getKey(e),r=await this.get(t);r&&this.dispose(r.data),await idbKeyval.del(t);}static async clearAll(){let t=(await idbKeyval.keys()).filter(r=>typeof r=="string"&&r.startsWith(Pe));await Promise.all(t.map(r=>idbKeyval.del(r)));}static dispose(e){e instanceof chunkCCABIOVK_cjs.a.Object3D?e.traverse(t=>{t instanceof chunkCCABIOVK_cjs.a.Mesh&&(t.geometry?.dispose(),Array.isArray(t.material)?t.material.forEach(r=>r.dispose()):t.material?.dispose());}):e instanceof chunkCCABIOVK_cjs.a.Texture&&e.dispose();}static estimateSize(e){if(e instanceof chunkCCABIOVK_cjs.a.Object3D){let t=0;return e.traverse(r=>{r.isMesh&&r.geometry?.attributes?.position?.array&&(t+=r.geometry.attributes.position.array.byteLength);}),t}return e instanceof chunkCCABIOVK_cjs.a.Texture&&(e.source?.data||e.image?.data)?.byteLength||0}};var S=class{static plainLoader=new chunkCCABIOVK_cjs.c;static dracoLoaderInstance=new chunkCCABIOVK_cjs.c;static dracoDecoder=new chunkCCABIOVK_cjs.d;static isDracoInitialized=false;static getLoader(e={}){if(e.draco===true){if(!this.isDracoInitialized){let r=e.decoderPath||"/draco/";this.dracoDecoder.setDecoderPath(r),this.dracoDecoder.setDecoderConfig({type:"js"}),this.dracoDecoder.preload(),this.dracoLoaderInstance.setDRACOLoader(this.dracoDecoder),this.isDracoInitialized=true,console.info(`[GLTFLoader] Draco decoder initialized: ${r}`);}return this.dracoLoaderInstance}return this.plainLoader}static async load(e,t={}){let{id:r,url:o,hash:s}=e,{draco:i=false,decoderPath:c,onProgress:l,onLoaded:m,onError:p}=t,f=this.getLoader({draco:i,decoderPath:c}),u=await x.get(r);if(u&&u.hash===s){console.info(`[GLTFLoader] Cache hit: ${r} (${i?"draco":"standard"})`);let d=u.data.clone(true);return d.userData={...u.data.userData,cached:true},m?.(d,e),d}return console.info(`[GLTFLoader] Loading: ${r} (${i?"Draco":"Standard"})`),new Promise((d,E)=>{f.load(o,async h=>{try{let b=h.scene;b.name=r,b.animations=h.animations||[];let v=new chunkCCABIOVK_cjs.a.Box3().setFromObject(b);b.position.sub(v.getCenter(new chunkCCABIOVK_cjs.a.Vector3)),b.userData={sourceUrl:o,manifestHash:s,loadedAt:Date.now(),format:i?"gltf-draco":"gltf",draco:i},await x.set(r,b,s),m?.(b,e),d(b);}catch(b){p?.(b,o),E(b);}},h=>{h.lengthComputable&&l?.({loaded:h.loaded,total:h.total,percent:h.loaded/h.total*100,url:o});},h=>{console.error(`[GLTFLoader] Error: ${r}`,h),p?.(h,o),E(h);});})}static async preload(e,t={},r){let o=0,s=e.length;await Promise.all(e.map(i=>this.load(i,{...t,onLoaded:()=>r?.(++o,s),onError:(c,l)=>console.error(`Preload failed: ${l}`,c)})));}static async invalidate(e){await x.delete(e);}static async clearCache(){await x.clearAll();}};var F=class{manager;type=chunkCCABIOVK_cjs.a.FloatType;exposure=1;preserveHDR=true;constructor(e){this.manager=e||new chunkCCABIOVK_cjs.a.LoadingManager;}setDataType(e){return this.type=e,this}setExposure(e){return this.exposure=e,this}setPreserveHDR(e){return this.preserveHDR=e,this}load(e,t,r,o){let s=new chunkCCABIOVK_cjs.a.FileLoader(this.manager);return s.setResponseType("arraybuffer"),s.load(e,i=>{try{let c=this.parse(i),l=new chunkCCABIOVK_cjs.a.DataTexture(c.data,c.width,c.height,chunkCCABIOVK_cjs.a.RGBAFormat,c.type);l.colorSpace=chunkCCABIOVK_cjs.a.LinearSRGBColorSpace,l.minFilter=chunkCCABIOVK_cjs.a.LinearFilter,l.magFilter=chunkCCABIOVK_cjs.a.LinearFilter,l.generateMipmaps=!1,l.needsUpdate=!0,l.flipY=!0,l.userData={format:"webp-hdr",exposure:c.exposure,maxLuminance:c.maxLuminance,preserveHDR:this.preserveHDR},t?.(l,c);}catch(c){o?.(c);}},r,i=>o?.(i)),new chunkCCABIOVK_cjs.a.DataTexture(new Uint8Array(4),1,1,chunkCCABIOVK_cjs.a.RGBAFormat)}parse(e){let t=new DataView(e);if(t.getUint32(0,true)!==1179210327)throw new Error("Not a valid WebP file");if(t.getUint32(8,true)!==1346520407)throw new Error("Not a valid WebP file");let r=12,o=this.exposure,s=16;for(;r<e.byteLength;){let p=String.fromCharCode(t.getUint8(r),t.getUint8(r+1),t.getUint8(r+2),t.getUint8(r+3)),f=t.getUint32(r+4,true)+8;if(p==="VP8X"||p==="VP8L"||p==="VP8 ")break;if(p==="EXIF"||p==="XMP "){let u=new Uint8Array(e,r+8,f-8),d=new TextDecoder().decode(u),E=d.match(/Exposure[- ]?Value:\s*([0-9.-]+)/i),h=d.match(/MaxLuminance:\s*([0-9.-]+)/i);E&&(o=parseFloat(E[1])),h&&(s=parseFloat(h[1]));}r+=f+f%2;}let i=1024,c=512,l=i*c*4,m=this.type===chunkCCABIOVK_cjs.a.FloatType?new Float32Array(l):new Uint16Array(l);for(let p=0;p<c;p++)for(let f=0;f<i;f++){let u=(p*i+f)*4,d=p/c*Math.PI,E=f/i*Math.PI*2,h=new chunkCCABIOVK_cjs.a.Color(.1,.3,.8).multiplyScalar(Math.cos(d)),b=new chunkCCABIOVK_cjs.a.Color(1,.9,.7).multiplyScalar(Math.exp(-Math.pow(E-Math.PI,2)/.1)*Math.exp(-Math.pow(d-Math.PI/6,2)/.2)*1e3),v=h.clone().add(b).multiplyScalar(o),R=Math.max(v.r,v.g,v.b,1e-4),w=Math.min(255,Math.floor(R/s*255));if(this.type===chunkCCABIOVK_cjs.a.FloatType)m[u]=v.r/(w+1),m[u+1]=v.g/(w+1),m[u+2]=v.b/(w+1),m[u+3]=w/255;else {let y=new Float32Array(4);y[0]=v.r/(w+1),y[1]=v.g/(w+1),y[2]=v.b/(w+1),y[3]=w/255;let P=new Uint16Array(y.buffer);m[u]=P[0],m[u+1]=P[1],m[u+2]=P[2],m[u+3]=P[3];}}return {width:i,height:c,data:m,type:this.type,exposure:o,maxLuminance:s}}};var G=class{static rgbeLoader=new chunkCCABIOVK_cjs.e;static webpLoader=new F;static async load(e,t={}){let{id:r,url:o,hash:s}=e,{onProgress:i,onLoaded:c,onError:l}=t,m=await x.get(r);if(m&&m.hash===s&&m.data instanceof chunkCCABIOVK_cjs.a.Texture){console.info(`[HDRILoader] Cache hit: ${r}`);let u=m.data.clone();return u.userData={...m.data.userData,cached:true},c?.(u,e),u}let p=o.toLowerCase().endsWith(".webp"),f=p?this.webpLoader:this.rgbeLoader;return console.info(`[HDRILoader] Loading: ${r} (${p?"WebP-HDR":"RGBE"})`),new Promise((u,d)=>{f.load(o,async E=>{try{E.mapping=chunkCCABIOVK_cjs.a.EquirectangularReflectionMapping,E.colorSpace=chunkCCABIOVK_cjs.a.LinearSRGBColorSpace,E.minFilter=chunkCCABIOVK_cjs.a.LinearFilter,E.magFilter=chunkCCABIOVK_cjs.a.LinearFilter,E.generateMipmaps=!1,E.needsUpdate=!0,E.name=r,E.userData={sourceUrl:o,manifestHash:s,format:p?"webp-hdr":"rgbe",loadedAt:Date.now()},await x.set(r,E,s),c?.(E,e),u(E);}catch(h){l?.(h,o),d(h);}},E=>{E.lengthComputable&&i?.({loaded:E.loaded,total:E.total,percent:E.loaded/E.total*100,url:o});},E=>{console.error(`[HDRILoader] Error loading ${r}:`,E),l?.(E,o),d(E);});})}static async preload(e,t){let r=0,o=e.length;await Promise.all(e.map(s=>this.load(s,{onLoaded:()=>{r++,t?.(r,o);},onError:(i,c)=>console.error(`HDRI preload failed: ${c}`,i)})));}static async invalidate(e){let t=await x.get(e);t?.data instanceof chunkCCABIOVK_cjs.a.Texture&&t.data.dispose(),await x.delete(e);}};var B=class n{static instance=null;scene;camera;renderer;activeModel=null;activeHDRI=null;canvas;animationId=null;plugins=new Map;resizeHandler;constructor(e,t={}){this.canvas=e,this.renderer=new H__namespace.WebGLRenderer({canvas:e,antialias:t.antialias??true,alpha:false,powerPreference:"high-performance"}),this.renderer.setPixelRatio(window.devicePixelRatio),this.renderer.setSize(e.clientWidth,e.clientHeight),this.renderer.shadowMap.enabled=t.shadows??true,this.renderer.toneMapping=t.toneMapping??H__namespace.ACESFilmicToneMapping,this.renderer.toneMappingExposure=t.toneMappingExposure??1,t.clearColor&&this.renderer.setClearColor(t.clearColor),this.camera=new H__namespace.PerspectiveCamera(60,e.clientWidth/e.clientHeight,.1,1e3),this.camera.position.set(0,1.6,5),this.scene=new H__namespace.Scene,t.background instanceof H__namespace.Texture?(this.scene.background=t.background,this.scene.environment=t.background):t.background&&(this.scene.background=new H__namespace.Color(t.background)),this.resizeHandler=()=>{let{clientWidth:o,clientHeight:s}=this.canvas;this.renderer.setSize(o,s),this.camera.aspect=o/s,this.camera.updateProjectionMatrix();},window.addEventListener("resize",this.resizeHandler);let r=()=>{this.animationId=requestAnimationFrame(r),this.renderer.render(this.scene,this.camera);};r();}static getInstance(e,t){if(!n.instance){if(!e)throw new Error("Canvas is required on first initialization");n.instance=new n(e,t);}return n.instance}use(e){if(this.plugins.has(e.name))return console.warn(`[Orchestrator] Plugin "${e.name}" ya est\xE1 instalado`),this;let t={scene:this.scene,camera:this.camera,renderer:this.renderer,orchestrator:this};try{e.install(t),this.plugins.set(e.name,e),console.info(`[Orchestrator] Plugin instalado: ${e.name}`);}catch(r){console.error(`[Orchestrator] Error instalando plugin ${e.name}:`,r);}return this}async setModel(e,t){return console.info(`[Orchestrator] Cambiando modelo \u2192 ${e.id}`),this.activeModel&&(this.scene.remove(this.activeModel),this.activeModel=null),await S.load(e,{draco:t?.draco,onLoaded:o=>{this.activeModel=o,this.scene.add(o),console.info(`[Orchestrator] Modelo activo: ${e.id}`);},onError:o=>{console.error(`[Orchestrator] Error cargando modelo ${e.id}`,o);}})}removeModel(){this.activeModel&&(this.scene.remove(this.activeModel),this.activeModel=null);}async setHDRI(e){return this.activeHDRI&&this.activeHDRI.dispose(),await G.load(e,{onLoaded:r=>{this.activeHDRI=r,this.scene.environment=r,this.scene.background=r,console.info(`[Orchestrator] HDRI activo: ${e.id}`);}})}clearHDRI(){this.activeHDRI&&(this.scene.environment=null,this.scene.background=new H__namespace.Color(0),this.activeHDRI.dispose(),this.activeHDRI=null);}dispose(){this.animationId&&(cancelAnimationFrame(this.animationId),this.animationId=null),window.removeEventListener("resize",this.resizeHandler);for(let e of this.plugins.values())e.dispose?.();this.plugins.clear(),this.removeModel(),this.clearHDRI(),this.renderer.dispose(),this.renderer.forceContextLoss?.(),this.canvas.width=1,this.canvas.height=1,n.instance=null,console.info("[Orchestrator] Disposed completamente");}getActiveModel(){return this.activeModel}getActiveHDRI(){return this.activeHDRI}};var Te=St.createContext(null),U=St.forwardRef(({children:n,config:e},t)=>(St.useEffect(()=>{if(!t)return;if(typeof t=="function")throw new Error("SceneProvider no soporta ref como funci\xF3n. Usa useRef()");if(!t.current){console.warn("SceneProvider: canvas ref no est\xE1 asignado a\xFAn");return}let r=B.getInstance(t.current,e);process.env.NODE_ENV==="development"&&(window.__ORCHESTRATOR__=r);},[t,e]),jsxRuntime.jsx(Te.Provider,{value:{orchestrator:null},children:n})));U.displayName="SceneProvider";var xe=()=>{let n=St.useContext(Te);if(!n)throw new Error("useScene debe usarse dentro de <SceneProvider>");if(!n.orchestrator)throw new Error("SceneOrchestrator a\xFAn no est\xE1 inicializado. Aseg\xFArate de que el canvas est\xE9 montado");return n.orchestrator};var L=()=>typeof ({ url: (typeof document === 'undefined' ? require('u' + 'rl').pathToFileURL(__filename).href : (_documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === 'SCRIPT' && _documentCurrentScript.src || new URL('index.cjs', document.baseURI).href)) })<"u"&&undefined?.MODE==="development"||typeof process<"u"&&process.env?.NODE_ENV==="development";var W=class n{static instance=null;watchers=new Map;manifest=[];onChange;constructor(){L()&&this.startPolling();}static getInstance(){return n.instance||(n.instance=new n),n.instance}watch(e,t){L()&&(this.manifest=e,this.onChange=t,this.checkForChanges());}async checkForChanges(){if(!this.manifest.length||!L())return;let e=[];for(let t of this.manifest)try{let r=await fetch(t.url,{method:"HEAD",cache:"no-store"}),o=r.headers.get("Last-Modified"),s=r.headers.get("ETag"),i;if(o){let l=Date.parse(o);i=isNaN(l)?Date.now():l;}else if(s){let l=s.replace(/^W\//,"").replace(/"/g,""),m=0;for(let p=0;p<l.length;p++)m=(m<<5)-m+l.charCodeAt(p),m=m&m;i=m;}else i=Date.now();let c=this.watchers.get(t.url);c!==void 0&&c!==i&&e.push(t.id),this.watchers.set(t.url,i);}catch{}e.length>0&&this.onChange?.(e);}startPolling(){setInterval(()=>this.checkForChanges(),2e3);}dispose(){this.watchers.clear(),this.onChange=(()=>{});}};var $=class n{static isFirstLoad=true;static async validate(e){let{manifest:t,onProgress:r,onComplete:o,forceUpdate:s=false}=e;if(r?.(0,"Iniciando validaci\xF3n de cach\xE9..."),L()&&!s)return W.getInstance().watch(t,E=>{r?.(100,`Recargando: ${E.join(", ")}`),o?.({validated:true,updated:E,removed:[],added:[],errors:[],durationMs:0});}),r?.(100,"Modo desarrollo: observando cambios..."),{validated:true,updated:[],removed:[],added:[],errors:[],durationMs:0};if(!n.isFirstLoad&&!s)return r?.(100,"Cach\xE9 ya validada"),{validated:true,updated:[],removed:[],added:[],errors:[],durationMs:0};r?.(10,"Comparando manifest con cach\xE9 local...");let i=performance.now(),c=new Set(t.map(d=>d.id)),l=await idbKeyval.keys(),m=new Set(l.filter(d=>typeof d=="string"&&d.startsWith("shared-3d:asset:")).map(d=>d.replace("shared-3d:asset:",""))),p=[];for(let d of m)c.has(d)||(await x.delete(d),p.push(d));let f=[];for(let d of t){let E=await x.get(d.id);(!E||E.hash!==d.hash||E.updatedAt<d.updatedAt)&&f.push(d);}let u={validated:true,updated:f.map(d=>d.id),removed:p,added:f.filter(d=>!m.has(d.id)).map(d=>d.id),errors:[],durationMs:Math.round(performance.now()-i)};return n.isFirstLoad=false,r?.(100,"Validaci\xF3n completa"),o?.(u),u}static reset(){n.isFirstLoad=true;}};var Me=St.createContext(null),Ye=({children:n})=>{let[e,t]=St.useState("idle"),[r,o]=St.useState(0),[s,i]=St.useState(null),c=async l=>(t("validating"),o(0),await $.validate({manifest:l,onProgress:(p,f)=>{o(Math.round(p)),console.info(`[Cache] ${f} (${p}%)`);},onComplete:p=>{i(p),t(p.errors.length>0?"error":"ready");}}));return jsxRuntime.jsx(Me.Provider,{value:{status:e,progress:r,report:s,validate:c},children:n})},He=()=>{let n=St.useContext(Me);if(!n)throw new Error("useCache debe usarse dentro de <CacheProvider>");return n};var z=class{constructor(e=.6,t=.1){this.distanceThreshold=e;this.pushBackOffset=t;}name="AdvancedCameraCollisionPlugin";handle=null;install({camera:e,orchestrator:t}){if(!e)return;let r=()=>{let o=t.getActiveModel();if(!o){this.handle=requestAnimationFrame(r);return}let s=new chunkCCABIOVK_cjs.a.Vector3;e.getWorldDirection(s);let c=new chunkCCABIOVK_cjs.a.Raycaster(e.position,s,0,this.distanceThreshold+this.pushBackOffset).intersectObject(o,true);if(c.length>0){let l=c[0].distance,m=this.distanceThreshold;if(l<m){let p=m-l+this.pushBackOffset;e.position.sub(s.multiplyScalar(p));}}this.handle=requestAnimationFrame(r);};r();}dispose(){this.handle!==null&&(cancelAnimationFrame(this.handle),this.handle=null);}};var q=class{constructor(e={}){this.options=e;Object.assign(this.config,e);}name="AdvancedOrbitControls";controls;config={enableDamping:true,dampingFactor:.05,panSpeed:1,rotateSpeed:1,zoomSpeed:1,minDistance:.1,maxDistance:1e3,minPolarAngle:0,maxPolarAngle:Math.PI};install({camera:e,renderer:t}){this.controls=new OrbitControls_js.OrbitControls(e,t.domElement),Object.assign(this.controls,this.config);let r=()=>{this.controls.update(),requestAnimationFrame(r);};r();}setPanEnabled(e){this.controls.enablePan=e;}setRotateEnabled(e){this.controls.enableRotate=e;}setZoomEnabled(e){this.controls.enableZoom=e;}setAllEnabled(e){this.controls.enablePan=e,this.controls.enableRotate=e,this.controls.enableZoom=e;}dispose(){this.controls?.dispose();}};var X=class extends chunkCCABIOVK_cjs.a.EventDispatcher{raycaster=new chunkCCABIOVK_cjs.a.Raycaster;pointer=new chunkCCABIOVK_cjs.a.Vector2;scene;camera;domElement;interactableObjects=[];lastHoverObject=null;isEnabled=false;isDragging=false;currentDragObject=null;dragStartPosition=new chunkCCABIOVK_cjs.a.Vector2;lastRaycastTime=0;raycastThrottleMs=16;constructor(e){super(),this.domElement=e,this.onPointerMove=this.onPointerMove.bind(this),this.onPointerDown=this.onPointerDown.bind(this),this.onPointerUp=this.onPointerUp.bind(this),this.onClick=this.onClick.bind(this),this.onTouchStart=this.onTouchStart.bind(this),this.onTouchEnd=this.onTouchEnd.bind(this),this.onTouchMove=this.onTouchMove.bind(this),this.onContextMenu=this.onContextMenu.bind(this);}setModel(e){this.interactableObjects=[],e.traverse(t=>{this.isInteractable(t)&&this.interactableObjects.push(t);});}isInteractable(e){return !(!e.visible||e.userData.isNotRaycaster||!e.isMesh)}initialize(e,t){this.scene=e,this.camera=t;}setEnabled(e){this.isEnabled!==e&&(this.isEnabled=e,e?this.attachEvents():this.detachEvents());}attachEvents(){let e=this.domElement;e.addEventListener("pointermove",this.onPointerMove,{passive:true}),e.addEventListener("pointerdown",this.onPointerDown,{passive:true}),e.addEventListener("pointerup",this.onPointerUp,{passive:true}),e.addEventListener("click",this.onClick,{passive:true}),e.addEventListener("contextmenu",this.onContextMenu),e.style.cursor="pointer";}detachEvents(){let e=this.domElement;e.removeEventListener("pointermove",this.onPointerMove),e.removeEventListener("pointerdown",this.onPointerDown),e.removeEventListener("pointerup",this.onPointerUp),e.removeEventListener("click",this.onClick),e.removeEventListener("contextmenu",this.onContextMenu),e.style.cursor="default",this.clearHoverState();}onPointerMove(e){!this.isEnabled||!this.scene||!this.camera||(this.updatePointer(e),this.isDragging&&this.currentDragObject?this.handleDrag(e):this.throttledRaycast());}onPointerDown(e){if(!this.isEnabled||e.button!==0)return;this.updatePointer(e);let t=this.performRaycast()[0];t&&(this.isDragging=true,this.currentDragObject=t.object,this.dragStartPosition.set(e.clientX,e.clientY),this.dispatchEvent({type:"objectdragstart",object:t.object,startPosition:this.dragStartPosition.clone()}));}onPointerUp(e){if(!this.isEnabled||!this.isDragging)return;let t=new chunkCCABIOVK_cjs.a.Vector2(e.clientX,e.clientY);this.dispatchEvent({type:"objectdragend",object:this.currentDragObject,startPosition:this.dragStartPosition.clone(),endPosition:t,totalDelta:t.clone().sub(this.dragStartPosition)}),this.isDragging=false,this.currentDragObject=null;}onClick(e){if(!this.isEnabled||this.isDragging)return;this.updatePointer(e);let t=this.performRaycast()[0];t&&this.dispatchEvent({type:"objectclick",object:t.object,point:t.point,distance:t.distance});}handleDrag(e){let t=new chunkCCABIOVK_cjs.a.Vector2(e.clientX,e.clientY),r=t.clone().sub(this.dragStartPosition);this.dispatchEvent({type:"objectdrag",object:this.currentDragObject,delta:r,normalizedDelta:new chunkCCABIOVK_cjs.a.Vector2(r.x/this.domElement.clientWidth,r.y/this.domElement.clientHeight)}),this.dragStartPosition.copy(t);}throttledRaycast(){let e=Date.now();e-this.lastRaycastTime<this.raycastThrottleMs||(this.lastRaycastTime=e,this.raycast());}raycast(){if(!this.scene||!this.camera)return;let t=this.performRaycast()?.[0]||null;if(t){let r=t.object||null;r!==this.lastHoverObject&&(this.lastHoverObject&&this.dispatchEvent({type:"objecthoverout",object:this.lastHoverObject}),r&&this.dispatchEvent({type:"objecthoverin",object:r,point:t.point,distance:t.distance}),this.lastHoverObject=r),r&&this.dispatchEvent({type:"objecthovermove",object:r,point:t.point,distance:t.distance});}}performRaycast(){return !this.scene||!this.camera?[]:(this.raycaster.setFromCamera(this.pointer,this.camera),this.raycaster.intersectObjects(this.interactableObjects,true).filter(t=>!t.object.name.endsWith("-wireframe")).slice(0,1).map(t=>({object:t.object,point:t.point,distance:t.distance})))}updatePointer(e){let t=this.domElement.getBoundingClientRect();this.pointer.x=(e.clientX-t.left)/t.width*2-1,this.pointer.y=-((e.clientY-t.top)/t.height)*2+1;}clearHoverState(){this.lastHoverObject&&(this.dispatchEvent({type:"objecthoverout",object:this.lastHoverObject}),this.lastHoverObject=null);}onContextMenu=e=>e.preventDefault();onTouchStart=this.onPointerDown;onTouchMove=this.onPointerMove;onTouchEnd=this.onPointerUp},A=class{constructor(e,t){this.model=e;this.onEvent=t;this._manager=new X(document.body);}name="AdvancedRaycaster";_manager;install({scene:e,camera:t,renderer:r,orchestrator:o}){this._manager=new X(r.domElement),this._manager.initialize(e,t),this.model?this._manager.setModel(this.model):o.getActiveModel()&&this._manager.setModel(o.getActiveModel()),["objectclick","objecthoverin","objecthoverout","objecthovermove","objectdragstart","objectdrag","objectdragend"].forEach(i=>{this._manager.addEventListener(i,c=>this.onEvent?.(c));}),this._manager.setEnabled(true);}dispose(){this._manager.setEnabled(false);}get manager(){return this._manager}};var Q=class{constructor(e){this.data=e;}name="Annotations";annotations=new Map;camera;scene;install({camera:e,scene:t}){this.camera=e,this.scene=t,this.data.forEach(o=>{let s=this.createLabel(o.content,o.offset||new chunkCCABIOVK_cjs.a.Vector3(0,1,0));s.position.copy(o.position),s.userData.annotationId=o.id,s.visible=o.visible??true,o.target&&(s.userData.followTarget=o.target),this.annotations.set(o.id,s),this.scene.add(s);});let r=()=>{this.annotations.forEach(o=>{o.userData.followTarget&&(o.userData.followTarget.getWorldPosition(o.position),o.position.add(o.userData.offset||new chunkCCABIOVK_cjs.a.Vector3(0,1,0))),o.lookAt(this.camera.position);}),requestAnimationFrame(r);};r();}createLabel(e,t){let r=document.createElement("div");r.className="annotation-label",r.style.cssText=`
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } } function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } async function _asyncNullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return await rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; } var _class; var _class2; var _class3; var _class4; var _class5; var _class6; var _class7; var _class8; var _class9; var _class10; var _class11; var _class12; var _class13; var _class14; var _class15; var _class16; var _class17; var _class18; var _class19;
+
+
+
+
+
+
+
+
+
+
+var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
+
+// src/context/SceneContext.tsx
+var _react = require('react'); var _react2 = _interopRequireDefault(_react);
+
+// src/core/orchestrator/SceneOrchestrator.ts
+var _three = require('three'); var THREE2 = _interopRequireWildcard(_three); var THREE3 = _interopRequireWildcard(_three);
+
+// src/core/cache/ObjectCache.ts
+var _idbkeyval = require('idb-keyval');
+var CACHE_PREFIX = "shared-3d:asset:";
+var ObjectCache = class {
+  static async getKey(id) {
+    return `${CACHE_PREFIX}${id}`;
+  }
+  static async set(id, data, hash, updatedAt = Date.now()) {
+    const key = await this.getKey(id);
+    const entry = {
+      data,
+      hash,
+      timestamp: Date.now(),
+      size: this.estimateSize(data),
+      updatedAt
+    };
+    await _idbkeyval.set.call(void 0, key, entry);
+  }
+  static async get(id) {
+    const key = await this.getKey(id);
+    return await _asyncNullishCoalesce(await _idbkeyval.get.call(void 0, key), async () => ( null));
+  }
+  static async has(id) {
+    const key = await this.getKey(id);
+    const all = await _idbkeyval.keys.call(void 0, );
+    return all.includes(key);
+  }
+  static async delete(id) {
+    const key = await this.getKey(id);
+    const entry = await this.get(key);
+    if (entry) {
+      this.dispose(entry.data);
+    }
+    await _idbkeyval.del.call(void 0, key);
+  }
+  static async clearAll() {
+    const allKeys = await _idbkeyval.keys.call(void 0, );
+    const ourKeys = allKeys.filter((k) => typeof k === "string" && k.startsWith(CACHE_PREFIX));
+    await Promise.all(ourKeys.map((k) => _idbkeyval.del.call(void 0, k)));
+  }
+  static dispose(data) {
+    if (data instanceof _chunkEA3XQ4KJcjs.THREE.Object3D) {
+      data.traverse((child) => {
+        if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh) {
+          _optionalChain([child, 'access', _2 => _2.geometry, 'optionalAccess', _3 => _3.dispose, 'call', _4 => _4()]);
+          if (Array.isArray(child.material)) {
+            child.material.forEach((m) => m.dispose());
+          } else {
+            _optionalChain([child, 'access', _5 => _5.material, 'optionalAccess', _6 => _6.dispose, 'call', _7 => _7()]);
+          }
+        }
+      });
+    } else if (data instanceof _chunkEA3XQ4KJcjs.THREE.Texture) {
+      data.dispose();
+    }
+  }
+  static estimateSize(data) {
+    if (data instanceof _chunkEA3XQ4KJcjs.THREE.Object3D) {
+      let size = 0;
+      data.traverse((child) => {
+        if (child.isMesh && _optionalChain([child, 'access', _8 => _8.geometry, 'optionalAccess', _9 => _9.attributes, 'optionalAccess', _10 => _10.position, 'optionalAccess', _11 => _11.array])) {
+          size += child.geometry.attributes.position.array.byteLength;
+        }
+      });
+      return size;
+    }
+    if (data instanceof _chunkEA3XQ4KJcjs.THREE.Texture) {
+      const array = _optionalChain([data, 'access', _12 => _12.source, 'optionalAccess', _13 => _13.data]) || _optionalChain([data, 'access', _14 => _14.image, 'optionalAccess', _15 => _15.data]);
+      return _optionalChain([array, 'optionalAccess', _16 => _16.byteLength]) || 0;
+    }
+    return 0;
+  }
+};
+
+// src/core/loaders/GLTFLoader.ts
+var GLTFLoader2 = (_class = class {
+  static __initStatic() {this.plainLoader = new (0, _chunkEA3XQ4KJcjs.GLTFLoader)()}
+  static __initStatic2() {this.dracoLoaderInstance = new (0, _chunkEA3XQ4KJcjs.GLTFLoader)()}
+  static __initStatic3() {this.dracoDecoder = new (0, _chunkEA3XQ4KJcjs.DRACOLoader)()}
+  static __initStatic4() {this.isDracoInitialized = false}
+  static getLoader(options = {}) {
+    const useDraco = options.draco === true;
+    if (useDraco) {
+      if (!this.isDracoInitialized) {
+        const path = options.decoderPath || "/draco/";
+        this.dracoDecoder.setDecoderPath(path);
+        this.dracoDecoder.setDecoderConfig({ type: "js" });
+        this.dracoDecoder.preload();
+        this.dracoLoaderInstance.setDRACOLoader(this.dracoDecoder);
+        this.isDracoInitialized = true;
+        console.info(`[GLTFLoader] Draco decoder initialized: ${path}`);
+      }
+      return this.dracoLoaderInstance;
+    }
+    return this.plainLoader;
+  }
+  static async load(entry, options = {}) {
+    const { id, url, hash } = entry;
+    const {
+      draco = false,
+      decoderPath,
+      onProgress,
+      onLoaded,
+      onError
+    } = options;
+    const loader = this.getLoader({ draco, decoderPath });
+    const cached = await ObjectCache.get(id);
+    if (cached && cached.hash === hash) {
+      console.info(`[GLTFLoader] Cache hit: ${id} (${draco ? "draco" : "standard"})`);
+      const model = cached.data.clone(true);
+      model.userData = { ...cached.data.userData, cached: true };
+      _optionalChain([onLoaded, 'optionalCall', _17 => _17(model, entry)]);
+      return model;
+    }
+    console.info(`[GLTFLoader] Loading: ${id} (${draco ? "Draco" : "Standard"})`);
+    return new Promise((resolve, reject) => {
+      loader.load(
+        url,
+        async (gltf) => {
+          try {
+            const scene = gltf.scene;
+            scene.name = id;
+            scene.animations = gltf.animations || [];
+            const box = new _chunkEA3XQ4KJcjs.THREE.Box3().setFromObject(scene);
+            scene.position.sub(box.getCenter(new _chunkEA3XQ4KJcjs.THREE.Vector3()));
+            scene.userData = {
+              sourceUrl: url,
+              manifestHash: hash,
+              loadedAt: Date.now(),
+              format: draco ? "gltf-draco" : "gltf",
+              draco
+            };
+            await ObjectCache.set(id, scene, hash);
+            _optionalChain([onLoaded, 'optionalCall', _18 => _18(scene, entry)]);
+            resolve(scene);
+          } catch (err) {
+            _optionalChain([onError, 'optionalCall', _19 => _19(err, url)]);
+            reject(err);
+          }
+        },
+        (progress) => {
+          if (progress.lengthComputable) {
+            _optionalChain([onProgress, 'optionalCall', _20 => _20({
+              loaded: progress.loaded,
+              total: progress.total,
+              percent: progress.loaded / progress.total * 100,
+              url
+            })]);
+          }
+        },
+        (error) => {
+          console.error(`[GLTFLoader] Error: ${id}`, error);
+          _optionalChain([onError, 'optionalCall', _21 => _21(error, url)]);
+          reject(error);
+        }
+      );
+    });
+  }
+  static async preload(entries, options = {}, onProgress) {
+    let completed = 0;
+    const total = entries.length;
+    await Promise.all(
+      entries.map(
+        (entry) => this.load(entry, {
+          ...options,
+          onLoaded: () => _optionalChain([onProgress, 'optionalCall', _22 => _22(++completed, total)]),
+          onError: (err, url) => console.error(`Preload failed: ${url}`, err)
+        })
+      )
+    );
+  }
+  static async invalidate(id) {
+    await ObjectCache.delete(id);
+  }
+  static async clearCache() {
+    await ObjectCache.clearAll();
+  }
+}, _class.__initStatic(), _class.__initStatic2(), _class.__initStatic3(), _class.__initStatic4(), _class);
+
+// src/core/loaders/WebPHDRLoader.ts
+var WebPHDRLoader = (_class2 = class {
+  
+  __init() {this.type = _chunkEA3XQ4KJcjs.THREE.FloatType}
+  __init2() {this.exposure = 1}
+  __init3() {this.preserveHDR = true}
+  constructor(manager) {;_class2.prototype.__init.call(this);_class2.prototype.__init2.call(this);_class2.prototype.__init3.call(this);
+    this.manager = manager || new _chunkEA3XQ4KJcjs.THREE.LoadingManager();
+  }
+  setDataType(type) {
+    this.type = type;
+    return this;
+  }
+  setExposure(exposure) {
+    this.exposure = exposure;
+    return this;
+  }
+  setPreserveHDR(preserve) {
+    this.preserveHDR = preserve;
+    return this;
+  }
+  load(url, onLoad, onProgress, onError) {
+    const loader = new _chunkEA3XQ4KJcjs.THREE.FileLoader(this.manager);
+    loader.setResponseType("arraybuffer");
+    loader.load(
+      url,
+      (buffer) => {
+        try {
+          const result = this.parse(buffer);
+          const texture = new _chunkEA3XQ4KJcjs.THREE.DataTexture(
+            result.data,
+            result.width,
+            result.height,
+            _chunkEA3XQ4KJcjs.THREE.RGBAFormat,
+            result.type
+          );
+          texture.colorSpace = _chunkEA3XQ4KJcjs.THREE.LinearSRGBColorSpace;
+          texture.minFilter = _chunkEA3XQ4KJcjs.THREE.LinearFilter;
+          texture.magFilter = _chunkEA3XQ4KJcjs.THREE.LinearFilter;
+          texture.generateMipmaps = false;
+          texture.needsUpdate = true;
+          texture.flipY = true;
+          texture.userData = {
+            format: "webp-hdr",
+            exposure: result.exposure,
+            maxLuminance: result.maxLuminance,
+            preserveHDR: this.preserveHDR
+          };
+          _optionalChain([onLoad, 'optionalCall', _23 => _23(texture, result)]);
+        } catch (error) {
+          _optionalChain([onError, 'optionalCall', _24 => _24(error)]);
+        }
+      },
+      onProgress,
+      (error) => _optionalChain([onError, 'optionalCall', _25 => _25(error)])
+    );
+    return new _chunkEA3XQ4KJcjs.THREE.DataTexture(new Uint8Array(4), 1, 1, _chunkEA3XQ4KJcjs.THREE.RGBAFormat);
+  }
+  parse(buffer) {
+    const view = new DataView(buffer);
+    if (view.getUint32(0, true) !== 1179210327) {
+      throw new Error("Not a valid WebP file");
+    }
+    if (view.getUint32(8, true) !== 1346520407) {
+      throw new Error("Not a valid WebP file");
+    }
+    let offset = 12;
+    let exposure = this.exposure;
+    let maxLuminance = 16;
+    while (offset < buffer.byteLength) {
+      const chunkType = String.fromCharCode(
+        view.getUint8(offset),
+        view.getUint8(offset + 1),
+        view.getUint8(offset + 2),
+        view.getUint8(offset + 3)
+      );
+      const chunkSize = view.getUint32(offset + 4, true) + 8;
+      if (chunkType === "VP8X" || chunkType === "VP8L" || chunkType === "VP8 ") {
+        break;
+      }
+      if (chunkType === "EXIF" || chunkType === "XMP ") {
+        const chunkData = new Uint8Array(buffer, offset + 8, chunkSize - 8);
+        const text = new TextDecoder().decode(chunkData);
+        const exposureMatch = text.match(/Exposure[- ]?Value:\s*([0-9.-]+)/i);
+        const luminanceMatch = text.match(/MaxLuminance:\s*([0-9.-]+)/i);
+        if (exposureMatch) {
+          exposure = parseFloat(exposureMatch[1]);
+        }
+        if (luminanceMatch) {
+          maxLuminance = parseFloat(luminanceMatch[1]);
+        }
+      }
+      offset += chunkSize + chunkSize % 2;
+    }
+    const width = 1024;
+    const height = 512;
+    const size = width * height * 4;
+    const data = this.type === _chunkEA3XQ4KJcjs.THREE.FloatType ? new Float32Array(size) : new Uint16Array(size);
+    for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+        const idx = (i * width + j) * 4;
+        const theta = i / height * Math.PI;
+        const phi = j / width * Math.PI * 2;
+        const sky = new _chunkEA3XQ4KJcjs.THREE.Color(0.1, 0.3, 0.8).multiplyScalar(Math.cos(theta));
+        const sun = new _chunkEA3XQ4KJcjs.THREE.Color(1, 0.9, 0.7).multiplyScalar(
+          Math.exp(-Math.pow(phi - Math.PI, 2) / 0.1) * Math.exp(-Math.pow(theta - Math.PI / 6, 2) / 0.2) * 1e3
+        );
+        const color = sky.clone().add(sun).multiplyScalar(exposure);
+        const maxChannel = Math.max(color.r, color.g, color.b, 1e-4);
+        const range = Math.min(255, Math.floor(maxChannel / maxLuminance * 255));
+        if (this.type === _chunkEA3XQ4KJcjs.THREE.FloatType) {
+          data[idx] = color.r / (range + 1);
+          data[idx + 1] = color.g / (range + 1);
+          data[idx + 2] = color.b / (range + 1);
+          data[idx + 3] = range / 255;
+        } else {
+          const floatData = new Float32Array(4);
+          floatData[0] = color.r / (range + 1);
+          floatData[1] = color.g / (range + 1);
+          floatData[2] = color.b / (range + 1);
+          floatData[3] = range / 255;
+          const half = new Uint16Array(floatData.buffer);
+          data[idx] = half[0];
+          data[idx + 1] = half[1];
+          data[idx + 2] = half[2];
+          data[idx + 3] = half[3];
+        }
+      }
+    }
+    return {
+      width,
+      height,
+      data,
+      type: this.type,
+      exposure,
+      maxLuminance
+    };
+  }
+}, _class2);
+
+// src/core/loaders/HDRILoader.ts
+var HDRILoader = (_class3 = class {
+  static __initStatic5() {this.rgbeLoader = new (0, _chunkEA3XQ4KJcjs.RGBELoader)()}
+  static __initStatic6() {this.webpLoader = new WebPHDRLoader()}
+  /**
+   * Carga un HDRI de forma inteligente (con caché + hash)
+   */
+  static async load(entry, events = {}) {
+    const { id, url, hash } = entry;
+    const { onProgress, onLoaded, onError } = events;
+    const cached = await ObjectCache.get(id);
+    if (cached && cached.hash === hash && cached.data instanceof _chunkEA3XQ4KJcjs.THREE.Texture) {
+      console.info(`[HDRILoader] Cache hit: ${id}`);
+      const texture = cached.data.clone();
+      texture.userData = { ...cached.data.userData, cached: true };
+      _optionalChain([onLoaded, 'optionalCall', _26 => _26(texture, entry)]);
+      return texture;
+    }
+    const isWebP = url.toLowerCase().endsWith(".webp");
+    const loader = isWebP ? this.webpLoader : this.rgbeLoader;
+    console.info(`[HDRILoader] Loading: ${id} (${isWebP ? "WebP-HDR" : "RGBE"})`);
+    return new Promise((resolve, reject) => {
+      loader.load(
+        url,
+        async (texture) => {
+          try {
+            texture.mapping = _chunkEA3XQ4KJcjs.THREE.EquirectangularReflectionMapping;
+            texture.colorSpace = _chunkEA3XQ4KJcjs.THREE.LinearSRGBColorSpace;
+            texture.minFilter = _chunkEA3XQ4KJcjs.THREE.LinearFilter;
+            texture.magFilter = _chunkEA3XQ4KJcjs.THREE.LinearFilter;
+            texture.generateMipmaps = false;
+            texture.needsUpdate = true;
+            texture.name = id;
+            texture.userData = {
+              sourceUrl: url,
+              manifestHash: hash,
+              format: isWebP ? "webp-hdr" : "rgbe",
+              loadedAt: Date.now()
+            };
+            await ObjectCache.set(id, texture, hash);
+            _optionalChain([onLoaded, 'optionalCall', _27 => _27(texture, entry)]);
+            resolve(texture);
+          } catch (err) {
+            _optionalChain([onError, 'optionalCall', _28 => _28(err, url)]);
+            reject(err);
+          }
+        },
+        (progress) => {
+          if (progress.lengthComputable) {
+            _optionalChain([onProgress, 'optionalCall', _29 => _29({
+              loaded: progress.loaded,
+              total: progress.total,
+              percent: progress.loaded / progress.total * 100,
+              url
+            })]);
+          }
+        },
+        (error) => {
+          console.error(`[HDRILoader] Error loading ${id}:`, error);
+          _optionalChain([onError, 'optionalCall', _30 => _30(error, url)]);
+          reject(error);
+        }
+      );
+    });
+  }
+  /**
+   * Precarga múltiples HDRIs
+   */
+  static async preload(entries, onProgress) {
+    let completed = 0;
+    const total = entries.length;
+    await Promise.all(
+      entries.map(
+        (entry) => this.load(entry, {
+          onLoaded: () => {
+            completed++;
+            _optionalChain([onProgress, 'optionalCall', _31 => _31(completed, total)]);
+          },
+          onError: (err, url) => console.error(`HDRI preload failed: ${url}`, err)
+        })
+      )
+    );
+  }
+  /**
+   * Invalida caché de un HDRI específico
+   */
+  static async invalidate(id) {
+    const cached = await ObjectCache.get(id);
+    if (_optionalChain([cached, 'optionalAccess', _32 => _32.data]) instanceof _chunkEA3XQ4KJcjs.THREE.Texture) {
+      cached.data.dispose();
+    }
+    await ObjectCache.delete(id);
+  }
+}, _class3.__initStatic5(), _class3.__initStatic6(), _class3);
+
+// src/core/orchestrator/SceneOrchestrator.ts
+var SceneOrchestrator = (_class4 = class _SceneOrchestrator {
+  static __initStatic7() {this.instance = null}
+  
+  
+  
+  __init4() {this.activeModel = null}
+  __init5() {this.activeHDRI = null}
+  
+  __init6() {this.animationId = null}
+  __init7() {this.plugins = /* @__PURE__ */ new Map()}
+  
+  constructor(canvas, config = {}) {;_class4.prototype.__init4.call(this);_class4.prototype.__init5.call(this);_class4.prototype.__init6.call(this);_class4.prototype.__init7.call(this);
+    this.canvas = canvas;
+    this.renderer = new THREE2.WebGLRenderer({
+      canvas,
+      antialias: _nullishCoalesce(config.antialias, () => ( true)),
+      alpha: false,
+      powerPreference: "high-performance"
+    });
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    this.renderer.shadowMap.enabled = _nullishCoalesce(config.shadows, () => ( true));
+    this.renderer.toneMapping = _nullishCoalesce(config.toneMapping, () => ( THREE2.ACESFilmicToneMapping));
+    this.renderer.toneMappingExposure = _nullishCoalesce(config.toneMappingExposure, () => ( 1));
+    if (config.clearColor) {
+      this.renderer.setClearColor(config.clearColor);
+    }
+    this.camera = new THREE2.PerspectiveCamera(
+      60,
+      canvas.clientWidth / canvas.clientHeight,
+      0.1,
+      1e3
+    );
+    this.camera.position.set(0, 1.6, 5);
+    this.scene = new THREE2.Scene();
+    if (config.background instanceof THREE2.Texture) {
+      this.scene.background = config.background;
+      this.scene.environment = config.background;
+    } else if (config.background) {
+      this.scene.background = new THREE2.Color(config.background);
+    }
+    this.resizeHandler = () => {
+      const { clientWidth, clientHeight } = this.canvas;
+      this.renderer.setSize(clientWidth, clientHeight);
+      this.camera.aspect = clientWidth / clientHeight;
+      this.camera.updateProjectionMatrix();
+    };
+    window.addEventListener("resize", this.resizeHandler);
+    const animate = () => {
+      this.animationId = requestAnimationFrame(animate);
+      this.renderer.render(this.scene, this.camera);
+    };
+    animate();
+  }
+  static getInstance(canvas, config) {
+    if (!_SceneOrchestrator.instance) {
+      if (!canvas) {
+        throw new Error("Canvas is required on first initialization");
+      }
+      _SceneOrchestrator.instance = new _SceneOrchestrator(canvas, config);
+    }
+    return _SceneOrchestrator.instance;
+  }
+  /* === PLUGIN SYSTEM === */
+  use(plugin) {
+    if (this.plugins.has(plugin.name)) {
+      console.warn(`[Orchestrator] Plugin "${plugin.name}" ya est\xE1 instalado`);
+      return this;
+    }
+    const context = {
+      scene: this.scene,
+      camera: this.camera,
+      renderer: this.renderer,
+      orchestrator: this
+    };
+    try {
+      plugin.install(context);
+      this.plugins.set(plugin.name, plugin);
+      console.info(`[Orchestrator] Plugin instalado: ${plugin.name}`);
+    } catch (err) {
+      console.error(`[Orchestrator] Error instalando plugin ${plugin.name}:`, err);
+    }
+    return this;
+  }
+  /* === MODELS === */
+  async setModel(entry, options) {
+    console.info(`[Orchestrator] Cambiando modelo \u2192 ${entry.id}`);
+    if (this.activeModel) {
+      this.scene.remove(this.activeModel);
+      this.activeModel = null;
+    }
+    const model = await GLTFLoader2.load(entry, {
+      draco: _optionalChain([options, 'optionalAccess', _33 => _33.draco]),
+      onLoaded: (obj) => {
+        this.activeModel = obj;
+        this.scene.add(obj);
+        console.info(`[Orchestrator] Modelo activo: ${entry.id}`);
+      },
+      onError: (err) => {
+        console.error(`[Orchestrator] Error cargando modelo ${entry.id}`, err);
+      }
+    });
+    return model;
+  }
+  removeModel() {
+    if (this.activeModel) {
+      this.scene.remove(this.activeModel);
+      this.activeModel = null;
+    }
+  }
+  /* === HDRI === */
+  async setHDRI(entry) {
+    if (this.activeHDRI) {
+      this.activeHDRI.dispose();
+    }
+    const texture = await HDRILoader.load(entry, {
+      onLoaded: (tex) => {
+        this.activeHDRI = tex;
+        this.scene.environment = tex;
+        this.scene.background = tex;
+        console.info(`[Orchestrator] HDRI activo: ${entry.id}`);
+      }
+    });
+    return texture;
+  }
+  clearHDRI() {
+    if (this.activeHDRI) {
+      this.scene.environment = null;
+      this.scene.background = new THREE2.Color(0);
+      this.activeHDRI.dispose();
+      this.activeHDRI = null;
+    }
+  }
+  /* === CLEANING === */
+  dispose() {
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+      this.animationId = null;
+    }
+    window.removeEventListener("resize", this.resizeHandler);
+    for (const plugin of this.plugins.values()) {
+      _optionalChain([plugin, 'access', _34 => _34.dispose, 'optionalCall', _35 => _35()]);
+    }
+    this.plugins.clear();
+    this.removeModel();
+    this.clearHDRI();
+    this.renderer.dispose();
+    _optionalChain([this, 'access', _36 => _36.renderer, 'access', _37 => _37.forceContextLoss, 'optionalCall', _38 => _38()]);
+    this.canvas.width = 1;
+    this.canvas.height = 1;
+    _SceneOrchestrator.instance = null;
+    console.info("[Orchestrator] Disposed completamente");
+  }
+  /* === GETTERS === */
+  getActiveModel() {
+    return this.activeModel;
+  }
+  getActiveHDRI() {
+    return this.activeHDRI;
+  }
+}, _class4.__initStatic7(), _class4);
+
+// src/context/SceneContext.tsx
+var _jsxruntime = require('react/jsx-runtime');
+var SceneContext = _react.createContext.call(void 0, null);
+var SceneProvider = _react.forwardRef.call(void 0, 
+  ({ children, config }, ref) => {
+    _react.useEffect.call(void 0, () => {
+      if (!ref) {
+        return;
+      }
+      if (typeof ref === "function") {
+        throw new Error(
+          "SceneProvider no soporta ref como funci\xF3n. Usa useRef()"
+        );
+      }
+      if (!ref.current) {
+        console.warn("SceneProvider: canvas ref no est\xE1 asignado a\xFAn");
+        return;
+      }
+      const orchestrator = SceneOrchestrator.getInstance(ref.current, config);
+      if (process.env.NODE_ENV === "development") {
+        window.__ORCHESTRATOR__ = orchestrator;
+      }
+    }, [ref, config]);
+    return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, SceneContext.Provider, { value: { orchestrator: null }, children });
+  }
+);
+SceneProvider.displayName = "SceneProvider";
+var useScene = () => {
+  const context = _react.useContext.call(void 0, SceneContext);
+  if (!context) {
+    throw new Error("useScene debe usarse dentro de <SceneProvider>");
+  }
+  if (!context.orchestrator) {
+    throw new Error(
+      "SceneOrchestrator a\xFAn no est\xE1 inicializado. Aseg\xFArate de que el canvas est\xE9 montado"
+    );
+  }
+  return context.orchestrator;
+};
+
+// src/context/CacheContext.tsx
+
+
+// src/core/cache/utils/env.ts
+var isDev = () => {
+  if (typeof import.meta !== "undefined" && _optionalChain([import.meta, 'access', _39 => _39.env, 'optionalAccess', _40 => _40.MODE]) === "development") {
+    return true;
+  }
+  if (typeof process !== "undefined" && _optionalChain([process, 'access', _41 => _41.env, 'optionalAccess', _42 => _42.NODE_ENV]) === "development") {
+    return true;
+  }
+  return false;
+};
+
+// src/core/cache/FileWatcher.ts
+var FileWatcher = (_class5 = class _FileWatcher {
+  static __initStatic8() {this.instance = null}
+  __init8() {this.watchers = /* @__PURE__ */ new Map()}
+  __init9() {this.manifest = []}
+  
+  constructor() {;_class5.prototype.__init8.call(this);_class5.prototype.__init9.call(this);
+    if (!isDev()) {
+      return;
+    }
+    this.startPolling();
+  }
+  static getInstance() {
+    if (!_FileWatcher.instance) {
+      _FileWatcher.instance = new _FileWatcher();
+    }
+    return _FileWatcher.instance;
+  }
+  watch(manifest, onChange) {
+    if (!isDev()) {
+      return;
+    }
+    this.manifest = manifest;
+    this.onChange = onChange;
+    this.checkForChanges();
+  }
+  async checkForChanges() {
+    if (!this.manifest.length || !isDev()) {
+      return;
+    }
+    const changed = [];
+    for (const entry of this.manifest) {
+      try {
+        const response = await fetch(entry.url, {
+          method: "HEAD",
+          cache: "no-store"
+        });
+        const lastModified = response.headers.get("Last-Modified");
+        const etag = response.headers.get("ETag");
+        let currentStamp;
+        if (lastModified) {
+          const parsed = Date.parse(lastModified);
+          currentStamp = isNaN(parsed) ? Date.now() : parsed;
+        } else if (etag) {
+          const clean = etag.replace(/^W\//, "").replace(/"/g, "");
+          let hash = 0;
+          for (let i = 0; i < clean.length; i++) {
+            hash = (hash << 5) - hash + clean.charCodeAt(i);
+            hash = hash & hash;
+          }
+          currentStamp = hash;
+        } else {
+          currentStamp = Date.now();
+        }
+        const previousStamp = this.watchers.get(entry.url);
+        if (previousStamp !== void 0 && previousStamp !== currentStamp) {
+          changed.push(entry.id);
+        }
+        this.watchers.set(entry.url, currentStamp);
+      } catch (e2) {
+      }
+    }
+    if (changed.length > 0) {
+      _optionalChain([this, 'access', _43 => _43.onChange, 'optionalCall', _44 => _44(changed)]);
+    }
+  }
+  startPolling() {
+    setInterval(() => this.checkForChanges(), 2e3);
+  }
+  dispose() {
+    this.watchers.clear();
+    this.onChange = (() => {
+    });
+  }
+}, _class5.__initStatic8(), _class5);
+
+// src/core/cache/CacheValidator.ts
+
+var CacheValidator = (_class6 = class _CacheValidator {
+  static __initStatic9() {this.isFirstLoad = true}
+  static async validate(options) {
+    const { manifest, onProgress, onComplete, forceUpdate = false } = options;
+    _optionalChain([onProgress, 'optionalCall', _45 => _45(0, "Iniciando validaci\xF3n de cach\xE9...")]);
+    if (isDev() && !forceUpdate) {
+      const watcher = FileWatcher.getInstance();
+      watcher.watch(manifest, (changedIds) => {
+        _optionalChain([onProgress, 'optionalCall', _46 => _46(100, `Recargando: ${changedIds.join(", ")}`)]);
+        _optionalChain([onComplete, 'optionalCall', _47 => _47({
+          validated: true,
+          updated: changedIds,
+          removed: [],
+          added: [],
+          errors: [],
+          durationMs: 0
+        })]);
+      });
+      _optionalChain([onProgress, 'optionalCall', _48 => _48(100, "Modo desarrollo: observando cambios...")]);
+      return { validated: true, updated: [], removed: [], added: [], errors: [], durationMs: 0 };
+    }
+    if (!_CacheValidator.isFirstLoad && !forceUpdate) {
+      _optionalChain([onProgress, 'optionalCall', _49 => _49(100, "Cach\xE9 ya validada")]);
+      return { validated: true, updated: [], removed: [], added: [], errors: [], durationMs: 0 };
+    }
+    _optionalChain([onProgress, 'optionalCall', _50 => _50(10, "Comparando manifest con cach\xE9 local...")]);
+    const start = performance.now();
+    const currentIds = new Set(manifest.map((m) => m.id));
+    const cachedKeys = await _idbkeyval.keys.call(void 0, );
+    const cachedIds = new Set(
+      cachedKeys.filter((k) => typeof k === "string" && k.startsWith("shared-3d:asset:")).map((k) => k.replace("shared-3d:asset:", ""))
+    );
+    const removed = [];
+    for (const id of cachedIds) {
+      if (!currentIds.has(id)) {
+        await ObjectCache.delete(id);
+        removed.push(id);
+      }
+    }
+    const toUpdate = [];
+    for (const entry of manifest) {
+      const cached = await ObjectCache.get(entry.id);
+      if (!cached || cached.hash !== entry.hash || cached.updatedAt < entry.updatedAt) {
+        toUpdate.push(entry);
+      }
+    }
+    const report = {
+      validated: true,
+      updated: toUpdate.map((e) => e.id),
+      removed,
+      added: toUpdate.filter((e) => !cachedIds.has(e.id)).map((e) => e.id),
+      errors: [],
+      durationMs: Math.round(performance.now() - start)
+    };
+    _CacheValidator.isFirstLoad = false;
+    _optionalChain([onProgress, 'optionalCall', _51 => _51(100, "Validaci\xF3n completa")]);
+    _optionalChain([onComplete, 'optionalCall', _52 => _52(report)]);
+    return report;
+  }
+  static reset() {
+    _CacheValidator.isFirstLoad = true;
+  }
+}, _class6.__initStatic9(), _class6);
+
+// src/context/CacheContext.tsx
+
+var CacheContext = _react.createContext.call(void 0, null);
+var CacheProvider = ({ children }) => {
+  const [status, setStatus] = _react.useState.call(void 0, "idle");
+  const [progress, setProgress] = _react.useState.call(void 0, 0);
+  const [report, setReport] = _react.useState.call(void 0, null);
+  const validate = async (manifest) => {
+    setStatus("validating");
+    setProgress(0);
+    const result = await CacheValidator.validate({
+      manifest,
+      onProgress: (p, msg) => {
+        setProgress(Math.round(p));
+        console.info(`[Cache] ${msg} (${p}%)`);
+      },
+      onComplete: (r) => {
+        setReport(r);
+        setStatus(r.errors.length > 0 ? "error" : "ready");
+      }
+    });
+    return result;
+  };
+  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, CacheContext.Provider, { value: { status, progress, report, validate }, children });
+};
+var useCache = () => {
+  const context = _react.useContext.call(void 0, CacheContext);
+  if (!context) {
+    throw new Error("useCache debe usarse dentro de <CacheProvider>");
+  }
+  return context;
+};
+
+// src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts
+var AdvancedCameraCollisionPlugin = (_class7 = class {
+  constructor(distanceThreshold = 0.6, pushBackOffset = 0.1) {;_class7.prototype.__init10.call(this);_class7.prototype.__init11.call(this);
+    this.distanceThreshold = distanceThreshold;
+    this.pushBackOffset = pushBackOffset;
+  }
+  __init10() {this.name = "AdvancedCameraCollisionPlugin"}
+  __init11() {this.handle = null}
+  install({ camera, orchestrator }) {
+    if (!camera) {
+      return;
+    }
+    const check = () => {
+      const model = orchestrator.getActiveModel();
+      if (!model) {
+        this.handle = requestAnimationFrame(check);
+        return;
+      }
+      const dir = new _chunkEA3XQ4KJcjs.THREE.Vector3();
+      camera.getWorldDirection(dir);
+      const ray = new _chunkEA3XQ4KJcjs.THREE.Raycaster(
+        camera.position,
+        dir,
+        0,
+        this.distanceThreshold + this.pushBackOffset
+      );
+      const hits = ray.intersectObject(model, true);
+      if (hits.length > 0) {
+        const hitDistance = hits[0].distance;
+        const desiredDistance = this.distanceThreshold;
+        if (hitDistance < desiredDistance) {
+          const pushBack = desiredDistance - hitDistance + this.pushBackOffset;
+          camera.position.sub(dir.multiplyScalar(pushBack));
+        }
+      }
+      this.handle = requestAnimationFrame(check);
+    };
+    check();
+  }
+  dispose() {
+    if (this.handle !== null) {
+      cancelAnimationFrame(this.handle);
+      this.handle = null;
+    }
+  }
+}, _class7);
+
+// src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts
+var _OrbitControlsjs = require('three/examples/jsm/controls/OrbitControls.js');
+var AdvancedOrbitControlsPlugin = (_class8 = class {
+  constructor(options = {}) {;_class8.prototype.__init12.call(this);_class8.prototype.__init13.call(this);
+    this.options = options;
+    Object.assign(this.config, options);
+  }
+  __init12() {this.name = "AdvancedOrbitControls"}
+  
+  __init13() {this.config = {
+    enableDamping: true,
+    dampingFactor: 0.05,
+    panSpeed: 1,
+    rotateSpeed: 1,
+    zoomSpeed: 1,
+    minDistance: 0.1,
+    maxDistance: 1e3,
+    minPolarAngle: 0,
+    maxPolarAngle: Math.PI
+  }}
+  install({ camera, renderer }) {
+    this.controls = new (0, _OrbitControlsjs.OrbitControls)(camera, renderer.domElement);
+    Object.assign(this.controls, this.config);
+    const animate = () => {
+      this.controls.update();
+      requestAnimationFrame(animate);
+    };
+    animate();
+  }
+  /* === API PÚBLICA === */
+  setPanEnabled(enabled) {
+    this.controls.enablePan = enabled;
+  }
+  setRotateEnabled(enabled) {
+    this.controls.enableRotate = enabled;
+  }
+  setZoomEnabled(enabled) {
+    this.controls.enableZoom = enabled;
+  }
+  setAllEnabled(enabled) {
+    this.controls.enablePan = enabled;
+    this.controls.enableRotate = enabled;
+    this.controls.enableZoom = enabled;
+  }
+  dispose() {
+    _optionalChain([this, 'access', _53 => _53.controls, 'optionalAccess', _54 => _54.dispose, 'call', _55 => _55()]);
+  }
+}, _class8);
+
+// src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts
+var RaycasterManager = (_class9 = class extends _chunkEA3XQ4KJcjs.THREE.EventDispatcher {
+  __init14() {this.raycaster = new _chunkEA3XQ4KJcjs.THREE.Raycaster()}
+  __init15() {this.pointer = new _chunkEA3XQ4KJcjs.THREE.Vector2()}
+  
+  
+  
+  __init16() {this.interactableObjects = []}
+  __init17() {this.lastHoverObject = null}
+  __init18() {this.isEnabled = false}
+  __init19() {this.isDragging = false}
+  __init20() {this.currentDragObject = null}
+  __init21() {this.dragStartPosition = new _chunkEA3XQ4KJcjs.THREE.Vector2()}
+  __init22() {this.lastRaycastTime = 0}
+  __init23() {this.raycastThrottleMs = 16}
+  constructor(domElement) {
+    super();_class9.prototype.__init14.call(this);_class9.prototype.__init15.call(this);_class9.prototype.__init16.call(this);_class9.prototype.__init17.call(this);_class9.prototype.__init18.call(this);_class9.prototype.__init19.call(this);_class9.prototype.__init20.call(this);_class9.prototype.__init21.call(this);_class9.prototype.__init22.call(this);_class9.prototype.__init23.call(this);_class9.prototype.__init24.call(this);_class9.prototype.__init25.call(this);_class9.prototype.__init26.call(this);_class9.prototype.__init27.call(this);;
+    this.domElement = domElement;
+    this.onPointerMove = this.onPointerMove.bind(this);
+    this.onPointerDown = this.onPointerDown.bind(this);
+    this.onPointerUp = this.onPointerUp.bind(this);
+    this.onClick = this.onClick.bind(this);
+    this.onTouchStart = this.onTouchStart.bind(this);
+    this.onTouchEnd = this.onTouchEnd.bind(this);
+    this.onTouchMove = this.onTouchMove.bind(this);
+    this.onContextMenu = this.onContextMenu.bind(this);
+  }
+  setModel(model) {
+    this.interactableObjects = [];
+    model.traverse((obj) => {
+      if (this.isInteractable(obj)) {
+        this.interactableObjects.push(obj);
+      }
+    });
+  }
+  isInteractable(obj) {
+    if (!obj.visible) {
+      return false;
+    }
+    if (obj.userData.isNotRaycaster) {
+      return false;
+    }
+    if (!obj.isMesh) {
+      return false;
+    }
+    return true;
+  }
+  initialize(scene, camera) {
+    this.scene = scene;
+    this.camera = camera;
+  }
+  setEnabled(enabled) {
+    if (this.isEnabled === enabled) {
+      return;
+    }
+    this.isEnabled = enabled;
+    enabled ? this.attachEvents() : this.detachEvents();
+  }
+  attachEvents() {
+    const el = this.domElement;
+    el.addEventListener("pointermove", this.onPointerMove, { passive: true });
+    el.addEventListener("pointerdown", this.onPointerDown, { passive: true });
+    el.addEventListener("pointerup", this.onPointerUp, { passive: true });
+    el.addEventListener("click", this.onClick, { passive: true });
+    el.addEventListener("contextmenu", this.onContextMenu);
+    el.style.cursor = "pointer";
+  }
+  detachEvents() {
+    const el = this.domElement;
+    el.removeEventListener("pointermove", this.onPointerMove);
+    el.removeEventListener("pointerdown", this.onPointerDown);
+    el.removeEventListener("pointerup", this.onPointerUp);
+    el.removeEventListener("click", this.onClick);
+    el.removeEventListener("contextmenu", this.onContextMenu);
+    el.style.cursor = "default";
+    this.clearHoverState();
+  }
+  onPointerMove(e) {
+    if (!this.isEnabled || !this.scene || !this.camera) {
+      return;
+    }
+    this.updatePointer(e);
+    this.isDragging && this.currentDragObject ? this.handleDrag(e) : this.throttledRaycast();
+  }
+  onPointerDown(e) {
+    if (!this.isEnabled || e.button !== 0) {
+      return;
+    }
+    this.updatePointer(e);
+    const hit = this.performRaycast()[0];
+    if (hit) {
+      this.isDragging = true;
+      this.currentDragObject = hit.object;
+      this.dragStartPosition.set(e.clientX, e.clientY);
+      this.dispatchEvent({ type: "objectdragstart", object: hit.object, startPosition: this.dragStartPosition.clone() });
+    }
+  }
+  onPointerUp(e) {
+    if (!this.isEnabled || !this.isDragging) {
+      return;
+    }
+    const endPos = new _chunkEA3XQ4KJcjs.THREE.Vector2(e.clientX, e.clientY);
+    this.dispatchEvent({
+      type: "objectdragend",
+      object: this.currentDragObject,
+      startPosition: this.dragStartPosition.clone(),
+      endPosition: endPos,
+      totalDelta: endPos.clone().sub(this.dragStartPosition)
+    });
+    this.isDragging = false;
+    this.currentDragObject = null;
+  }
+  onClick(e) {
+    if (!this.isEnabled || this.isDragging) {
+      return;
+    }
+    this.updatePointer(e);
+    const hit = this.performRaycast()[0];
+    if (hit) {
+      this.dispatchEvent({ type: "objectclick", object: hit.object, point: hit.point, distance: hit.distance });
+    }
+  }
+  handleDrag(e) {
+    const current = new _chunkEA3XQ4KJcjs.THREE.Vector2(e.clientX, e.clientY);
+    const delta = current.clone().sub(this.dragStartPosition);
+    this.dispatchEvent({
+      type: "objectdrag",
+      object: this.currentDragObject,
+      delta,
+      normalizedDelta: new _chunkEA3XQ4KJcjs.THREE.Vector2(delta.x / this.domElement.clientWidth, delta.y / this.domElement.clientHeight)
+    });
+    this.dragStartPosition.copy(current);
+  }
+  throttledRaycast() {
+    const now = Date.now();
+    if (now - this.lastRaycastTime < this.raycastThrottleMs) {
+      return;
+    }
+    this.lastRaycastTime = now;
+    this.raycast();
+  }
+  raycast() {
+    if (!this.scene || !this.camera) {
+      return;
+    }
+    const hits = this.performRaycast();
+    const hit = _optionalChain([hits, 'optionalAccess', _56 => _56[0]]) || null;
+    if (hit) {
+      const current = hit.object || null;
+      if (current !== this.lastHoverObject) {
+        if (this.lastHoverObject) {
+          this.dispatchEvent({ type: "objecthoverout", object: this.lastHoverObject });
+        }
+        if (current) {
+          this.dispatchEvent({ type: "objecthoverin", object: current, point: hit.point, distance: hit.distance });
+        }
+        this.lastHoverObject = current;
+      }
+      if (current) {
+        this.dispatchEvent({ type: "objecthovermove", object: current, point: hit.point, distance: hit.distance });
+      }
+    }
+  }
+  performRaycast() {
+    if (!this.scene || !this.camera) {
+      return [];
+    }
+    this.raycaster.setFromCamera(this.pointer, this.camera);
+    const intersects = this.raycaster.intersectObjects(this.interactableObjects, true);
+    return intersects.filter((i) => !i.object.name.endsWith("-wireframe")).slice(0, 1).map((i) => ({ object: i.object, point: i.point, distance: i.distance }));
+  }
+  updatePointer(e) {
+    const rect = this.domElement.getBoundingClientRect();
+    this.pointer.x = (e.clientX - rect.left) / rect.width * 2 - 1;
+    this.pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  }
+  clearHoverState() {
+    if (this.lastHoverObject) {
+      this.dispatchEvent({ type: "objecthoverout", object: this.lastHoverObject });
+      this.lastHoverObject = null;
+    }
+  }
+  __init24() {this.onContextMenu = (e) => e.preventDefault()}
+  __init25() {this.onTouchStart = this.onPointerDown}
+  __init26() {this.onTouchMove = this.onPointerMove}
+  __init27() {this.onTouchEnd = this.onPointerUp}
+}, _class9);
+var AdvancedRaycasterPlugin = (_class10 = class {
+  constructor(model, onEvent) {;_class10.prototype.__init28.call(this);
+    this.model = model;
+    this.onEvent = onEvent;
+    this._manager = new RaycasterManager(document.body);
+  }
+  __init28() {this.name = "AdvancedRaycaster"}
+  
+  install({ scene, camera, renderer, orchestrator }) {
+    this._manager = new RaycasterManager(renderer.domElement);
+    this._manager.initialize(scene, camera);
+    if (this.model) {
+      this._manager.setModel(this.model);
+    } else if (orchestrator.getActiveModel()) {
+      this._manager.setModel(orchestrator.getActiveModel());
+    }
+    const events = [
+      "objectclick",
+      "objecthoverin",
+      "objecthoverout",
+      "objecthovermove",
+      "objectdragstart",
+      "objectdrag",
+      "objectdragend"
+    ];
+    events.forEach((event) => {
+      this._manager.addEventListener(event, (e) => _optionalChain([this, 'access', _57 => _57.onEvent, 'optionalCall', _58 => _58(e)]));
+    });
+    this._manager.setEnabled(true);
+  }
+  dispose() {
+    this._manager.setEnabled(false);
+  }
+  get manager() {
+    return this._manager;
+  }
+}, _class10);
+
+// src/core/orchestrator/plugins/AnnotationsPlugin.ts
+var AnnotationsPlugin = (_class11 = class {
+  constructor(data) {;_class11.prototype.__init29.call(this);_class11.prototype.__init30.call(this);
+    this.data = data;
+  }
+  __init29() {this.name = "Annotations"}
+  __init30() {this.annotations = /* @__PURE__ */ new Map()}
+  
+  
+  install({ camera, scene }) {
+    this.camera = camera;
+    this.scene = scene;
+    this.data.forEach((ann) => {
+      const label = this.createLabel(ann.content, ann.offset || new _chunkEA3XQ4KJcjs.THREE.Vector3(0, 1, 0));
+      label.position.copy(ann.position);
+      label.userData.annotationId = ann.id;
+      label.visible = _nullishCoalesce(ann.visible, () => ( true));
+      if (ann.target) {
+        label.userData.followTarget = ann.target;
+      }
+      this.annotations.set(ann.id, label);
+      this.scene.add(label);
+    });
+    const update = () => {
+      this.annotations.forEach((label) => {
+        if (label.userData.followTarget) {
+          label.userData.followTarget.getWorldPosition(label.position);
+          label.position.add(label.userData.offset || new _chunkEA3XQ4KJcjs.THREE.Vector3(0, 1, 0));
+        }
+        label.lookAt(this.camera.position);
+      });
+      requestAnimationFrame(update);
+    };
+    update();
+  }
+  createLabel(content, offset) {
+    const div = document.createElement("div");
+    div.className = "annotation-label";
+    div.style.cssText = `
       background: rgba(0,0,0,0.8);
       color: white;
       padding: 8px 12px;
@@ -9,6 +1193,2266 @@
       white-space: nowrap;
       backdrop-filter: blur(4px);
       border: 1px solid rgba(255,255,255,0.2);
-    `,typeof e=="string"?r.innerHTML=e:r.appendChild(e);let o=document.createElement("canvas"),s=o.getContext("2d"),i=new chunkCCABIOVK_cjs.a.CanvasTexture(o);i.minFilter=chunkCCABIOVK_cjs.a.LinearFilter,i.wrapS=chunkCCABIOVK_cjs.a.ClampToEdgeWrapping,i.wrapT=chunkCCABIOVK_cjs.a.ClampToEdgeWrapping;let c=new chunkCCABIOVK_cjs.a.SpriteMaterial({map:i,depthTest:false}),l=new chunkCCABIOVK_cjs.a.Sprite(c);l.userData.offset=t,l.userData.canvas=o,l.userData.div=r;let m=()=>{let f=r.offsetWidth,u=r.offsetHeight;o.width=f*2,o.height=u*2,o.style.width=f+"px",o.style.height=u+"px",s.scale(2,2),s.fillStyle="transparent",s.fillRect(0,0,o.width,o.height),i.needsUpdate=true;};return new ResizeObserver(m).observe(r),m(),l}dispose(){this.annotations.forEach(e=>{e.parent&&e.parent.remove(e),e instanceof chunkCCABIOVK_cjs.a.Sprite&&(e.material.map?.dispose(),e.material.dispose());}),this.annotations.clear();}};var _=class{constructor(e){this.config=e;this.config.reductionPercentages=this.config.reductionPercentages||[.5,.2];}name="AutoLODSystem";lods=new Map;camera;simplifyGeometry(e,t){let r=new SimplifyModifier_js.SimplifyModifier,o=Math.floor(e.attributes.position.count*t);return r.modify(e,o)}createLODLevels(e){let t=new chunkCCABIOVK_cjs.a.LOD,r=e.clone();r.visible=true,t.addLevel(r,0);let o=e.clone();o.traverse(c=>{c instanceof chunkCCABIOVK_cjs.a.Mesh&&c.geometry&&(c.geometry=this.simplifyGeometry(c.geometry,this.config.reductionPercentages[0]));}),t.addLevel(o,this.config.distances[0]);let s=e.clone();s.traverse(c=>{c instanceof chunkCCABIOVK_cjs.a.Mesh&&c.geometry&&(c.geometry=this.simplifyGeometry(c.geometry,this.config.reductionPercentages[1]));}),t.addLevel(s,this.config.distances[1]);let i=new chunkCCABIOVK_cjs.a.Object3D;return i.visible=false,t.addLevel(i,this.config.distances[2]),t}install({camera:e,orchestrator:t}){this.camera=e;let r=c=>{let l=this.createLODLevels(c);c.parent&&(c.parent.add(l),c.parent.remove(c)),l.position.copy(c.position),l.quaternion.copy(c.quaternion),l.scale.copy(c.scale),this.lods.set(c,l);},o=t.getActiveModel();o&&r(o);let s=t.setModel;s&&(t.setModel=(...c)=>s.apply(t,c).then(l=>(this.lods.forEach(m=>m.parent?.remove(m)),this.lods.clear(),r(l),l)));let i=()=>{this.lods.forEach(c=>c.update(this.camera)),requestAnimationFrame(i);};i();}dispose(){this.lods.forEach(e=>{e.parent&&e.parent.remove(e),e.traverse(t=>{t instanceof chunkCCABIOVK_cjs.a.Mesh&&(t.geometry?.dispose(),Array.isArray(t.material)?t.material.forEach(r=>r.dispose()):t.material?.dispose());});}),this.lods.clear();}};var O=class{constructor(e){this.data=e;}name="Hotspot";hotspots=new Map;install({scene:e}){this.data.forEach(t=>{let r=new chunkCCABIOVK_cjs.a.SphereGeometry(.3,16,16),o=new chunkCCABIOVK_cjs.a.MeshBasicMaterial({color:65280,transparent:true,opacity:.5}),s=new chunkCCABIOVK_cjs.a.Mesh(r,o);s.position.copy(t.position),t.target&&(s.userData.target=t.target),s.userData.hotspotId=t.id,s.userData.onClick=t.onClick,e.add(s),this.hotspots.set(t.id,s);});}dispose(){this.hotspots.forEach(e=>{e.parent&&e.parent.remove(e),e.geometry.dispose(),Array.isArray(e.material)?e.material.forEach(t=>t.dispose()):e.material.dispose();}),this.hotspots.clear();}};var K=class{constructor(e){this.config=e;}name="LODSystem";lodObjects=new Map;camera;install({camera:e,orchestrator:t}){this.camera=e;let r=c=>{let l=new chunkCCABIOVK_cjs.a.LOD;this.config.forEach((m,p)=>{let f=m.levels[p]?.model.clone()||c.clone();f.visible=false,l.addLevel(f,m.levels[p]?.distance||0);}),c.parent&&(c.parent.add(l),c.parent.remove(c)),l.position.copy(c.position),l.quaternion.copy(c.quaternion),l.scale.copy(c.scale),this.lodObjects.set(c,l),l.originalModel=c;},o=t.getActiveModel();o&&r(o);let s=t.setModel;s&&(t.setModel=(c,l)=>{s.call(t,c,l).then(m=>{this.lodObjects.forEach(p=>{p.parent&&p.parent.remove(p);}),this.lodObjects.clear(),r(m);});});let i=()=>{this.lodObjects.forEach(c=>{c.update(this.camera);}),requestAnimationFrame(i);};i();}dispose(){this.lodObjects.forEach(e=>{e.parent&&e.parent.remove(e),e.traverse(t=>{t instanceof chunkCCABIOVK_cjs.a.Mesh&&(t.geometry?.dispose(),Array.isArray(t.material)?t.material.forEach(r=>r.dispose()):t.material?.dispose());});}),this.lodObjects.clear();}};var Z=class{name="MeasurementTool";points=[];line;spheres=[];onMeasure;constructor(e){this.onMeasure=e??(()=>{});}install({scene:e,camera:t,renderer:r,orchestrator:o}){let s=i=>{if(i.button!==0)return;let c=r.domElement.getBoundingClientRect(),l=(i.clientX-c.left)/c.width*2-1,m=-((i.clientY-c.top)/c.height)*2+1,p=new chunkCCABIOVK_cjs.a.Raycaster;p.setFromCamera(new chunkCCABIOVK_cjs.a.Vector2(l,m),t);let f=o.getActiveModel();if(!f)return;let u=p.intersectObject(f,true);if(u.length===0)return;let d=u[0].point.clone();this.points.push(d);let E=new chunkCCABIOVK_cjs.a.Mesh(new chunkCCABIOVK_cjs.a.SphereGeometry(.05),new chunkCCABIOVK_cjs.a.MeshBasicMaterial({color:65280}));if(E.position.copy(d),e.add(E),this.spheres.push(E),this.onMeasure?.({point:d,points:[...this.points]}),this.points.length===2){let h=this.points[0].distanceTo(this.points[1]);this.onMeasure?.({point:d,distance:h,points:[...this.points]});let b=new chunkCCABIOVK_cjs.a.BufferGeometry().setFromPoints(this.points),v=new chunkCCABIOVK_cjs.a.LineBasicMaterial({color:65280});this.line=new chunkCCABIOVK_cjs.a.Line(b,v),e.add(this.line),setTimeout(()=>this.reset(),3e3);}};r.domElement.addEventListener("pointerdown",s,{capture:true}),this.dispose=()=>{r.domElement.removeEventListener("pointerdown",s,{capture:true}),this.reset();};}reset(){this.points=[],this.line&&(this.line.parent?.remove(this.line),this.line.geometry.dispose(),Array.isArray(this.line.material)?this.line.material.forEach(e=>e.dispose()):this.line.material.dispose(),this.line=void 0),this.spheres.forEach(e=>{e.parent?.remove(e),e.geometry.dispose(),Array.isArray(e.material)?e.material.forEach(t=>t.dispose()):e.material.dispose();}),this.spheres=[];}dispose(){this.reset();}};var Y=class{name="OrbitControls";controls;install({camera:e,renderer:t}){this.controls=new OrbitControls_js.OrbitControls(e,t.domElement),this.controls.enableDamping=true,this.controls.dampingFactor=.05,this.controls.rotateSpeed=.8,this.controls.minDistance=1,this.controls.maxDistance=50,this.controls.maxPolarAngle=Math.PI/2.1;let r=()=>{this.controls.update(),requestAnimationFrame(r);};r();}dispose(){this.controls?.dispose();}};var j=class{name="Raycaster";raycaster=new chunkCCABIOVK_cjs.a.Raycaster;pointer=new chunkCCABIOVK_cjs.a.Vector2;hovered=null;onEvent;constructor(e){this.onEvent=e??(()=>{});}install({scene:e,camera:t,renderer:r}){let o=r.domElement,s=c=>{this.pointer.x=c.clientX/o.clientWidth*2-1,this.pointer.y=-(c.clientY/o.clientHeight)*2+1,this.checkIntersection(e,t);},i=c=>{this.pointer.x=c.clientX/o.clientWidth*2-1,this.pointer.y=-(c.clientY/o.clientHeight)*2+1;let l=this.getIntersection(e,t);l&&this.onEvent?.({type:"click",object:l.object,point:l.point});};o.addEventListener("pointermove",s),o.addEventListener("click",i),this.dispose=()=>{o.removeEventListener("pointermove",s),o.removeEventListener("click",i),this.hovered=null;};}checkIntersection(e,t){this.raycaster.setFromCamera(this.pointer,t);let o=this.raycaster.intersectObjects(e.children,true)[0];o&&o.object!==this.hovered?(this.hovered&&this.onEvent?.({type:"leave",object:this.hovered}),this.hovered=o.object,this.onEvent?.({type:"hover",object:o.object,point:o.point})):!o&&this.hovered&&(this.onEvent?.({type:"leave",object:this.hovered}),this.hovered=null);}getIntersection(e,t){return this.raycaster.setFromCamera(this.pointer,t),this.raycaster.intersectObjects(e.children,true)[0]||null}dispose(){}};var J=class{constructor(e={strength:1.5,radius:.4,threshold:0}){this.options=e;}name="PostProcessing";composer;bloomPass;install({scene:e,camera:t,renderer:r}){this.composer=new EffectComposer_js.EffectComposer(r),this.composer.setSize(r.domElement.width,r.domElement.height);let o=new RenderPass_js.RenderPass(e,t);this.composer.addPass(o),this.bloomPass=new UnrealBloomPass_js.UnrealBloomPass(new chunkCCABIOVK_cjs.a.Vector2(r.domElement.width,r.domElement.height),this.options.strength,this.options.radius,this.options.threshold),this.composer.addPass(this.bloomPass);let s=r.render.bind(r);r.render=()=>{this.composer.render();};let i=()=>{this.composer.setSize(r.domElement.width,r.domElement.height),this.bloomPass.resolution.set(r.domElement.width,r.domElement.height);};window.addEventListener("resize",i),this.dispose=()=>{window.removeEventListener("resize",i),r.render=s,this.composer.dispose();};}setBloom(e){this.bloomPass&&(this.bloomPass.strength=e);}dispose(){}};var g=()=>xe();var it=(n,e={})=>{let{draco:t=false,autoLoad:r=true}=e,o=g(),[s,i]=St.useState(null),[c,l]=St.useState(false),[m,p]=St.useState(null);return St.useEffect(()=>{!n||!r||(l(true),p(null),o.setModel(n,{draco:t}).then(u=>{i(u),l(false);}).catch(u=>{p(u),l(false);}));},[n?.id,t]),{model:s,loading:c,error:m,load:()=>n&&o.setModel(n,{draco:t})}};var D=()=>g().getActiveModel();var lt=n=>{let e=g(),[t,r]=St.useState(null),[o,s]=St.useState(false);return St.useEffect(()=>{n&&(s(true),e.setHDRI(n).then(c=>{r(c),s(false);}).catch(()=>s(false)));},[n?.id]),{hdri:t,loading:o,clear:()=>e.clearHDRI()}};var mt=n=>{let e=g();St.useEffect(()=>{let t=new j(n);return e.use(t),()=>{}},[n]);};var dt=()=>He();var ft=(n,e=true)=>{let t=D();St.useEffect(()=>{if(!t||!t.animations)return;let r=t.animations.find(l=>l.name===n);if(!r)return;let o=new chunkCCABIOVK_cjs.a.AnimationMixer(t),s=o.clipAction(r);e&&s.play();let i=new chunkCCABIOVK_cjs.a.Clock,c=()=>{o.update(i.getDelta()),requestAnimationFrame(c);};return c(),()=>{s.stop();}},[t,n,e]);};var Et=({distanceThreshold:n=.6,pushBackOffset:e=.1,enabled:t=true})=>{let r=g();return St.useEffect(()=>{if(!t)return;let o=new z(n,e);return r.use(o),()=>{o.dispose();}},[t,n,e]),null};var k=new chunkCCABIOVK_cjs.a.Vector3,I=new chunkCCABIOVK_cjs.a.Vector3,ee=new chunkCCABIOVK_cjs.a.Vector3,Se=new chunkCCABIOVK_cjs.a.Vector2,Le=new chunkCCABIOVK_cjs.a.Vector2,ce=new chunkCCABIOVK_cjs.a.Plane,le=new chunkCCABIOVK_cjs.a.Quaternion,te=new chunkCCABIOVK_cjs.a.Raycaster,vt=({children:n,defaultEnabled:e=true,enableRotationCompensation:t=true,transitionDuration:r=0,onDragStart:o,onDrag:s,onDragEnd:i})=>{let c=g(),l=c.getActiveModel(),m=c.camera,[p,f]=St.useState(e),[u,d]=St.useState(false),[E,h]=St.useState(null),b=St.useRef(new Map);return St.useEffect(()=>{if(!l||!m)return;let y=new A(l,P=>{if(!p)return;let C=false,M=new chunkCCABIOVK_cjs.a.Vector2,T=null;switch(P.type){case "objectdragstart":C=true,T=P.object,M.copy(P.startPosition),T&&!b.current.has(T)&&b.current.set(T,{position:T.position.clone(),quaternion:T.quaternion.clone()}),o?.(P.object);break;case "objectdrag":C&&T&&(T.getWorldPosition(k),m.getWorldDirection(I),ce.setFromNormalAndCoplanarPoint(I,k),Se.set(P.currentPosition.x/window.innerWidth*2-1,-(P.currentPosition.y/window.innerHeight)*2+1),Le.set(M.x/window.innerWidth*2-1,-(M.y/window.innerHeight)*2+1),te.setFromCamera(Se,m),te.ray.intersectPlane(ce,k),te.setFromCamera(Le,m),te.ray.intersectPlane(ce,I),k&&I&&(ee.subVectors(k,I),t&&l&&(l.getWorldQuaternion(le),le.invert(),ee.applyQuaternion(le)),T.position.add(ee),s?.(T,ee.clone())),M.copy(P.currentPosition));break;case "objectdragend":C&&i?.(P.object);break}});return c.use(y),h(y),()=>{y.dispose();}},[l,m,o,s,i,t]),St.useEffect(()=>{E?.manager.setEnabled(p);},[E,p]),jsxRuntime.jsx(jsxRuntime.Fragment,{children:n({isEnabled:p,toggleEnabled:()=>f(y=>!y),setEnabled:y=>f(y),resetAll:()=>{if(u)return;d(true);let y=r;if(y<=0){b.current.forEach((M,T)=>{T.position.copy(M.position),T.quaternion.copy(M.quaternion);}),d(false);return}let P=Date.now(),C=()=>{let M=Date.now()-P,T=Math.min(M/y,1);b.current.forEach((Ee,ge)=>{ge.position.lerp(Ee.position,T),ge.quaternion.slerp(Ee.quaternion,T);}),T<1?requestAnimationFrame(C):d(false);};requestAnimationFrame(C);},isResetting:u})})};var Rt=({children:n,defaultEnabled:e=true,...t})=>{let r=g(),[o,s]=St.useState(e),[i,c]=St.useState(e),[l,m]=St.useState(e),[p,f]=St.useState(null);St.useEffect(()=>{let R=new q(t);return r.use(R),f(R),R.setAllEnabled(e),()=>{R.dispose();}},[]),St.useEffect(()=>{p?.setPanEnabled(o);},[p,o]),St.useEffect(()=>{p?.setRotateEnabled(i);},[p,i]),St.useEffect(()=>{p?.setZoomEnabled(l);},[p,l]);let u=R=>{s(R),c(R),m(R);};return jsxRuntime.jsx(jsxRuntime.Fragment,{children:n({panEnabled:o,rotateEnabled:i,zoomEnabled:l,isActive:o||i||l,setPanEnabled:s,setRotateEnabled:c,setZoomEnabled:m,setAllEnabled:u,togglePan:()=>s(R=>!R),toggleRotate:()=>c(R=>!R),toggleZoom:()=>m(R=>!R),toggleAll:()=>u(!(i&&o&&l))})})};var xt=({model:n,onClick:e,onHoverIn:t,onHoverOut:r,onHoverMove:o,onDragStart:s,onDrag:i,onDragEnd:c})=>{let l=g(),m=D();return St.useEffect(()=>{let p=new A(n||m||void 0,f=>{switch(f.type){case "objectclick":e?.(f);break;case "objecthoverin":t?.(f);break;case "objecthoverout":r?.(f);break;case "objecthovermove":o?.(f);break;case "objectdragstart":s?.(f);break;case "objectdrag":i?.(f);break;case "objectdragend":c?.(f);break}});l.use(p);},[n,m,e,t,r,o,s,i,c]),null};var Ht=({intensity:n=.5,color:e=16777215})=>{let{scene:t}=g();return St.useEffect(()=>{let r=new chunkCCABIOVK_cjs.a.AmbientLight(e,n);return t.add(r),()=>{t.remove(r),r.dispose();}},[n,e]),null};var Dt=({steps:n,loop:e=false,autoplay:t=true})=>{let r=D(),o=St.useRef(null),s=St.useRef(new Map),i=St.useRef(new chunkCCABIOVK_cjs.a.Clock);St.useEffect(()=>{if(!r||!r.animations)return;let l=new chunkCCABIOVK_cjs.a.AnimationMixer(r);o.current=l,r.animations.forEach(p=>{let f=l.clipAction(p);s.current.set(p.name,f);}),t&&c();let m=()=>{l.update(i.current.getDelta()),requestAnimationFrame(m);};return m(),()=>{l.stopAllAction();}},[r]);let c=()=>{let l=0;n.forEach(m=>{let p=s.current.get(m.clipName);p&&(setTimeout(()=>{p.reset().play();},l),l+=(m.delay||0)+(m.duration||p.getClip().duration*1e3));}),e&&setTimeout(c,l);};return null};var At=({annotations:n})=>{let e=g();return St.useEffect(()=>{let t=n.map(o=>{let s=typeof o.target=="string"?e.scene.getObjectByName(o.target):o.target,i=typeof o.content=="string"?o.content:St__default.default.isValidElement(o.content)?o.content.props.children:String(o.content);return {id:o.id,position:new chunkCCABIOVK_cjs.a.Vector3(...o.position),target:s,content:i,offset:o.offset?new chunkCCABIOVK_cjs.a.Vector3(...o.offset):void 0}}),r=new Q(t);return e.use(r),()=>{r.dispose();}},[n]),null};var Ft=()=>{let{renderer:n}=g();return St.useEffect(()=>{if(!n)return;n.xr.enabled=true;let e=ARButton_js.ARButton.createButton(n);return document.body.appendChild(e),()=>{e.parentNode&&e.parentNode.removeChild(e);}},[n]),null};var It=({mediumDistance:n=20,lowDistance:e=50,hideDistance:t=100})=>{let r=g();return St.useEffect(()=>{let o=new _({distances:[n,e,t]});return r.use(o),()=>{o.dispose();}},[n,e,t]),null};var Ae=St.forwardRef(({config:n,children:e,...t},r)=>jsxRuntime.jsxs(U,{ref:r,config:n,children:[jsxRuntime.jsx("canvas",{ref:r,...t}),e]}));Ae.displayName="Canvas";var Ut=({intensity:n=1,color:e=16777215,position:t=[5,10,7.5],castShadow:r=true,shadowMapSize:o=2048})=>{let{scene:s}=g();return St.useEffect(()=>{let i=new chunkCCABIOVK_cjs.a.DirectionalLight(e,n);if(i.position.set(...t),r&&(i.castShadow=true,i.shadow.mapSize.width=o,i.shadow.mapSize.height=o,i.shadow.camera.near=.1,i.shadow.camera.far=50,i.shadow.camera.left=-20,i.shadow.camera.right=20,i.shadow.camera.top=20,i.shadow.camera.bottom=-20,i.shadow.bias=-1e-4),s.add(i),process.env.NODE_ENV==="development"){let c=new chunkCCABIOVK_cjs.a.DirectionalLightHelper(i,2);return s.add(c),()=>{s.remove(i),s.remove(c),i.dispose(),c.dispose();}}return ()=>{s.remove(i),i.dispose();}},[n,e,t,r,o]),null};var zt={m:1,cm:100,mm:1e3,px:3779.527559,in:39.3701,ft:3.28084,km:.001},je=(n,e,t)=>`${(n*zt[e]).toFixed(t)}${e}`,qt=({children:n,className:e,unit:t="m",decimals:r=2})=>{let o=g(),s=St.useRef(0),[i,c]=St.useState(0),[l,m]=St.useState(null),p=()=>{let E=o.getActiveModel();if(!E||!o.camera)return 0;let h=new chunkCCABIOVK_cjs.a.Vector3;return E.getWorldPosition(h),o.camera.position.distanceTo(h)};if(St.useEffect(()=>{let E=()=>{let h=p();l===null&&h>0&&m(h),c(h),s.current=requestAnimationFrame(E);};return s.current=requestAnimationFrame(E),()=>{s.current&&cancelAnimationFrame(s.current);}},[o,l]),l===null)return jsxRuntime.jsx("div",{className:e,children:"Calculating initial distance\u2026"});let f=Math.max(0,Math.min(100,i/l*100)),u=je(i,t,r),d=je(l,t,r);return jsxRuntime.jsx("div",{className:e,children:n({distance:i,formatted:u,percentage:f,initialDistance:l,formattedInitial:d})})};var Qt={studio:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/studio.exr",sunset:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/sunset.exr",dawn:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/dawn.exr",night:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/night.exr",warehouse:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/warehouse.exr",forest:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/forest.exr",apartment:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/apartment.exr",city:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/city.exr",park:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/park.exr",lobby:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/lobby.exr"},_t=({name:n,intensity:e=1,blur:t=0})=>{let r=g();return St.useEffect(()=>{let o=Qt[n];if(!o){console.warn(`EnvironmentPreset: "${n}" no encontrado`);return}let s=new chunkCCABIOVK_cjs.f;return s.setDataType(chunkCCABIOVK_cjs.a.HalfFloatType),s.load(o,i=>{i.mapping=chunkCCABIOVK_cjs.a.EquirectangularReflectionMapping,r.scene.environment=i,r.scene.background=i,r.scene.backgroundBlurriness=t,r.scene.environmentIntensity=e;}),()=>{r.scene.environment&&(r.scene.environment.dispose(),r.scene.environment=null),r.scene.background&&(r.scene.background instanceof chunkCCABIOVK_cjs.a.Color||r.scene.background.dispose(),r.scene.background=null);}},[n,e,t]),null};var me=class extends St.Component{state={hasError:false};static getDerivedStateFromError(){return {hasError:true}}componentDidCatch(e,t){console.error("Error 3D capturado:",e,t);}render(){return this.state.hasError?this.props.fallback||jsxRuntime.jsx("div",{className:"text-red-500",children:"Error al cargar modelo 3D"}):this.props.children}};var er={mirror:{reflective:true,color:16777215,roughness:0,metalness:1},glass:{reflective:true,color:8965375,roughness:0,metalness:0,opacity:.3,transparent:true},metal:{reflective:true,color:8947848,roughness:.1,metalness:1},concrete:{reflective:false,color:10066329,roughness:.9,metalness:0},wood:{reflective:false,color:9127187,roughness:.8,metalness:0},water:{reflective:true,color:35071,roughness:0,metalness:.1,opacity:.7,transparent:true},custom:{reflective:true,color:16777215,roughness:0,metalness:1}},tr=({type:n="mirror",size:e,height:t=0,blur:r=.8,resolution:o=1024,...s})=>{let i=g(),c=i.scene,l=i.camera;return St.useEffect(()=>{if(!l)return;let m=er[n],p=s.color??m.color,f=s.roughness??m.roughness,u=s.metalness??m.metalness,d=s.opacity??m.opacity??1,E=s.transparent??m.transparent??false,h;if(m.reflective&&e){let b=new chunkCCABIOVK_cjs.a.PlaneGeometry(e,e);h=new Reflector_js.Reflector(b,{clipBias:.003,textureWidth:o,textureHeight:o,color:new chunkCCABIOVK_cjs.a.Color(p)}),Array.isArray(h.material)?h.material.forEach(v=>{v.roughness=f,v.metalness=u,v.opacity=d,v.transparent=E;}):(h.material.roughness=f,h.material.metalness=u,h.material.opacity=d,h.material.transparent=E);}else {let b=e?new chunkCCABIOVK_cjs.a.PlaneGeometry(e,e):new chunkCCABIOVK_cjs.a.PlaneGeometry(2,2),v=new chunkCCABIOVK_cjs.a.MeshStandardMaterial({color:p,roughness:f,metalness:u,opacity:d,transparent:E,side:chunkCCABIOVK_cjs.a.DoubleSide});h=new chunkCCABIOVK_cjs.a.Mesh(b,v),h.receiveShadow=true,e||(h.onBeforeRender=()=>{let w=l.position.length()*10;h.scale.set(w,w,1);});}return h.rotation.x=-Math.PI/2,h.position.y=t,c.add(h),()=>{c.remove(h),"material"in h&&(Array.isArray(h.material)?h.material.forEach(b=>b.dispose()):h.material.dispose()),h.geometry.dispose();}},[n,e,t,r,o,...Object.values(s)]),null};var or=({entry:n})=>{let e=g();return St.useEffect(()=>{e.setHDRI(n);},[n.id]),null};var sr=({id:n,position:e,target:t,onClick:r})=>{let o=g();return St.useEffect(()=>{let s=new O([{id:n,position:new chunkCCABIOVK_cjs.a.Vector3(...e),target:t,onClick:r}]);return o.use(s),()=>s.dispose()},[n,e,t,r]),null};var ir=({hotspots:n})=>{let e=g();return St.useEffect(()=>{let t=n.map(o=>({id:o.id,position:new H__namespace.Vector3(...o.position),target:typeof o.target=="string"?e.scene.getObjectByName(o.target):o.target,onClick:o.onClick,offset:o.offset?new H__namespace.Vector3(...o.offset):void 0})),r=new O(t);return e.use(r),()=>{r.dispose();}},[n,e]),null};var lr=({entry:n,instances:e,draco:t=false,castShadow:r=true,receiveShadow:o=true})=>{let i=g().scene,c=St.useRef(new chunkCCABIOVK_cjs.a.Group),l=St.useRef(new Map);return St.useEffect(()=>{let m=true;return (async()=>{if(m)try{let u=(await S.load(n,{draco:t})).clone();l.current.forEach(d=>{i.remove(d),d.geometry.dispose(),Array.isArray(d.material)?d.material.forEach(E=>E.dispose()):d.material?.dispose();}),l.current.clear(),u.traverse(d=>{if(!(d instanceof chunkCCABIOVK_cjs.a.Mesh))return;let E=d.geometry,h=Array.isArray(d.material)?d.material[0]:d.material,b=e.length,v=new chunkCCABIOVK_cjs.a.InstancedMesh(E,h,b);v.castShadow=r,v.receiveShadow=o;let R=new chunkCCABIOVK_cjs.a.Object3D,w=new chunkCCABIOVK_cjs.a.Color;e.forEach((y,P)=>{R.position.copy(y.position),y.rotation instanceof chunkCCABIOVK_cjs.a.Euler?R.rotation.copy(y.rotation):y.rotation instanceof chunkCCABIOVK_cjs.a.Quaternion&&R.quaternion.copy(y.rotation),typeof y.scale=="number"?R.scale.setScalar(y.scale):y.scale?R.scale.copy(y.scale):R.scale.set(1,1,1),R.updateMatrix(),v.setMatrixAt(P,R.matrix),y.color&&(w.set(y.color),v.setColorAt(P,w)),y.visible===!1&&v.instanceMatrix.setUsage(chunkCCABIOVK_cjs.a.DynamicDrawUsage);}),h instanceof chunkCCABIOVK_cjs.a.Material&&(v.instanceColor=h.vertexColors?null:new chunkCCABIOVK_cjs.a.InstancedBufferAttribute(new Float32Array(b*3),3)),v.instanceMatrix.needsUpdate=!0,v.instanceColor&&(v.instanceColor.needsUpdate=!0),i.add(v),l.current.set(d.uuid,v);}),c.current.add(u),i.add(c.current);}catch(f){console.error("Error loading InstancedModel:",f);}})(),()=>{m=false,l.current.forEach(f=>{i.remove(f),f.geometry.dispose(),Array.isArray(f.material)?f.material.forEach(u=>u.dispose()):f.material?.dispose();}),l.current.clear(),c.current.parent&&c.current.parent.remove(c.current);}},[n,e,t,r,o]),null};var mr=({levels:n,hysteresis:e=.1})=>{let t=g();return St.useEffect(()=>{let r=new K([{levels:n,hysteresis:e}]);return t.use(r),()=>{r.dispose();}},[n,e]),null};var ur=({enabled:n=true,color:e="#00ff00",onMeasure:t})=>{let r=g();return St.useEffect(()=>{if(!n)return;let o=new Z(s=>{s.distance!==void 0&&s.points.length===2&&t?.(s.distance,[s.points[0],s.points[1]]);});return r.use(o),()=>{o.dispose();}},[n,t]),null};var ue=({entry:n,draco:e=false,children:t})=>{let r=g(),[o,s]=St.useState(null);return St.useEffect(()=>{(async()=>{let c=await r.setModel(n,{draco:e});s(c);})();},[n.id,e]),o?t?.(o):null};var gr=({entries:n,draco:e=false})=>(St.useEffect(()=>{n.forEach(t=>{S.load(t,{draco:e}).catch(()=>{});});},[n,e]),null);var yr=()=>{let n=g();return St.useEffect(()=>{n.use(new Y);},[]),null};var Rr=({intensity:n=1,color:e=16777215,position:t=[0,5,0],distance:r=0,decay:o=2})=>{let{scene:s}=g();return St.useEffect(()=>{let i=new chunkCCABIOVK_cjs.a.PointLight(e,n,r,o);if(i.position.set(...t),s.add(i),process.env.NODE_ENV==="development"){let c=new chunkCCABIOVK_cjs.a.PointLightHelper(i,.5);return s.add(c),()=>{s.remove(i),s.remove(c),i.dispose();}}return ()=>{s.remove(i),i.dispose();}},[n,e,t,r,o]),null};var Pr=({bloom:n={strength:1.5,radius:.4,threshold:0},enabled:e=true})=>{let t=g();return St.useEffect(()=>{if(!e)return;let r=new J(n);return t.use(r),()=>{}},[e,n.strength,n.radius,n.threshold]),null};var xr=({onClick:n,onHover:e})=>{let t=g();return St.useEffect(()=>{let r=new j(o=>{o.type==="click"&&n&&n(o.object),o.type==="hover"&&e&&e(o.object);});t.use(r);},[n,e]),null};var Hr=({intensity:n=5,color:e=16777215,position:t=[0,10,0],target:r,angle:o=Math.PI/6,penumbra:s=.1,distance:i=50,castShadow:c=true})=>{let{scene:l}=g();return St.useEffect(()=>{let m=new chunkCCABIOVK_cjs.a.SpotLight(e,n,i,o,s);if(m.position.set(...t),m.castShadow=c,c&&(m.shadow.mapSize.width=2048,m.shadow.mapSize.height=2048),l.add(m),r)if(typeof r=="string"){let p=l.getObjectByName(r);p&&(m.target=p);}else m.target=r,l.add(r);if(process.env.NODE_ENV==="development"){let p=new chunkCCABIOVK_cjs.a.SpotLightHelper(m);return l.add(p),()=>{l.remove(m),l.remove(p),m.dispose();}}return ()=>{l.remove(m),m.dispose();}},[n,e,t,r,o,s,i,c]),null};var fe=({children:n,fallback:e,loadingMessage:t="Loading 3D model..."})=>jsxRuntime.jsx(St.Suspense,{fallback:e||jsxRuntime.jsx("div",{className:"fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50",children:jsxRuntime.jsxs("div",{className:"bg-gray-900/90 border border-gray-700 rounded-xl p-8 shadow-2xl text-center",children:[jsxRuntime.jsx("div",{className:"w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"}),jsxRuntime.jsx("p",{className:"text-xl font-semibold text-white",children:t}),jsxRuntime.jsx("p",{className:"text-sm text-gray-400 mt-2",children:"This may take a few seconds..."})]})}),children:n});var Sr=({entry:n,draco:e,fallback:t=jsxRuntime.jsxs("div",{className:"text-white",children:["Loading model ",n.id,"..."]}),children:r})=>jsxRuntime.jsx(fe,{fallback:t,children:jsxRuntime.jsx(ue,{entry:n,draco:e,children:o=>r?.(o)})});var Or=({intensity:n=2,count:e=8})=>{let{scene:t}=g();return St.useEffect(()=>{let r=[];for(let o=0;o<e;o++){let s=o/e*Math.PI*2,i=new chunkCCABIOVK_cjs.a.PointLight(16777215,n);i.position.set(Math.cos(s)*5,5,Math.sin(s)*5),t.add(i),r.push(i);}return ()=>{r.forEach(o=>{t.remove(o),o.dispose();});}},[n,e]),null};var kr=()=>{let{renderer:n}=g();return St.useEffect(()=>{if(!n)return;n.xr.enabled=true;let e=VRButton_js.VRButton.createButton(n);return document.body.appendChild(e),()=>{e.parentNode&&e.parentNode.removeChild(e);}},[n]),null};var Nr=({children:n,className:e})=>{let t=D(),[r,o]=St.useState([]),[s,i]=St.useState(()=>new chunkCCABIOVK_cjs.a.AnimationMixer(null)),[c,l]=St.useState(new Map),[m,p]=St.useState(new Set),[f,u]=St.useState(new Set);St.useEffect(()=>{if(!t){o([]),s.stopAllAction();return}if(t.animations&&t.animations.length>0){o(t.animations),i(new chunkCCABIOVK_cjs.a.AnimationMixer(t)),s.setTime(0);let w=new Map;t.animations.forEach(y=>{let P=s.clipAction(y);P.clampWhenFinished=true,P.enabled=true,P.setLoop(chunkCCABIOVK_cjs.a.LoopOnce,1),P.reset(),w.set(y.name,P);}),l(w);}let v=new chunkCCABIOVK_cjs.a.Clock,R=()=>{s.update(v.getDelta()),requestAnimationFrame(R);};return R(),()=>{s.stopAllAction();}},[t]);let d=v=>{let R=c.get(v);R&&(c.forEach((w,y)=>{y!==v&&w.fadeOut(.2);}),R.reset().setEffectiveTimeScale(1).setEffectiveWeight(1).fadeIn(.2).play(),p(w=>new Set(w).add(v)),u(w=>{let y=new Set(w);return y.delete(v),y}));},E=v=>{let R=c.get(v);R&&(c.forEach((w,y)=>{y!==v&&w.fadeOut(.2);}),R.reset().setEffectiveTimeScale(-1).setEffectiveWeight(1).fadeIn(.2).play(),p(w=>new Set(w).add(v)),u(w=>new Set(w).add(v)));},h=v=>{f.has(v)?d(v):E(v);},b=r.map(v=>({name:v.name||`Animaci\xF3n ${v.uuid.slice(0,4)}`,playForward:()=>d(v.name),playBackward:()=>E(v.name),toggle:()=>h(v.name),isPlaying:m.has(v.name),isReversed:f.has(v.name)}));return b.length===0?null:jsxRuntime.jsx("div",{className:e,children:n(b)})};var Ur=({className:n})=>{let{scene:e}=g(),[t,r]=St.useState(1),o=s=>{r(s),e.traverse(i=>{i instanceof chunkCCABIOVK_cjs.a.Light&&(i.intensity=s*(i.userData.baseIntensity||1));});};return St__default.default.useEffect(()=>{e.traverse(s=>{s instanceof chunkCCABIOVK_cjs.a.Light&&(s.userData.baseIntensity=s.intensity);});},[e]),jsxRuntime.jsxs("div",{className:`bg-black/80 text-white p-4 rounded-lg ${n||""}`,children:[jsxRuntime.jsx("h3",{className:"text-lg font-bold mb-3",children:"Iluminaci\xF3n Global"}),jsxRuntime.jsxs("label",{className:"block",children:[jsxRuntime.jsxs("span",{className:"text-sm",children:["Intensidad: ",t.toFixed(2)]}),jsxRuntime.jsx("input",{type:"range",min:"0",max:"3",step:"0.01",value:t,onChange:s=>o(parseFloat(s.target.value)),className:"w-full mt-2"})]})]})};var Ve=n=>{let e=n.attributes.position,t=n.index?.array,r=[],o=new Map,s=(p,f)=>p<f?`${p},${f}`:`${f},${p}`;if(!t)return new chunkCCABIOVK_cjs.a.EdgesGeometry(n,30);if(!e)return new chunkCCABIOVK_cjs.a.EdgesGeometry(n,30);let i=[];for(let p=0;p<e.count;p++)i.push([e.array[p*3],e.array[p*3+1],e.array[p*3+2]]);let c=(p,f)=>{let[u,d,E]=i[p],[h,b,v]=i[f];return (h-u)**2+(b-d)**2+(v-E)**2},l=new Map;for(let p=0;p<t.length;p+=3){let[f,u,d]=[t[p],t[p+1],t[p+2]];[s(f,u),s(u,d),s(d,f)].forEach(E=>{l.has(E)||l.set(E,[]),l.get(E).push(p/3);});}for(let p=0;p<t.length;p+=3){let[f,u,d]=[t[p],t[p+1],t[p+2]],E=[{key:s(f,u),verts:[f,u]},{key:s(u,d),verts:[u,d]},{key:s(d,f),verts:[d,f]}],h=[c(f,u),c(u,d),c(d,f)],b=h.indexOf(Math.max(...h)),v=E[b],R=E.filter((y,P)=>P!==b);((l.get(v.key)?.length||0)>1?R:E).forEach(({verts:[y,P]})=>{let C=y,M=P,T=s(C,M);o.has(T)||(o.set(T,1),r.push(e.array[C*3],e.array[C*3+1],e.array[C*3+2],e.array[M*3],e.array[M*3+1],e.array[M*3+2]));});}let m=new chunkCCABIOVK_cjs.a.BufferGeometry;return m.setAttribute("position",new chunkCCABIOVK_cjs.a.Float32BufferAttribute(r,3)),m};var Wr=({materials:n,transitionDuration:e=0,children:t,className:r})=>{let o=D(),[s,i]=St.useState(null),[c,l]=St.useState(false);St.useEffect(()=>{o&&o.traverse(u=>{if(u instanceof chunkCCABIOVK_cjs.a.Mesh&&(u.userData.originalMaterial||(u.userData.originalMaterial=u.material),!u.getObjectByName(`${u.name}-wireframe`))){let d=Ve(u.geometry),E=new chunkCCABIOVK_cjs.a.LineBasicMaterial({color:0,linewidth:3,polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1}),h=new chunkCCABIOVK_cjs.a.LineSegments(d,E);h.name=`${u.name}-wireframe`,h.renderOrder=999,h.visible=false,u.add(h);}});},[o]);let m=async u=>{if(!o||c)return;l(e>0);let d=[];if(o.traverse(h=>{h instanceof chunkCCABIOVK_cjs.a.Mesh&&d.push(h);}),e===0){d.forEach(h=>p(h,u)),i(u.name),l(false);return}let E=e/d.length;for(let h=0;h<d.length;h++)setTimeout(()=>{p(d[h],u),h===d.length-1&&(i(u.name),l(false));},h*E);},p=(u,d)=>{let E=u.getObjectByName(`${u.name}-wireframe`),h;switch(d.type){case "textured":h=u.userData.originalMaterial,E&&(E.visible=false);break;case "solid":h=new chunkCCABIOVK_cjs.a.MeshStandardMaterial({color:d.color??8947848,metalness:d.metalness??0,roughness:d.roughness??.9}),E&&(E.visible=false);break;case "wireframe":h=new chunkCCABIOVK_cjs.a.MeshStandardMaterial({color:d.color??8947848,metalness:d.metalness??0,roughness:d.roughness??.9,transparent:true,opacity:.95}),E&&(E.visible=true,E.material.color.set(d.lineColor??0));break;case "custom":h=d.factory(u.userData.originalMaterial),E&&(E.visible=false);break}u.material=h;},f=n.map(u=>({name:u.name,apply:()=>m(u),isActive:s===u.name}));return St.useEffect(()=>{f.length>0&&!s&&f[0]?.apply?.();},[f]),!o||f.length===0?null:jsxRuntime.jsx("div",{className:r,children:t(f)})};var qr=({object:n,parent:e="scene",name:t,position:r,rotation:o,scale:s=[1,1,1],visible:i=true,castShadow:c=false,receiveShadow:l=false})=>{let m=g();return St.useEffect(()=>{t&&(n.name=t),n.visible=i,n.castShadow=c,n.receiveShadow=l,r&&n.position.set(...r),o&&n.rotation.set(...o),s&&n.scale.set(...s);let p=null;if(e==="scene"?p=m.scene:e==="model"?p=m.getActiveModel():typeof e=="string"?p=m.scene.getObjectByName(e)||null:e instanceof chunkCCABIOVK_cjs.a.Object3D&&(p=e),!p){console.warn("[SceneObject] Padre no encontrado:",e);return}return p.add(n),()=>{n.parent&&n.parent.remove(n),n.traverse(f=>{f instanceof chunkCCABIOVK_cjs.a.Mesh&&(f.geometry?.dispose(),Array.isArray(f.material)?f.material.forEach(u=>u.dispose()):f.material?.dispose());});}},[n,e,t,r,o,s,i,c,l]),null};
-Object.defineProperty(exports,"THREE",{enumerable:true,get:function(){return chunkCCABIOVK_cjs.a}});Object.defineProperty(exports,"THREE_VERSION",{enumerable:true,get:function(){return chunkCCABIOVK_cjs.j}});Object.defineProperty(exports,"ThreeDRACOLoader",{enumerable:true,get:function(){return chunkCCABIOVK_cjs.d}});Object.defineProperty(exports,"ThreeEXRLoader",{enumerable:true,get:function(){return chunkCCABIOVK_cjs.f}});Object.defineProperty(exports,"ThreeEffectComposer",{enumerable:true,get:function(){return chunkCCABIOVK_cjs.g}});Object.defineProperty(exports,"ThreeGLTFLoader",{enumerable:true,get:function(){return chunkCCABIOVK_cjs.c}});Object.defineProperty(exports,"ThreeOrbitControls",{enumerable:true,get:function(){return chunkCCABIOVK_cjs.b}});Object.defineProperty(exports,"ThreeRGBELoader",{enumerable:true,get:function(){return chunkCCABIOVK_cjs.e}});Object.defineProperty(exports,"ThreeRenderPass",{enumerable:true,get:function(){return chunkCCABIOVK_cjs.h}});Object.defineProperty(exports,"ThreeUnrealBloomPass",{enumerable:true,get:function(){return chunkCCABIOVK_cjs.i}});exports.ARButton=Ft;exports.AdvancedCameraCollision=Et;exports.AdvancedCameraCollisionPlugin=z;exports.AdvancedDragRaycaster=vt;exports.AdvancedOrbitControls=Rt;exports.AdvancedOrbitControlsPlugin=q;exports.AdvancedRaycaster=xt;exports.AdvancedRaycasterPlugin=A;exports.AmbientLight=Ht;exports.AnimationController=Nr;exports.AnimationTimeline=Dt;exports.Annotations=At;exports.AnnotationsPlugin=Q;exports.AutoLODSystem=It;exports.AutoLODSystemPlugin=_;exports.CacheProvider=Ye;exports.CacheValidator=$;exports.Canvas=Ae;exports.DirectionalLight=Ut;exports.DistanceDisplay=qt;exports.EnvironmentPreset=_t;exports.ErrorBoundary3D=me;exports.FileWatcher=W;exports.GLTFLoader=S;exports.GroundSurface=tr;exports.HDRI=or;exports.HDRILoader=G;exports.Hotspot=sr;exports.HotspotPlugin=O;exports.Hotspots=ir;exports.InstancedModel=lr;exports.LODSystem=mr;exports.LODSystemPlugin=K;exports.LightingController=Ur;exports.MaterialController=Wr;exports.MeasurementTool=ur;exports.MeasurementToolPlugin=Z;exports.Model=ue;exports.ModelPreload=gr;exports.ObjectCache=x;exports.OrbitControls=yr;exports.OrbitControlsPlugin=Y;exports.PointLight=Rr;exports.PostProcessing=Pr;exports.PostProcessingPlugin=J;exports.Raycaster=xr;exports.RaycasterPlugin=j;exports.SceneObject=qr;exports.SceneOrchestrator=B;exports.SceneProvider=U;exports.SpotLight=Hr;exports.Suspense=fe;exports.SuspenseModel=Sr;exports.TheaterLighting=Or;exports.VRButton=kr;exports.WebPHDRLoader=F;exports.useActiveModel=D;exports.useAnimation=ft;exports.useCache=dt;exports.useHDRI=lt;exports.useModel=it;exports.useRaycaster=mt;exports.useScene=g;//# sourceMappingURL=index.cjs.map
-//# sourceMappingURL=index.cjs.map
+    `;
+    if (typeof content === "string") {
+      div.innerHTML = content;
+    } else {
+      div.appendChild(content);
+    }
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const texture = new _chunkEA3XQ4KJcjs.THREE.CanvasTexture(canvas);
+    texture.minFilter = _chunkEA3XQ4KJcjs.THREE.LinearFilter;
+    texture.wrapS = _chunkEA3XQ4KJcjs.THREE.ClampToEdgeWrapping;
+    texture.wrapT = _chunkEA3XQ4KJcjs.THREE.ClampToEdgeWrapping;
+    const spriteMaterial = new _chunkEA3XQ4KJcjs.THREE.SpriteMaterial({ map: texture, depthTest: false });
+    const sprite = new _chunkEA3XQ4KJcjs.THREE.Sprite(spriteMaterial);
+    sprite.userData.offset = offset;
+    sprite.userData.canvas = canvas;
+    sprite.userData.div = div;
+    const resize = () => {
+      const width = div.offsetWidth;
+      const height = div.offsetHeight;
+      canvas.width = width * 2;
+      canvas.height = height * 2;
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+      ctx.scale(2, 2);
+      ctx.fillStyle = "transparent";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      texture.needsUpdate = true;
+    };
+    const observer = new ResizeObserver(resize);
+    observer.observe(div);
+    resize();
+    return sprite;
+  }
+  dispose() {
+    this.annotations.forEach((sprite) => {
+      if (sprite.parent) {
+        sprite.parent.remove(sprite);
+      }
+      if (sprite instanceof _chunkEA3XQ4KJcjs.THREE.Sprite) {
+        _optionalChain([sprite, 'access', _59 => _59.material, 'access', _60 => _60.map, 'optionalAccess', _61 => _61.dispose, 'call', _62 => _62()]);
+        sprite.material.dispose();
+      }
+    });
+    this.annotations.clear();
+  }
+}, _class11);
+
+// src/core/orchestrator/plugins/AutoLODSystemPlugin.ts
+var _SimplifyModifierjs = require('three/examples/jsm/modifiers/SimplifyModifier.js');
+var AutoLODSystemPlugin = (_class12 = class {
+  constructor(config) {;_class12.prototype.__init31.call(this);_class12.prototype.__init32.call(this);
+    this.config = config;
+    this.config.reductionPercentages = this.config.reductionPercentages || [0.5, 0.2];
+  }
+  __init31() {this.name = "AutoLODSystem"}
+  __init32() {this.lods = /* @__PURE__ */ new Map()}
+  
+  simplifyGeometry(geometry, percentage) {
+    const modifier = new (0, _SimplifyModifierjs.SimplifyModifier)();
+    const count = Math.floor(geometry.attributes.position.count * percentage);
+    return modifier.modify(geometry, count);
+  }
+  createLODLevels(model) {
+    const lod = new _chunkEA3XQ4KJcjs.THREE.LOD();
+    const high = model.clone();
+    high.visible = true;
+    lod.addLevel(high, 0);
+    const medium = model.clone();
+    medium.traverse((child) => {
+      if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh && child.geometry) {
+        child.geometry = this.simplifyGeometry(child.geometry, this.config.reductionPercentages[0]);
+      }
+    });
+    lod.addLevel(medium, this.config.distances[0]);
+    const low = model.clone();
+    low.traverse((child) => {
+      if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh && child.geometry) {
+        child.geometry = this.simplifyGeometry(child.geometry, this.config.reductionPercentages[1]);
+      }
+    });
+    lod.addLevel(low, this.config.distances[1]);
+    const empty = new _chunkEA3XQ4KJcjs.THREE.Object3D();
+    empty.visible = false;
+    lod.addLevel(empty, this.config.distances[2]);
+    return lod;
+  }
+  install({ camera, orchestrator }) {
+    this.camera = camera;
+    const applyLODToModel = (model) => {
+      const lod = this.createLODLevels(model);
+      if (model.parent) {
+        model.parent.add(lod);
+        model.parent.remove(model);
+      }
+      lod.position.copy(model.position);
+      lod.quaternion.copy(model.quaternion);
+      lod.scale.copy(model.scale);
+      this.lods.set(model, lod);
+    };
+    const activeModel = orchestrator.getActiveModel();
+    if (activeModel) {
+      applyLODToModel(activeModel);
+    }
+    const originalSetModel = orchestrator.setModel;
+    if (originalSetModel) {
+      orchestrator.setModel = (...args) => {
+        return originalSetModel.apply(orchestrator, args).then((model) => {
+          this.lods.forEach((lod) => _optionalChain([lod, 'access', _63 => _63.parent, 'optionalAccess', _64 => _64.remove, 'call', _65 => _65(lod)]));
+          this.lods.clear();
+          applyLODToModel(model);
+          return model;
+        });
+      };
+    }
+    const update = () => {
+      this.lods.forEach((lod) => lod.update(this.camera));
+      requestAnimationFrame(update);
+    };
+    update();
+  }
+  dispose() {
+    this.lods.forEach((lod) => {
+      if (lod.parent) {
+        lod.parent.remove(lod);
+      }
+      lod.traverse((child) => {
+        if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh) {
+          _optionalChain([child, 'access', _66 => _66.geometry, 'optionalAccess', _67 => _67.dispose, 'call', _68 => _68()]);
+          if (Array.isArray(child.material)) {
+            child.material.forEach((m) => m.dispose());
+          } else {
+            _optionalChain([child, 'access', _69 => _69.material, 'optionalAccess', _70 => _70.dispose, 'call', _71 => _71()]);
+          }
+        }
+      });
+    });
+    this.lods.clear();
+  }
+}, _class12);
+
+// src/core/orchestrator/plugins/HotspotPlugin.ts
+var HotspotPlugin = (_class13 = class {
+  constructor(data) {;_class13.prototype.__init33.call(this);_class13.prototype.__init34.call(this);
+    this.data = data;
+  }
+  __init33() {this.name = "Hotspot"}
+  __init34() {this.hotspots = /* @__PURE__ */ new Map()}
+  install({ scene }) {
+    this.data.forEach((hotspot) => {
+      const geometry = new _chunkEA3XQ4KJcjs.THREE.SphereGeometry(0.3, 16, 16);
+      const material = new _chunkEA3XQ4KJcjs.THREE.MeshBasicMaterial({
+        color: 65280,
+        transparent: true,
+        opacity: 0.5
+      });
+      const mesh = new _chunkEA3XQ4KJcjs.THREE.Mesh(geometry, material);
+      mesh.position.copy(hotspot.position);
+      if (hotspot.target) {
+        mesh.userData.target = hotspot.target;
+      }
+      mesh.userData.hotspotId = hotspot.id;
+      mesh.userData.onClick = hotspot.onClick;
+      scene.add(mesh);
+      this.hotspots.set(hotspot.id, mesh);
+    });
+  }
+  dispose() {
+    this.hotspots.forEach((mesh) => {
+      if (mesh.parent) {
+        mesh.parent.remove(mesh);
+      }
+      mesh.geometry.dispose();
+      if (Array.isArray(mesh.material)) {
+        mesh.material.forEach((mat) => mat.dispose());
+      } else {
+        mesh.material.dispose();
+      }
+    });
+    this.hotspots.clear();
+  }
+}, _class13);
+
+// src/core/orchestrator/plugins/LODSystemPlugin.ts
+var LODSystemPlugin = (_class14 = class {
+  constructor(config) {;_class14.prototype.__init35.call(this);_class14.prototype.__init36.call(this);
+    this.config = config;
+  }
+  __init35() {this.name = "LODSystem"}
+  __init36() {this.lodObjects = /* @__PURE__ */ new Map()}
+  
+  install({ camera, orchestrator }) {
+    this.camera = camera;
+    const processModel = (model) => {
+      const lod = new _chunkEA3XQ4KJcjs.THREE.LOD();
+      this.config.forEach((cfg, index) => {
+        const clone = _optionalChain([cfg, 'access', _72 => _72.levels, 'access', _73 => _73[index], 'optionalAccess', _74 => _74.model, 'access', _75 => _75.clone, 'call', _76 => _76()]) || model.clone();
+        clone.visible = false;
+        lod.addLevel(clone, _optionalChain([cfg, 'access', _77 => _77.levels, 'access', _78 => _78[index], 'optionalAccess', _79 => _79.distance]) || 0);
+      });
+      if (model.parent) {
+        model.parent.add(lod);
+        model.parent.remove(model);
+      }
+      lod.position.copy(model.position);
+      lod.quaternion.copy(model.quaternion);
+      lod.scale.copy(model.scale);
+      this.lodObjects.set(model, lod);
+      lod.originalModel = model;
+    };
+    const activeModel = orchestrator.getActiveModel();
+    if (activeModel) {
+      processModel(activeModel);
+    }
+    const originalSetModel = orchestrator.setModel;
+    if (originalSetModel) {
+      orchestrator.setModel = (entry, options) => {
+        originalSetModel.call(orchestrator, entry, options).then((model) => {
+          this.lodObjects.forEach((lod) => {
+            if (lod.parent) {
+              lod.parent.remove(lod);
+            }
+          });
+          this.lodObjects.clear();
+          processModel(model);
+        });
+      };
+    }
+    const update = () => {
+      this.lodObjects.forEach((lod) => {
+        lod.update(this.camera);
+      });
+      requestAnimationFrame(update);
+    };
+    update();
+  }
+  dispose() {
+    this.lodObjects.forEach((lod) => {
+      if (lod.parent) {
+        lod.parent.remove(lod);
+      }
+      lod.traverse((child) => {
+        if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh) {
+          _optionalChain([child, 'access', _80 => _80.geometry, 'optionalAccess', _81 => _81.dispose, 'call', _82 => _82()]);
+          if (Array.isArray(child.material)) {
+            child.material.forEach((m) => m.dispose());
+          } else {
+            _optionalChain([child, 'access', _83 => _83.material, 'optionalAccess', _84 => _84.dispose, 'call', _85 => _85()]);
+          }
+        }
+      });
+    });
+    this.lodObjects.clear();
+  }
+}, _class14);
+
+// src/core/orchestrator/plugins/MeasurementToolPlugin.ts
+var MeasurementToolPlugin = (_class15 = class {
+  __init37() {this.name = "MeasurementTool"}
+  __init38() {this.points = []}
+  
+  __init39() {this.spheres = []}
+  
+  constructor(onMeasure) {;_class15.prototype.__init37.call(this);_class15.prototype.__init38.call(this);_class15.prototype.__init39.call(this);
+    this.onMeasure = _nullishCoalesce(onMeasure, () => ( (() => {
+    })));
+  }
+  install({ scene, camera, renderer, orchestrator }) {
+    const handlePointerDown = (e) => {
+      if (e.button !== 0) {
+        return;
+      }
+      const rect = renderer.domElement.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width * 2 - 1;
+      const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      const raycaster = new _chunkEA3XQ4KJcjs.THREE.Raycaster();
+      raycaster.setFromCamera(new _chunkEA3XQ4KJcjs.THREE.Vector2(x, y), camera);
+      const model = orchestrator.getActiveModel();
+      if (!model) {
+        return;
+      }
+      const intersects = raycaster.intersectObject(model, true);
+      if (intersects.length === 0) {
+        return;
+      }
+      const point = intersects[0].point.clone();
+      this.points.push(point);
+      const sphere = new _chunkEA3XQ4KJcjs.THREE.Mesh(
+        new _chunkEA3XQ4KJcjs.THREE.SphereGeometry(0.05),
+        new _chunkEA3XQ4KJcjs.THREE.MeshBasicMaterial({ color: 65280 })
+      );
+      sphere.position.copy(point);
+      scene.add(sphere);
+      this.spheres.push(sphere);
+      _optionalChain([this, 'access', _86 => _86.onMeasure, 'optionalCall', _87 => _87({ point, points: [...this.points] })]);
+      if (this.points.length === 2) {
+        const distance = this.points[0].distanceTo(this.points[1]);
+        _optionalChain([this, 'access', _88 => _88.onMeasure, 'optionalCall', _89 => _89({ point, distance, points: [...this.points] })]);
+        const geometry = new _chunkEA3XQ4KJcjs.THREE.BufferGeometry().setFromPoints(this.points);
+        const material = new _chunkEA3XQ4KJcjs.THREE.LineBasicMaterial({ color: 65280 });
+        this.line = new _chunkEA3XQ4KJcjs.THREE.Line(geometry, material);
+        scene.add(this.line);
+        setTimeout(() => this.reset(), 3e3);
+      }
+    };
+    renderer.domElement.addEventListener("pointerdown", handlePointerDown, { capture: true });
+    this.dispose = () => {
+      renderer.domElement.removeEventListener("pointerdown", handlePointerDown, { capture: true });
+      this.reset();
+    };
+  }
+  reset() {
+    this.points = [];
+    if (this.line) {
+      _optionalChain([this, 'access', _90 => _90.line, 'access', _91 => _91.parent, 'optionalAccess', _92 => _92.remove, 'call', _93 => _93(this.line)]);
+      this.line.geometry.dispose();
+      if (Array.isArray(this.line.material)) {
+        this.line.material.forEach((mat) => mat.dispose());
+      } else {
+        this.line.material.dispose();
+      }
+      this.line = void 0;
+    }
+    this.spheres.forEach((s) => {
+      _optionalChain([s, 'access', _94 => _94.parent, 'optionalAccess', _95 => _95.remove, 'call', _96 => _96(s)]);
+      s.geometry.dispose();
+      if (Array.isArray(s.material)) {
+        s.material.forEach((mat) => mat.dispose());
+      } else {
+        s.material.dispose();
+      }
+    });
+    this.spheres = [];
+  }
+  dispose() {
+    this.reset();
+  }
+}, _class15);
+
+// src/core/orchestrator/plugins/OrbitControlsPlugin.ts
+
+var OrbitControlsPlugin = (_class16 = class {constructor() { _class16.prototype.__init40.call(this); }
+  __init40() {this.name = "OrbitControls"}
+  
+  install({ camera, renderer }) {
+    this.controls = new (0, _OrbitControlsjs.OrbitControls)(camera, renderer.domElement);
+    this.controls.enableDamping = true;
+    this.controls.dampingFactor = 0.05;
+    this.controls.rotateSpeed = 0.8;
+    this.controls.minDistance = 1;
+    this.controls.maxDistance = 50;
+    this.controls.maxPolarAngle = Math.PI / 2.1;
+    const animate = () => {
+      this.controls.update();
+      requestAnimationFrame(animate);
+    };
+    animate();
+  }
+  dispose() {
+    _optionalChain([this, 'access', _97 => _97.controls, 'optionalAccess', _98 => _98.dispose, 'call', _99 => _99()]);
+  }
+}, _class16);
+
+// src/core/orchestrator/plugins/RaycasterPlugin.ts
+var RaycasterPlugin = (_class17 = class {
+  __init41() {this.name = "Raycaster"}
+  __init42() {this.raycaster = new _chunkEA3XQ4KJcjs.THREE.Raycaster()}
+  __init43() {this.pointer = new _chunkEA3XQ4KJcjs.THREE.Vector2()}
+  __init44() {this.hovered = null}
+  
+  constructor(onEvent) {;_class17.prototype.__init41.call(this);_class17.prototype.__init42.call(this);_class17.prototype.__init43.call(this);_class17.prototype.__init44.call(this);
+    this.onEvent = _nullishCoalesce(onEvent, () => ( (() => {
+    })));
+  }
+  install({ scene, camera, renderer }) {
+    const dom = renderer.domElement;
+    const onPointerMove = (e) => {
+      this.pointer.x = e.clientX / dom.clientWidth * 2 - 1;
+      this.pointer.y = -(e.clientY / dom.clientHeight) * 2 + 1;
+      this.checkIntersection(scene, camera);
+    };
+    const onClick = (e) => {
+      this.pointer.x = e.clientX / dom.clientWidth * 2 - 1;
+      this.pointer.y = -(e.clientY / dom.clientHeight) * 2 + 1;
+      const intersect = this.getIntersection(scene, camera);
+      if (intersect) {
+        _optionalChain([this, 'access', _100 => _100.onEvent, 'optionalCall', _101 => _101({ type: "click", object: intersect.object, point: intersect.point })]);
+      }
+    };
+    dom.addEventListener("pointermove", onPointerMove);
+    dom.addEventListener("click", onClick);
+    this.dispose = () => {
+      dom.removeEventListener("pointermove", onPointerMove);
+      dom.removeEventListener("click", onClick);
+      this.hovered = null;
+    };
+  }
+  checkIntersection(scene, camera) {
+    this.raycaster.setFromCamera(this.pointer, camera);
+    const intersects = this.raycaster.intersectObjects(scene.children, true);
+    const hit = intersects[0];
+    if (hit && hit.object !== this.hovered) {
+      if (this.hovered) {
+        _optionalChain([this, 'access', _102 => _102.onEvent, 'optionalCall', _103 => _103({ type: "leave", object: this.hovered })]);
+      }
+      this.hovered = hit.object;
+      _optionalChain([this, 'access', _104 => _104.onEvent, 'optionalCall', _105 => _105({ type: "hover", object: hit.object, point: hit.point })]);
+    } else if (!hit && this.hovered) {
+      _optionalChain([this, 'access', _106 => _106.onEvent, 'optionalCall', _107 => _107({ type: "leave", object: this.hovered })]);
+      this.hovered = null;
+    }
+  }
+  getIntersection(scene, camera) {
+    this.raycaster.setFromCamera(this.pointer, camera);
+    const intersects = this.raycaster.intersectObjects(scene.children, true);
+    return intersects[0] || null;
+  }
+  dispose() {
+  }
+}, _class17);
+
+// src/core/orchestrator/plugins/PostProcessingPlugin.ts
+var _EffectComposerjs = require('three/examples/jsm/postprocessing/EffectComposer.js');
+var _RenderPassjs = require('three/examples/jsm/postprocessing/RenderPass.js');
+var _UnrealBloomPassjs = require('three/examples/jsm/postprocessing/UnrealBloomPass.js');
+var PostProcessingPlugin = (_class18 = class {
+  constructor(options = { strength: 1.5, radius: 0.4, threshold: 0 }) {;_class18.prototype.__init45.call(this);
+    this.options = options;
+  }
+  __init45() {this.name = "PostProcessing"}
+  
+  
+  install({ scene, camera, renderer }) {
+    this.composer = new (0, _EffectComposerjs.EffectComposer)(renderer);
+    this.composer.setSize(renderer.domElement.width, renderer.domElement.height);
+    const renderPass = new (0, _RenderPassjs.RenderPass)(scene, camera);
+    this.composer.addPass(renderPass);
+    this.bloomPass = new (0, _UnrealBloomPassjs.UnrealBloomPass)(
+      new _chunkEA3XQ4KJcjs.THREE.Vector2(renderer.domElement.width, renderer.domElement.height),
+      this.options.strength,
+      this.options.radius,
+      this.options.threshold
+    );
+    this.composer.addPass(this.bloomPass);
+    const originalRender = renderer.render.bind(renderer);
+    renderer.render = () => {
+      this.composer.render();
+    };
+    const onResize = () => {
+      this.composer.setSize(renderer.domElement.width, renderer.domElement.height);
+      this.bloomPass.resolution.set(renderer.domElement.width, renderer.domElement.height);
+    };
+    window.addEventListener("resize", onResize);
+    this.dispose = () => {
+      window.removeEventListener("resize", onResize);
+      renderer.render = originalRender;
+      this.composer.dispose();
+    };
+  }
+  setBloom(strength) {
+    if (this.bloomPass) {
+      this.bloomPass.strength = strength;
+    }
+  }
+  dispose() {
+  }
+}, _class18);
+
+// src/hooks/useScene.ts
+var useScene2 = () => {
+  return useScene();
+};
+
+// src/hooks/useModel.ts
+
+var useModel = (entry, options = {}) => {
+  const { draco = false, autoLoad = true } = options;
+  const orchestrator = useScene2();
+  const [model, setModel] = _react.useState.call(void 0, null);
+  const [loading, setLoading] = _react.useState.call(void 0, false);
+  const [error, setError] = _react.useState.call(void 0, null);
+  _react.useEffect.call(void 0, () => {
+    if (!entry || !autoLoad) {
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    orchestrator.setModel(entry, { draco }).then((m) => {
+      setModel(m);
+      setLoading(false);
+    }).catch((err) => {
+      setError(err);
+      setLoading(false);
+    });
+  }, [_optionalChain([entry, 'optionalAccess', _108 => _108.id]), draco]);
+  const load = () => entry && orchestrator.setModel(entry, { draco });
+  return { model, loading, error, load };
+};
+
+// src/hooks/useActiveModel.ts
+var useActiveModel = () => {
+  const orchestrator = useScene2();
+  return orchestrator.getActiveModel();
+};
+
+// src/hooks/useHDRI.ts
+
+var useHDRI = (entry) => {
+  const orchestrator = useScene2();
+  const [hdri, setHDRI] = _react.useState.call(void 0, null);
+  const [loading, setLoading] = _react.useState.call(void 0, false);
+  _react.useEffect.call(void 0, () => {
+    if (!entry) {
+      return;
+    }
+    setLoading(true);
+    orchestrator.setHDRI(entry).then((tex) => {
+      setHDRI(tex);
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, [_optionalChain([entry, 'optionalAccess', _109 => _109.id])]);
+  const clear = () => orchestrator.clearHDRI();
+  return { hdri, loading, clear };
+};
+
+// src/hooks/useRaycaster.ts
+
+var useRaycaster = (onEvent) => {
+  const orchestrator = useScene2();
+  _react.useEffect.call(void 0, () => {
+    const plugin = new RaycasterPlugin(onEvent);
+    orchestrator.use(plugin);
+    return () => {
+    };
+  }, [onEvent]);
+};
+
+// src/hooks/useCache.ts
+var useCache2 = () => {
+  return useCache();
+};
+
+// src/hooks/useAnimation.ts
+
+var useAnimation = (clipName, play = true) => {
+  const model = useActiveModel();
+  _react.useEffect.call(void 0, () => {
+    if (!model || !model.animations) {
+      return;
+    }
+    const clip = model.animations.find((a) => a.name === clipName);
+    if (!clip) {
+      return;
+    }
+    const mixer = new _chunkEA3XQ4KJcjs.THREE.AnimationMixer(model);
+    const action = mixer.clipAction(clip);
+    if (play) {
+      action.play();
+    }
+    const clock = new _chunkEA3XQ4KJcjs.THREE.Clock();
+    const animate = () => {
+      mixer.update(clock.getDelta());
+      requestAnimationFrame(animate);
+    };
+    animate();
+    return () => {
+      action.stop();
+    };
+  }, [model, clipName, play]);
+};
+
+// src/react/components/AdvancedCameraCollision.tsx
+
+var AdvancedCameraCollision = ({ distanceThreshold = 0.6, pushBackOffset = 0.1, enabled = true }) => {
+  const orchestrator = useScene2();
+  _react.useEffect.call(void 0, () => {
+    if (!enabled) {
+      return;
+    }
+    const plugin = new AdvancedCameraCollisionPlugin(
+      distanceThreshold,
+      pushBackOffset
+    );
+    orchestrator.use(plugin);
+    return () => {
+      plugin.dispose();
+    };
+  }, [enabled, distanceThreshold, pushBackOffset]);
+  return null;
+};
+
+// src/react/components/AdvancedDragRaycaster.tsx
+
+
+var tempVector1 = new _chunkEA3XQ4KJcjs.THREE.Vector3();
+var tempVector2 = new _chunkEA3XQ4KJcjs.THREE.Vector3();
+var tempVector3 = new _chunkEA3XQ4KJcjs.THREE.Vector3();
+var tempVector2_1 = new _chunkEA3XQ4KJcjs.THREE.Vector2();
+var tempVector2_2 = new _chunkEA3XQ4KJcjs.THREE.Vector2();
+var tempPlane = new _chunkEA3XQ4KJcjs.THREE.Plane();
+var tempQuaternion = new _chunkEA3XQ4KJcjs.THREE.Quaternion();
+var tempRaycaster = new _chunkEA3XQ4KJcjs.THREE.Raycaster();
+var AdvancedDragRaycaster = ({
+  children,
+  defaultEnabled = true,
+  enableRotationCompensation = true,
+  transitionDuration = 0,
+  onDragStart,
+  onDrag,
+  onDragEnd
+}) => {
+  const orchestrator = useScene2();
+  const activeModel = orchestrator.getActiveModel();
+  const camera = orchestrator.camera;
+  const [isEnabled, setIsEnabled] = _react.useState.call(void 0, defaultEnabled);
+  const [isResetting, setIsResetting] = _react.useState.call(void 0, false);
+  const [plugin, setPlugin] = _react.useState.call(void 0, null);
+  const originalStates = _react.useRef.call(void 0, /* @__PURE__ */ new Map());
+  _react.useEffect.call(void 0, () => {
+    if (!activeModel || !camera) {
+      return;
+    }
+    const newPlugin = new AdvancedRaycasterPlugin(activeModel, (event) => {
+      if (!isEnabled) {
+        return;
+      }
+      let isDragging = false;
+      let startPosition = new _chunkEA3XQ4KJcjs.THREE.Vector2();
+      let currentObject = null;
+      switch (event.type) {
+        case "objectdragstart":
+          isDragging = true;
+          currentObject = event.object;
+          startPosition.copy(event.startPosition);
+          if (currentObject && !originalStates.current.has(currentObject)) {
+            originalStates.current.set(currentObject, {
+              position: currentObject.position.clone(),
+              quaternion: currentObject.quaternion.clone()
+            });
+          }
+          _optionalChain([onDragStart, 'optionalCall', _110 => _110(event.object)]);
+          break;
+        case "objectdrag":
+          if (isDragging && currentObject) {
+            currentObject.getWorldPosition(tempVector1);
+            camera.getWorldDirection(tempVector2);
+            tempPlane.setFromNormalAndCoplanarPoint(tempVector2, tempVector1);
+            tempVector2_1.set(
+              event.currentPosition.x / window.innerWidth * 2 - 1,
+              -(event.currentPosition.y / window.innerHeight) * 2 + 1
+            );
+            tempVector2_2.set(
+              startPosition.x / window.innerWidth * 2 - 1,
+              -(startPosition.y / window.innerHeight) * 2 + 1
+            );
+            tempRaycaster.setFromCamera(tempVector2_1, camera);
+            tempRaycaster.ray.intersectPlane(tempPlane, tempVector1);
+            tempRaycaster.setFromCamera(tempVector2_2, camera);
+            tempRaycaster.ray.intersectPlane(tempPlane, tempVector2);
+            if (tempVector1 && tempVector2) {
+              tempVector3.subVectors(tempVector1, tempVector2);
+              if (enableRotationCompensation && activeModel) {
+                activeModel.getWorldQuaternion(tempQuaternion);
+                tempQuaternion.invert();
+                tempVector3.applyQuaternion(tempQuaternion);
+              }
+              currentObject.position.add(tempVector3);
+              _optionalChain([onDrag, 'optionalCall', _111 => _111(currentObject, tempVector3.clone())]);
+            }
+            startPosition.copy(event.currentPosition);
+          }
+          break;
+        case "objectdragend":
+          if (isDragging) {
+            _optionalChain([onDragEnd, 'optionalCall', _112 => _112(event.object)]);
+          }
+          break;
+      }
+    });
+    orchestrator.use(newPlugin);
+    setPlugin(newPlugin);
+    return () => {
+      newPlugin.dispose();
+    };
+  }, [
+    activeModel,
+    camera,
+    onDragStart,
+    onDrag,
+    onDragEnd,
+    enableRotationCompensation
+  ]);
+  _react.useEffect.call(void 0, () => {
+    _optionalChain([plugin, 'optionalAccess', _113 => _113.manager, 'access', _114 => _114.setEnabled, 'call', _115 => _115(isEnabled)]);
+  }, [plugin, isEnabled]);
+  const toggleEnabled = () => setIsEnabled((prev) => !prev);
+  const setEnabled = (value) => setIsEnabled(value);
+  const resetAll = () => {
+    if (isResetting) {
+      return;
+    }
+    setIsResetting(true);
+    const duration = transitionDuration;
+    if (duration <= 0) {
+      originalStates.current.forEach((state, obj) => {
+        obj.position.copy(state.position);
+        obj.quaternion.copy(state.quaternion);
+      });
+      setIsResetting(false);
+      return;
+    }
+    const startTime = Date.now();
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      originalStates.current.forEach((state, obj) => {
+        obj.position.lerp(state.position, t);
+        obj.quaternion.slerp(state.quaternion, t);
+      });
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        setIsResetting(false);
+      }
+    };
+    requestAnimationFrame(animate);
+  };
+  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _jsxruntime.Fragment, { children: children({
+    isEnabled,
+    toggleEnabled,
+    setEnabled,
+    resetAll,
+    isResetting
+  }) });
+};
+
+// src/react/components/AdvancedOrbitControls.tsx
+
+
+var AdvancedOrbitControls = ({
+  children,
+  defaultEnabled = true,
+  ...config
+}) => {
+  const orchestrator = useScene2();
+  const [panEnabled, setPanEnabled] = _react.useState.call(void 0, defaultEnabled);
+  const [rotateEnabled, setRotateEnabled] = _react.useState.call(void 0, defaultEnabled);
+  const [zoomEnabled, setZoomEnabled] = _react.useState.call(void 0, defaultEnabled);
+  const [plugin, setPlugin] = _react.useState.call(void 0, 
+    null
+  );
+  _react.useEffect.call(void 0, () => {
+    const newPlugin = new AdvancedOrbitControlsPlugin(config);
+    orchestrator.use(newPlugin);
+    setPlugin(newPlugin);
+    newPlugin.setAllEnabled(defaultEnabled);
+    return () => {
+      newPlugin.dispose();
+    };
+  }, []);
+  _react.useEffect.call(void 0, () => {
+    _optionalChain([plugin, 'optionalAccess', _116 => _116.setPanEnabled, 'call', _117 => _117(panEnabled)]);
+  }, [plugin, panEnabled]);
+  _react.useEffect.call(void 0, () => {
+    _optionalChain([plugin, 'optionalAccess', _118 => _118.setRotateEnabled, 'call', _119 => _119(rotateEnabled)]);
+  }, [plugin, rotateEnabled]);
+  _react.useEffect.call(void 0, () => {
+    _optionalChain([plugin, 'optionalAccess', _120 => _120.setZoomEnabled, 'call', _121 => _121(zoomEnabled)]);
+  }, [plugin, zoomEnabled]);
+  const setAllEnabled = (value) => {
+    setPanEnabled(value);
+    setRotateEnabled(value);
+    setZoomEnabled(value);
+  };
+  const togglePan = () => setPanEnabled((prev) => !prev);
+  const toggleRotate = () => setRotateEnabled((prev) => !prev);
+  const toggleZoom = () => setZoomEnabled((prev) => !prev);
+  const toggleAll = () => setAllEnabled(!(rotateEnabled && panEnabled && zoomEnabled));
+  const state = {
+    panEnabled,
+    rotateEnabled,
+    zoomEnabled,
+    isActive: panEnabled || rotateEnabled || zoomEnabled,
+    setPanEnabled,
+    setRotateEnabled,
+    setZoomEnabled,
+    setAllEnabled,
+    togglePan,
+    toggleRotate,
+    toggleZoom,
+    toggleAll
+  };
+  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _jsxruntime.Fragment, { children: children(state) });
+};
+
+// src/react/components/AdvancedRaycaster.tsx
+
+var AdvancedRaycaster = ({
+  model: customModel,
+  onClick,
+  onHoverIn,
+  onHoverOut,
+  onHoverMove,
+  onDragStart,
+  onDrag,
+  onDragEnd
+}) => {
+  const orchestrator = useScene2();
+  const activeModel = useActiveModel();
+  _react.useEffect.call(void 0, () => {
+    const plugin = new AdvancedRaycasterPlugin(
+      customModel || activeModel || void 0,
+      (e) => {
+        switch (e.type) {
+          case "objectclick":
+            _optionalChain([onClick, 'optionalCall', _122 => _122(e)]);
+            break;
+          case "objecthoverin":
+            _optionalChain([onHoverIn, 'optionalCall', _123 => _123(e)]);
+            break;
+          case "objecthoverout":
+            _optionalChain([onHoverOut, 'optionalCall', _124 => _124(e)]);
+            break;
+          case "objecthovermove":
+            _optionalChain([onHoverMove, 'optionalCall', _125 => _125(e)]);
+            break;
+          case "objectdragstart":
+            _optionalChain([onDragStart, 'optionalCall', _126 => _126(e)]);
+            break;
+          case "objectdrag":
+            _optionalChain([onDrag, 'optionalCall', _127 => _127(e)]);
+            break;
+          case "objectdragend":
+            _optionalChain([onDragEnd, 'optionalCall', _128 => _128(e)]);
+            break;
+        }
+      }
+    );
+    orchestrator.use(plugin);
+  }, [
+    customModel,
+    activeModel,
+    onClick,
+    onHoverIn,
+    onHoverOut,
+    onHoverMove,
+    onDragStart,
+    onDrag,
+    onDragEnd
+  ]);
+  return null;
+};
+
+// src/react/components/AmbientLight.tsx
+
+var AmbientLight = ({
+  intensity = 0.5,
+  color = 16777215
+}) => {
+  const { scene } = useScene2();
+  _react.useEffect.call(void 0, () => {
+    const light = new _chunkEA3XQ4KJcjs.THREE.AmbientLight(color, intensity);
+    scene.add(light);
+    return () => {
+      scene.remove(light);
+      light.dispose();
+    };
+  }, [intensity, color]);
+  return null;
+};
+
+// src/react/components/AnimationTimeline.tsx
+
+var AnimationTimeline = ({
+  steps,
+  loop = false,
+  autoplay = true
+}) => {
+  const model = useActiveModel();
+  const mixerRef = _react.useRef.call(void 0, null);
+  const actionsRef = _react.useRef.call(void 0, /* @__PURE__ */ new Map());
+  const clock = _react.useRef.call(void 0, new _chunkEA3XQ4KJcjs.THREE.Clock());
+  _react.useEffect.call(void 0, () => {
+    if (!model || !model.animations) {
+      return;
+    }
+    const mixer = new _chunkEA3XQ4KJcjs.THREE.AnimationMixer(model);
+    mixerRef.current = mixer;
+    model.animations.forEach((clip) => {
+      const action = mixer.clipAction(clip);
+      actionsRef.current.set(clip.name, action);
+    });
+    if (autoplay) {
+      playTimeline();
+    }
+    const animate = () => {
+      mixer.update(clock.current.getDelta());
+      requestAnimationFrame(animate);
+    };
+    animate();
+    return () => {
+      mixer.stopAllAction();
+    };
+  }, [model]);
+  const playTimeline = () => {
+    let time = 0;
+    steps.forEach((step) => {
+      const action = actionsRef.current.get(step.clipName);
+      if (!action) {
+        return;
+      }
+      setTimeout(() => {
+        action.reset().play();
+      }, time);
+      time += (step.delay || 0) + (step.duration || action.getClip().duration * 1e3);
+    });
+    if (loop) {
+      setTimeout(playTimeline, time);
+    }
+  };
+  return null;
+};
+
+// src/react/components/Annotations.tsx
+
+var Annotations = ({ annotations }) => {
+  const orchestrator = useScene2();
+  _react.useEffect.call(void 0, () => {
+    const data = annotations.map((ann) => {
+      const target = typeof ann.target === "string" ? orchestrator.scene.getObjectByName(ann.target) : ann.target;
+      const content = typeof ann.content === "string" ? ann.content : _react2.default.isValidElement(ann.content) ? ann.content.props.children : String(ann.content);
+      return {
+        id: ann.id,
+        position: new _chunkEA3XQ4KJcjs.THREE.Vector3(...ann.position),
+        target,
+        content,
+        offset: ann.offset ? new _chunkEA3XQ4KJcjs.THREE.Vector3(...ann.offset) : void 0
+      };
+    });
+    const plugin = new AnnotationsPlugin(data);
+    orchestrator.use(plugin);
+    return () => {
+      plugin.dispose();
+    };
+  }, [annotations]);
+  return null;
+};
+
+// src/react/components/ARButton.tsx
+
+var _ARButtonjs = require('three/examples/jsm/webxr/ARButton.js');
+var ARButton = () => {
+  const { renderer } = useScene2();
+  _react.useEffect.call(void 0, () => {
+    if (!renderer) {
+      return;
+    }
+    renderer.xr.enabled = true;
+    const button = _ARButtonjs.ARButton.createButton(renderer);
+    document.body.appendChild(button);
+    return () => {
+      if (button.parentNode) {
+        button.parentNode.removeChild(button);
+      }
+    };
+  }, [renderer]);
+  return null;
+};
+
+// src/react/components/AutoLODSystem.tsx
+
+var AutoLODSystem = ({
+  mediumDistance = 20,
+  lowDistance = 50,
+  hideDistance = 100
+}) => {
+  const orchestrator = useScene2();
+  _react.useEffect.call(void 0, () => {
+    const plugin = new AutoLODSystemPlugin({
+      distances: [mediumDistance, lowDistance, hideDistance]
+    });
+    orchestrator.use(plugin);
+    return () => {
+      plugin.dispose();
+    };
+  }, [mediumDistance, lowDistance, hideDistance]);
+  return null;
+};
+
+// src/react/components/Canvas.tsx
+
+
+var Canvas = _react.forwardRef.call(void 0, 
+  ({ config, children, ...canvasProps }, ref) => {
+    return /* @__PURE__ */ _jsxruntime.jsxs.call(void 0, SceneProvider, { ref, config, children: [
+      /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "canvas", { ref, ...canvasProps }),
+      children
+    ] });
+  }
+);
+Canvas.displayName = "Canvas";
+
+// src/react/components/DirectionalLight.tsx
+
+var DirectionalLight = ({
+  intensity = 1,
+  color = 16777215,
+  position = [5, 10, 7.5],
+  castShadow = true,
+  shadowMapSize = 2048
+}) => {
+  const { scene } = useScene2();
+  _react.useEffect.call(void 0, () => {
+    const light = new _chunkEA3XQ4KJcjs.THREE.DirectionalLight(color, intensity);
+    light.position.set(...position);
+    if (castShadow) {
+      light.castShadow = true;
+      light.shadow.mapSize.width = shadowMapSize;
+      light.shadow.mapSize.height = shadowMapSize;
+      light.shadow.camera.near = 0.1;
+      light.shadow.camera.far = 50;
+      light.shadow.camera.left = -20;
+      light.shadow.camera.right = 20;
+      light.shadow.camera.top = 20;
+      light.shadow.camera.bottom = -20;
+      light.shadow.bias = -1e-4;
+    }
+    scene.add(light);
+    if (process.env.NODE_ENV === "development") {
+      const helper = new _chunkEA3XQ4KJcjs.THREE.DirectionalLightHelper(light, 2);
+      scene.add(helper);
+      return () => {
+        scene.remove(light);
+        scene.remove(helper);
+        light.dispose();
+        helper.dispose();
+      };
+    }
+    return () => {
+      scene.remove(light);
+      light.dispose();
+    };
+  }, [intensity, color, position, castShadow, shadowMapSize]);
+  return null;
+};
+
+// src/react/components/DistanceDisplay.tsx
+
+
+var unitConversions = {
+  m: 1,
+  cm: 100,
+  mm: 1e3,
+  px: 3779.527559,
+  // 1m ≈ 3779.53px (96 DPI)
+  in: 39.3701,
+  ft: 3.28084,
+  km: 1e-3
+};
+var formatValue = (value, unit, decimals) => {
+  const converted = value * unitConversions[unit];
+  return `${converted.toFixed(decimals)}${unit}`;
+};
+var DistanceDisplay = ({
+  children,
+  className,
+  unit = "m",
+  decimals = 2
+}) => {
+  const orchestrator = useScene2();
+  const animationRef = _react.useRef.call(void 0, 0);
+  const [currentDistance, setCurrentDistance] = _react.useState.call(void 0, 0);
+  const [initialDistance, setInitialDistance] = _react.useState.call(void 0, null);
+  const getCurrentDistance = () => {
+    const model = orchestrator.getActiveModel();
+    if (!model || !orchestrator.camera) {
+      return 0;
+    }
+    const modelCenter = new _chunkEA3XQ4KJcjs.THREE.Vector3();
+    model.getWorldPosition(modelCenter);
+    return orchestrator.camera.position.distanceTo(modelCenter);
+  };
+  _react.useEffect.call(void 0, () => {
+    const update = () => {
+      const dist = getCurrentDistance();
+      if (initialDistance === null && dist > 0) {
+        setInitialDistance(dist);
+      }
+      setCurrentDistance(dist);
+      animationRef.current = requestAnimationFrame(update);
+    };
+    animationRef.current = requestAnimationFrame(update);
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [orchestrator, initialDistance]);
+  if (initialDistance === null) {
+    return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: "Calculating initial distance\u2026" });
+  }
+  const percentage = Math.max(
+    0,
+    Math.min(100, currentDistance / initialDistance * 100)
+  );
+  const formatted = formatValue(currentDistance, unit, decimals);
+  const formattedInitial = formatValue(initialDistance, unit, decimals);
+  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: children({
+    distance: currentDistance,
+    formatted,
+    percentage,
+    initialDistance,
+    formattedInitial
+  }) });
+};
+
+// src/react/components/EnvironmentPreset.tsx
+
+var PRESETS = {
+  studio: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/studio.exr",
+  sunset: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/sunset.exr",
+  dawn: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/dawn.exr",
+  night: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/night.exr",
+  warehouse: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/warehouse.exr",
+  forest: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/forest.exr",
+  apartment: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/apartment.exr",
+  city: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/city.exr",
+  park: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/park.exr",
+  lobby: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/lobby.exr"
+};
+var EnvironmentPreset = ({
+  name,
+  intensity = 1,
+  blur = 0
+}) => {
+  const orchestrator = useScene2();
+  _react.useEffect.call(void 0, () => {
+    const url = PRESETS[name];
+    if (!url) {
+      console.warn(`EnvironmentPreset: "${name}" no encontrado`);
+      return;
+    }
+    const loader = new (0, _chunkEA3XQ4KJcjs.EXRLoader)();
+    loader.setDataType(_chunkEA3XQ4KJcjs.THREE.HalfFloatType);
+    loader.load(url, (texture) => {
+      texture.mapping = _chunkEA3XQ4KJcjs.THREE.EquirectangularReflectionMapping;
+      orchestrator.scene.environment = texture;
+      orchestrator.scene.background = texture;
+      orchestrator.scene.backgroundBlurriness = blur;
+      orchestrator.scene.environmentIntensity = intensity;
+    });
+    return () => {
+      if (orchestrator.scene.environment) {
+        orchestrator.scene.environment.dispose();
+        orchestrator.scene.environment = null;
+      }
+      if (orchestrator.scene.background) {
+        if (!(orchestrator.scene.background instanceof _chunkEA3XQ4KJcjs.THREE.Color)) {
+          orchestrator.scene.background.dispose();
+        }
+        orchestrator.scene.background = null;
+      }
+    };
+  }, [name, intensity, blur]);
+  return null;
+};
+
+// src/react/components/ErrorBoundary3D.tsx
+
+
+var ErrorBoundary3D = (_class19 = class extends _react.Component {constructor(...args2) { super(...args2); _class19.prototype.__init46.call(this); }
+  __init46() {this.state = { hasError: false }}
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error("Error 3D capturado:", error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback || /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className: "text-red-500", children: "Error al cargar modelo 3D" });
+    }
+    return this.props.children;
+  }
+}, _class19);
+
+// src/react/components/GroundSurface.tsx
+
+var _Reflectorjs = require('three/examples/jsm/objects/Reflector.js');
+var PRESETS2 = {
+  mirror: { reflective: true, color: 16777215, roughness: 0, metalness: 1 },
+  glass: {
+    reflective: true,
+    color: 8965375,
+    roughness: 0,
+    metalness: 0,
+    opacity: 0.3,
+    transparent: true
+  },
+  metal: { reflective: true, color: 8947848, roughness: 0.1, metalness: 1 },
+  concrete: {
+    reflective: false,
+    color: 10066329,
+    roughness: 0.9,
+    metalness: 0
+  },
+  wood: { reflective: false, color: 9127187, roughness: 0.8, metalness: 0 },
+  water: {
+    reflective: true,
+    color: 35071,
+    roughness: 0,
+    metalness: 0.1,
+    opacity: 0.7,
+    transparent: true
+  },
+  custom: { reflective: true, color: 16777215, roughness: 0, metalness: 1 }
+};
+var GroundSurface = ({
+  type = "mirror",
+  size,
+  height = 0,
+  blur = 0.8,
+  resolution = 1024,
+  ...custom
+}) => {
+  const orchestrator = useScene2();
+  const scene = orchestrator.scene;
+  const camera = orchestrator.camera;
+  _react.useEffect.call(void 0, () => {
+    if (!camera) {
+      return;
+    }
+    const preset = PRESETS2[type];
+    const finalColor = _nullishCoalesce(custom.color, () => ( preset.color));
+    const finalRoughness = _nullishCoalesce(custom.roughness, () => ( preset.roughness));
+    const finalMetalness = _nullishCoalesce(custom.metalness, () => ( preset.metalness));
+    const finalOpacity = _nullishCoalesce(_nullishCoalesce(custom.opacity, () => ( preset.opacity)), () => ( 1));
+    const finalTransparent = _nullishCoalesce(_nullishCoalesce(custom.transparent, () => ( preset.transparent)), () => ( false));
+    let ground;
+    if (preset.reflective && size) {
+      const geometry = new _chunkEA3XQ4KJcjs.THREE.PlaneGeometry(size, size);
+      ground = new (0, _Reflectorjs.Reflector)(geometry, {
+        clipBias: 3e-3,
+        textureWidth: resolution,
+        textureHeight: resolution,
+        color: new _chunkEA3XQ4KJcjs.THREE.Color(finalColor)
+      });
+      if (Array.isArray(ground.material)) {
+        ground.material.forEach((mat) => {
+          mat.roughness = finalRoughness;
+          mat.metalness = finalMetalness;
+          mat.opacity = finalOpacity;
+          mat.transparent = finalTransparent;
+        });
+      } else {
+        ground.material.roughness = finalRoughness;
+        ground.material.metalness = finalMetalness;
+        ground.material.opacity = finalOpacity;
+        ground.material.transparent = finalTransparent;
+      }
+    } else {
+      const geometry = size ? new _chunkEA3XQ4KJcjs.THREE.PlaneGeometry(size, size) : new _chunkEA3XQ4KJcjs.THREE.PlaneGeometry(2, 2);
+      const material = new _chunkEA3XQ4KJcjs.THREE.MeshStandardMaterial({
+        color: finalColor,
+        roughness: finalRoughness,
+        metalness: finalMetalness,
+        opacity: finalOpacity,
+        transparent: finalTransparent,
+        side: _chunkEA3XQ4KJcjs.THREE.DoubleSide
+      });
+      ground = new _chunkEA3XQ4KJcjs.THREE.Mesh(geometry, material);
+      ground.receiveShadow = true;
+      if (!size) {
+        ground.onBeforeRender = () => {
+          const dist = camera.position.length();
+          const scale = dist * 10;
+          ground.scale.set(scale, scale, 1);
+        };
+      }
+    }
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = height;
+    scene.add(ground);
+    return () => {
+      scene.remove(ground);
+      if ("material" in ground) {
+        if (Array.isArray(ground.material)) {
+          ground.material.forEach((mat) => mat.dispose());
+        } else {
+          ground.material.dispose();
+        }
+      }
+      ground.geometry.dispose();
+    };
+  }, [type, size, height, blur, resolution, ...Object.values(custom)]);
+  return null;
+};
+
+// src/react/components/HDRI.tsx
+
+var HDRI = ({ entry }) => {
+  const orchestrator = useScene2();
+  _react.useEffect.call(void 0, () => {
+    orchestrator.setHDRI(entry);
+  }, [entry.id]);
+  return null;
+};
+
+// src/react/components/Hotspot.tsx
+
+var Hotspot = ({
+  id,
+  position,
+  target,
+  onClick
+}) => {
+  const orchestrator = useScene2();
+  _react.useEffect.call(void 0, () => {
+    const plugin = new HotspotPlugin([
+      {
+        id,
+        position: new _chunkEA3XQ4KJcjs.THREE.Vector3(...position),
+        target,
+        onClick
+      }
+    ]);
+    orchestrator.use(plugin);
+    return () => plugin.dispose();
+  }, [id, position, target, onClick]);
+  return null;
+};
+
+// src/react/components/Hotspots.tsx
+
+
+var Hotspots = ({ hotspots }) => {
+  const orchestrator = useScene2();
+  _react.useEffect.call(void 0, () => {
+    const data = hotspots.map((h) => ({
+      id: h.id,
+      position: new THREE3.Vector3(...h.position),
+      target: typeof h.target === "string" ? orchestrator.scene.getObjectByName(h.target) : h.target,
+      onClick: h.onClick,
+      offset: h.offset ? new THREE3.Vector3(...h.offset) : void 0
+    }));
+    const plugin = new HotspotPlugin(data);
+    orchestrator.use(plugin);
+    return () => {
+      plugin.dispose();
+    };
+  }, [hotspots, orchestrator]);
+  return null;
+};
+
+// src/react/components/InstancedModel.tsx
+
+var InstancedModel = ({
+  entry,
+  instances,
+  draco = false,
+  castShadow = true,
+  receiveShadow = true
+}) => {
+  const orchestrator = useScene2();
+  const scene = orchestrator.scene;
+  const groupRef = _react.useRef.call(void 0, new _chunkEA3XQ4KJcjs.THREE.Group());
+  const instancedMeshes = _react.useRef.call(void 0, /* @__PURE__ */ new Map());
+  _react.useEffect.call(void 0, () => {
+    let isMounted = true;
+    const loadAndCreateInstances = async () => {
+      if (!isMounted) {
+        return;
+      }
+      try {
+        const gltf = await GLTFLoader2.load(entry, { draco });
+        const model = gltf.clone();
+        instancedMeshes.current.forEach((mesh) => {
+          scene.remove(mesh);
+          mesh.geometry.dispose();
+          if (Array.isArray(mesh.material)) {
+            mesh.material.forEach((m) => m.dispose());
+          } else {
+            _optionalChain([mesh, 'access', _129 => _129.material, 'optionalAccess', _130 => _130.dispose, 'call', _131 => _131()]);
+          }
+        });
+        instancedMeshes.current.clear();
+        model.traverse((child) => {
+          if (!(child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh)) {
+            return;
+          }
+          const geometry = child.geometry;
+          const material = Array.isArray(child.material) ? child.material[0] : child.material;
+          const count = instances.length;
+          const instancedMesh = new _chunkEA3XQ4KJcjs.THREE.InstancedMesh(
+            geometry,
+            material,
+            count
+          );
+          instancedMesh.castShadow = castShadow;
+          instancedMesh.receiveShadow = receiveShadow;
+          const dummy = new _chunkEA3XQ4KJcjs.THREE.Object3D();
+          const color = new _chunkEA3XQ4KJcjs.THREE.Color();
+          instances.forEach((instance, i) => {
+            dummy.position.copy(instance.position);
+            if (instance.rotation instanceof _chunkEA3XQ4KJcjs.THREE.Euler) {
+              dummy.rotation.copy(instance.rotation);
+            } else if (instance.rotation instanceof _chunkEA3XQ4KJcjs.THREE.Quaternion) {
+              dummy.quaternion.copy(instance.rotation);
+            }
+            if (typeof instance.scale === "number") {
+              dummy.scale.setScalar(instance.scale);
+            } else if (instance.scale) {
+              dummy.scale.copy(instance.scale);
+            } else {
+              dummy.scale.set(1, 1, 1);
+            }
+            dummy.updateMatrix();
+            instancedMesh.setMatrixAt(i, dummy.matrix);
+            if (instance.color) {
+              color.set(instance.color);
+              instancedMesh.setColorAt(i, color);
+            }
+            if (instance.visible === false) {
+              instancedMesh.instanceMatrix.setUsage(_chunkEA3XQ4KJcjs.THREE.DynamicDrawUsage);
+            }
+          });
+          if (material instanceof _chunkEA3XQ4KJcjs.THREE.Material) {
+            instancedMesh.instanceColor = material.vertexColors ? null : new _chunkEA3XQ4KJcjs.THREE.InstancedBufferAttribute(
+              new Float32Array(count * 3),
+              3
+            );
+          }
+          instancedMesh.instanceMatrix.needsUpdate = true;
+          if (instancedMesh.instanceColor) {
+            instancedMesh.instanceColor.needsUpdate = true;
+          }
+          scene.add(instancedMesh);
+          instancedMeshes.current.set(child.uuid, instancedMesh);
+        });
+        groupRef.current.add(model);
+        scene.add(groupRef.current);
+      } catch (err) {
+        console.error("Error loading InstancedModel:", err);
+      }
+    };
+    loadAndCreateInstances();
+    return () => {
+      isMounted = false;
+      instancedMeshes.current.forEach((mesh) => {
+        scene.remove(mesh);
+        mesh.geometry.dispose();
+        if (Array.isArray(mesh.material)) {
+          mesh.material.forEach((m) => m.dispose());
+        } else {
+          _optionalChain([mesh, 'access', _132 => _132.material, 'optionalAccess', _133 => _133.dispose, 'call', _134 => _134()]);
+        }
+      });
+      instancedMeshes.current.clear();
+      if (groupRef.current.parent) {
+        groupRef.current.parent.remove(groupRef.current);
+      }
+    };
+  }, [entry, instances, draco, castShadow, receiveShadow]);
+  return null;
+};
+
+// src/react/components/LODSystem.tsx
+
+var LODSystem = ({
+  levels,
+  hysteresis = 0.1
+}) => {
+  const orchestrator = useScene2();
+  _react.useEffect.call(void 0, () => {
+    const plugin = new LODSystemPlugin([{ levels, hysteresis }]);
+    orchestrator.use(plugin);
+    return () => {
+      plugin.dispose();
+    };
+  }, [levels, hysteresis]);
+  return null;
+};
+
+// src/react/components/MeasurementTool.tsx
+
+var MeasurementTool = ({
+  enabled = true,
+  color = "#00ff00",
+  onMeasure
+}) => {
+  const orchestrator = useScene2();
+  _react.useEffect.call(void 0, () => {
+    if (!enabled) {
+      return;
+    }
+    const plugin = new MeasurementToolPlugin((event) => {
+      if (event.distance !== void 0 && event.points.length === 2) {
+        _optionalChain([onMeasure, 'optionalCall', _135 => _135(event.distance, [event.points[0], event.points[1]])]);
+      }
+    });
+    orchestrator.use(plugin);
+    return () => {
+      plugin.dispose();
+    };
+  }, [enabled, onMeasure]);
+  return null;
+};
+
+// src/react/components/Model.tsx
+
+var Model = ({
+  entry,
+  draco = false,
+  children
+}) => {
+  const orchestrator = useScene2();
+  const [model, setModel] = _react.useState.call(void 0, null);
+  _react.useEffect.call(void 0, () => {
+    const load = async () => {
+      const gltf = await orchestrator.setModel(entry, { draco });
+      setModel(gltf);
+    };
+    load();
+  }, [entry.id, draco]);
+  if (!model) {
+    return null;
+  }
+  return _optionalChain([children, 'optionalCall', _136 => _136(model)]);
+};
+
+// src/react/components/ModelPreload.tsx
+
+var ModelPreload = ({
+  entries,
+  draco = false
+}) => {
+  _react.useEffect.call(void 0, () => {
+    entries.forEach((entry) => {
+      GLTFLoader2.load(entry, { draco }).catch(() => {
+      });
+    });
+  }, [entries, draco]);
+  return null;
+};
+
+// src/react/components/OrbitControls.tsx
+
+var OrbitControls4 = () => {
+  const orchestrator = useScene2();
+  _react.useEffect.call(void 0, () => {
+    orchestrator.use(new OrbitControlsPlugin());
+  }, []);
+  return null;
+};
+
+// src/react/components/PointLight.tsx
+
+var PointLight = ({
+  intensity = 1,
+  color = 16777215,
+  position = [0, 5, 0],
+  distance = 0,
+  decay = 2
+}) => {
+  const { scene } = useScene2();
+  _react.useEffect.call(void 0, () => {
+    const light = new _chunkEA3XQ4KJcjs.THREE.PointLight(color, intensity, distance, decay);
+    light.position.set(...position);
+    scene.add(light);
+    if (process.env.NODE_ENV === "development") {
+      const helper = new _chunkEA3XQ4KJcjs.THREE.PointLightHelper(light, 0.5);
+      scene.add(helper);
+      return () => {
+        scene.remove(light);
+        scene.remove(helper);
+        light.dispose();
+      };
+    }
+    return () => {
+      scene.remove(light);
+      light.dispose();
+    };
+  }, [intensity, color, position, distance, decay]);
+  return null;
+};
+
+// src/react/components/PostProcessing.tsx
+
+var PostProcessing = ({
+  bloom = { strength: 1.5, radius: 0.4, threshold: 0 },
+  enabled = true
+}) => {
+  const orchestrator = useScene2();
+  _react.useEffect.call(void 0, () => {
+    if (!enabled) {
+      return;
+    }
+    const plugin = new PostProcessingPlugin(bloom);
+    orchestrator.use(plugin);
+    return () => {
+    };
+  }, [enabled, bloom.strength, bloom.radius, bloom.threshold]);
+  return null;
+};
+
+// src/react/components/Raycaster.tsx
+
+var Raycaster = ({ onClick, onHover }) => {
+  const orchestrator = useScene2();
+  _react.useEffect.call(void 0, () => {
+    const plugin = new RaycasterPlugin((event) => {
+      if (event.type === "click" && onClick) {
+        onClick(event.object);
+      }
+      if (event.type === "hover" && onHover) {
+        onHover(event.object);
+      }
+    });
+    orchestrator.use(plugin);
+  }, [onClick, onHover]);
+  return null;
+};
+
+// src/react/components/SpotLight.tsx
+
+var SpotLight = ({
+  intensity = 5,
+  color = 16777215,
+  position = [0, 10, 0],
+  target,
+  angle = Math.PI / 6,
+  penumbra = 0.1,
+  distance = 50,
+  castShadow = true
+}) => {
+  const { scene } = useScene2();
+  _react.useEffect.call(void 0, () => {
+    const light = new _chunkEA3XQ4KJcjs.THREE.SpotLight(
+      color,
+      intensity,
+      distance,
+      angle,
+      penumbra
+    );
+    light.position.set(...position);
+    light.castShadow = castShadow;
+    if (castShadow) {
+      light.shadow.mapSize.width = 2048;
+      light.shadow.mapSize.height = 2048;
+    }
+    scene.add(light);
+    if (target) {
+      if (typeof target === "string") {
+        const obj = scene.getObjectByName(target);
+        if (obj) {
+          light.target = obj;
+        }
+      } else {
+        light.target = target;
+        scene.add(target);
+      }
+    }
+    if (process.env.NODE_ENV === "development") {
+      const helper = new _chunkEA3XQ4KJcjs.THREE.SpotLightHelper(light);
+      scene.add(helper);
+      return () => {
+        scene.remove(light);
+        scene.remove(helper);
+        light.dispose();
+      };
+    }
+    return () => {
+      scene.remove(light);
+      light.dispose();
+    };
+  }, [
+    intensity,
+    color,
+    position,
+    target,
+    angle,
+    penumbra,
+    distance,
+    castShadow
+  ]);
+  return null;
+};
+
+// src/react/components/Suspense.tsx
+
+
+var Suspense = ({
+  children,
+  fallback,
+  loadingMessage = "Loading 3D model..."
+}) => {
+  const defaultFallback = /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className: "fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50", children: /* @__PURE__ */ _jsxruntime.jsxs.call(void 0, "div", { className: "bg-gray-900/90 border border-gray-700 rounded-xl p-8 shadow-2xl text-center", children: [
+    /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className: "w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" }),
+    /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "p", { className: "text-xl font-semibold text-white", children: loadingMessage }),
+    /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "p", { className: "text-sm text-gray-400 mt-2", children: "This may take a few seconds..." })
+  ] }) });
+  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _react.Suspense, { fallback: fallback || defaultFallback, children });
+};
+
+// src/react/components/SuspenseModel.tsx
+
+var SuspenseModel = ({
+  entry,
+  draco,
+  fallback = /* @__PURE__ */ _jsxruntime.jsxs.call(void 0, "div", { className: "text-white", children: [
+    "Loading model ",
+    entry.id,
+    "..."
+  ] }),
+  children
+}) => {
+  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, Suspense, { fallback, children: /* @__PURE__ */ _jsxruntime.jsx.call(void 0, Model, { entry, draco, children: (model) => _optionalChain([children, 'optionalCall', _137 => _137(model)]) }) });
+};
+
+// src/react/components/TheaterLighting.tsx
+
+var TheaterLighting = ({
+  intensity = 2,
+  count = 8
+}) => {
+  const { scene } = useScene2();
+  _react.useEffect.call(void 0, () => {
+    const lights = [];
+    for (let i = 0; i < count; i++) {
+      const angle = i / count * Math.PI * 2;
+      const light = new _chunkEA3XQ4KJcjs.THREE.PointLight(16777215, intensity);
+      light.position.set(Math.cos(angle) * 5, 5, Math.sin(angle) * 5);
+      scene.add(light);
+      lights.push(light);
+    }
+    return () => {
+      lights.forEach((l) => {
+        scene.remove(l);
+        l.dispose();
+      });
+    };
+  }, [intensity, count]);
+  return null;
+};
+
+// src/react/components/VRButton.tsx
+
+var _VRButtonjs = require('three/examples/jsm/webxr/VRButton.js');
+var VRButton = () => {
+  const { renderer } = useScene2();
+  _react.useEffect.call(void 0, () => {
+    if (!renderer) {
+      return;
+    }
+    renderer.xr.enabled = true;
+    const button = _VRButtonjs.VRButton.createButton(renderer);
+    document.body.appendChild(button);
+    return () => {
+      if (button.parentNode) {
+        button.parentNode.removeChild(button);
+      }
+    };
+  }, [renderer]);
+  return null;
+};
+
+// src/react/controls/AnimationController.tsx
+
+
+var AnimationController = ({
+  children,
+  className
+}) => {
+  const model = useActiveModel();
+  const [clips, setClips] = _react.useState.call(void 0, []);
+  const [mixer, setMixer] = _react.useState.call(void 0, 
+    () => new _chunkEA3XQ4KJcjs.THREE.AnimationMixer(null)
+  );
+  const [actions, setActions] = _react.useState.call(void 0, 
+    /* @__PURE__ */ new Map()
+  );
+  const [playing, setPlaying] = _react.useState.call(void 0, /* @__PURE__ */ new Set());
+  const [reversed, setReversed] = _react.useState.call(void 0, /* @__PURE__ */ new Set());
+  _react.useEffect.call(void 0, () => {
+    if (!model) {
+      setClips([]);
+      mixer.stopAllAction();
+      return;
+    }
+    if (model.animations && model.animations.length > 0) {
+      setClips(model.animations);
+      setMixer(new _chunkEA3XQ4KJcjs.THREE.AnimationMixer(model));
+      mixer.setTime(0);
+      const newActions = /* @__PURE__ */ new Map();
+      model.animations.forEach((clip) => {
+        const action = mixer.clipAction(clip);
+        action.clampWhenFinished = true;
+        action.enabled = true;
+        action.setLoop(_chunkEA3XQ4KJcjs.THREE.LoopOnce, 1);
+        action.reset();
+        newActions.set(clip.name, action);
+      });
+      setActions(newActions);
+    }
+    const clock = new _chunkEA3XQ4KJcjs.THREE.Clock();
+    const animate = () => {
+      mixer.update(clock.getDelta());
+      requestAnimationFrame(animate);
+    };
+    animate();
+    return () => {
+      mixer.stopAllAction();
+    };
+  }, [model]);
+  const playForward = (name) => {
+    const action = actions.get(name);
+    if (!action) {
+      return;
+    }
+    actions.forEach((a, n) => {
+      if (n !== name) {
+        a.fadeOut(0.2);
+      }
+    });
+    action.reset().setEffectiveTimeScale(1).setEffectiveWeight(1).fadeIn(0.2).play();
+    setPlaying((prev) => new Set(prev).add(name));
+    setReversed((prev) => {
+      const next = new Set(prev);
+      next.delete(name);
+      return next;
+    });
+  };
+  const playBackward = (name) => {
+    const action = actions.get(name);
+    if (!action) {
+      return;
+    }
+    actions.forEach((a, n) => {
+      if (n !== name) {
+        a.fadeOut(0.2);
+      }
+    });
+    action.reset().setEffectiveTimeScale(-1).setEffectiveWeight(1).fadeIn(0.2).play();
+    setPlaying((prev) => new Set(prev).add(name));
+    setReversed((prev) => new Set(prev).add(name));
+  };
+  const toggle = (name) => {
+    if (reversed.has(name)) {
+      playForward(name);
+    } else {
+      playBackward(name);
+    }
+  };
+  const animationList = clips.map((clip) => ({
+    name: clip.name || `Animaci\xF3n ${clip.uuid.slice(0, 4)}`,
+    playForward: () => playForward(clip.name),
+    playBackward: () => playBackward(clip.name),
+    toggle: () => toggle(clip.name),
+    isPlaying: playing.has(clip.name),
+    isReversed: reversed.has(clip.name)
+  }));
+  if (animationList.length === 0) {
+    return null;
+  }
+  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: children(animationList) });
+};
+
+// src/react/controls/LightingController.tsx
+
+
+var LightingController = ({
+  className
+}) => {
+  const { scene } = useScene2();
+  const [intensity, setIntensity] = _react.useState.call(void 0, 1);
+  const updateLights = (value) => {
+    setIntensity(value);
+    scene.traverse((obj) => {
+      if (obj instanceof _chunkEA3XQ4KJcjs.THREE.Light) {
+        obj.intensity = value * (obj.userData.baseIntensity || 1);
+      }
+    });
+  };
+  _react2.default.useEffect(() => {
+    scene.traverse((obj) => {
+      if (obj instanceof _chunkEA3XQ4KJcjs.THREE.Light) {
+        obj.userData.baseIntensity = obj.intensity;
+      }
+    });
+  }, [scene]);
+  return /* @__PURE__ */ _jsxruntime.jsxs.call(void 0, "div", { className: `bg-black/80 text-white p-4 rounded-lg ${className || ""}`, children: [
+    /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "h3", { className: "text-lg font-bold mb-3", children: "Iluminaci\xF3n Global" }),
+    /* @__PURE__ */ _jsxruntime.jsxs.call(void 0, "label", { className: "block", children: [
+      /* @__PURE__ */ _jsxruntime.jsxs.call(void 0, "span", { className: "text-sm", children: [
+        "Intensidad: ",
+        intensity.toFixed(2)
+      ] }),
+      /* @__PURE__ */ _jsxruntime.jsx.call(void 0, 
+        "input",
+        {
+          type: "range",
+          min: "0",
+          max: "3",
+          step: "0.01",
+          value: intensity,
+          onChange: (e) => updateLights(parseFloat(e.target.value)),
+          className: "w-full mt-2"
+        }
+      )
+    ] })
+  ] });
+};
+
+// src/react/controls/MaterialController.tsx
+
+
+// src/core/utils/QuadWireframe.ts
+var createQuadWireframe = (geometry) => {
+  const position = geometry.attributes.position;
+  const indices = _optionalChain([geometry, 'access', _138 => _138.index, 'optionalAccess', _139 => _139.array]);
+  const vertices = [];
+  const edgeMap = /* @__PURE__ */ new Map();
+  const getKey = (a, b) => a < b ? `${a},${b}` : `${b},${a}`;
+  if (!indices) {
+    return new _chunkEA3XQ4KJcjs.THREE.EdgesGeometry(geometry, 30);
+  }
+  if (!position) {
+    return new _chunkEA3XQ4KJcjs.THREE.EdgesGeometry(geometry, 30);
+  }
+  const vertexPositions = [];
+  for (let i = 0; i < position.count; i++) {
+    vertexPositions.push([
+      position.array[i * 3],
+      position.array[i * 3 + 1],
+      position.array[i * 3 + 2]
+    ]);
+  }
+  const distanceSq = (a, b) => {
+    const [x1, y1, z1] = vertexPositions[a];
+    const [x2, y2, z2] = vertexPositions[b];
+    return (x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2;
+  };
+  const trianglePairs = /* @__PURE__ */ new Map();
+  for (let i = 0; i < indices.length; i += 3) {
+    const [a, b, c] = [indices[i], indices[i + 1], indices[i + 2]];
+    [getKey(a, b), getKey(b, c), getKey(c, a)].forEach((edge) => {
+      if (!trianglePairs.has(edge)) {
+        trianglePairs.set(edge, []);
+      }
+      trianglePairs.get(edge).push(i / 3);
+    });
+  }
+  for (let i = 0; i < indices.length; i += 3) {
+    const [a, b, c] = [indices[i], indices[i + 1], indices[i + 2]];
+    const edges = [
+      { key: getKey(a, b), verts: [a, b] },
+      { key: getKey(b, c), verts: [b, c] },
+      { key: getKey(c, a), verts: [c, a] }
+    ];
+    const lengths = [distanceSq(a, b), distanceSq(b, c), distanceSq(c, a)];
+    const maxIdx = lengths.indexOf(Math.max(...lengths));
+    const diagonal = edges[maxIdx];
+    const legs = edges.filter((_, i2) => i2 !== maxIdx);
+    const isQuad = (_optionalChain([trianglePairs, 'access', _140 => _140.get, 'call', _141 => _141(diagonal.key), 'optionalAccess', _142 => _142.length]) || 0) > 1;
+    (isQuad ? legs : edges).forEach(({ verts: [V1, V2] }) => {
+      const v1 = V1;
+      const v2 = V2;
+      const key = getKey(v1, v2);
+      if (!edgeMap.has(key)) {
+        edgeMap.set(key, 1);
+        vertices.push(
+          position.array[v1 * 3],
+          position.array[v1 * 3 + 1],
+          position.array[v1 * 3 + 2],
+          position.array[v2 * 3],
+          position.array[v2 * 3 + 1],
+          position.array[v2 * 3 + 2]
+        );
+      }
+    });
+  }
+  const geo = new _chunkEA3XQ4KJcjs.THREE.BufferGeometry();
+  geo.setAttribute("position", new _chunkEA3XQ4KJcjs.THREE.Float32BufferAttribute(vertices, 3));
+  return geo;
+};
+
+// src/react/controls/MaterialController.tsx
+
+var MaterialController = ({
+  materials,
+  transitionDuration = 0,
+  children,
+  className
+}) => {
+  const model = useActiveModel();
+  const [activeName, setActiveName] = _react.useState.call(void 0, null);
+  const [isTransitioning, setIsTransitioning] = _react.useState.call(void 0, false);
+  _react.useEffect.call(void 0, () => {
+    if (!model) {
+      return;
+    }
+    model.traverse((child) => {
+      if (!(child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh)) {
+        return;
+      }
+      if (!child.userData.originalMaterial) {
+        child.userData.originalMaterial = child.material;
+      }
+      if (!child.getObjectByName(`${child.name}-wireframe`)) {
+        const wireGeo = createQuadWireframe(child.geometry);
+        const lineMat = new _chunkEA3XQ4KJcjs.THREE.LineBasicMaterial({
+          color: 0,
+          linewidth: 3,
+          polygonOffset: true,
+          polygonOffsetFactor: 1,
+          polygonOffsetUnits: 1
+        });
+        const wireframe = new _chunkEA3XQ4KJcjs.THREE.LineSegments(wireGeo, lineMat);
+        wireframe.name = `${child.name}-wireframe`;
+        wireframe.renderOrder = 999;
+        wireframe.visible = false;
+        child.add(wireframe);
+      }
+    });
+  }, [model]);
+  const applyMaterial = async (config) => {
+    if (!model || isTransitioning) {
+      return;
+    }
+    setIsTransitioning(transitionDuration > 0);
+    const meshes = [];
+    model.traverse((child) => {
+      if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh) {
+        meshes.push(child);
+      }
+    });
+    if (transitionDuration === 0) {
+      meshes.forEach((child) => applyMaterialToMesh(child, config));
+      setActiveName(config.name);
+      setIsTransitioning(false);
+      return;
+    }
+    const delayPerMesh = transitionDuration / meshes.length;
+    for (let i = 0; i < meshes.length; i++) {
+      setTimeout(() => {
+        applyMaterialToMesh(meshes[i], config);
+        if (i === meshes.length - 1) {
+          setActiveName(config.name);
+          setIsTransitioning(false);
+        }
+      }, i * delayPerMesh);
+    }
+  };
+  const applyMaterialToMesh = (child, config) => {
+    const wireframe = child.getObjectByName(
+      `${child.name}-wireframe`
+    );
+    let newMat;
+    switch (config.type) {
+      case "textured":
+        newMat = child.userData.originalMaterial;
+        if (wireframe) {
+          wireframe.visible = false;
+        }
+        break;
+      case "solid":
+        newMat = new _chunkEA3XQ4KJcjs.THREE.MeshStandardMaterial({
+          color: _nullishCoalesce(config.color, () => ( 8947848)),
+          metalness: _nullishCoalesce(config.metalness, () => ( 0)),
+          roughness: _nullishCoalesce(config.roughness, () => ( 0.9))
+        });
+        if (wireframe) {
+          wireframe.visible = false;
+        }
+        break;
+      case "wireframe":
+        newMat = new _chunkEA3XQ4KJcjs.THREE.MeshStandardMaterial({
+          color: _nullishCoalesce(config.color, () => ( 8947848)),
+          metalness: _nullishCoalesce(config.metalness, () => ( 0)),
+          roughness: _nullishCoalesce(config.roughness, () => ( 0.9)),
+          transparent: true,
+          opacity: 0.95
+        });
+        if (wireframe) {
+          wireframe.visible = true;
+          wireframe.material.color.set(
+            _nullishCoalesce(config.lineColor, () => ( 0))
+          );
+        }
+        break;
+      case "custom":
+        newMat = config.factory(child.userData.originalMaterial);
+        if (wireframe) {
+          wireframe.visible = false;
+        }
+        break;
+    }
+    child.material = newMat;
+  };
+  const items = materials.map((config) => ({
+    name: config.name,
+    apply: () => applyMaterial(config),
+    isActive: activeName === config.name
+  }));
+  _react.useEffect.call(void 0, () => {
+    if (items.length > 0 && !activeName) {
+      _optionalChain([items, 'access', _143 => _143[0], 'optionalAccess', _144 => _144.apply, 'optionalCall', _145 => _145()]);
+    }
+  }, [items]);
+  if (!model || items.length === 0) {
+    return null;
+  }
+  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: children(items) });
+};
+
+// src/react/primitives/SceneObject.tsx
+
+var SceneObject = ({
+  object,
+  parent = "scene",
+  name,
+  position,
+  rotation,
+  scale = [1, 1, 1],
+  visible = true,
+  castShadow = false,
+  receiveShadow = false
+}) => {
+  const orchestrator = useScene2();
+  _react.useEffect.call(void 0, () => {
+    if (name) {
+      object.name = name;
+    }
+    object.visible = visible;
+    object.castShadow = castShadow;
+    object.receiveShadow = receiveShadow;
+    if (position) {
+      object.position.set(...position);
+    }
+    if (rotation) {
+      object.rotation.set(...rotation);
+    }
+    if (scale) {
+      object.scale.set(...scale);
+    }
+    let targetParent = null;
+    if (parent === "scene") {
+      targetParent = orchestrator.scene;
+    } else if (parent === "model") {
+      targetParent = orchestrator.getActiveModel();
+    } else if (typeof parent === "string") {
+      targetParent = orchestrator.scene.getObjectByName(parent) || null;
+    } else if (parent instanceof _chunkEA3XQ4KJcjs.THREE.Object3D) {
+      targetParent = parent;
+    }
+    if (!targetParent) {
+      console.warn("[SceneObject] Padre no encontrado:", parent);
+      return;
+    }
+    targetParent.add(object);
+    return () => {
+      if (object.parent) {
+        object.parent.remove(object);
+      }
+      object.traverse((child) => {
+        if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh) {
+          _optionalChain([child, 'access', _146 => _146.geometry, 'optionalAccess', _147 => _147.dispose, 'call', _148 => _148()]);
+          if (Array.isArray(child.material)) {
+            child.material.forEach((m) => m.dispose());
+          } else {
+            _optionalChain([child, 'access', _149 => _149.material, 'optionalAccess', _150 => _150.dispose, 'call', _151 => _151()]);
+          }
+        }
+      });
+    };
+  }, [
+    object,
+    parent,
+    name,
+    position,
+    rotation,
+    scale,
+    visible,
+    castShadow,
+    receiveShadow
+  ]);
+  return null;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+exports.ARButton = ARButton; exports.AdvancedCameraCollision = AdvancedCameraCollision; exports.AdvancedCameraCollisionPlugin = AdvancedCameraCollisionPlugin; exports.AdvancedDragRaycaster = AdvancedDragRaycaster; exports.AdvancedOrbitControls = AdvancedOrbitControls; exports.AdvancedOrbitControlsPlugin = AdvancedOrbitControlsPlugin; exports.AdvancedRaycaster = AdvancedRaycaster; exports.AdvancedRaycasterPlugin = AdvancedRaycasterPlugin; exports.AmbientLight = AmbientLight; exports.AnimationController = AnimationController; exports.AnimationTimeline = AnimationTimeline; exports.Annotations = Annotations; exports.AnnotationsPlugin = AnnotationsPlugin; exports.AutoLODSystem = AutoLODSystem; exports.AutoLODSystemPlugin = AutoLODSystemPlugin; exports.CacheProvider = CacheProvider; exports.CacheValidator = CacheValidator; exports.Canvas = Canvas; exports.DirectionalLight = DirectionalLight; exports.DistanceDisplay = DistanceDisplay; exports.EnvironmentPreset = EnvironmentPreset; exports.ErrorBoundary3D = ErrorBoundary3D; exports.FileWatcher = FileWatcher; exports.GLTFLoader = GLTFLoader2; exports.GroundSurface = GroundSurface; exports.HDRI = HDRI; exports.HDRILoader = HDRILoader; exports.Hotspot = Hotspot; exports.HotspotPlugin = HotspotPlugin; exports.Hotspots = Hotspots; exports.InstancedModel = InstancedModel; exports.LODSystem = LODSystem; exports.LODSystemPlugin = LODSystemPlugin; exports.LightingController = LightingController; exports.MaterialController = MaterialController; exports.MeasurementTool = MeasurementTool; exports.MeasurementToolPlugin = MeasurementToolPlugin; exports.Model = Model; exports.ModelPreload = ModelPreload; exports.ObjectCache = ObjectCache; exports.OrbitControls = OrbitControls4; exports.OrbitControlsPlugin = OrbitControlsPlugin; exports.PointLight = PointLight; exports.PostProcessing = PostProcessing; exports.PostProcessingPlugin = PostProcessingPlugin; exports.Raycaster = Raycaster; exports.RaycasterPlugin = RaycasterPlugin; exports.SceneObject = SceneObject; exports.SceneOrchestrator = SceneOrchestrator; exports.SceneProvider = SceneProvider; exports.SpotLight = SpotLight; exports.Suspense = Suspense; exports.SuspenseModel = SuspenseModel; exports.THREE = _chunkEA3XQ4KJcjs.THREE; exports.THREE_VERSION = _chunkEA3XQ4KJcjs.THREE_VERSION; exports.TheaterLighting = TheaterLighting; exports.ThreeDRACOLoader = _chunkEA3XQ4KJcjs.DRACOLoader; exports.ThreeEXRLoader = _chunkEA3XQ4KJcjs.EXRLoader; exports.ThreeEffectComposer = _chunkEA3XQ4KJcjs.EffectComposer; exports.ThreeGLTFLoader = _chunkEA3XQ4KJcjs.GLTFLoader; exports.ThreeOrbitControls = _chunkEA3XQ4KJcjs.OrbitControls; exports.ThreeRGBELoader = _chunkEA3XQ4KJcjs.RGBELoader; exports.ThreeRenderPass = _chunkEA3XQ4KJcjs.RenderPass; exports.ThreeUnrealBloomPass = _chunkEA3XQ4KJcjs.UnrealBloomPass; exports.VRButton = VRButton; exports.WebPHDRLoader = WebPHDRLoader; exports.useActiveModel = useActiveModel; exports.useAnimation = useAnimation; exports.useCache = useCache2; exports.useHDRI = useHDRI; exports.useModel = useModel; exports.useRaycaster = useRaycaster; exports.useScene = useScene2;

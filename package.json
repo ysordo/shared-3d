@@ -39,9 +39,14 @@
     },
     "./server": {
       "types": "./dist/server/index.d.ts",
+      "import": "./dist/server/index.js",
       "require": "./dist/server/index.cjs"
     },
-    "./three": "./dist/lib/three.js"
+    "./three": {
+      "types": "./dist/lib/three.d.ts",
+      "import": "./dist/lib/three.js",
+      "require": "./dist/lib/three.cjs"
+    }
   },
   "files": [
     "dist",

@@ -1,4 +1,1188 @@
-import {c,d,a,e,f}from'./chunk-AV5IKSIK.js';export{a as THREE,j as THREE_VERSION,d as ThreeDRACOLoader,f as ThreeEXRLoader,g as ThreeEffectComposer,c as ThreeGLTFLoader,b as ThreeOrbitControls,e as ThreeRGBELoader,h as ThreeRenderPass,i as ThreeUnrealBloomPass}from'./chunk-AV5IKSIK.js';import St,{createContext,forwardRef,useEffect,useContext,useState,useRef,Component,Suspense}from'react';import*as H from'three';import {set,get,keys,del}from'idb-keyval';import {jsx,jsxs,Fragment}from'react/jsx-runtime';import {OrbitControls}from'three/examples/jsm/controls/OrbitControls.js';import {SimplifyModifier}from'three/examples/jsm/modifiers/SimplifyModifier.js';import {EffectComposer}from'three/examples/jsm/postprocessing/EffectComposer.js';import {RenderPass}from'three/examples/jsm/postprocessing/RenderPass.js';import {UnrealBloomPass}from'three/examples/jsm/postprocessing/UnrealBloomPass.js';import {ARButton}from'three/examples/jsm/webxr/ARButton.js';import {Reflector}from'three/examples/jsm/objects/Reflector.js';import {VRButton}from'three/examples/jsm/webxr/VRButton.js';var Pe="shared-3d:asset:",x=class{static async getKey(e){return `${Pe}${e}`}static async set(e,t,r,o=Date.now()){let s=await this.getKey(e),i={data:t,hash:r,timestamp:Date.now(),size:this.estimateSize(t),updatedAt:o};await set(s,i);}static async get(e){let t=await this.getKey(e);return await get(t)??null}static async has(e){let t=await this.getKey(e);return (await keys()).includes(t)}static async delete(e){let t=await this.getKey(e),r=await this.get(t);r&&this.dispose(r.data),await del(t);}static async clearAll(){let t=(await keys()).filter(r=>typeof r=="string"&&r.startsWith(Pe));await Promise.all(t.map(r=>del(r)));}static dispose(e){e instanceof a.Object3D?e.traverse(t=>{t instanceof a.Mesh&&(t.geometry?.dispose(),Array.isArray(t.material)?t.material.forEach(r=>r.dispose()):t.material?.dispose());}):e instanceof a.Texture&&e.dispose();}static estimateSize(e){if(e instanceof a.Object3D){let t=0;return e.traverse(r=>{r.isMesh&&r.geometry?.attributes?.position?.array&&(t+=r.geometry.attributes.position.array.byteLength);}),t}return e instanceof a.Texture&&(e.source?.data||e.image?.data)?.byteLength||0}};var S=class{static plainLoader=new c;static dracoLoaderInstance=new c;static dracoDecoder=new d;static isDracoInitialized=false;static getLoader(e={}){if(e.draco===true){if(!this.isDracoInitialized){let r=e.decoderPath||"/draco/";this.dracoDecoder.setDecoderPath(r),this.dracoDecoder.setDecoderConfig({type:"js"}),this.dracoDecoder.preload(),this.dracoLoaderInstance.setDRACOLoader(this.dracoDecoder),this.isDracoInitialized=true,console.info(`[GLTFLoader] Draco decoder initialized: ${r}`);}return this.dracoLoaderInstance}return this.plainLoader}static async load(e,t={}){let{id:r,url:o,hash:s}=e,{draco:i=false,decoderPath:c,onProgress:l,onLoaded:m,onError:p}=t,f=this.getLoader({draco:i,decoderPath:c}),u=await x.get(r);if(u&&u.hash===s){console.info(`[GLTFLoader] Cache hit: ${r} (${i?"draco":"standard"})`);let d=u.data.clone(true);return d.userData={...u.data.userData,cached:true},m?.(d,e),d}return console.info(`[GLTFLoader] Loading: ${r} (${i?"Draco":"Standard"})`),new Promise((d,E)=>{f.load(o,async h=>{try{let b=h.scene;b.name=r,b.animations=h.animations||[];let v=new a.Box3().setFromObject(b);b.position.sub(v.getCenter(new a.Vector3)),b.userData={sourceUrl:o,manifestHash:s,loadedAt:Date.now(),format:i?"gltf-draco":"gltf",draco:i},await x.set(r,b,s),m?.(b,e),d(b);}catch(b){p?.(b,o),E(b);}},h=>{h.lengthComputable&&l?.({loaded:h.loaded,total:h.total,percent:h.loaded/h.total*100,url:o});},h=>{console.error(`[GLTFLoader] Error: ${r}`,h),p?.(h,o),E(h);});})}static async preload(e,t={},r){let o=0,s=e.length;await Promise.all(e.map(i=>this.load(i,{...t,onLoaded:()=>r?.(++o,s),onError:(c,l)=>console.error(`Preload failed: ${l}`,c)})));}static async invalidate(e){await x.delete(e);}static async clearCache(){await x.clearAll();}};var F=class{manager;type=a.FloatType;exposure=1;preserveHDR=true;constructor(e){this.manager=e||new a.LoadingManager;}setDataType(e){return this.type=e,this}setExposure(e){return this.exposure=e,this}setPreserveHDR(e){return this.preserveHDR=e,this}load(e,t,r,o){let s=new a.FileLoader(this.manager);return s.setResponseType("arraybuffer"),s.load(e,i=>{try{let c=this.parse(i),l=new a.DataTexture(c.data,c.width,c.height,a.RGBAFormat,c.type);l.colorSpace=a.LinearSRGBColorSpace,l.minFilter=a.LinearFilter,l.magFilter=a.LinearFilter,l.generateMipmaps=!1,l.needsUpdate=!0,l.flipY=!0,l.userData={format:"webp-hdr",exposure:c.exposure,maxLuminance:c.maxLuminance,preserveHDR:this.preserveHDR},t?.(l,c);}catch(c){o?.(c);}},r,i=>o?.(i)),new a.DataTexture(new Uint8Array(4),1,1,a.RGBAFormat)}parse(e){let t=new DataView(e);if(t.getUint32(0,true)!==1179210327)throw new Error("Not a valid WebP file");if(t.getUint32(8,true)!==1346520407)throw new Error("Not a valid WebP file");let r=12,o=this.exposure,s=16;for(;r<e.byteLength;){let p=String.fromCharCode(t.getUint8(r),t.getUint8(r+1),t.getUint8(r+2),t.getUint8(r+3)),f=t.getUint32(r+4,true)+8;if(p==="VP8X"||p==="VP8L"||p==="VP8 ")break;if(p==="EXIF"||p==="XMP "){let u=new Uint8Array(e,r+8,f-8),d=new TextDecoder().decode(u),E=d.match(/Exposure[- ]?Value:\s*([0-9.-]+)/i),h=d.match(/MaxLuminance:\s*([0-9.-]+)/i);E&&(o=parseFloat(E[1])),h&&(s=parseFloat(h[1]));}r+=f+f%2;}let i=1024,c=512,l=i*c*4,m=this.type===a.FloatType?new Float32Array(l):new Uint16Array(l);for(let p=0;p<c;p++)for(let f=0;f<i;f++){let u=(p*i+f)*4,d=p/c*Math.PI,E=f/i*Math.PI*2,h=new a.Color(.1,.3,.8).multiplyScalar(Math.cos(d)),b=new a.Color(1,.9,.7).multiplyScalar(Math.exp(-Math.pow(E-Math.PI,2)/.1)*Math.exp(-Math.pow(d-Math.PI/6,2)/.2)*1e3),v=h.clone().add(b).multiplyScalar(o),R=Math.max(v.r,v.g,v.b,1e-4),w=Math.min(255,Math.floor(R/s*255));if(this.type===a.FloatType)m[u]=v.r/(w+1),m[u+1]=v.g/(w+1),m[u+2]=v.b/(w+1),m[u+3]=w/255;else {let y=new Float32Array(4);y[0]=v.r/(w+1),y[1]=v.g/(w+1),y[2]=v.b/(w+1),y[3]=w/255;let P=new Uint16Array(y.buffer);m[u]=P[0],m[u+1]=P[1],m[u+2]=P[2],m[u+3]=P[3];}}return {width:i,height:c,data:m,type:this.type,exposure:o,maxLuminance:s}}};var G=class{static rgbeLoader=new e;static webpLoader=new F;static async load(e,t={}){let{id:r,url:o,hash:s}=e,{onProgress:i,onLoaded:c,onError:l}=t,m=await x.get(r);if(m&&m.hash===s&&m.data instanceof a.Texture){console.info(`[HDRILoader] Cache hit: ${r}`);let u=m.data.clone();return u.userData={...m.data.userData,cached:true},c?.(u,e),u}let p=o.toLowerCase().endsWith(".webp"),f=p?this.webpLoader:this.rgbeLoader;return console.info(`[HDRILoader] Loading: ${r} (${p?"WebP-HDR":"RGBE"})`),new Promise((u,d)=>{f.load(o,async E=>{try{E.mapping=a.EquirectangularReflectionMapping,E.colorSpace=a.LinearSRGBColorSpace,E.minFilter=a.LinearFilter,E.magFilter=a.LinearFilter,E.generateMipmaps=!1,E.needsUpdate=!0,E.name=r,E.userData={sourceUrl:o,manifestHash:s,format:p?"webp-hdr":"rgbe",loadedAt:Date.now()},await x.set(r,E,s),c?.(E,e),u(E);}catch(h){l?.(h,o),d(h);}},E=>{E.lengthComputable&&i?.({loaded:E.loaded,total:E.total,percent:E.loaded/E.total*100,url:o});},E=>{console.error(`[HDRILoader] Error loading ${r}:`,E),l?.(E,o),d(E);});})}static async preload(e,t){let r=0,o=e.length;await Promise.all(e.map(s=>this.load(s,{onLoaded:()=>{r++,t?.(r,o);},onError:(i,c)=>console.error(`HDRI preload failed: ${c}`,i)})));}static async invalidate(e){let t=await x.get(e);t?.data instanceof a.Texture&&t.data.dispose(),await x.delete(e);}};var B=class n{static instance=null;scene;camera;renderer;activeModel=null;activeHDRI=null;canvas;animationId=null;plugins=new Map;resizeHandler;constructor(e,t={}){this.canvas=e,this.renderer=new H.WebGLRenderer({canvas:e,antialias:t.antialias??true,alpha:false,powerPreference:"high-performance"}),this.renderer.setPixelRatio(window.devicePixelRatio),this.renderer.setSize(e.clientWidth,e.clientHeight),this.renderer.shadowMap.enabled=t.shadows??true,this.renderer.toneMapping=t.toneMapping??H.ACESFilmicToneMapping,this.renderer.toneMappingExposure=t.toneMappingExposure??1,t.clearColor&&this.renderer.setClearColor(t.clearColor),this.camera=new H.PerspectiveCamera(60,e.clientWidth/e.clientHeight,.1,1e3),this.camera.position.set(0,1.6,5),this.scene=new H.Scene,t.background instanceof H.Texture?(this.scene.background=t.background,this.scene.environment=t.background):t.background&&(this.scene.background=new H.Color(t.background)),this.resizeHandler=()=>{let{clientWidth:o,clientHeight:s}=this.canvas;this.renderer.setSize(o,s),this.camera.aspect=o/s,this.camera.updateProjectionMatrix();},window.addEventListener("resize",this.resizeHandler);let r=()=>{this.animationId=requestAnimationFrame(r),this.renderer.render(this.scene,this.camera);};r();}static getInstance(e,t){if(!n.instance){if(!e)throw new Error("Canvas is required on first initialization");n.instance=new n(e,t);}return n.instance}use(e){if(this.plugins.has(e.name))return console.warn(`[Orchestrator] Plugin "${e.name}" ya est\xE1 instalado`),this;let t={scene:this.scene,camera:this.camera,renderer:this.renderer,orchestrator:this};try{e.install(t),this.plugins.set(e.name,e),console.info(`[Orchestrator] Plugin instalado: ${e.name}`);}catch(r){console.error(`[Orchestrator] Error instalando plugin ${e.name}:`,r);}return this}async setModel(e,t){return console.info(`[Orchestrator] Cambiando modelo \u2192 ${e.id}`),this.activeModel&&(this.scene.remove(this.activeModel),this.activeModel=null),await S.load(e,{draco:t?.draco,onLoaded:o=>{this.activeModel=o,this.scene.add(o),console.info(`[Orchestrator] Modelo activo: ${e.id}`);},onError:o=>{console.error(`[Orchestrator] Error cargando modelo ${e.id}`,o);}})}removeModel(){this.activeModel&&(this.scene.remove(this.activeModel),this.activeModel=null);}async setHDRI(e){return this.activeHDRI&&this.activeHDRI.dispose(),await G.load(e,{onLoaded:r=>{this.activeHDRI=r,this.scene.environment=r,this.scene.background=r,console.info(`[Orchestrator] HDRI activo: ${e.id}`);}})}clearHDRI(){this.activeHDRI&&(this.scene.environment=null,this.scene.background=new H.Color(0),this.activeHDRI.dispose(),this.activeHDRI=null);}dispose(){this.animationId&&(cancelAnimationFrame(this.animationId),this.animationId=null),window.removeEventListener("resize",this.resizeHandler);for(let e of this.plugins.values())e.dispose?.();this.plugins.clear(),this.removeModel(),this.clearHDRI(),this.renderer.dispose(),this.renderer.forceContextLoss?.(),this.canvas.width=1,this.canvas.height=1,n.instance=null,console.info("[Orchestrator] Disposed completamente");}getActiveModel(){return this.activeModel}getActiveHDRI(){return this.activeHDRI}};var Te=createContext(null),U=forwardRef(({children:n,config:e},t)=>(useEffect(()=>{if(!t)return;if(typeof t=="function")throw new Error("SceneProvider no soporta ref como funci\xF3n. Usa useRef()");if(!t.current){console.warn("SceneProvider: canvas ref no est\xE1 asignado a\xFAn");return}let r=B.getInstance(t.current,e);process.env.NODE_ENV==="development"&&(window.__ORCHESTRATOR__=r);},[t,e]),jsx(Te.Provider,{value:{orchestrator:null},children:n})));U.displayName="SceneProvider";var xe=()=>{let n=useContext(Te);if(!n)throw new Error("useScene debe usarse dentro de <SceneProvider>");if(!n.orchestrator)throw new Error("SceneOrchestrator a\xFAn no est\xE1 inicializado. Aseg\xFArate de que el canvas est\xE9 montado");return n.orchestrator};var L=()=>typeof import.meta<"u"&&import.meta.env?.MODE==="development"||typeof process<"u"&&process.env?.NODE_ENV==="development";var W=class n{static instance=null;watchers=new Map;manifest=[];onChange;constructor(){L()&&this.startPolling();}static getInstance(){return n.instance||(n.instance=new n),n.instance}watch(e,t){L()&&(this.manifest=e,this.onChange=t,this.checkForChanges());}async checkForChanges(){if(!this.manifest.length||!L())return;let e=[];for(let t of this.manifest)try{let r=await fetch(t.url,{method:"HEAD",cache:"no-store"}),o=r.headers.get("Last-Modified"),s=r.headers.get("ETag"),i;if(o){let l=Date.parse(o);i=isNaN(l)?Date.now():l;}else if(s){let l=s.replace(/^W\//,"").replace(/"/g,""),m=0;for(let p=0;p<l.length;p++)m=(m<<5)-m+l.charCodeAt(p),m=m&m;i=m;}else i=Date.now();let c=this.watchers.get(t.url);c!==void 0&&c!==i&&e.push(t.id),this.watchers.set(t.url,i);}catch{}e.length>0&&this.onChange?.(e);}startPolling(){setInterval(()=>this.checkForChanges(),2e3);}dispose(){this.watchers.clear(),this.onChange=(()=>{});}};var $=class n{static isFirstLoad=true;static async validate(e){let{manifest:t,onProgress:r,onComplete:o,forceUpdate:s=false}=e;if(r?.(0,"Iniciando validaci\xF3n de cach\xE9..."),L()&&!s)return W.getInstance().watch(t,E=>{r?.(100,`Recargando: ${E.join(", ")}`),o?.({validated:true,updated:E,removed:[],added:[],errors:[],durationMs:0});}),r?.(100,"Modo desarrollo: observando cambios..."),{validated:true,updated:[],removed:[],added:[],errors:[],durationMs:0};if(!n.isFirstLoad&&!s)return r?.(100,"Cach\xE9 ya validada"),{validated:true,updated:[],removed:[],added:[],errors:[],durationMs:0};r?.(10,"Comparando manifest con cach\xE9 local...");let i=performance.now(),c=new Set(t.map(d=>d.id)),l=await keys(),m=new Set(l.filter(d=>typeof d=="string"&&d.startsWith("shared-3d:asset:")).map(d=>d.replace("shared-3d:asset:",""))),p=[];for(let d of m)c.has(d)||(await x.delete(d),p.push(d));let f=[];for(let d of t){let E=await x.get(d.id);(!E||E.hash!==d.hash||E.updatedAt<d.updatedAt)&&f.push(d);}let u={validated:true,updated:f.map(d=>d.id),removed:p,added:f.filter(d=>!m.has(d.id)).map(d=>d.id),errors:[],durationMs:Math.round(performance.now()-i)};return n.isFirstLoad=false,r?.(100,"Validaci\xF3n completa"),o?.(u),u}static reset(){n.isFirstLoad=true;}};var Me=createContext(null),Ye=({children:n})=>{let[e,t]=useState("idle"),[r,o]=useState(0),[s,i]=useState(null),c=async l=>(t("validating"),o(0),await $.validate({manifest:l,onProgress:(p,f)=>{o(Math.round(p)),console.info(`[Cache] ${f} (${p}%)`);},onComplete:p=>{i(p),t(p.errors.length>0?"error":"ready");}}));return jsx(Me.Provider,{value:{status:e,progress:r,report:s,validate:c},children:n})},He=()=>{let n=useContext(Me);if(!n)throw new Error("useCache debe usarse dentro de <CacheProvider>");return n};var z=class{constructor(e=.6,t=.1){this.distanceThreshold=e;this.pushBackOffset=t;}name="AdvancedCameraCollisionPlugin";handle=null;install({camera:e,orchestrator:t}){if(!e)return;let r=()=>{let o=t.getActiveModel();if(!o){this.handle=requestAnimationFrame(r);return}let s=new a.Vector3;e.getWorldDirection(s);let c=new a.Raycaster(e.position,s,0,this.distanceThreshold+this.pushBackOffset).intersectObject(o,true);if(c.length>0){let l=c[0].distance,m=this.distanceThreshold;if(l<m){let p=m-l+this.pushBackOffset;e.position.sub(s.multiplyScalar(p));}}this.handle=requestAnimationFrame(r);};r();}dispose(){this.handle!==null&&(cancelAnimationFrame(this.handle),this.handle=null);}};var q=class{constructor(e={}){this.options=e;Object.assign(this.config,e);}name="AdvancedOrbitControls";controls;config={enableDamping:true,dampingFactor:.05,panSpeed:1,rotateSpeed:1,zoomSpeed:1,minDistance:.1,maxDistance:1e3,minPolarAngle:0,maxPolarAngle:Math.PI};install({camera:e,renderer:t}){this.controls=new OrbitControls(e,t.domElement),Object.assign(this.controls,this.config);let r=()=>{this.controls.update(),requestAnimationFrame(r);};r();}setPanEnabled(e){this.controls.enablePan=e;}setRotateEnabled(e){this.controls.enableRotate=e;}setZoomEnabled(e){this.controls.enableZoom=e;}setAllEnabled(e){this.controls.enablePan=e,this.controls.enableRotate=e,this.controls.enableZoom=e;}dispose(){this.controls?.dispose();}};var X=class extends a.EventDispatcher{raycaster=new a.Raycaster;pointer=new a.Vector2;scene;camera;domElement;interactableObjects=[];lastHoverObject=null;isEnabled=false;isDragging=false;currentDragObject=null;dragStartPosition=new a.Vector2;lastRaycastTime=0;raycastThrottleMs=16;constructor(e){super(),this.domElement=e,this.onPointerMove=this.onPointerMove.bind(this),this.onPointerDown=this.onPointerDown.bind(this),this.onPointerUp=this.onPointerUp.bind(this),this.onClick=this.onClick.bind(this),this.onTouchStart=this.onTouchStart.bind(this),this.onTouchEnd=this.onTouchEnd.bind(this),this.onTouchMove=this.onTouchMove.bind(this),this.onContextMenu=this.onContextMenu.bind(this);}setModel(e){this.interactableObjects=[],e.traverse(t=>{this.isInteractable(t)&&this.interactableObjects.push(t);});}isInteractable(e){return !(!e.visible||e.userData.isNotRaycaster||!e.isMesh)}initialize(e,t){this.scene=e,this.camera=t;}setEnabled(e){this.isEnabled!==e&&(this.isEnabled=e,e?this.attachEvents():this.detachEvents());}attachEvents(){let e=this.domElement;e.addEventListener("pointermove",this.onPointerMove,{passive:true}),e.addEventListener("pointerdown",this.onPointerDown,{passive:true}),e.addEventListener("pointerup",this.onPointerUp,{passive:true}),e.addEventListener("click",this.onClick,{passive:true}),e.addEventListener("contextmenu",this.onContextMenu),e.style.cursor="pointer";}detachEvents(){let e=this.domElement;e.removeEventListener("pointermove",this.onPointerMove),e.removeEventListener("pointerdown",this.onPointerDown),e.removeEventListener("pointerup",this.onPointerUp),e.removeEventListener("click",this.onClick),e.removeEventListener("contextmenu",this.onContextMenu),e.style.cursor="default",this.clearHoverState();}onPointerMove(e){!this.isEnabled||!this.scene||!this.camera||(this.updatePointer(e),this.isDragging&&this.currentDragObject?this.handleDrag(e):this.throttledRaycast());}onPointerDown(e){if(!this.isEnabled||e.button!==0)return;this.updatePointer(e);let t=this.performRaycast()[0];t&&(this.isDragging=true,this.currentDragObject=t.object,this.dragStartPosition.set(e.clientX,e.clientY),this.dispatchEvent({type:"objectdragstart",object:t.object,startPosition:this.dragStartPosition.clone()}));}onPointerUp(e){if(!this.isEnabled||!this.isDragging)return;let t=new a.Vector2(e.clientX,e.clientY);this.dispatchEvent({type:"objectdragend",object:this.currentDragObject,startPosition:this.dragStartPosition.clone(),endPosition:t,totalDelta:t.clone().sub(this.dragStartPosition)}),this.isDragging=false,this.currentDragObject=null;}onClick(e){if(!this.isEnabled||this.isDragging)return;this.updatePointer(e);let t=this.performRaycast()[0];t&&this.dispatchEvent({type:"objectclick",object:t.object,point:t.point,distance:t.distance});}handleDrag(e){let t=new a.Vector2(e.clientX,e.clientY),r=t.clone().sub(this.dragStartPosition);this.dispatchEvent({type:"objectdrag",object:this.currentDragObject,delta:r,normalizedDelta:new a.Vector2(r.x/this.domElement.clientWidth,r.y/this.domElement.clientHeight)}),this.dragStartPosition.copy(t);}throttledRaycast(){let e=Date.now();e-this.lastRaycastTime<this.raycastThrottleMs||(this.lastRaycastTime=e,this.raycast());}raycast(){if(!this.scene||!this.camera)return;let t=this.performRaycast()?.[0]||null;if(t){let r=t.object||null;r!==this.lastHoverObject&&(this.lastHoverObject&&this.dispatchEvent({type:"objecthoverout",object:this.lastHoverObject}),r&&this.dispatchEvent({type:"objecthoverin",object:r,point:t.point,distance:t.distance}),this.lastHoverObject=r),r&&this.dispatchEvent({type:"objecthovermove",object:r,point:t.point,distance:t.distance});}}performRaycast(){return !this.scene||!this.camera?[]:(this.raycaster.setFromCamera(this.pointer,this.camera),this.raycaster.intersectObjects(this.interactableObjects,true).filter(t=>!t.object.name.endsWith("-wireframe")).slice(0,1).map(t=>({object:t.object,point:t.point,distance:t.distance})))}updatePointer(e){let t=this.domElement.getBoundingClientRect();this.pointer.x=(e.clientX-t.left)/t.width*2-1,this.pointer.y=-((e.clientY-t.top)/t.height)*2+1;}clearHoverState(){this.lastHoverObject&&(this.dispatchEvent({type:"objecthoverout",object:this.lastHoverObject}),this.lastHoverObject=null);}onContextMenu=e=>e.preventDefault();onTouchStart=this.onPointerDown;onTouchMove=this.onPointerMove;onTouchEnd=this.onPointerUp},A=class{constructor(e,t){this.model=e;this.onEvent=t;this._manager=new X(document.body);}name="AdvancedRaycaster";_manager;install({scene:e,camera:t,renderer:r,orchestrator:o}){this._manager=new X(r.domElement),this._manager.initialize(e,t),this.model?this._manager.setModel(this.model):o.getActiveModel()&&this._manager.setModel(o.getActiveModel()),["objectclick","objecthoverin","objecthoverout","objecthovermove","objectdragstart","objectdrag","objectdragend"].forEach(i=>{this._manager.addEventListener(i,c=>this.onEvent?.(c));}),this._manager.setEnabled(true);}dispose(){this._manager.setEnabled(false);}get manager(){return this._manager}};var Q=class{constructor(e){this.data=e;}name="Annotations";annotations=new Map;camera;scene;install({camera:e,scene:t}){this.camera=e,this.scene=t,this.data.forEach(o=>{let s=this.createLabel(o.content,o.offset||new a.Vector3(0,1,0));s.position.copy(o.position),s.userData.annotationId=o.id,s.visible=o.visible??true,o.target&&(s.userData.followTarget=o.target),this.annotations.set(o.id,s),this.scene.add(s);});let r=()=>{this.annotations.forEach(o=>{o.userData.followTarget&&(o.userData.followTarget.getWorldPosition(o.position),o.position.add(o.userData.offset||new a.Vector3(0,1,0))),o.lookAt(this.camera.position);}),requestAnimationFrame(r);};r();}createLabel(e,t){let r=document.createElement("div");r.className="annotation-label",r.style.cssText=`
+import {
+  DRACOLoader,
+  EXRLoader,
+  EffectComposer,
+  GLTFLoader,
+  OrbitControls,
+  RGBELoader,
+  RenderPass,
+  THREE,
+  THREE_VERSION,
+  UnrealBloomPass
+} from "./chunk-OVHQQSEK.js";
+
+// src/context/SceneContext.tsx
+import { createContext, useContext, forwardRef, useEffect } from "react";
+
+// src/core/orchestrator/SceneOrchestrator.ts
+import * as THREE2 from "three";
+
+// src/core/cache/ObjectCache.ts
+import { get, set, del, keys } from "idb-keyval";
+var CACHE_PREFIX = "shared-3d:asset:";
+var ObjectCache = class {
+  static async getKey(id) {
+    return `${CACHE_PREFIX}${id}`;
+  }
+  static async set(id, data, hash, updatedAt = Date.now()) {
+    const key = await this.getKey(id);
+    const entry = {
+      data,
+      hash,
+      timestamp: Date.now(),
+      size: this.estimateSize(data),
+      updatedAt
+    };
+    await set(key, entry);
+  }
+  static async get(id) {
+    const key = await this.getKey(id);
+    return await get(key) ?? null;
+  }
+  static async has(id) {
+    const key = await this.getKey(id);
+    const all = await keys();
+    return all.includes(key);
+  }
+  static async delete(id) {
+    const key = await this.getKey(id);
+    const entry = await this.get(key);
+    if (entry) {
+      this.dispose(entry.data);
+    }
+    await del(key);
+  }
+  static async clearAll() {
+    const allKeys = await keys();
+    const ourKeys = allKeys.filter((k) => typeof k === "string" && k.startsWith(CACHE_PREFIX));
+    await Promise.all(ourKeys.map((k) => del(k)));
+  }
+  static dispose(data) {
+    if (data instanceof THREE.Object3D) {
+      data.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.geometry?.dispose();
+          if (Array.isArray(child.material)) {
+            child.material.forEach((m) => m.dispose());
+          } else {
+            child.material?.dispose();
+          }
+        }
+      });
+    } else if (data instanceof THREE.Texture) {
+      data.dispose();
+    }
+  }
+  static estimateSize(data) {
+    if (data instanceof THREE.Object3D) {
+      let size = 0;
+      data.traverse((child) => {
+        if (child.isMesh && child.geometry?.attributes?.position?.array) {
+          size += child.geometry.attributes.position.array.byteLength;
+        }
+      });
+      return size;
+    }
+    if (data instanceof THREE.Texture) {
+      const array = data.source?.data || data.image?.data;
+      return array?.byteLength || 0;
+    }
+    return 0;
+  }
+};
+
+// src/core/loaders/GLTFLoader.ts
+var GLTFLoader2 = class {
+  static plainLoader = new GLTFLoader();
+  static dracoLoaderInstance = new GLTFLoader();
+  static dracoDecoder = new DRACOLoader();
+  static isDracoInitialized = false;
+  static getLoader(options = {}) {
+    const useDraco = options.draco === true;
+    if (useDraco) {
+      if (!this.isDracoInitialized) {
+        const path = options.decoderPath || "/draco/";
+        this.dracoDecoder.setDecoderPath(path);
+        this.dracoDecoder.setDecoderConfig({ type: "js" });
+        this.dracoDecoder.preload();
+        this.dracoLoaderInstance.setDRACOLoader(this.dracoDecoder);
+        this.isDracoInitialized = true;
+        console.info(`[GLTFLoader] Draco decoder initialized: ${path}`);
+      }
+      return this.dracoLoaderInstance;
+    }
+    return this.plainLoader;
+  }
+  static async load(entry, options = {}) {
+    const { id, url, hash } = entry;
+    const {
+      draco = false,
+      decoderPath,
+      onProgress,
+      onLoaded,
+      onError
+    } = options;
+    const loader = this.getLoader({ draco, decoderPath });
+    const cached = await ObjectCache.get(id);
+    if (cached && cached.hash === hash) {
+      console.info(`[GLTFLoader] Cache hit: ${id} (${draco ? "draco" : "standard"})`);
+      const model = cached.data.clone(true);
+      model.userData = { ...cached.data.userData, cached: true };
+      onLoaded?.(model, entry);
+      return model;
+    }
+    console.info(`[GLTFLoader] Loading: ${id} (${draco ? "Draco" : "Standard"})`);
+    return new Promise((resolve, reject) => {
+      loader.load(
+        url,
+        async (gltf) => {
+          try {
+            const scene = gltf.scene;
+            scene.name = id;
+            scene.animations = gltf.animations || [];
+            const box = new THREE.Box3().setFromObject(scene);
+            scene.position.sub(box.getCenter(new THREE.Vector3()));
+            scene.userData = {
+              sourceUrl: url,
+              manifestHash: hash,
+              loadedAt: Date.now(),
+              format: draco ? "gltf-draco" : "gltf",
+              draco
+            };
+            await ObjectCache.set(id, scene, hash);
+            onLoaded?.(scene, entry);
+            resolve(scene);
+          } catch (err) {
+            onError?.(err, url);
+            reject(err);
+          }
+        },
+        (progress) => {
+          if (progress.lengthComputable) {
+            onProgress?.({
+              loaded: progress.loaded,
+              total: progress.total,
+              percent: progress.loaded / progress.total * 100,
+              url
+            });
+          }
+        },
+        (error) => {
+          console.error(`[GLTFLoader] Error: ${id}`, error);
+          onError?.(error, url);
+          reject(error);
+        }
+      );
+    });
+  }
+  static async preload(entries, options = {}, onProgress) {
+    let completed = 0;
+    const total = entries.length;
+    await Promise.all(
+      entries.map(
+        (entry) => this.load(entry, {
+          ...options,
+          onLoaded: () => onProgress?.(++completed, total),
+          onError: (err, url) => console.error(`Preload failed: ${url}`, err)
+        })
+      )
+    );
+  }
+  static async invalidate(id) {
+    await ObjectCache.delete(id);
+  }
+  static async clearCache() {
+    await ObjectCache.clearAll();
+  }
+};
+
+// src/core/loaders/WebPHDRLoader.ts
+var WebPHDRLoader = class {
+  manager;
+  type = THREE.FloatType;
+  exposure = 1;
+  preserveHDR = true;
+  constructor(manager) {
+    this.manager = manager || new THREE.LoadingManager();
+  }
+  setDataType(type) {
+    this.type = type;
+    return this;
+  }
+  setExposure(exposure) {
+    this.exposure = exposure;
+    return this;
+  }
+  setPreserveHDR(preserve) {
+    this.preserveHDR = preserve;
+    return this;
+  }
+  load(url, onLoad, onProgress, onError) {
+    const loader = new THREE.FileLoader(this.manager);
+    loader.setResponseType("arraybuffer");
+    loader.load(
+      url,
+      (buffer) => {
+        try {
+          const result = this.parse(buffer);
+          const texture = new THREE.DataTexture(
+            result.data,
+            result.width,
+            result.height,
+            THREE.RGBAFormat,
+            result.type
+          );
+          texture.colorSpace = THREE.LinearSRGBColorSpace;
+          texture.minFilter = THREE.LinearFilter;
+          texture.magFilter = THREE.LinearFilter;
+          texture.generateMipmaps = false;
+          texture.needsUpdate = true;
+          texture.flipY = true;
+          texture.userData = {
+            format: "webp-hdr",
+            exposure: result.exposure,
+            maxLuminance: result.maxLuminance,
+            preserveHDR: this.preserveHDR
+          };
+          onLoad?.(texture, result);
+        } catch (error) {
+          onError?.(error);
+        }
+      },
+      onProgress,
+      (error) => onError?.(error)
+    );
+    return new THREE.DataTexture(new Uint8Array(4), 1, 1, THREE.RGBAFormat);
+  }
+  parse(buffer) {
+    const view = new DataView(buffer);
+    if (view.getUint32(0, true) !== 1179210327) {
+      throw new Error("Not a valid WebP file");
+    }
+    if (view.getUint32(8, true) !== 1346520407) {
+      throw new Error("Not a valid WebP file");
+    }
+    let offset = 12;
+    let exposure = this.exposure;
+    let maxLuminance = 16;
+    while (offset < buffer.byteLength) {
+      const chunkType = String.fromCharCode(
+        view.getUint8(offset),
+        view.getUint8(offset + 1),
+        view.getUint8(offset + 2),
+        view.getUint8(offset + 3)
+      );
+      const chunkSize = view.getUint32(offset + 4, true) + 8;
+      if (chunkType === "VP8X" || chunkType === "VP8L" || chunkType === "VP8 ") {
+        break;
+      }
+      if (chunkType === "EXIF" || chunkType === "XMP ") {
+        const chunkData = new Uint8Array(buffer, offset + 8, chunkSize - 8);
+        const text = new TextDecoder().decode(chunkData);
+        const exposureMatch = text.match(/Exposure[- ]?Value:\s*([0-9.-]+)/i);
+        const luminanceMatch = text.match(/MaxLuminance:\s*([0-9.-]+)/i);
+        if (exposureMatch) {
+          exposure = parseFloat(exposureMatch[1]);
+        }
+        if (luminanceMatch) {
+          maxLuminance = parseFloat(luminanceMatch[1]);
+        }
+      }
+      offset += chunkSize + chunkSize % 2;
+    }
+    const width = 1024;
+    const height = 512;
+    const size = width * height * 4;
+    const data = this.type === THREE.FloatType ? new Float32Array(size) : new Uint16Array(size);
+    for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+        const idx = (i * width + j) * 4;
+        const theta = i / height * Math.PI;
+        const phi = j / width * Math.PI * 2;
+        const sky = new THREE.Color(0.1, 0.3, 0.8).multiplyScalar(Math.cos(theta));
+        const sun = new THREE.Color(1, 0.9, 0.7).multiplyScalar(
+          Math.exp(-Math.pow(phi - Math.PI, 2) / 0.1) * Math.exp(-Math.pow(theta - Math.PI / 6, 2) / 0.2) * 1e3
+        );
+        const color = sky.clone().add(sun).multiplyScalar(exposure);
+        const maxChannel = Math.max(color.r, color.g, color.b, 1e-4);
+        const range = Math.min(255, Math.floor(maxChannel / maxLuminance * 255));
+        if (this.type === THREE.FloatType) {
+          data[idx] = color.r / (range + 1);
+          data[idx + 1] = color.g / (range + 1);
+          data[idx + 2] = color.b / (range + 1);
+          data[idx + 3] = range / 255;
+        } else {
+          const floatData = new Float32Array(4);
+          floatData[0] = color.r / (range + 1);
+          floatData[1] = color.g / (range + 1);
+          floatData[2] = color.b / (range + 1);
+          floatData[3] = range / 255;
+          const half = new Uint16Array(floatData.buffer);
+          data[idx] = half[0];
+          data[idx + 1] = half[1];
+          data[idx + 2] = half[2];
+          data[idx + 3] = half[3];
+        }
+      }
+    }
+    return {
+      width,
+      height,
+      data,
+      type: this.type,
+      exposure,
+      maxLuminance
+    };
+  }
+};
+
+// src/core/loaders/HDRILoader.ts
+var HDRILoader = class {
+  static rgbeLoader = new RGBELoader();
+  static webpLoader = new WebPHDRLoader();
+  /**
+   * Carga un HDRI de forma inteligente (con caché + hash)
+   */
+  static async load(entry, events = {}) {
+    const { id, url, hash } = entry;
+    const { onProgress, onLoaded, onError } = events;
+    const cached = await ObjectCache.get(id);
+    if (cached && cached.hash === hash && cached.data instanceof THREE.Texture) {
+      console.info(`[HDRILoader] Cache hit: ${id}`);
+      const texture = cached.data.clone();
+      texture.userData = { ...cached.data.userData, cached: true };
+      onLoaded?.(texture, entry);
+      return texture;
+    }
+    const isWebP = url.toLowerCase().endsWith(".webp");
+    const loader = isWebP ? this.webpLoader : this.rgbeLoader;
+    console.info(`[HDRILoader] Loading: ${id} (${isWebP ? "WebP-HDR" : "RGBE"})`);
+    return new Promise((resolve, reject) => {
+      loader.load(
+        url,
+        async (texture) => {
+          try {
+            texture.mapping = THREE.EquirectangularReflectionMapping;
+            texture.colorSpace = THREE.LinearSRGBColorSpace;
+            texture.minFilter = THREE.LinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+            texture.generateMipmaps = false;
+            texture.needsUpdate = true;
+            texture.name = id;
+            texture.userData = {
+              sourceUrl: url,
+              manifestHash: hash,
+              format: isWebP ? "webp-hdr" : "rgbe",
+              loadedAt: Date.now()
+            };
+            await ObjectCache.set(id, texture, hash);
+            onLoaded?.(texture, entry);
+            resolve(texture);
+          } catch (err) {
+            onError?.(err, url);
+            reject(err);
+          }
+        },
+        (progress) => {
+          if (progress.lengthComputable) {
+            onProgress?.({
+              loaded: progress.loaded,
+              total: progress.total,
+              percent: progress.loaded / progress.total * 100,
+              url
+            });
+          }
+        },
+        (error) => {
+          console.error(`[HDRILoader] Error loading ${id}:`, error);
+          onError?.(error, url);
+          reject(error);
+        }
+      );
+    });
+  }
+  /**
+   * Precarga múltiples HDRIs
+   */
+  static async preload(entries, onProgress) {
+    let completed = 0;
+    const total = entries.length;
+    await Promise.all(
+      entries.map(
+        (entry) => this.load(entry, {
+          onLoaded: () => {
+            completed++;
+            onProgress?.(completed, total);
+          },
+          onError: (err, url) => console.error(`HDRI preload failed: ${url}`, err)
+        })
+      )
+    );
+  }
+  /**
+   * Invalida caché de un HDRI específico
+   */
+  static async invalidate(id) {
+    const cached = await ObjectCache.get(id);
+    if (cached?.data instanceof THREE.Texture) {
+      cached.data.dispose();
+    }
+    await ObjectCache.delete(id);
+  }
+};
+
+// src/core/orchestrator/SceneOrchestrator.ts
+var SceneOrchestrator = class _SceneOrchestrator {
+  static instance = null;
+  scene;
+  camera;
+  renderer;
+  activeModel = null;
+  activeHDRI = null;
+  canvas;
+  animationId = null;
+  plugins = /* @__PURE__ */ new Map();
+  resizeHandler;
+  constructor(canvas, config = {}) {
+    this.canvas = canvas;
+    this.renderer = new THREE2.WebGLRenderer({
+      canvas,
+      antialias: config.antialias ?? true,
+      alpha: false,
+      powerPreference: "high-performance"
+    });
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    this.renderer.shadowMap.enabled = config.shadows ?? true;
+    this.renderer.toneMapping = config.toneMapping ?? THREE2.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = config.toneMappingExposure ?? 1;
+    if (config.clearColor) {
+      this.renderer.setClearColor(config.clearColor);
+    }
+    this.camera = new THREE2.PerspectiveCamera(
+      60,
+      canvas.clientWidth / canvas.clientHeight,
+      0.1,
+      1e3
+    );
+    this.camera.position.set(0, 1.6, 5);
+    this.scene = new THREE2.Scene();
+    if (config.background instanceof THREE2.Texture) {
+      this.scene.background = config.background;
+      this.scene.environment = config.background;
+    } else if (config.background) {
+      this.scene.background = new THREE2.Color(config.background);
+    }
+    this.resizeHandler = () => {
+      const { clientWidth, clientHeight } = this.canvas;
+      this.renderer.setSize(clientWidth, clientHeight);
+      this.camera.aspect = clientWidth / clientHeight;
+      this.camera.updateProjectionMatrix();
+    };
+    window.addEventListener("resize", this.resizeHandler);
+    const animate = () => {
+      this.animationId = requestAnimationFrame(animate);
+      this.renderer.render(this.scene, this.camera);
+    };
+    animate();
+  }
+  static getInstance(canvas, config) {
+    if (!_SceneOrchestrator.instance) {
+      if (!canvas) {
+        throw new Error("Canvas is required on first initialization");
+      }
+      _SceneOrchestrator.instance = new _SceneOrchestrator(canvas, config);
+    }
+    return _SceneOrchestrator.instance;
+  }
+  /* === PLUGIN SYSTEM === */
+  use(plugin) {
+    if (this.plugins.has(plugin.name)) {
+      console.warn(`[Orchestrator] Plugin "${plugin.name}" ya est\xE1 instalado`);
+      return this;
+    }
+    const context = {
+      scene: this.scene,
+      camera: this.camera,
+      renderer: this.renderer,
+      orchestrator: this
+    };
+    try {
+      plugin.install(context);
+      this.plugins.set(plugin.name, plugin);
+      console.info(`[Orchestrator] Plugin instalado: ${plugin.name}`);
+    } catch (err) {
+      console.error(`[Orchestrator] Error instalando plugin ${plugin.name}:`, err);
+    }
+    return this;
+  }
+  /* === MODELS === */
+  async setModel(entry, options) {
+    console.info(`[Orchestrator] Cambiando modelo \u2192 ${entry.id}`);
+    if (this.activeModel) {
+      this.scene.remove(this.activeModel);
+      this.activeModel = null;
+    }
+    const model = await GLTFLoader2.load(entry, {
+      draco: options?.draco,
+      onLoaded: (obj) => {
+        this.activeModel = obj;
+        this.scene.add(obj);
+        console.info(`[Orchestrator] Modelo activo: ${entry.id}`);
+      },
+      onError: (err) => {
+        console.error(`[Orchestrator] Error cargando modelo ${entry.id}`, err);
+      }
+    });
+    return model;
+  }
+  removeModel() {
+    if (this.activeModel) {
+      this.scene.remove(this.activeModel);
+      this.activeModel = null;
+    }
+  }
+  /* === HDRI === */
+  async setHDRI(entry) {
+    if (this.activeHDRI) {
+      this.activeHDRI.dispose();
+    }
+    const texture = await HDRILoader.load(entry, {
+      onLoaded: (tex) => {
+        this.activeHDRI = tex;
+        this.scene.environment = tex;
+        this.scene.background = tex;
+        console.info(`[Orchestrator] HDRI activo: ${entry.id}`);
+      }
+    });
+    return texture;
+  }
+  clearHDRI() {
+    if (this.activeHDRI) {
+      this.scene.environment = null;
+      this.scene.background = new THREE2.Color(0);
+      this.activeHDRI.dispose();
+      this.activeHDRI = null;
+    }
+  }
+  /* === CLEANING === */
+  dispose() {
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+      this.animationId = null;
+    }
+    window.removeEventListener("resize", this.resizeHandler);
+    for (const plugin of this.plugins.values()) {
+      plugin.dispose?.();
+    }
+    this.plugins.clear();
+    this.removeModel();
+    this.clearHDRI();
+    this.renderer.dispose();
+    this.renderer.forceContextLoss?.();
+    this.canvas.width = 1;
+    this.canvas.height = 1;
+    _SceneOrchestrator.instance = null;
+    console.info("[Orchestrator] Disposed completamente");
+  }
+  /* === GETTERS === */
+  getActiveModel() {
+    return this.activeModel;
+  }
+  getActiveHDRI() {
+    return this.activeHDRI;
+  }
+};
+
+// src/context/SceneContext.tsx
+import { jsx } from "react/jsx-runtime";
+var SceneContext = createContext(null);
+var SceneProvider = forwardRef(
+  ({ children, config }, ref) => {
+    useEffect(() => {
+      if (!ref) {
+        return;
+      }
+      if (typeof ref === "function") {
+        throw new Error(
+          "SceneProvider no soporta ref como funci\xF3n. Usa useRef()"
+        );
+      }
+      if (!ref.current) {
+        console.warn("SceneProvider: canvas ref no est\xE1 asignado a\xFAn");
+        return;
+      }
+      const orchestrator = SceneOrchestrator.getInstance(ref.current, config);
+      if (process.env.NODE_ENV === "development") {
+        window.__ORCHESTRATOR__ = orchestrator;
+      }
+    }, [ref, config]);
+    return /* @__PURE__ */ jsx(SceneContext.Provider, { value: { orchestrator: null }, children });
+  }
+);
+SceneProvider.displayName = "SceneProvider";
+var useScene = () => {
+  const context = useContext(SceneContext);
+  if (!context) {
+    throw new Error("useScene debe usarse dentro de <SceneProvider>");
+  }
+  if (!context.orchestrator) {
+    throw new Error(
+      "SceneOrchestrator a\xFAn no est\xE1 inicializado. Aseg\xFArate de que el canvas est\xE9 montado"
+    );
+  }
+  return context.orchestrator;
+};
+
+// src/context/CacheContext.tsx
+import { createContext as createContext2, useContext as useContext2, useState } from "react";
+
+// src/core/cache/utils/env.ts
+var isDev = () => {
+  if (typeof import.meta !== "undefined" && import.meta.env?.MODE === "development") {
+    return true;
+  }
+  if (typeof process !== "undefined" && process.env?.NODE_ENV === "development") {
+    return true;
+  }
+  return false;
+};
+
+// src/core/cache/FileWatcher.ts
+var FileWatcher = class _FileWatcher {
+  static instance = null;
+  watchers = /* @__PURE__ */ new Map();
+  manifest = [];
+  onChange;
+  constructor() {
+    if (!isDev()) {
+      return;
+    }
+    this.startPolling();
+  }
+  static getInstance() {
+    if (!_FileWatcher.instance) {
+      _FileWatcher.instance = new _FileWatcher();
+    }
+    return _FileWatcher.instance;
+  }
+  watch(manifest, onChange) {
+    if (!isDev()) {
+      return;
+    }
+    this.manifest = manifest;
+    this.onChange = onChange;
+    this.checkForChanges();
+  }
+  async checkForChanges() {
+    if (!this.manifest.length || !isDev()) {
+      return;
+    }
+    const changed = [];
+    for (const entry of this.manifest) {
+      try {
+        const response = await fetch(entry.url, {
+          method: "HEAD",
+          cache: "no-store"
+        });
+        const lastModified = response.headers.get("Last-Modified");
+        const etag = response.headers.get("ETag");
+        let currentStamp;
+        if (lastModified) {
+          const parsed = Date.parse(lastModified);
+          currentStamp = isNaN(parsed) ? Date.now() : parsed;
+        } else if (etag) {
+          const clean = etag.replace(/^W\//, "").replace(/"/g, "");
+          let hash = 0;
+          for (let i = 0; i < clean.length; i++) {
+            hash = (hash << 5) - hash + clean.charCodeAt(i);
+            hash = hash & hash;
+          }
+          currentStamp = hash;
+        } else {
+          currentStamp = Date.now();
+        }
+        const previousStamp = this.watchers.get(entry.url);
+        if (previousStamp !== void 0 && previousStamp !== currentStamp) {
+          changed.push(entry.id);
+        }
+        this.watchers.set(entry.url, currentStamp);
+      } catch {
+      }
+    }
+    if (changed.length > 0) {
+      this.onChange?.(changed);
+    }
+  }
+  startPolling() {
+    setInterval(() => this.checkForChanges(), 2e3);
+  }
+  dispose() {
+    this.watchers.clear();
+    this.onChange = (() => {
+    });
+  }
+};
+
+// src/core/cache/CacheValidator.ts
+import { keys as keys2 } from "idb-keyval";
+var CacheValidator = class _CacheValidator {
+  static isFirstLoad = true;
+  static async validate(options) {
+    const { manifest, onProgress, onComplete, forceUpdate = false } = options;
+    onProgress?.(0, "Iniciando validaci\xF3n de cach\xE9...");
+    if (isDev() && !forceUpdate) {
+      const watcher = FileWatcher.getInstance();
+      watcher.watch(manifest, (changedIds) => {
+        onProgress?.(100, `Recargando: ${changedIds.join(", ")}`);
+        onComplete?.({
+          validated: true,
+          updated: changedIds,
+          removed: [],
+          added: [],
+          errors: [],
+          durationMs: 0
+        });
+      });
+      onProgress?.(100, "Modo desarrollo: observando cambios...");
+      return { validated: true, updated: [], removed: [], added: [], errors: [], durationMs: 0 };
+    }
+    if (!_CacheValidator.isFirstLoad && !forceUpdate) {
+      onProgress?.(100, "Cach\xE9 ya validada");
+      return { validated: true, updated: [], removed: [], added: [], errors: [], durationMs: 0 };
+    }
+    onProgress?.(10, "Comparando manifest con cach\xE9 local...");
+    const start = performance.now();
+    const currentIds = new Set(manifest.map((m) => m.id));
+    const cachedKeys = await keys2();
+    const cachedIds = new Set(
+      cachedKeys.filter((k) => typeof k === "string" && k.startsWith("shared-3d:asset:")).map((k) => k.replace("shared-3d:asset:", ""))
+    );
+    const removed = [];
+    for (const id of cachedIds) {
+      if (!currentIds.has(id)) {
+        await ObjectCache.delete(id);
+        removed.push(id);
+      }
+    }
+    const toUpdate = [];
+    for (const entry of manifest) {
+      const cached = await ObjectCache.get(entry.id);
+      if (!cached || cached.hash !== entry.hash || cached.updatedAt < entry.updatedAt) {
+        toUpdate.push(entry);
+      }
+    }
+    const report = {
+      validated: true,
+      updated: toUpdate.map((e) => e.id),
+      removed,
+      added: toUpdate.filter((e) => !cachedIds.has(e.id)).map((e) => e.id),
+      errors: [],
+      durationMs: Math.round(performance.now() - start)
+    };
+    _CacheValidator.isFirstLoad = false;
+    onProgress?.(100, "Validaci\xF3n completa");
+    onComplete?.(report);
+    return report;
+  }
+  static reset() {
+    _CacheValidator.isFirstLoad = true;
+  }
+};
+
+// src/context/CacheContext.tsx
+import { jsx as jsx2 } from "react/jsx-runtime";
+var CacheContext = createContext2(null);
+var CacheProvider = ({ children }) => {
+  const [status, setStatus] = useState("idle");
+  const [progress, setProgress] = useState(0);
+  const [report, setReport] = useState(null);
+  const validate = async (manifest) => {
+    setStatus("validating");
+    setProgress(0);
+    const result = await CacheValidator.validate({
+      manifest,
+      onProgress: (p, msg) => {
+        setProgress(Math.round(p));
+        console.info(`[Cache] ${msg} (${p}%)`);
+      },
+      onComplete: (r) => {
+        setReport(r);
+        setStatus(r.errors.length > 0 ? "error" : "ready");
+      }
+    });
+    return result;
+  };
+  return /* @__PURE__ */ jsx2(CacheContext.Provider, { value: { status, progress, report, validate }, children });
+};
+var useCache = () => {
+  const context = useContext2(CacheContext);
+  if (!context) {
+    throw new Error("useCache debe usarse dentro de <CacheProvider>");
+  }
+  return context;
+};
+
+// src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts
+var AdvancedCameraCollisionPlugin = class {
+  constructor(distanceThreshold = 0.6, pushBackOffset = 0.1) {
+    this.distanceThreshold = distanceThreshold;
+    this.pushBackOffset = pushBackOffset;
+  }
+  name = "AdvancedCameraCollisionPlugin";
+  handle = null;
+  install({ camera, orchestrator }) {
+    if (!camera) {
+      return;
+    }
+    const check = () => {
+      const model = orchestrator.getActiveModel();
+      if (!model) {
+        this.handle = requestAnimationFrame(check);
+        return;
+      }
+      const dir = new THREE.Vector3();
+      camera.getWorldDirection(dir);
+      const ray = new THREE.Raycaster(
+        camera.position,
+        dir,
+        0,
+        this.distanceThreshold + this.pushBackOffset
+      );
+      const hits = ray.intersectObject(model, true);
+      if (hits.length > 0) {
+        const hitDistance = hits[0].distance;
+        const desiredDistance = this.distanceThreshold;
+        if (hitDistance < desiredDistance) {
+          const pushBack = desiredDistance - hitDistance + this.pushBackOffset;
+          camera.position.sub(dir.multiplyScalar(pushBack));
+        }
+      }
+      this.handle = requestAnimationFrame(check);
+    };
+    check();
+  }
+  dispose() {
+    if (this.handle !== null) {
+      cancelAnimationFrame(this.handle);
+      this.handle = null;
+    }
+  }
+};
+
+// src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts
+import { OrbitControls as OrbitControls2 } from "three/examples/jsm/controls/OrbitControls.js";
+var AdvancedOrbitControlsPlugin = class {
+  constructor(options = {}) {
+    this.options = options;
+    Object.assign(this.config, options);
+  }
+  name = "AdvancedOrbitControls";
+  controls;
+  config = {
+    enableDamping: true,
+    dampingFactor: 0.05,
+    panSpeed: 1,
+    rotateSpeed: 1,
+    zoomSpeed: 1,
+    minDistance: 0.1,
+    maxDistance: 1e3,
+    minPolarAngle: 0,
+    maxPolarAngle: Math.PI
+  };
+  install({ camera, renderer }) {
+    this.controls = new OrbitControls2(camera, renderer.domElement);
+    Object.assign(this.controls, this.config);
+    const animate = () => {
+      this.controls.update();
+      requestAnimationFrame(animate);
+    };
+    animate();
+  }
+  /* === API PÚBLICA === */
+  setPanEnabled(enabled) {
+    this.controls.enablePan = enabled;
+  }
+  setRotateEnabled(enabled) {
+    this.controls.enableRotate = enabled;
+  }
+  setZoomEnabled(enabled) {
+    this.controls.enableZoom = enabled;
+  }
+  setAllEnabled(enabled) {
+    this.controls.enablePan = enabled;
+    this.controls.enableRotate = enabled;
+    this.controls.enableZoom = enabled;
+  }
+  dispose() {
+    this.controls?.dispose();
+  }
+};
+
+// src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts
+var RaycasterManager = class extends THREE.EventDispatcher {
+  raycaster = new THREE.Raycaster();
+  pointer = new THREE.Vector2();
+  scene;
+  camera;
+  domElement;
+  interactableObjects = [];
+  lastHoverObject = null;
+  isEnabled = false;
+  isDragging = false;
+  currentDragObject = null;
+  dragStartPosition = new THREE.Vector2();
+  lastRaycastTime = 0;
+  raycastThrottleMs = 16;
+  constructor(domElement) {
+    super();
+    this.domElement = domElement;
+    this.onPointerMove = this.onPointerMove.bind(this);
+    this.onPointerDown = this.onPointerDown.bind(this);
+    this.onPointerUp = this.onPointerUp.bind(this);
+    this.onClick = this.onClick.bind(this);
+    this.onTouchStart = this.onTouchStart.bind(this);
+    this.onTouchEnd = this.onTouchEnd.bind(this);
+    this.onTouchMove = this.onTouchMove.bind(this);
+    this.onContextMenu = this.onContextMenu.bind(this);
+  }
+  setModel(model) {
+    this.interactableObjects = [];
+    model.traverse((obj) => {
+      if (this.isInteractable(obj)) {
+        this.interactableObjects.push(obj);
+      }
+    });
+  }
+  isInteractable(obj) {
+    if (!obj.visible) {
+      return false;
+    }
+    if (obj.userData.isNotRaycaster) {
+      return false;
+    }
+    if (!obj.isMesh) {
+      return false;
+    }
+    return true;
+  }
+  initialize(scene, camera) {
+    this.scene = scene;
+    this.camera = camera;
+  }
+  setEnabled(enabled) {
+    if (this.isEnabled === enabled) {
+      return;
+    }
+    this.isEnabled = enabled;
+    enabled ? this.attachEvents() : this.detachEvents();
+  }
+  attachEvents() {
+    const el = this.domElement;
+    el.addEventListener("pointermove", this.onPointerMove, { passive: true });
+    el.addEventListener("pointerdown", this.onPointerDown, { passive: true });
+    el.addEventListener("pointerup", this.onPointerUp, { passive: true });
+    el.addEventListener("click", this.onClick, { passive: true });
+    el.addEventListener("contextmenu", this.onContextMenu);
+    el.style.cursor = "pointer";
+  }
+  detachEvents() {
+    const el = this.domElement;
+    el.removeEventListener("pointermove", this.onPointerMove);
+    el.removeEventListener("pointerdown", this.onPointerDown);
+    el.removeEventListener("pointerup", this.onPointerUp);
+    el.removeEventListener("click", this.onClick);
+    el.removeEventListener("contextmenu", this.onContextMenu);
+    el.style.cursor = "default";
+    this.clearHoverState();
+  }
+  onPointerMove(e) {
+    if (!this.isEnabled || !this.scene || !this.camera) {
+      return;
+    }
+    this.updatePointer(e);
+    this.isDragging && this.currentDragObject ? this.handleDrag(e) : this.throttledRaycast();
+  }
+  onPointerDown(e) {
+    if (!this.isEnabled || e.button !== 0) {
+      return;
+    }
+    this.updatePointer(e);
+    const hit = this.performRaycast()[0];
+    if (hit) {
+      this.isDragging = true;
+      this.currentDragObject = hit.object;
+      this.dragStartPosition.set(e.clientX, e.clientY);
+      this.dispatchEvent({ type: "objectdragstart", object: hit.object, startPosition: this.dragStartPosition.clone() });
+    }
+  }
+  onPointerUp(e) {
+    if (!this.isEnabled || !this.isDragging) {
+      return;
+    }
+    const endPos = new THREE.Vector2(e.clientX, e.clientY);
+    this.dispatchEvent({
+      type: "objectdragend",
+      object: this.currentDragObject,
+      startPosition: this.dragStartPosition.clone(),
+      endPosition: endPos,
+      totalDelta: endPos.clone().sub(this.dragStartPosition)
+    });
+    this.isDragging = false;
+    this.currentDragObject = null;
+  }
+  onClick(e) {
+    if (!this.isEnabled || this.isDragging) {
+      return;
+    }
+    this.updatePointer(e);
+    const hit = this.performRaycast()[0];
+    if (hit) {
+      this.dispatchEvent({ type: "objectclick", object: hit.object, point: hit.point, distance: hit.distance });
+    }
+  }
+  handleDrag(e) {
+    const current = new THREE.Vector2(e.clientX, e.clientY);
+    const delta = current.clone().sub(this.dragStartPosition);
+    this.dispatchEvent({
+      type: "objectdrag",
+      object: this.currentDragObject,
+      delta,
+      normalizedDelta: new THREE.Vector2(delta.x / this.domElement.clientWidth, delta.y / this.domElement.clientHeight)
+    });
+    this.dragStartPosition.copy(current);
+  }
+  throttledRaycast() {
+    const now = Date.now();
+    if (now - this.lastRaycastTime < this.raycastThrottleMs) {
+      return;
+    }
+    this.lastRaycastTime = now;
+    this.raycast();
+  }
+  raycast() {
+    if (!this.scene || !this.camera) {
+      return;
+    }
+    const hits = this.performRaycast();
+    const hit = hits?.[0] || null;
+    if (hit) {
+      const current = hit.object || null;
+      if (current !== this.lastHoverObject) {
+        if (this.lastHoverObject) {
+          this.dispatchEvent({ type: "objecthoverout", object: this.lastHoverObject });
+        }
+        if (current) {
+          this.dispatchEvent({ type: "objecthoverin", object: current, point: hit.point, distance: hit.distance });
+        }
+        this.lastHoverObject = current;
+      }
+      if (current) {
+        this.dispatchEvent({ type: "objecthovermove", object: current, point: hit.point, distance: hit.distance });
+      }
+    }
+  }
+  performRaycast() {
+    if (!this.scene || !this.camera) {
+      return [];
+    }
+    this.raycaster.setFromCamera(this.pointer, this.camera);
+    const intersects = this.raycaster.intersectObjects(this.interactableObjects, true);
+    return intersects.filter((i) => !i.object.name.endsWith("-wireframe")).slice(0, 1).map((i) => ({ object: i.object, point: i.point, distance: i.distance }));
+  }
+  updatePointer(e) {
+    const rect = this.domElement.getBoundingClientRect();
+    this.pointer.x = (e.clientX - rect.left) / rect.width * 2 - 1;
+    this.pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  }
+  clearHoverState() {
+    if (this.lastHoverObject) {
+      this.dispatchEvent({ type: "objecthoverout", object: this.lastHoverObject });
+      this.lastHoverObject = null;
+    }
+  }
+  onContextMenu = (e) => e.preventDefault();
+  onTouchStart = this.onPointerDown;
+  onTouchMove = this.onPointerMove;
+  onTouchEnd = this.onPointerUp;
+};
+var AdvancedRaycasterPlugin = class {
+  constructor(model, onEvent) {
+    this.model = model;
+    this.onEvent = onEvent;
+    this._manager = new RaycasterManager(document.body);
+  }
+  name = "AdvancedRaycaster";
+  _manager;
+  install({ scene, camera, renderer, orchestrator }) {
+    this._manager = new RaycasterManager(renderer.domElement);
+    this._manager.initialize(scene, camera);
+    if (this.model) {
+      this._manager.setModel(this.model);
+    } else if (orchestrator.getActiveModel()) {
+      this._manager.setModel(orchestrator.getActiveModel());
+    }
+    const events = [
+      "objectclick",
+      "objecthoverin",
+      "objecthoverout",
+      "objecthovermove",
+      "objectdragstart",
+      "objectdrag",
+      "objectdragend"
+    ];
+    events.forEach((event) => {
+      this._manager.addEventListener(event, (e) => this.onEvent?.(e));
+    });
+    this._manager.setEnabled(true);
+  }
+  dispose() {
+    this._manager.setEnabled(false);
+  }
+  get manager() {
+    return this._manager;
+  }
+};
+
+// src/core/orchestrator/plugins/AnnotationsPlugin.ts
+var AnnotationsPlugin = class {
+  constructor(data) {
+    this.data = data;
+  }
+  name = "Annotations";
+  annotations = /* @__PURE__ */ new Map();
+  camera;
+  scene;
+  install({ camera, scene }) {
+    this.camera = camera;
+    this.scene = scene;
+    this.data.forEach((ann) => {
+      const label = this.createLabel(ann.content, ann.offset || new THREE.Vector3(0, 1, 0));
+      label.position.copy(ann.position);
+      label.userData.annotationId = ann.id;
+      label.visible = ann.visible ?? true;
+      if (ann.target) {
+        label.userData.followTarget = ann.target;
+      }
+      this.annotations.set(ann.id, label);
+      this.scene.add(label);
+    });
+    const update = () => {
+      this.annotations.forEach((label) => {
+        if (label.userData.followTarget) {
+          label.userData.followTarget.getWorldPosition(label.position);
+          label.position.add(label.userData.offset || new THREE.Vector3(0, 1, 0));
+        }
+        label.lookAt(this.camera.position);
+      });
+      requestAnimationFrame(update);
+    };
+    update();
+  }
+  createLabel(content, offset) {
+    const div = document.createElement("div");
+    div.className = "annotation-label";
+    div.style.cssText = `
       background: rgba(0,0,0,0.8);
       color: white;
       padding: 8px 12px;
@@ -9,6 +1193,2266 @@ import {c,d,a,e,f}from'./chunk-AV5IKSIK.js';export{a as THREE,j as THREE_VERSION
       white-space: nowrap;
       backdrop-filter: blur(4px);
       border: 1px solid rgba(255,255,255,0.2);
-    `,typeof e=="string"?r.innerHTML=e:r.appendChild(e);let o=document.createElement("canvas"),s=o.getContext("2d"),i=new a.CanvasTexture(o);i.minFilter=a.LinearFilter,i.wrapS=a.ClampToEdgeWrapping,i.wrapT=a.ClampToEdgeWrapping;let c=new a.SpriteMaterial({map:i,depthTest:false}),l=new a.Sprite(c);l.userData.offset=t,l.userData.canvas=o,l.userData.div=r;let m=()=>{let f=r.offsetWidth,u=r.offsetHeight;o.width=f*2,o.height=u*2,o.style.width=f+"px",o.style.height=u+"px",s.scale(2,2),s.fillStyle="transparent",s.fillRect(0,0,o.width,o.height),i.needsUpdate=true;};return new ResizeObserver(m).observe(r),m(),l}dispose(){this.annotations.forEach(e=>{e.parent&&e.parent.remove(e),e instanceof a.Sprite&&(e.material.map?.dispose(),e.material.dispose());}),this.annotations.clear();}};var _=class{constructor(e){this.config=e;this.config.reductionPercentages=this.config.reductionPercentages||[.5,.2];}name="AutoLODSystem";lods=new Map;camera;simplifyGeometry(e,t){let r=new SimplifyModifier,o=Math.floor(e.attributes.position.count*t);return r.modify(e,o)}createLODLevels(e){let t=new a.LOD,r=e.clone();r.visible=true,t.addLevel(r,0);let o=e.clone();o.traverse(c=>{c instanceof a.Mesh&&c.geometry&&(c.geometry=this.simplifyGeometry(c.geometry,this.config.reductionPercentages[0]));}),t.addLevel(o,this.config.distances[0]);let s=e.clone();s.traverse(c=>{c instanceof a.Mesh&&c.geometry&&(c.geometry=this.simplifyGeometry(c.geometry,this.config.reductionPercentages[1]));}),t.addLevel(s,this.config.distances[1]);let i=new a.Object3D;return i.visible=false,t.addLevel(i,this.config.distances[2]),t}install({camera:e,orchestrator:t}){this.camera=e;let r=c=>{let l=this.createLODLevels(c);c.parent&&(c.parent.add(l),c.parent.remove(c)),l.position.copy(c.position),l.quaternion.copy(c.quaternion),l.scale.copy(c.scale),this.lods.set(c,l);},o=t.getActiveModel();o&&r(o);let s=t.setModel;s&&(t.setModel=(...c)=>s.apply(t,c).then(l=>(this.lods.forEach(m=>m.parent?.remove(m)),this.lods.clear(),r(l),l)));let i=()=>{this.lods.forEach(c=>c.update(this.camera)),requestAnimationFrame(i);};i();}dispose(){this.lods.forEach(e=>{e.parent&&e.parent.remove(e),e.traverse(t=>{t instanceof a.Mesh&&(t.geometry?.dispose(),Array.isArray(t.material)?t.material.forEach(r=>r.dispose()):t.material?.dispose());});}),this.lods.clear();}};var O=class{constructor(e){this.data=e;}name="Hotspot";hotspots=new Map;install({scene:e}){this.data.forEach(t=>{let r=new a.SphereGeometry(.3,16,16),o=new a.MeshBasicMaterial({color:65280,transparent:true,opacity:.5}),s=new a.Mesh(r,o);s.position.copy(t.position),t.target&&(s.userData.target=t.target),s.userData.hotspotId=t.id,s.userData.onClick=t.onClick,e.add(s),this.hotspots.set(t.id,s);});}dispose(){this.hotspots.forEach(e=>{e.parent&&e.parent.remove(e),e.geometry.dispose(),Array.isArray(e.material)?e.material.forEach(t=>t.dispose()):e.material.dispose();}),this.hotspots.clear();}};var K=class{constructor(e){this.config=e;}name="LODSystem";lodObjects=new Map;camera;install({camera:e,orchestrator:t}){this.camera=e;let r=c=>{let l=new a.LOD;this.config.forEach((m,p)=>{let f=m.levels[p]?.model.clone()||c.clone();f.visible=false,l.addLevel(f,m.levels[p]?.distance||0);}),c.parent&&(c.parent.add(l),c.parent.remove(c)),l.position.copy(c.position),l.quaternion.copy(c.quaternion),l.scale.copy(c.scale),this.lodObjects.set(c,l),l.originalModel=c;},o=t.getActiveModel();o&&r(o);let s=t.setModel;s&&(t.setModel=(c,l)=>{s.call(t,c,l).then(m=>{this.lodObjects.forEach(p=>{p.parent&&p.parent.remove(p);}),this.lodObjects.clear(),r(m);});});let i=()=>{this.lodObjects.forEach(c=>{c.update(this.camera);}),requestAnimationFrame(i);};i();}dispose(){this.lodObjects.forEach(e=>{e.parent&&e.parent.remove(e),e.traverse(t=>{t instanceof a.Mesh&&(t.geometry?.dispose(),Array.isArray(t.material)?t.material.forEach(r=>r.dispose()):t.material?.dispose());});}),this.lodObjects.clear();}};var Z=class{name="MeasurementTool";points=[];line;spheres=[];onMeasure;constructor(e){this.onMeasure=e??(()=>{});}install({scene:e,camera:t,renderer:r,orchestrator:o}){let s=i=>{if(i.button!==0)return;let c=r.domElement.getBoundingClientRect(),l=(i.clientX-c.left)/c.width*2-1,m=-((i.clientY-c.top)/c.height)*2+1,p=new a.Raycaster;p.setFromCamera(new a.Vector2(l,m),t);let f=o.getActiveModel();if(!f)return;let u=p.intersectObject(f,true);if(u.length===0)return;let d=u[0].point.clone();this.points.push(d);let E=new a.Mesh(new a.SphereGeometry(.05),new a.MeshBasicMaterial({color:65280}));if(E.position.copy(d),e.add(E),this.spheres.push(E),this.onMeasure?.({point:d,points:[...this.points]}),this.points.length===2){let h=this.points[0].distanceTo(this.points[1]);this.onMeasure?.({point:d,distance:h,points:[...this.points]});let b=new a.BufferGeometry().setFromPoints(this.points),v=new a.LineBasicMaterial({color:65280});this.line=new a.Line(b,v),e.add(this.line),setTimeout(()=>this.reset(),3e3);}};r.domElement.addEventListener("pointerdown",s,{capture:true}),this.dispose=()=>{r.domElement.removeEventListener("pointerdown",s,{capture:true}),this.reset();};}reset(){this.points=[],this.line&&(this.line.parent?.remove(this.line),this.line.geometry.dispose(),Array.isArray(this.line.material)?this.line.material.forEach(e=>e.dispose()):this.line.material.dispose(),this.line=void 0),this.spheres.forEach(e=>{e.parent?.remove(e),e.geometry.dispose(),Array.isArray(e.material)?e.material.forEach(t=>t.dispose()):e.material.dispose();}),this.spheres=[];}dispose(){this.reset();}};var Y=class{name="OrbitControls";controls;install({camera:e,renderer:t}){this.controls=new OrbitControls(e,t.domElement),this.controls.enableDamping=true,this.controls.dampingFactor=.05,this.controls.rotateSpeed=.8,this.controls.minDistance=1,this.controls.maxDistance=50,this.controls.maxPolarAngle=Math.PI/2.1;let r=()=>{this.controls.update(),requestAnimationFrame(r);};r();}dispose(){this.controls?.dispose();}};var j=class{name="Raycaster";raycaster=new a.Raycaster;pointer=new a.Vector2;hovered=null;onEvent;constructor(e){this.onEvent=e??(()=>{});}install({scene:e,camera:t,renderer:r}){let o=r.domElement,s=c=>{this.pointer.x=c.clientX/o.clientWidth*2-1,this.pointer.y=-(c.clientY/o.clientHeight)*2+1,this.checkIntersection(e,t);},i=c=>{this.pointer.x=c.clientX/o.clientWidth*2-1,this.pointer.y=-(c.clientY/o.clientHeight)*2+1;let l=this.getIntersection(e,t);l&&this.onEvent?.({type:"click",object:l.object,point:l.point});};o.addEventListener("pointermove",s),o.addEventListener("click",i),this.dispose=()=>{o.removeEventListener("pointermove",s),o.removeEventListener("click",i),this.hovered=null;};}checkIntersection(e,t){this.raycaster.setFromCamera(this.pointer,t);let o=this.raycaster.intersectObjects(e.children,true)[0];o&&o.object!==this.hovered?(this.hovered&&this.onEvent?.({type:"leave",object:this.hovered}),this.hovered=o.object,this.onEvent?.({type:"hover",object:o.object,point:o.point})):!o&&this.hovered&&(this.onEvent?.({type:"leave",object:this.hovered}),this.hovered=null);}getIntersection(e,t){return this.raycaster.setFromCamera(this.pointer,t),this.raycaster.intersectObjects(e.children,true)[0]||null}dispose(){}};var J=class{constructor(e={strength:1.5,radius:.4,threshold:0}){this.options=e;}name="PostProcessing";composer;bloomPass;install({scene:e,camera:t,renderer:r}){this.composer=new EffectComposer(r),this.composer.setSize(r.domElement.width,r.domElement.height);let o=new RenderPass(e,t);this.composer.addPass(o),this.bloomPass=new UnrealBloomPass(new a.Vector2(r.domElement.width,r.domElement.height),this.options.strength,this.options.radius,this.options.threshold),this.composer.addPass(this.bloomPass);let s=r.render.bind(r);r.render=()=>{this.composer.render();};let i=()=>{this.composer.setSize(r.domElement.width,r.domElement.height),this.bloomPass.resolution.set(r.domElement.width,r.domElement.height);};window.addEventListener("resize",i),this.dispose=()=>{window.removeEventListener("resize",i),r.render=s,this.composer.dispose();};}setBloom(e){this.bloomPass&&(this.bloomPass.strength=e);}dispose(){}};var g=()=>xe();var it=(n,e={})=>{let{draco:t=false,autoLoad:r=true}=e,o=g(),[s,i]=useState(null),[c,l]=useState(false),[m,p]=useState(null);return useEffect(()=>{!n||!r||(l(true),p(null),o.setModel(n,{draco:t}).then(u=>{i(u),l(false);}).catch(u=>{p(u),l(false);}));},[n?.id,t]),{model:s,loading:c,error:m,load:()=>n&&o.setModel(n,{draco:t})}};var D=()=>g().getActiveModel();var lt=n=>{let e=g(),[t,r]=useState(null),[o,s]=useState(false);return useEffect(()=>{n&&(s(true),e.setHDRI(n).then(c=>{r(c),s(false);}).catch(()=>s(false)));},[n?.id]),{hdri:t,loading:o,clear:()=>e.clearHDRI()}};var mt=n=>{let e=g();useEffect(()=>{let t=new j(n);return e.use(t),()=>{}},[n]);};var dt=()=>He();var ft=(n,e=true)=>{let t=D();useEffect(()=>{if(!t||!t.animations)return;let r=t.animations.find(l=>l.name===n);if(!r)return;let o=new a.AnimationMixer(t),s=o.clipAction(r);e&&s.play();let i=new a.Clock,c=()=>{o.update(i.getDelta()),requestAnimationFrame(c);};return c(),()=>{s.stop();}},[t,n,e]);};var Et=({distanceThreshold:n=.6,pushBackOffset:e=.1,enabled:t=true})=>{let r=g();return useEffect(()=>{if(!t)return;let o=new z(n,e);return r.use(o),()=>{o.dispose();}},[t,n,e]),null};var k=new a.Vector3,I=new a.Vector3,ee=new a.Vector3,Se=new a.Vector2,Le=new a.Vector2,ce=new a.Plane,le=new a.Quaternion,te=new a.Raycaster,vt=({children:n,defaultEnabled:e=true,enableRotationCompensation:t=true,transitionDuration:r=0,onDragStart:o,onDrag:s,onDragEnd:i})=>{let c=g(),l=c.getActiveModel(),m=c.camera,[p,f]=useState(e),[u,d]=useState(false),[E,h]=useState(null),b=useRef(new Map);return useEffect(()=>{if(!l||!m)return;let y=new A(l,P=>{if(!p)return;let C=false,M=new a.Vector2,T=null;switch(P.type){case "objectdragstart":C=true,T=P.object,M.copy(P.startPosition),T&&!b.current.has(T)&&b.current.set(T,{position:T.position.clone(),quaternion:T.quaternion.clone()}),o?.(P.object);break;case "objectdrag":C&&T&&(T.getWorldPosition(k),m.getWorldDirection(I),ce.setFromNormalAndCoplanarPoint(I,k),Se.set(P.currentPosition.x/window.innerWidth*2-1,-(P.currentPosition.y/window.innerHeight)*2+1),Le.set(M.x/window.innerWidth*2-1,-(M.y/window.innerHeight)*2+1),te.setFromCamera(Se,m),te.ray.intersectPlane(ce,k),te.setFromCamera(Le,m),te.ray.intersectPlane(ce,I),k&&I&&(ee.subVectors(k,I),t&&l&&(l.getWorldQuaternion(le),le.invert(),ee.applyQuaternion(le)),T.position.add(ee),s?.(T,ee.clone())),M.copy(P.currentPosition));break;case "objectdragend":C&&i?.(P.object);break}});return c.use(y),h(y),()=>{y.dispose();}},[l,m,o,s,i,t]),useEffect(()=>{E?.manager.setEnabled(p);},[E,p]),jsx(Fragment,{children:n({isEnabled:p,toggleEnabled:()=>f(y=>!y),setEnabled:y=>f(y),resetAll:()=>{if(u)return;d(true);let y=r;if(y<=0){b.current.forEach((M,T)=>{T.position.copy(M.position),T.quaternion.copy(M.quaternion);}),d(false);return}let P=Date.now(),C=()=>{let M=Date.now()-P,T=Math.min(M/y,1);b.current.forEach((Ee,ge)=>{ge.position.lerp(Ee.position,T),ge.quaternion.slerp(Ee.quaternion,T);}),T<1?requestAnimationFrame(C):d(false);};requestAnimationFrame(C);},isResetting:u})})};var Rt=({children:n,defaultEnabled:e=true,...t})=>{let r=g(),[o,s]=useState(e),[i,c]=useState(e),[l,m]=useState(e),[p,f]=useState(null);useEffect(()=>{let R=new q(t);return r.use(R),f(R),R.setAllEnabled(e),()=>{R.dispose();}},[]),useEffect(()=>{p?.setPanEnabled(o);},[p,o]),useEffect(()=>{p?.setRotateEnabled(i);},[p,i]),useEffect(()=>{p?.setZoomEnabled(l);},[p,l]);let u=R=>{s(R),c(R),m(R);};return jsx(Fragment,{children:n({panEnabled:o,rotateEnabled:i,zoomEnabled:l,isActive:o||i||l,setPanEnabled:s,setRotateEnabled:c,setZoomEnabled:m,setAllEnabled:u,togglePan:()=>s(R=>!R),toggleRotate:()=>c(R=>!R),toggleZoom:()=>m(R=>!R),toggleAll:()=>u(!(i&&o&&l))})})};var xt=({model:n,onClick:e,onHoverIn:t,onHoverOut:r,onHoverMove:o,onDragStart:s,onDrag:i,onDragEnd:c})=>{let l=g(),m=D();return useEffect(()=>{let p=new A(n||m||void 0,f=>{switch(f.type){case "objectclick":e?.(f);break;case "objecthoverin":t?.(f);break;case "objecthoverout":r?.(f);break;case "objecthovermove":o?.(f);break;case "objectdragstart":s?.(f);break;case "objectdrag":i?.(f);break;case "objectdragend":c?.(f);break}});l.use(p);},[n,m,e,t,r,o,s,i,c]),null};var Ht=({intensity:n=.5,color:e=16777215})=>{let{scene:t}=g();return useEffect(()=>{let r=new a.AmbientLight(e,n);return t.add(r),()=>{t.remove(r),r.dispose();}},[n,e]),null};var Dt=({steps:n,loop:e=false,autoplay:t=true})=>{let r=D(),o=useRef(null),s=useRef(new Map),i=useRef(new a.Clock);useEffect(()=>{if(!r||!r.animations)return;let l=new a.AnimationMixer(r);o.current=l,r.animations.forEach(p=>{let f=l.clipAction(p);s.current.set(p.name,f);}),t&&c();let m=()=>{l.update(i.current.getDelta()),requestAnimationFrame(m);};return m(),()=>{l.stopAllAction();}},[r]);let c=()=>{let l=0;n.forEach(m=>{let p=s.current.get(m.clipName);p&&(setTimeout(()=>{p.reset().play();},l),l+=(m.delay||0)+(m.duration||p.getClip().duration*1e3));}),e&&setTimeout(c,l);};return null};var At=({annotations:n})=>{let e=g();return useEffect(()=>{let t=n.map(o=>{let s=typeof o.target=="string"?e.scene.getObjectByName(o.target):o.target,i=typeof o.content=="string"?o.content:St.isValidElement(o.content)?o.content.props.children:String(o.content);return {id:o.id,position:new a.Vector3(...o.position),target:s,content:i,offset:o.offset?new a.Vector3(...o.offset):void 0}}),r=new Q(t);return e.use(r),()=>{r.dispose();}},[n]),null};var Ft=()=>{let{renderer:n}=g();return useEffect(()=>{if(!n)return;n.xr.enabled=true;let e=ARButton.createButton(n);return document.body.appendChild(e),()=>{e.parentNode&&e.parentNode.removeChild(e);}},[n]),null};var It=({mediumDistance:n=20,lowDistance:e=50,hideDistance:t=100})=>{let r=g();return useEffect(()=>{let o=new _({distances:[n,e,t]});return r.use(o),()=>{o.dispose();}},[n,e,t]),null};var Ae=forwardRef(({config:n,children:e,...t},r)=>jsxs(U,{ref:r,config:n,children:[jsx("canvas",{ref:r,...t}),e]}));Ae.displayName="Canvas";var Ut=({intensity:n=1,color:e=16777215,position:t=[5,10,7.5],castShadow:r=true,shadowMapSize:o=2048})=>{let{scene:s}=g();return useEffect(()=>{let i=new a.DirectionalLight(e,n);if(i.position.set(...t),r&&(i.castShadow=true,i.shadow.mapSize.width=o,i.shadow.mapSize.height=o,i.shadow.camera.near=.1,i.shadow.camera.far=50,i.shadow.camera.left=-20,i.shadow.camera.right=20,i.shadow.camera.top=20,i.shadow.camera.bottom=-20,i.shadow.bias=-1e-4),s.add(i),process.env.NODE_ENV==="development"){let c=new a.DirectionalLightHelper(i,2);return s.add(c),()=>{s.remove(i),s.remove(c),i.dispose(),c.dispose();}}return ()=>{s.remove(i),i.dispose();}},[n,e,t,r,o]),null};var zt={m:1,cm:100,mm:1e3,px:3779.527559,in:39.3701,ft:3.28084,km:.001},je=(n,e,t)=>`${(n*zt[e]).toFixed(t)}${e}`,qt=({children:n,className:e,unit:t="m",decimals:r=2})=>{let o=g(),s=useRef(0),[i,c]=useState(0),[l,m]=useState(null),p=()=>{let E=o.getActiveModel();if(!E||!o.camera)return 0;let h=new a.Vector3;return E.getWorldPosition(h),o.camera.position.distanceTo(h)};if(useEffect(()=>{let E=()=>{let h=p();l===null&&h>0&&m(h),c(h),s.current=requestAnimationFrame(E);};return s.current=requestAnimationFrame(E),()=>{s.current&&cancelAnimationFrame(s.current);}},[o,l]),l===null)return jsx("div",{className:e,children:"Calculating initial distance\u2026"});let f=Math.max(0,Math.min(100,i/l*100)),u=je(i,t,r),d=je(l,t,r);return jsx("div",{className:e,children:n({distance:i,formatted:u,percentage:f,initialDistance:l,formattedInitial:d})})};var Qt={studio:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/studio.exr",sunset:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/sunset.exr",dawn:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/dawn.exr",night:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/night.exr",warehouse:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/warehouse.exr",forest:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/forest.exr",apartment:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/apartment.exr",city:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/city.exr",park:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/park.exr",lobby:"https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/lobby.exr"},_t=({name:n,intensity:e=1,blur:t=0})=>{let r=g();return useEffect(()=>{let o=Qt[n];if(!o){console.warn(`EnvironmentPreset: "${n}" no encontrado`);return}let s=new f;return s.setDataType(a.HalfFloatType),s.load(o,i=>{i.mapping=a.EquirectangularReflectionMapping,r.scene.environment=i,r.scene.background=i,r.scene.backgroundBlurriness=t,r.scene.environmentIntensity=e;}),()=>{r.scene.environment&&(r.scene.environment.dispose(),r.scene.environment=null),r.scene.background&&(r.scene.background instanceof a.Color||r.scene.background.dispose(),r.scene.background=null);}},[n,e,t]),null};var me=class extends Component{state={hasError:false};static getDerivedStateFromError(){return {hasError:true}}componentDidCatch(e,t){console.error("Error 3D capturado:",e,t);}render(){return this.state.hasError?this.props.fallback||jsx("div",{className:"text-red-500",children:"Error al cargar modelo 3D"}):this.props.children}};var er={mirror:{reflective:true,color:16777215,roughness:0,metalness:1},glass:{reflective:true,color:8965375,roughness:0,metalness:0,opacity:.3,transparent:true},metal:{reflective:true,color:8947848,roughness:.1,metalness:1},concrete:{reflective:false,color:10066329,roughness:.9,metalness:0},wood:{reflective:false,color:9127187,roughness:.8,metalness:0},water:{reflective:true,color:35071,roughness:0,metalness:.1,opacity:.7,transparent:true},custom:{reflective:true,color:16777215,roughness:0,metalness:1}},tr=({type:n="mirror",size:e,height:t=0,blur:r=.8,resolution:o=1024,...s})=>{let i=g(),c=i.scene,l=i.camera;return useEffect(()=>{if(!l)return;let m=er[n],p=s.color??m.color,f=s.roughness??m.roughness,u=s.metalness??m.metalness,d=s.opacity??m.opacity??1,E=s.transparent??m.transparent??false,h;if(m.reflective&&e){let b=new a.PlaneGeometry(e,e);h=new Reflector(b,{clipBias:.003,textureWidth:o,textureHeight:o,color:new a.Color(p)}),Array.isArray(h.material)?h.material.forEach(v=>{v.roughness=f,v.metalness=u,v.opacity=d,v.transparent=E;}):(h.material.roughness=f,h.material.metalness=u,h.material.opacity=d,h.material.transparent=E);}else {let b=e?new a.PlaneGeometry(e,e):new a.PlaneGeometry(2,2),v=new a.MeshStandardMaterial({color:p,roughness:f,metalness:u,opacity:d,transparent:E,side:a.DoubleSide});h=new a.Mesh(b,v),h.receiveShadow=true,e||(h.onBeforeRender=()=>{let w=l.position.length()*10;h.scale.set(w,w,1);});}return h.rotation.x=-Math.PI/2,h.position.y=t,c.add(h),()=>{c.remove(h),"material"in h&&(Array.isArray(h.material)?h.material.forEach(b=>b.dispose()):h.material.dispose()),h.geometry.dispose();}},[n,e,t,r,o,...Object.values(s)]),null};var or=({entry:n})=>{let e=g();return useEffect(()=>{e.setHDRI(n);},[n.id]),null};var sr=({id:n,position:e,target:t,onClick:r})=>{let o=g();return useEffect(()=>{let s=new O([{id:n,position:new a.Vector3(...e),target:t,onClick:r}]);return o.use(s),()=>s.dispose()},[n,e,t,r]),null};var ir=({hotspots:n})=>{let e=g();return useEffect(()=>{let t=n.map(o=>({id:o.id,position:new H.Vector3(...o.position),target:typeof o.target=="string"?e.scene.getObjectByName(o.target):o.target,onClick:o.onClick,offset:o.offset?new H.Vector3(...o.offset):void 0})),r=new O(t);return e.use(r),()=>{r.dispose();}},[n,e]),null};var lr=({entry:n,instances:e,draco:t=false,castShadow:r=true,receiveShadow:o=true})=>{let i=g().scene,c=useRef(new a.Group),l=useRef(new Map);return useEffect(()=>{let m=true;return (async()=>{if(m)try{let u=(await S.load(n,{draco:t})).clone();l.current.forEach(d=>{i.remove(d),d.geometry.dispose(),Array.isArray(d.material)?d.material.forEach(E=>E.dispose()):d.material?.dispose();}),l.current.clear(),u.traverse(d=>{if(!(d instanceof a.Mesh))return;let E=d.geometry,h=Array.isArray(d.material)?d.material[0]:d.material,b=e.length,v=new a.InstancedMesh(E,h,b);v.castShadow=r,v.receiveShadow=o;let R=new a.Object3D,w=new a.Color;e.forEach((y,P)=>{R.position.copy(y.position),y.rotation instanceof a.Euler?R.rotation.copy(y.rotation):y.rotation instanceof a.Quaternion&&R.quaternion.copy(y.rotation),typeof y.scale=="number"?R.scale.setScalar(y.scale):y.scale?R.scale.copy(y.scale):R.scale.set(1,1,1),R.updateMatrix(),v.setMatrixAt(P,R.matrix),y.color&&(w.set(y.color),v.setColorAt(P,w)),y.visible===!1&&v.instanceMatrix.setUsage(a.DynamicDrawUsage);}),h instanceof a.Material&&(v.instanceColor=h.vertexColors?null:new a.InstancedBufferAttribute(new Float32Array(b*3),3)),v.instanceMatrix.needsUpdate=!0,v.instanceColor&&(v.instanceColor.needsUpdate=!0),i.add(v),l.current.set(d.uuid,v);}),c.current.add(u),i.add(c.current);}catch(f){console.error("Error loading InstancedModel:",f);}})(),()=>{m=false,l.current.forEach(f=>{i.remove(f),f.geometry.dispose(),Array.isArray(f.material)?f.material.forEach(u=>u.dispose()):f.material?.dispose();}),l.current.clear(),c.current.parent&&c.current.parent.remove(c.current);}},[n,e,t,r,o]),null};var mr=({levels:n,hysteresis:e=.1})=>{let t=g();return useEffect(()=>{let r=new K([{levels:n,hysteresis:e}]);return t.use(r),()=>{r.dispose();}},[n,e]),null};var ur=({enabled:n=true,color:e="#00ff00",onMeasure:t})=>{let r=g();return useEffect(()=>{if(!n)return;let o=new Z(s=>{s.distance!==void 0&&s.points.length===2&&t?.(s.distance,[s.points[0],s.points[1]]);});return r.use(o),()=>{o.dispose();}},[n,t]),null};var ue=({entry:n,draco:e=false,children:t})=>{let r=g(),[o,s]=useState(null);return useEffect(()=>{(async()=>{let c=await r.setModel(n,{draco:e});s(c);})();},[n.id,e]),o?t?.(o):null};var gr=({entries:n,draco:e=false})=>(useEffect(()=>{n.forEach(t=>{S.load(t,{draco:e}).catch(()=>{});});},[n,e]),null);var yr=()=>{let n=g();return useEffect(()=>{n.use(new Y);},[]),null};var Rr=({intensity:n=1,color:e=16777215,position:t=[0,5,0],distance:r=0,decay:o=2})=>{let{scene:s}=g();return useEffect(()=>{let i=new a.PointLight(e,n,r,o);if(i.position.set(...t),s.add(i),process.env.NODE_ENV==="development"){let c=new a.PointLightHelper(i,.5);return s.add(c),()=>{s.remove(i),s.remove(c),i.dispose();}}return ()=>{s.remove(i),i.dispose();}},[n,e,t,r,o]),null};var Pr=({bloom:n={strength:1.5,radius:.4,threshold:0},enabled:e=true})=>{let t=g();return useEffect(()=>{if(!e)return;let r=new J(n);return t.use(r),()=>{}},[e,n.strength,n.radius,n.threshold]),null};var xr=({onClick:n,onHover:e})=>{let t=g();return useEffect(()=>{let r=new j(o=>{o.type==="click"&&n&&n(o.object),o.type==="hover"&&e&&e(o.object);});t.use(r);},[n,e]),null};var Hr=({intensity:n=5,color:e=16777215,position:t=[0,10,0],target:r,angle:o=Math.PI/6,penumbra:s=.1,distance:i=50,castShadow:c=true})=>{let{scene:l}=g();return useEffect(()=>{let m=new a.SpotLight(e,n,i,o,s);if(m.position.set(...t),m.castShadow=c,c&&(m.shadow.mapSize.width=2048,m.shadow.mapSize.height=2048),l.add(m),r)if(typeof r=="string"){let p=l.getObjectByName(r);p&&(m.target=p);}else m.target=r,l.add(r);if(process.env.NODE_ENV==="development"){let p=new a.SpotLightHelper(m);return l.add(p),()=>{l.remove(m),l.remove(p),m.dispose();}}return ()=>{l.remove(m),m.dispose();}},[n,e,t,r,o,s,i,c]),null};var fe=({children:n,fallback:e,loadingMessage:t="Loading 3D model..."})=>jsx(Suspense,{fallback:e||jsx("div",{className:"fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50",children:jsxs("div",{className:"bg-gray-900/90 border border-gray-700 rounded-xl p-8 shadow-2xl text-center",children:[jsx("div",{className:"w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"}),jsx("p",{className:"text-xl font-semibold text-white",children:t}),jsx("p",{className:"text-sm text-gray-400 mt-2",children:"This may take a few seconds..."})]})}),children:n});var Sr=({entry:n,draco:e,fallback:t=jsxs("div",{className:"text-white",children:["Loading model ",n.id,"..."]}),children:r})=>jsx(fe,{fallback:t,children:jsx(ue,{entry:n,draco:e,children:o=>r?.(o)})});var Or=({intensity:n=2,count:e=8})=>{let{scene:t}=g();return useEffect(()=>{let r=[];for(let o=0;o<e;o++){let s=o/e*Math.PI*2,i=new a.PointLight(16777215,n);i.position.set(Math.cos(s)*5,5,Math.sin(s)*5),t.add(i),r.push(i);}return ()=>{r.forEach(o=>{t.remove(o),o.dispose();});}},[n,e]),null};var kr=()=>{let{renderer:n}=g();return useEffect(()=>{if(!n)return;n.xr.enabled=true;let e=VRButton.createButton(n);return document.body.appendChild(e),()=>{e.parentNode&&e.parentNode.removeChild(e);}},[n]),null};var Nr=({children:n,className:e})=>{let t=D(),[r,o]=useState([]),[s,i]=useState(()=>new a.AnimationMixer(null)),[c,l]=useState(new Map),[m,p]=useState(new Set),[f,u]=useState(new Set);useEffect(()=>{if(!t){o([]),s.stopAllAction();return}if(t.animations&&t.animations.length>0){o(t.animations),i(new a.AnimationMixer(t)),s.setTime(0);let w=new Map;t.animations.forEach(y=>{let P=s.clipAction(y);P.clampWhenFinished=true,P.enabled=true,P.setLoop(a.LoopOnce,1),P.reset(),w.set(y.name,P);}),l(w);}let v=new a.Clock,R=()=>{s.update(v.getDelta()),requestAnimationFrame(R);};return R(),()=>{s.stopAllAction();}},[t]);let d=v=>{let R=c.get(v);R&&(c.forEach((w,y)=>{y!==v&&w.fadeOut(.2);}),R.reset().setEffectiveTimeScale(1).setEffectiveWeight(1).fadeIn(.2).play(),p(w=>new Set(w).add(v)),u(w=>{let y=new Set(w);return y.delete(v),y}));},E=v=>{let R=c.get(v);R&&(c.forEach((w,y)=>{y!==v&&w.fadeOut(.2);}),R.reset().setEffectiveTimeScale(-1).setEffectiveWeight(1).fadeIn(.2).play(),p(w=>new Set(w).add(v)),u(w=>new Set(w).add(v)));},h=v=>{f.has(v)?d(v):E(v);},b=r.map(v=>({name:v.name||`Animaci\xF3n ${v.uuid.slice(0,4)}`,playForward:()=>d(v.name),playBackward:()=>E(v.name),toggle:()=>h(v.name),isPlaying:m.has(v.name),isReversed:f.has(v.name)}));return b.length===0?null:jsx("div",{className:e,children:n(b)})};var Ur=({className:n})=>{let{scene:e}=g(),[t,r]=useState(1),o=s=>{r(s),e.traverse(i=>{i instanceof a.Light&&(i.intensity=s*(i.userData.baseIntensity||1));});};return St.useEffect(()=>{e.traverse(s=>{s instanceof a.Light&&(s.userData.baseIntensity=s.intensity);});},[e]),jsxs("div",{className:`bg-black/80 text-white p-4 rounded-lg ${n||""}`,children:[jsx("h3",{className:"text-lg font-bold mb-3",children:"Iluminaci\xF3n Global"}),jsxs("label",{className:"block",children:[jsxs("span",{className:"text-sm",children:["Intensidad: ",t.toFixed(2)]}),jsx("input",{type:"range",min:"0",max:"3",step:"0.01",value:t,onChange:s=>o(parseFloat(s.target.value)),className:"w-full mt-2"})]})]})};var Ve=n=>{let e=n.attributes.position,t=n.index?.array,r=[],o=new Map,s=(p,f)=>p<f?`${p},${f}`:`${f},${p}`;if(!t)return new a.EdgesGeometry(n,30);if(!e)return new a.EdgesGeometry(n,30);let i=[];for(let p=0;p<e.count;p++)i.push([e.array[p*3],e.array[p*3+1],e.array[p*3+2]]);let c=(p,f)=>{let[u,d,E]=i[p],[h,b,v]=i[f];return (h-u)**2+(b-d)**2+(v-E)**2},l=new Map;for(let p=0;p<t.length;p+=3){let[f,u,d]=[t[p],t[p+1],t[p+2]];[s(f,u),s(u,d),s(d,f)].forEach(E=>{l.has(E)||l.set(E,[]),l.get(E).push(p/3);});}for(let p=0;p<t.length;p+=3){let[f,u,d]=[t[p],t[p+1],t[p+2]],E=[{key:s(f,u),verts:[f,u]},{key:s(u,d),verts:[u,d]},{key:s(d,f),verts:[d,f]}],h=[c(f,u),c(u,d),c(d,f)],b=h.indexOf(Math.max(...h)),v=E[b],R=E.filter((y,P)=>P!==b);((l.get(v.key)?.length||0)>1?R:E).forEach(({verts:[y,P]})=>{let C=y,M=P,T=s(C,M);o.has(T)||(o.set(T,1),r.push(e.array[C*3],e.array[C*3+1],e.array[C*3+2],e.array[M*3],e.array[M*3+1],e.array[M*3+2]));});}let m=new a.BufferGeometry;return m.setAttribute("position",new a.Float32BufferAttribute(r,3)),m};var Wr=({materials:n,transitionDuration:e=0,children:t,className:r})=>{let o=D(),[s,i]=useState(null),[c,l]=useState(false);useEffect(()=>{o&&o.traverse(u=>{if(u instanceof a.Mesh&&(u.userData.originalMaterial||(u.userData.originalMaterial=u.material),!u.getObjectByName(`${u.name}-wireframe`))){let d=Ve(u.geometry),E=new a.LineBasicMaterial({color:0,linewidth:3,polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1}),h=new a.LineSegments(d,E);h.name=`${u.name}-wireframe`,h.renderOrder=999,h.visible=false,u.add(h);}});},[o]);let m=async u=>{if(!o||c)return;l(e>0);let d=[];if(o.traverse(h=>{h instanceof a.Mesh&&d.push(h);}),e===0){d.forEach(h=>p(h,u)),i(u.name),l(false);return}let E=e/d.length;for(let h=0;h<d.length;h++)setTimeout(()=>{p(d[h],u),h===d.length-1&&(i(u.name),l(false));},h*E);},p=(u,d)=>{let E=u.getObjectByName(`${u.name}-wireframe`),h;switch(d.type){case "textured":h=u.userData.originalMaterial,E&&(E.visible=false);break;case "solid":h=new a.MeshStandardMaterial({color:d.color??8947848,metalness:d.metalness??0,roughness:d.roughness??.9}),E&&(E.visible=false);break;case "wireframe":h=new a.MeshStandardMaterial({color:d.color??8947848,metalness:d.metalness??0,roughness:d.roughness??.9,transparent:true,opacity:.95}),E&&(E.visible=true,E.material.color.set(d.lineColor??0));break;case "custom":h=d.factory(u.userData.originalMaterial),E&&(E.visible=false);break}u.material=h;},f=n.map(u=>({name:u.name,apply:()=>m(u),isActive:s===u.name}));return useEffect(()=>{f.length>0&&!s&&f[0]?.apply?.();},[f]),!o||f.length===0?null:jsx("div",{className:r,children:t(f)})};var qr=({object:n,parent:e="scene",name:t,position:r,rotation:o,scale:s=[1,1,1],visible:i=true,castShadow:c=false,receiveShadow:l=false})=>{let m=g();return useEffect(()=>{t&&(n.name=t),n.visible=i,n.castShadow=c,n.receiveShadow=l,r&&n.position.set(...r),o&&n.rotation.set(...o),s&&n.scale.set(...s);let p=null;if(e==="scene"?p=m.scene:e==="model"?p=m.getActiveModel():typeof e=="string"?p=m.scene.getObjectByName(e)||null:e instanceof a.Object3D&&(p=e),!p){console.warn("[SceneObject] Padre no encontrado:",e);return}return p.add(n),()=>{n.parent&&n.parent.remove(n),n.traverse(f=>{f instanceof a.Mesh&&(f.geometry?.dispose(),Array.isArray(f.material)?f.material.forEach(u=>u.dispose()):f.material?.dispose());});}},[n,e,t,r,o,s,i,c,l]),null};
-export{Ft as ARButton,Et as AdvancedCameraCollision,z as AdvancedCameraCollisionPlugin,vt as AdvancedDragRaycaster,Rt as AdvancedOrbitControls,q as AdvancedOrbitControlsPlugin,xt as AdvancedRaycaster,A as AdvancedRaycasterPlugin,Ht as AmbientLight,Nr as AnimationController,Dt as AnimationTimeline,At as Annotations,Q as AnnotationsPlugin,It as AutoLODSystem,_ as AutoLODSystemPlugin,Ye as CacheProvider,$ as CacheValidator,Ae as Canvas,Ut as DirectionalLight,qt as DistanceDisplay,_t as EnvironmentPreset,me as ErrorBoundary3D,W as FileWatcher,S as GLTFLoader,tr as GroundSurface,or as HDRI,G as HDRILoader,sr as Hotspot,O as HotspotPlugin,ir as Hotspots,lr as InstancedModel,mr as LODSystem,K as LODSystemPlugin,Ur as LightingController,Wr as MaterialController,ur as MeasurementTool,Z as MeasurementToolPlugin,ue as Model,gr as ModelPreload,x as ObjectCache,yr as OrbitControls,Y as OrbitControlsPlugin,Rr as PointLight,Pr as PostProcessing,J as PostProcessingPlugin,xr as Raycaster,j as RaycasterPlugin,qr as SceneObject,B as SceneOrchestrator,U as SceneProvider,Hr as SpotLight,fe as Suspense,Sr as SuspenseModel,Or as TheaterLighting,kr as VRButton,F as WebPHDRLoader,D as useActiveModel,ft as useAnimation,dt as useCache,lt as useHDRI,it as useModel,mt as useRaycaster,g as useScene};//# sourceMappingURL=index.js.map
-//# sourceMappingURL=index.js.map
+    `;
+    if (typeof content === "string") {
+      div.innerHTML = content;
+    } else {
+      div.appendChild(content);
+    }
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.minFilter = THREE.LinearFilter;
+    texture.wrapS = THREE.ClampToEdgeWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
+    const spriteMaterial = new THREE.SpriteMaterial({ map: texture, depthTest: false });
+    const sprite = new THREE.Sprite(spriteMaterial);
+    sprite.userData.offset = offset;
+    sprite.userData.canvas = canvas;
+    sprite.userData.div = div;
+    const resize = () => {
+      const width = div.offsetWidth;
+      const height = div.offsetHeight;
+      canvas.width = width * 2;
+      canvas.height = height * 2;
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+      ctx.scale(2, 2);
+      ctx.fillStyle = "transparent";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      texture.needsUpdate = true;
+    };
+    const observer = new ResizeObserver(resize);
+    observer.observe(div);
+    resize();
+    return sprite;
+  }
+  dispose() {
+    this.annotations.forEach((sprite) => {
+      if (sprite.parent) {
+        sprite.parent.remove(sprite);
+      }
+      if (sprite instanceof THREE.Sprite) {
+        sprite.material.map?.dispose();
+        sprite.material.dispose();
+      }
+    });
+    this.annotations.clear();
+  }
+};
+
+// src/core/orchestrator/plugins/AutoLODSystemPlugin.ts
+import { SimplifyModifier } from "three/examples/jsm/modifiers/SimplifyModifier.js";
+var AutoLODSystemPlugin = class {
+  constructor(config) {
+    this.config = config;
+    this.config.reductionPercentages = this.config.reductionPercentages || [0.5, 0.2];
+  }
+  name = "AutoLODSystem";
+  lods = /* @__PURE__ */ new Map();
+  camera;
+  simplifyGeometry(geometry, percentage) {
+    const modifier = new SimplifyModifier();
+    const count = Math.floor(geometry.attributes.position.count * percentage);
+    return modifier.modify(geometry, count);
+  }
+  createLODLevels(model) {
+    const lod = new THREE.LOD();
+    const high = model.clone();
+    high.visible = true;
+    lod.addLevel(high, 0);
+    const medium = model.clone();
+    medium.traverse((child) => {
+      if (child instanceof THREE.Mesh && child.geometry) {
+        child.geometry = this.simplifyGeometry(child.geometry, this.config.reductionPercentages[0]);
+      }
+    });
+    lod.addLevel(medium, this.config.distances[0]);
+    const low = model.clone();
+    low.traverse((child) => {
+      if (child instanceof THREE.Mesh && child.geometry) {
+        child.geometry = this.simplifyGeometry(child.geometry, this.config.reductionPercentages[1]);
+      }
+    });
+    lod.addLevel(low, this.config.distances[1]);
+    const empty = new THREE.Object3D();
+    empty.visible = false;
+    lod.addLevel(empty, this.config.distances[2]);
+    return lod;
+  }
+  install({ camera, orchestrator }) {
+    this.camera = camera;
+    const applyLODToModel = (model) => {
+      const lod = this.createLODLevels(model);
+      if (model.parent) {
+        model.parent.add(lod);
+        model.parent.remove(model);
+      }
+      lod.position.copy(model.position);
+      lod.quaternion.copy(model.quaternion);
+      lod.scale.copy(model.scale);
+      this.lods.set(model, lod);
+    };
+    const activeModel = orchestrator.getActiveModel();
+    if (activeModel) {
+      applyLODToModel(activeModel);
+    }
+    const originalSetModel = orchestrator.setModel;
+    if (originalSetModel) {
+      orchestrator.setModel = (...args) => {
+        return originalSetModel.apply(orchestrator, args).then((model) => {
+          this.lods.forEach((lod) => lod.parent?.remove(lod));
+          this.lods.clear();
+          applyLODToModel(model);
+          return model;
+        });
+      };
+    }
+    const update = () => {
+      this.lods.forEach((lod) => lod.update(this.camera));
+      requestAnimationFrame(update);
+    };
+    update();
+  }
+  dispose() {
+    this.lods.forEach((lod) => {
+      if (lod.parent) {
+        lod.parent.remove(lod);
+      }
+      lod.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.geometry?.dispose();
+          if (Array.isArray(child.material)) {
+            child.material.forEach((m) => m.dispose());
+          } else {
+            child.material?.dispose();
+          }
+        }
+      });
+    });
+    this.lods.clear();
+  }
+};
+
+// src/core/orchestrator/plugins/HotspotPlugin.ts
+var HotspotPlugin = class {
+  constructor(data) {
+    this.data = data;
+  }
+  name = "Hotspot";
+  hotspots = /* @__PURE__ */ new Map();
+  install({ scene }) {
+    this.data.forEach((hotspot) => {
+      const geometry = new THREE.SphereGeometry(0.3, 16, 16);
+      const material = new THREE.MeshBasicMaterial({
+        color: 65280,
+        transparent: true,
+        opacity: 0.5
+      });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.copy(hotspot.position);
+      if (hotspot.target) {
+        mesh.userData.target = hotspot.target;
+      }
+      mesh.userData.hotspotId = hotspot.id;
+      mesh.userData.onClick = hotspot.onClick;
+      scene.add(mesh);
+      this.hotspots.set(hotspot.id, mesh);
+    });
+  }
+  dispose() {
+    this.hotspots.forEach((mesh) => {
+      if (mesh.parent) {
+        mesh.parent.remove(mesh);
+      }
+      mesh.geometry.dispose();
+      if (Array.isArray(mesh.material)) {
+        mesh.material.forEach((mat) => mat.dispose());
+      } else {
+        mesh.material.dispose();
+      }
+    });
+    this.hotspots.clear();
+  }
+};
+
+// src/core/orchestrator/plugins/LODSystemPlugin.ts
+var LODSystemPlugin = class {
+  constructor(config) {
+    this.config = config;
+  }
+  name = "LODSystem";
+  lodObjects = /* @__PURE__ */ new Map();
+  camera;
+  install({ camera, orchestrator }) {
+    this.camera = camera;
+    const processModel = (model) => {
+      const lod = new THREE.LOD();
+      this.config.forEach((cfg, index) => {
+        const clone = cfg.levels[index]?.model.clone() || model.clone();
+        clone.visible = false;
+        lod.addLevel(clone, cfg.levels[index]?.distance || 0);
+      });
+      if (model.parent) {
+        model.parent.add(lod);
+        model.parent.remove(model);
+      }
+      lod.position.copy(model.position);
+      lod.quaternion.copy(model.quaternion);
+      lod.scale.copy(model.scale);
+      this.lodObjects.set(model, lod);
+      lod.originalModel = model;
+    };
+    const activeModel = orchestrator.getActiveModel();
+    if (activeModel) {
+      processModel(activeModel);
+    }
+    const originalSetModel = orchestrator.setModel;
+    if (originalSetModel) {
+      orchestrator.setModel = (entry, options) => {
+        originalSetModel.call(orchestrator, entry, options).then((model) => {
+          this.lodObjects.forEach((lod) => {
+            if (lod.parent) {
+              lod.parent.remove(lod);
+            }
+          });
+          this.lodObjects.clear();
+          processModel(model);
+        });
+      };
+    }
+    const update = () => {
+      this.lodObjects.forEach((lod) => {
+        lod.update(this.camera);
+      });
+      requestAnimationFrame(update);
+    };
+    update();
+  }
+  dispose() {
+    this.lodObjects.forEach((lod) => {
+      if (lod.parent) {
+        lod.parent.remove(lod);
+      }
+      lod.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.geometry?.dispose();
+          if (Array.isArray(child.material)) {
+            child.material.forEach((m) => m.dispose());
+          } else {
+            child.material?.dispose();
+          }
+        }
+      });
+    });
+    this.lodObjects.clear();
+  }
+};
+
+// src/core/orchestrator/plugins/MeasurementToolPlugin.ts
+var MeasurementToolPlugin = class {
+  name = "MeasurementTool";
+  points = [];
+  line;
+  spheres = [];
+  onMeasure;
+  constructor(onMeasure) {
+    this.onMeasure = onMeasure ?? (() => {
+    });
+  }
+  install({ scene, camera, renderer, orchestrator }) {
+    const handlePointerDown = (e) => {
+      if (e.button !== 0) {
+        return;
+      }
+      const rect = renderer.domElement.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width * 2 - 1;
+      const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(new THREE.Vector2(x, y), camera);
+      const model = orchestrator.getActiveModel();
+      if (!model) {
+        return;
+      }
+      const intersects = raycaster.intersectObject(model, true);
+      if (intersects.length === 0) {
+        return;
+      }
+      const point = intersects[0].point.clone();
+      this.points.push(point);
+      const sphere = new THREE.Mesh(
+        new THREE.SphereGeometry(0.05),
+        new THREE.MeshBasicMaterial({ color: 65280 })
+      );
+      sphere.position.copy(point);
+      scene.add(sphere);
+      this.spheres.push(sphere);
+      this.onMeasure?.({ point, points: [...this.points] });
+      if (this.points.length === 2) {
+        const distance = this.points[0].distanceTo(this.points[1]);
+        this.onMeasure?.({ point, distance, points: [...this.points] });
+        const geometry = new THREE.BufferGeometry().setFromPoints(this.points);
+        const material = new THREE.LineBasicMaterial({ color: 65280 });
+        this.line = new THREE.Line(geometry, material);
+        scene.add(this.line);
+        setTimeout(() => this.reset(), 3e3);
+      }
+    };
+    renderer.domElement.addEventListener("pointerdown", handlePointerDown, { capture: true });
+    this.dispose = () => {
+      renderer.domElement.removeEventListener("pointerdown", handlePointerDown, { capture: true });
+      this.reset();
+    };
+  }
+  reset() {
+    this.points = [];
+    if (this.line) {
+      this.line.parent?.remove(this.line);
+      this.line.geometry.dispose();
+      if (Array.isArray(this.line.material)) {
+        this.line.material.forEach((mat) => mat.dispose());
+      } else {
+        this.line.material.dispose();
+      }
+      this.line = void 0;
+    }
+    this.spheres.forEach((s) => {
+      s.parent?.remove(s);
+      s.geometry.dispose();
+      if (Array.isArray(s.material)) {
+        s.material.forEach((mat) => mat.dispose());
+      } else {
+        s.material.dispose();
+      }
+    });
+    this.spheres = [];
+  }
+  dispose() {
+    this.reset();
+  }
+};
+
+// src/core/orchestrator/plugins/OrbitControlsPlugin.ts
+import { OrbitControls as OrbitControls3 } from "three/examples/jsm/controls/OrbitControls.js";
+var OrbitControlsPlugin = class {
+  name = "OrbitControls";
+  controls;
+  install({ camera, renderer }) {
+    this.controls = new OrbitControls3(camera, renderer.domElement);
+    this.controls.enableDamping = true;
+    this.controls.dampingFactor = 0.05;
+    this.controls.rotateSpeed = 0.8;
+    this.controls.minDistance = 1;
+    this.controls.maxDistance = 50;
+    this.controls.maxPolarAngle = Math.PI / 2.1;
+    const animate = () => {
+      this.controls.update();
+      requestAnimationFrame(animate);
+    };
+    animate();
+  }
+  dispose() {
+    this.controls?.dispose();
+  }
+};
+
+// src/core/orchestrator/plugins/RaycasterPlugin.ts
+var RaycasterPlugin = class {
+  name = "Raycaster";
+  raycaster = new THREE.Raycaster();
+  pointer = new THREE.Vector2();
+  hovered = null;
+  onEvent;
+  constructor(onEvent) {
+    this.onEvent = onEvent ?? (() => {
+    });
+  }
+  install({ scene, camera, renderer }) {
+    const dom = renderer.domElement;
+    const onPointerMove = (e) => {
+      this.pointer.x = e.clientX / dom.clientWidth * 2 - 1;
+      this.pointer.y = -(e.clientY / dom.clientHeight) * 2 + 1;
+      this.checkIntersection(scene, camera);
+    };
+    const onClick = (e) => {
+      this.pointer.x = e.clientX / dom.clientWidth * 2 - 1;
+      this.pointer.y = -(e.clientY / dom.clientHeight) * 2 + 1;
+      const intersect = this.getIntersection(scene, camera);
+      if (intersect) {
+        this.onEvent?.({ type: "click", object: intersect.object, point: intersect.point });
+      }
+    };
+    dom.addEventListener("pointermove", onPointerMove);
+    dom.addEventListener("click", onClick);
+    this.dispose = () => {
+      dom.removeEventListener("pointermove", onPointerMove);
+      dom.removeEventListener("click", onClick);
+      this.hovered = null;
+    };
+  }
+  checkIntersection(scene, camera) {
+    this.raycaster.setFromCamera(this.pointer, camera);
+    const intersects = this.raycaster.intersectObjects(scene.children, true);
+    const hit = intersects[0];
+    if (hit && hit.object !== this.hovered) {
+      if (this.hovered) {
+        this.onEvent?.({ type: "leave", object: this.hovered });
+      }
+      this.hovered = hit.object;
+      this.onEvent?.({ type: "hover", object: hit.object, point: hit.point });
+    } else if (!hit && this.hovered) {
+      this.onEvent?.({ type: "leave", object: this.hovered });
+      this.hovered = null;
+    }
+  }
+  getIntersection(scene, camera) {
+    this.raycaster.setFromCamera(this.pointer, camera);
+    const intersects = this.raycaster.intersectObjects(scene.children, true);
+    return intersects[0] || null;
+  }
+  dispose() {
+  }
+};
+
+// src/core/orchestrator/plugins/PostProcessingPlugin.ts
+import { EffectComposer as EffectComposer2 } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass as RenderPass2 } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { UnrealBloomPass as UnrealBloomPass2 } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
+var PostProcessingPlugin = class {
+  constructor(options = { strength: 1.5, radius: 0.4, threshold: 0 }) {
+    this.options = options;
+  }
+  name = "PostProcessing";
+  composer;
+  bloomPass;
+  install({ scene, camera, renderer }) {
+    this.composer = new EffectComposer2(renderer);
+    this.composer.setSize(renderer.domElement.width, renderer.domElement.height);
+    const renderPass = new RenderPass2(scene, camera);
+    this.composer.addPass(renderPass);
+    this.bloomPass = new UnrealBloomPass2(
+      new THREE.Vector2(renderer.domElement.width, renderer.domElement.height),
+      this.options.strength,
+      this.options.radius,
+      this.options.threshold
+    );
+    this.composer.addPass(this.bloomPass);
+    const originalRender = renderer.render.bind(renderer);
+    renderer.render = () => {
+      this.composer.render();
+    };
+    const onResize = () => {
+      this.composer.setSize(renderer.domElement.width, renderer.domElement.height);
+      this.bloomPass.resolution.set(renderer.domElement.width, renderer.domElement.height);
+    };
+    window.addEventListener("resize", onResize);
+    this.dispose = () => {
+      window.removeEventListener("resize", onResize);
+      renderer.render = originalRender;
+      this.composer.dispose();
+    };
+  }
+  setBloom(strength) {
+    if (this.bloomPass) {
+      this.bloomPass.strength = strength;
+    }
+  }
+  dispose() {
+  }
+};
+
+// src/hooks/useScene.ts
+var useScene2 = () => {
+  return useScene();
+};
+
+// src/hooks/useModel.ts
+import { useEffect as useEffect2, useState as useState2 } from "react";
+var useModel = (entry, options = {}) => {
+  const { draco = false, autoLoad = true } = options;
+  const orchestrator = useScene2();
+  const [model, setModel] = useState2(null);
+  const [loading, setLoading] = useState2(false);
+  const [error, setError] = useState2(null);
+  useEffect2(() => {
+    if (!entry || !autoLoad) {
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    orchestrator.setModel(entry, { draco }).then((m) => {
+      setModel(m);
+      setLoading(false);
+    }).catch((err) => {
+      setError(err);
+      setLoading(false);
+    });
+  }, [entry?.id, draco]);
+  const load = () => entry && orchestrator.setModel(entry, { draco });
+  return { model, loading, error, load };
+};
+
+// src/hooks/useActiveModel.ts
+var useActiveModel = () => {
+  const orchestrator = useScene2();
+  return orchestrator.getActiveModel();
+};
+
+// src/hooks/useHDRI.ts
+import { useEffect as useEffect3, useState as useState3 } from "react";
+var useHDRI = (entry) => {
+  const orchestrator = useScene2();
+  const [hdri, setHDRI] = useState3(null);
+  const [loading, setLoading] = useState3(false);
+  useEffect3(() => {
+    if (!entry) {
+      return;
+    }
+    setLoading(true);
+    orchestrator.setHDRI(entry).then((tex) => {
+      setHDRI(tex);
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, [entry?.id]);
+  const clear = () => orchestrator.clearHDRI();
+  return { hdri, loading, clear };
+};
+
+// src/hooks/useRaycaster.ts
+import { useEffect as useEffect4 } from "react";
+var useRaycaster = (onEvent) => {
+  const orchestrator = useScene2();
+  useEffect4(() => {
+    const plugin = new RaycasterPlugin(onEvent);
+    orchestrator.use(plugin);
+    return () => {
+    };
+  }, [onEvent]);
+};
+
+// src/hooks/useCache.ts
+var useCache2 = () => {
+  return useCache();
+};
+
+// src/hooks/useAnimation.ts
+import { useEffect as useEffect5 } from "react";
+var useAnimation = (clipName, play = true) => {
+  const model = useActiveModel();
+  useEffect5(() => {
+    if (!model || !model.animations) {
+      return;
+    }
+    const clip = model.animations.find((a) => a.name === clipName);
+    if (!clip) {
+      return;
+    }
+    const mixer = new THREE.AnimationMixer(model);
+    const action = mixer.clipAction(clip);
+    if (play) {
+      action.play();
+    }
+    const clock = new THREE.Clock();
+    const animate = () => {
+      mixer.update(clock.getDelta());
+      requestAnimationFrame(animate);
+    };
+    animate();
+    return () => {
+      action.stop();
+    };
+  }, [model, clipName, play]);
+};
+
+// src/react/components/AdvancedCameraCollision.tsx
+import { useEffect as useEffect6 } from "react";
+var AdvancedCameraCollision = ({ distanceThreshold = 0.6, pushBackOffset = 0.1, enabled = true }) => {
+  const orchestrator = useScene2();
+  useEffect6(() => {
+    if (!enabled) {
+      return;
+    }
+    const plugin = new AdvancedCameraCollisionPlugin(
+      distanceThreshold,
+      pushBackOffset
+    );
+    orchestrator.use(plugin);
+    return () => {
+      plugin.dispose();
+    };
+  }, [enabled, distanceThreshold, pushBackOffset]);
+  return null;
+};
+
+// src/react/components/AdvancedDragRaycaster.tsx
+import { useEffect as useEffect7, useState as useState4, useRef } from "react";
+import { Fragment, jsx as jsx3 } from "react/jsx-runtime";
+var tempVector1 = new THREE.Vector3();
+var tempVector2 = new THREE.Vector3();
+var tempVector3 = new THREE.Vector3();
+var tempVector2_1 = new THREE.Vector2();
+var tempVector2_2 = new THREE.Vector2();
+var tempPlane = new THREE.Plane();
+var tempQuaternion = new THREE.Quaternion();
+var tempRaycaster = new THREE.Raycaster();
+var AdvancedDragRaycaster = ({
+  children,
+  defaultEnabled = true,
+  enableRotationCompensation = true,
+  transitionDuration = 0,
+  onDragStart,
+  onDrag,
+  onDragEnd
+}) => {
+  const orchestrator = useScene2();
+  const activeModel = orchestrator.getActiveModel();
+  const camera = orchestrator.camera;
+  const [isEnabled, setIsEnabled] = useState4(defaultEnabled);
+  const [isResetting, setIsResetting] = useState4(false);
+  const [plugin, setPlugin] = useState4(null);
+  const originalStates = useRef(/* @__PURE__ */ new Map());
+  useEffect7(() => {
+    if (!activeModel || !camera) {
+      return;
+    }
+    const newPlugin = new AdvancedRaycasterPlugin(activeModel, (event) => {
+      if (!isEnabled) {
+        return;
+      }
+      let isDragging = false;
+      let startPosition = new THREE.Vector2();
+      let currentObject = null;
+      switch (event.type) {
+        case "objectdragstart":
+          isDragging = true;
+          currentObject = event.object;
+          startPosition.copy(event.startPosition);
+          if (currentObject && !originalStates.current.has(currentObject)) {
+            originalStates.current.set(currentObject, {
+              position: currentObject.position.clone(),
+              quaternion: currentObject.quaternion.clone()
+            });
+          }
+          onDragStart?.(event.object);
+          break;
+        case "objectdrag":
+          if (isDragging && currentObject) {
+            currentObject.getWorldPosition(tempVector1);
+            camera.getWorldDirection(tempVector2);
+            tempPlane.setFromNormalAndCoplanarPoint(tempVector2, tempVector1);
+            tempVector2_1.set(
+              event.currentPosition.x / window.innerWidth * 2 - 1,
+              -(event.currentPosition.y / window.innerHeight) * 2 + 1
+            );
+            tempVector2_2.set(
+              startPosition.x / window.innerWidth * 2 - 1,
+              -(startPosition.y / window.innerHeight) * 2 + 1
+            );
+            tempRaycaster.setFromCamera(tempVector2_1, camera);
+            tempRaycaster.ray.intersectPlane(tempPlane, tempVector1);
+            tempRaycaster.setFromCamera(tempVector2_2, camera);
+            tempRaycaster.ray.intersectPlane(tempPlane, tempVector2);
+            if (tempVector1 && tempVector2) {
+              tempVector3.subVectors(tempVector1, tempVector2);
+              if (enableRotationCompensation && activeModel) {
+                activeModel.getWorldQuaternion(tempQuaternion);
+                tempQuaternion.invert();
+                tempVector3.applyQuaternion(tempQuaternion);
+              }
+              currentObject.position.add(tempVector3);
+              onDrag?.(currentObject, tempVector3.clone());
+            }
+            startPosition.copy(event.currentPosition);
+          }
+          break;
+        case "objectdragend":
+          if (isDragging) {
+            onDragEnd?.(event.object);
+          }
+          break;
+      }
+    });
+    orchestrator.use(newPlugin);
+    setPlugin(newPlugin);
+    return () => {
+      newPlugin.dispose();
+    };
+  }, [
+    activeModel,
+    camera,
+    onDragStart,
+    onDrag,
+    onDragEnd,
+    enableRotationCompensation
+  ]);
+  useEffect7(() => {
+    plugin?.manager.setEnabled(isEnabled);
+  }, [plugin, isEnabled]);
+  const toggleEnabled = () => setIsEnabled((prev) => !prev);
+  const setEnabled = (value) => setIsEnabled(value);
+  const resetAll = () => {
+    if (isResetting) {
+      return;
+    }
+    setIsResetting(true);
+    const duration = transitionDuration;
+    if (duration <= 0) {
+      originalStates.current.forEach((state, obj) => {
+        obj.position.copy(state.position);
+        obj.quaternion.copy(state.quaternion);
+      });
+      setIsResetting(false);
+      return;
+    }
+    const startTime = Date.now();
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      originalStates.current.forEach((state, obj) => {
+        obj.position.lerp(state.position, t);
+        obj.quaternion.slerp(state.quaternion, t);
+      });
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        setIsResetting(false);
+      }
+    };
+    requestAnimationFrame(animate);
+  };
+  return /* @__PURE__ */ jsx3(Fragment, { children: children({
+    isEnabled,
+    toggleEnabled,
+    setEnabled,
+    resetAll,
+    isResetting
+  }) });
+};
+
+// src/react/components/AdvancedOrbitControls.tsx
+import { useEffect as useEffect8, useState as useState5 } from "react";
+import { Fragment as Fragment2, jsx as jsx4 } from "react/jsx-runtime";
+var AdvancedOrbitControls = ({
+  children,
+  defaultEnabled = true,
+  ...config
+}) => {
+  const orchestrator = useScene2();
+  const [panEnabled, setPanEnabled] = useState5(defaultEnabled);
+  const [rotateEnabled, setRotateEnabled] = useState5(defaultEnabled);
+  const [zoomEnabled, setZoomEnabled] = useState5(defaultEnabled);
+  const [plugin, setPlugin] = useState5(
+    null
+  );
+  useEffect8(() => {
+    const newPlugin = new AdvancedOrbitControlsPlugin(config);
+    orchestrator.use(newPlugin);
+    setPlugin(newPlugin);
+    newPlugin.setAllEnabled(defaultEnabled);
+    return () => {
+      newPlugin.dispose();
+    };
+  }, []);
+  useEffect8(() => {
+    plugin?.setPanEnabled(panEnabled);
+  }, [plugin, panEnabled]);
+  useEffect8(() => {
+    plugin?.setRotateEnabled(rotateEnabled);
+  }, [plugin, rotateEnabled]);
+  useEffect8(() => {
+    plugin?.setZoomEnabled(zoomEnabled);
+  }, [plugin, zoomEnabled]);
+  const setAllEnabled = (value) => {
+    setPanEnabled(value);
+    setRotateEnabled(value);
+    setZoomEnabled(value);
+  };
+  const togglePan = () => setPanEnabled((prev) => !prev);
+  const toggleRotate = () => setRotateEnabled((prev) => !prev);
+  const toggleZoom = () => setZoomEnabled((prev) => !prev);
+  const toggleAll = () => setAllEnabled(!(rotateEnabled && panEnabled && zoomEnabled));
+  const state = {
+    panEnabled,
+    rotateEnabled,
+    zoomEnabled,
+    isActive: panEnabled || rotateEnabled || zoomEnabled,
+    setPanEnabled,
+    setRotateEnabled,
+    setZoomEnabled,
+    setAllEnabled,
+    togglePan,
+    toggleRotate,
+    toggleZoom,
+    toggleAll
+  };
+  return /* @__PURE__ */ jsx4(Fragment2, { children: children(state) });
+};
+
+// src/react/components/AdvancedRaycaster.tsx
+import { useEffect as useEffect9 } from "react";
+var AdvancedRaycaster = ({
+  model: customModel,
+  onClick,
+  onHoverIn,
+  onHoverOut,
+  onHoverMove,
+  onDragStart,
+  onDrag,
+  onDragEnd
+}) => {
+  const orchestrator = useScene2();
+  const activeModel = useActiveModel();
+  useEffect9(() => {
+    const plugin = new AdvancedRaycasterPlugin(
+      customModel || activeModel || void 0,
+      (e) => {
+        switch (e.type) {
+          case "objectclick":
+            onClick?.(e);
+            break;
+          case "objecthoverin":
+            onHoverIn?.(e);
+            break;
+          case "objecthoverout":
+            onHoverOut?.(e);
+            break;
+          case "objecthovermove":
+            onHoverMove?.(e);
+            break;
+          case "objectdragstart":
+            onDragStart?.(e);
+            break;
+          case "objectdrag":
+            onDrag?.(e);
+            break;
+          case "objectdragend":
+            onDragEnd?.(e);
+            break;
+        }
+      }
+    );
+    orchestrator.use(plugin);
+  }, [
+    customModel,
+    activeModel,
+    onClick,
+    onHoverIn,
+    onHoverOut,
+    onHoverMove,
+    onDragStart,
+    onDrag,
+    onDragEnd
+  ]);
+  return null;
+};
+
+// src/react/components/AmbientLight.tsx
+import { useEffect as useEffect10 } from "react";
+var AmbientLight = ({
+  intensity = 0.5,
+  color = 16777215
+}) => {
+  const { scene } = useScene2();
+  useEffect10(() => {
+    const light = new THREE.AmbientLight(color, intensity);
+    scene.add(light);
+    return () => {
+      scene.remove(light);
+      light.dispose();
+    };
+  }, [intensity, color]);
+  return null;
+};
+
+// src/react/components/AnimationTimeline.tsx
+import { useEffect as useEffect11, useRef as useRef2 } from "react";
+var AnimationTimeline = ({
+  steps,
+  loop = false,
+  autoplay = true
+}) => {
+  const model = useActiveModel();
+  const mixerRef = useRef2(null);
+  const actionsRef = useRef2(/* @__PURE__ */ new Map());
+  const clock = useRef2(new THREE.Clock());
+  useEffect11(() => {
+    if (!model || !model.animations) {
+      return;
+    }
+    const mixer = new THREE.AnimationMixer(model);
+    mixerRef.current = mixer;
+    model.animations.forEach((clip) => {
+      const action = mixer.clipAction(clip);
+      actionsRef.current.set(clip.name, action);
+    });
+    if (autoplay) {
+      playTimeline();
+    }
+    const animate = () => {
+      mixer.update(clock.current.getDelta());
+      requestAnimationFrame(animate);
+    };
+    animate();
+    return () => {
+      mixer.stopAllAction();
+    };
+  }, [model]);
+  const playTimeline = () => {
+    let time = 0;
+    steps.forEach((step) => {
+      const action = actionsRef.current.get(step.clipName);
+      if (!action) {
+        return;
+      }
+      setTimeout(() => {
+        action.reset().play();
+      }, time);
+      time += (step.delay || 0) + (step.duration || action.getClip().duration * 1e3);
+    });
+    if (loop) {
+      setTimeout(playTimeline, time);
+    }
+  };
+  return null;
+};
+
+// src/react/components/Annotations.tsx
+import React5, { useEffect as useEffect12 } from "react";
+var Annotations = ({ annotations }) => {
+  const orchestrator = useScene2();
+  useEffect12(() => {
+    const data = annotations.map((ann) => {
+      const target = typeof ann.target === "string" ? orchestrator.scene.getObjectByName(ann.target) : ann.target;
+      const content = typeof ann.content === "string" ? ann.content : React5.isValidElement(ann.content) ? ann.content.props.children : String(ann.content);
+      return {
+        id: ann.id,
+        position: new THREE.Vector3(...ann.position),
+        target,
+        content,
+        offset: ann.offset ? new THREE.Vector3(...ann.offset) : void 0
+      };
+    });
+    const plugin = new AnnotationsPlugin(data);
+    orchestrator.use(plugin);
+    return () => {
+      plugin.dispose();
+    };
+  }, [annotations]);
+  return null;
+};
+
+// src/react/components/ARButton.tsx
+import { useEffect as useEffect13 } from "react";
+import { ARButton as ThreeARButton } from "three/examples/jsm/webxr/ARButton.js";
+var ARButton = () => {
+  const { renderer } = useScene2();
+  useEffect13(() => {
+    if (!renderer) {
+      return;
+    }
+    renderer.xr.enabled = true;
+    const button = ThreeARButton.createButton(renderer);
+    document.body.appendChild(button);
+    return () => {
+      if (button.parentNode) {
+        button.parentNode.removeChild(button);
+      }
+    };
+  }, [renderer]);
+  return null;
+};
+
+// src/react/components/AutoLODSystem.tsx
+import { useEffect as useEffect14 } from "react";
+var AutoLODSystem = ({
+  mediumDistance = 20,
+  lowDistance = 50,
+  hideDistance = 100
+}) => {
+  const orchestrator = useScene2();
+  useEffect14(() => {
+    const plugin = new AutoLODSystemPlugin({
+      distances: [mediumDistance, lowDistance, hideDistance]
+    });
+    orchestrator.use(plugin);
+    return () => {
+      plugin.dispose();
+    };
+  }, [mediumDistance, lowDistance, hideDistance]);
+  return null;
+};
+
+// src/react/components/Canvas.tsx
+import { forwardRef as forwardRef2 } from "react";
+import { jsx as jsx5, jsxs } from "react/jsx-runtime";
+var Canvas = forwardRef2(
+  ({ config, children, ...canvasProps }, ref) => {
+    return /* @__PURE__ */ jsxs(SceneProvider, { ref, config, children: [
+      /* @__PURE__ */ jsx5("canvas", { ref, ...canvasProps }),
+      children
+    ] });
+  }
+);
+Canvas.displayName = "Canvas";
+
+// src/react/components/DirectionalLight.tsx
+import { useEffect as useEffect15 } from "react";
+var DirectionalLight = ({
+  intensity = 1,
+  color = 16777215,
+  position = [5, 10, 7.5],
+  castShadow = true,
+  shadowMapSize = 2048
+}) => {
+  const { scene } = useScene2();
+  useEffect15(() => {
+    const light = new THREE.DirectionalLight(color, intensity);
+    light.position.set(...position);
+    if (castShadow) {
+      light.castShadow = true;
+      light.shadow.mapSize.width = shadowMapSize;
+      light.shadow.mapSize.height = shadowMapSize;
+      light.shadow.camera.near = 0.1;
+      light.shadow.camera.far = 50;
+      light.shadow.camera.left = -20;
+      light.shadow.camera.right = 20;
+      light.shadow.camera.top = 20;
+      light.shadow.camera.bottom = -20;
+      light.shadow.bias = -1e-4;
+    }
+    scene.add(light);
+    if (process.env.NODE_ENV === "development") {
+      const helper = new THREE.DirectionalLightHelper(light, 2);
+      scene.add(helper);
+      return () => {
+        scene.remove(light);
+        scene.remove(helper);
+        light.dispose();
+        helper.dispose();
+      };
+    }
+    return () => {
+      scene.remove(light);
+      light.dispose();
+    };
+  }, [intensity, color, position, castShadow, shadowMapSize]);
+  return null;
+};
+
+// src/react/components/DistanceDisplay.tsx
+import { useEffect as useEffect16, useRef as useRef3, useState as useState6 } from "react";
+import { jsx as jsx6 } from "react/jsx-runtime";
+var unitConversions = {
+  m: 1,
+  cm: 100,
+  mm: 1e3,
+  px: 3779.527559,
+  // 1m ≈ 3779.53px (96 DPI)
+  in: 39.3701,
+  ft: 3.28084,
+  km: 1e-3
+};
+var formatValue = (value, unit, decimals) => {
+  const converted = value * unitConversions[unit];
+  return `${converted.toFixed(decimals)}${unit}`;
+};
+var DistanceDisplay = ({
+  children,
+  className,
+  unit = "m",
+  decimals = 2
+}) => {
+  const orchestrator = useScene2();
+  const animationRef = useRef3(0);
+  const [currentDistance, setCurrentDistance] = useState6(0);
+  const [initialDistance, setInitialDistance] = useState6(null);
+  const getCurrentDistance = () => {
+    const model = orchestrator.getActiveModel();
+    if (!model || !orchestrator.camera) {
+      return 0;
+    }
+    const modelCenter = new THREE.Vector3();
+    model.getWorldPosition(modelCenter);
+    return orchestrator.camera.position.distanceTo(modelCenter);
+  };
+  useEffect16(() => {
+    const update = () => {
+      const dist = getCurrentDistance();
+      if (initialDistance === null && dist > 0) {
+        setInitialDistance(dist);
+      }
+      setCurrentDistance(dist);
+      animationRef.current = requestAnimationFrame(update);
+    };
+    animationRef.current = requestAnimationFrame(update);
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [orchestrator, initialDistance]);
+  if (initialDistance === null) {
+    return /* @__PURE__ */ jsx6("div", { className, children: "Calculating initial distance\u2026" });
+  }
+  const percentage = Math.max(
+    0,
+    Math.min(100, currentDistance / initialDistance * 100)
+  );
+  const formatted = formatValue(currentDistance, unit, decimals);
+  const formattedInitial = formatValue(initialDistance, unit, decimals);
+  return /* @__PURE__ */ jsx6("div", { className, children: children({
+    distance: currentDistance,
+    formatted,
+    percentage,
+    initialDistance,
+    formattedInitial
+  }) });
+};
+
+// src/react/components/EnvironmentPreset.tsx
+import { useEffect as useEffect17 } from "react";
+var PRESETS = {
+  studio: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/studio.exr",
+  sunset: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/sunset.exr",
+  dawn: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/dawn.exr",
+  night: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/night.exr",
+  warehouse: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/warehouse.exr",
+  forest: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/forest.exr",
+  apartment: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/apartment.exr",
+  city: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/city.exr",
+  park: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/park.exr",
+  lobby: "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/assets/environment/lobby.exr"
+};
+var EnvironmentPreset = ({
+  name,
+  intensity = 1,
+  blur = 0
+}) => {
+  const orchestrator = useScene2();
+  useEffect17(() => {
+    const url = PRESETS[name];
+    if (!url) {
+      console.warn(`EnvironmentPreset: "${name}" no encontrado`);
+      return;
+    }
+    const loader = new EXRLoader();
+    loader.setDataType(THREE.HalfFloatType);
+    loader.load(url, (texture) => {
+      texture.mapping = THREE.EquirectangularReflectionMapping;
+      orchestrator.scene.environment = texture;
+      orchestrator.scene.background = texture;
+      orchestrator.scene.backgroundBlurriness = blur;
+      orchestrator.scene.environmentIntensity = intensity;
+    });
+    return () => {
+      if (orchestrator.scene.environment) {
+        orchestrator.scene.environment.dispose();
+        orchestrator.scene.environment = null;
+      }
+      if (orchestrator.scene.background) {
+        if (!(orchestrator.scene.background instanceof THREE.Color)) {
+          orchestrator.scene.background.dispose();
+        }
+        orchestrator.scene.background = null;
+      }
+    };
+  }, [name, intensity, blur]);
+  return null;
+};
+
+// src/react/components/ErrorBoundary3D.tsx
+import { Component } from "react";
+import { jsx as jsx7 } from "react/jsx-runtime";
+var ErrorBoundary3D = class extends Component {
+  state = { hasError: false };
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error("Error 3D capturado:", error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback || /* @__PURE__ */ jsx7("div", { className: "text-red-500", children: "Error al cargar modelo 3D" });
+    }
+    return this.props.children;
+  }
+};
+
+// src/react/components/GroundSurface.tsx
+import { useEffect as useEffect18 } from "react";
+import { Reflector } from "three/examples/jsm/objects/Reflector.js";
+var PRESETS2 = {
+  mirror: { reflective: true, color: 16777215, roughness: 0, metalness: 1 },
+  glass: {
+    reflective: true,
+    color: 8965375,
+    roughness: 0,
+    metalness: 0,
+    opacity: 0.3,
+    transparent: true
+  },
+  metal: { reflective: true, color: 8947848, roughness: 0.1, metalness: 1 },
+  concrete: {
+    reflective: false,
+    color: 10066329,
+    roughness: 0.9,
+    metalness: 0
+  },
+  wood: { reflective: false, color: 9127187, roughness: 0.8, metalness: 0 },
+  water: {
+    reflective: true,
+    color: 35071,
+    roughness: 0,
+    metalness: 0.1,
+    opacity: 0.7,
+    transparent: true
+  },
+  custom: { reflective: true, color: 16777215, roughness: 0, metalness: 1 }
+};
+var GroundSurface = ({
+  type = "mirror",
+  size,
+  height = 0,
+  blur = 0.8,
+  resolution = 1024,
+  ...custom
+}) => {
+  const orchestrator = useScene2();
+  const scene = orchestrator.scene;
+  const camera = orchestrator.camera;
+  useEffect18(() => {
+    if (!camera) {
+      return;
+    }
+    const preset = PRESETS2[type];
+    const finalColor = custom.color ?? preset.color;
+    const finalRoughness = custom.roughness ?? preset.roughness;
+    const finalMetalness = custom.metalness ?? preset.metalness;
+    const finalOpacity = custom.opacity ?? preset.opacity ?? 1;
+    const finalTransparent = custom.transparent ?? preset.transparent ?? false;
+    let ground;
+    if (preset.reflective && size) {
+      const geometry = new THREE.PlaneGeometry(size, size);
+      ground = new Reflector(geometry, {
+        clipBias: 3e-3,
+        textureWidth: resolution,
+        textureHeight: resolution,
+        color: new THREE.Color(finalColor)
+      });
+      if (Array.isArray(ground.material)) {
+        ground.material.forEach((mat) => {
+          mat.roughness = finalRoughness;
+          mat.metalness = finalMetalness;
+          mat.opacity = finalOpacity;
+          mat.transparent = finalTransparent;
+        });
+      } else {
+        ground.material.roughness = finalRoughness;
+        ground.material.metalness = finalMetalness;
+        ground.material.opacity = finalOpacity;
+        ground.material.transparent = finalTransparent;
+      }
+    } else {
+      const geometry = size ? new THREE.PlaneGeometry(size, size) : new THREE.PlaneGeometry(2, 2);
+      const material = new THREE.MeshStandardMaterial({
+        color: finalColor,
+        roughness: finalRoughness,
+        metalness: finalMetalness,
+        opacity: finalOpacity,
+        transparent: finalTransparent,
+        side: THREE.DoubleSide
+      });
+      ground = new THREE.Mesh(geometry, material);
+      ground.receiveShadow = true;
+      if (!size) {
+        ground.onBeforeRender = () => {
+          const dist = camera.position.length();
+          const scale = dist * 10;
+          ground.scale.set(scale, scale, 1);
+        };
+      }
+    }
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = height;
+    scene.add(ground);
+    return () => {
+      scene.remove(ground);
+      if ("material" in ground) {
+        if (Array.isArray(ground.material)) {
+          ground.material.forEach((mat) => mat.dispose());
+        } else {
+          ground.material.dispose();
+        }
+      }
+      ground.geometry.dispose();
+    };
+  }, [type, size, height, blur, resolution, ...Object.values(custom)]);
+  return null;
+};
+
+// src/react/components/HDRI.tsx
+import { useEffect as useEffect19 } from "react";
+var HDRI = ({ entry }) => {
+  const orchestrator = useScene2();
+  useEffect19(() => {
+    orchestrator.setHDRI(entry);
+  }, [entry.id]);
+  return null;
+};
+
+// src/react/components/Hotspot.tsx
+import { useEffect as useEffect20 } from "react";
+var Hotspot = ({
+  id,
+  position,
+  target,
+  onClick
+}) => {
+  const orchestrator = useScene2();
+  useEffect20(() => {
+    const plugin = new HotspotPlugin([
+      {
+        id,
+        position: new THREE.Vector3(...position),
+        target,
+        onClick
+      }
+    ]);
+    orchestrator.use(plugin);
+    return () => plugin.dispose();
+  }, [id, position, target, onClick]);
+  return null;
+};
+
+// src/react/components/Hotspots.tsx
+import { useEffect as useEffect21 } from "react";
+import * as THREE3 from "three";
+var Hotspots = ({ hotspots }) => {
+  const orchestrator = useScene2();
+  useEffect21(() => {
+    const data = hotspots.map((h) => ({
+      id: h.id,
+      position: new THREE3.Vector3(...h.position),
+      target: typeof h.target === "string" ? orchestrator.scene.getObjectByName(h.target) : h.target,
+      onClick: h.onClick,
+      offset: h.offset ? new THREE3.Vector3(...h.offset) : void 0
+    }));
+    const plugin = new HotspotPlugin(data);
+    orchestrator.use(plugin);
+    return () => {
+      plugin.dispose();
+    };
+  }, [hotspots, orchestrator]);
+  return null;
+};
+
+// src/react/components/InstancedModel.tsx
+import { useEffect as useEffect22, useRef as useRef4 } from "react";
+var InstancedModel = ({
+  entry,
+  instances,
+  draco = false,
+  castShadow = true,
+  receiveShadow = true
+}) => {
+  const orchestrator = useScene2();
+  const scene = orchestrator.scene;
+  const groupRef = useRef4(new THREE.Group());
+  const instancedMeshes = useRef4(/* @__PURE__ */ new Map());
+  useEffect22(() => {
+    let isMounted = true;
+    const loadAndCreateInstances = async () => {
+      if (!isMounted) {
+        return;
+      }
+      try {
+        const gltf = await GLTFLoader2.load(entry, { draco });
+        const model = gltf.clone();
+        instancedMeshes.current.forEach((mesh) => {
+          scene.remove(mesh);
+          mesh.geometry.dispose();
+          if (Array.isArray(mesh.material)) {
+            mesh.material.forEach((m) => m.dispose());
+          } else {
+            mesh.material?.dispose();
+          }
+        });
+        instancedMeshes.current.clear();
+        model.traverse((child) => {
+          if (!(child instanceof THREE.Mesh)) {
+            return;
+          }
+          const geometry = child.geometry;
+          const material = Array.isArray(child.material) ? child.material[0] : child.material;
+          const count = instances.length;
+          const instancedMesh = new THREE.InstancedMesh(
+            geometry,
+            material,
+            count
+          );
+          instancedMesh.castShadow = castShadow;
+          instancedMesh.receiveShadow = receiveShadow;
+          const dummy = new THREE.Object3D();
+          const color = new THREE.Color();
+          instances.forEach((instance, i) => {
+            dummy.position.copy(instance.position);
+            if (instance.rotation instanceof THREE.Euler) {
+              dummy.rotation.copy(instance.rotation);
+            } else if (instance.rotation instanceof THREE.Quaternion) {
+              dummy.quaternion.copy(instance.rotation);
+            }
+            if (typeof instance.scale === "number") {
+              dummy.scale.setScalar(instance.scale);
+            } else if (instance.scale) {
+              dummy.scale.copy(instance.scale);
+            } else {
+              dummy.scale.set(1, 1, 1);
+            }
+            dummy.updateMatrix();
+            instancedMesh.setMatrixAt(i, dummy.matrix);
+            if (instance.color) {
+              color.set(instance.color);
+              instancedMesh.setColorAt(i, color);
+            }
+            if (instance.visible === false) {
+              instancedMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+            }
+          });
+          if (material instanceof THREE.Material) {
+            instancedMesh.instanceColor = material.vertexColors ? null : new THREE.InstancedBufferAttribute(
+              new Float32Array(count * 3),
+              3
+            );
+          }
+          instancedMesh.instanceMatrix.needsUpdate = true;
+          if (instancedMesh.instanceColor) {
+            instancedMesh.instanceColor.needsUpdate = true;
+          }
+          scene.add(instancedMesh);
+          instancedMeshes.current.set(child.uuid, instancedMesh);
+        });
+        groupRef.current.add(model);
+        scene.add(groupRef.current);
+      } catch (err) {
+        console.error("Error loading InstancedModel:", err);
+      }
+    };
+    loadAndCreateInstances();
+    return () => {
+      isMounted = false;
+      instancedMeshes.current.forEach((mesh) => {
+        scene.remove(mesh);
+        mesh.geometry.dispose();
+        if (Array.isArray(mesh.material)) {
+          mesh.material.forEach((m) => m.dispose());
+        } else {
+          mesh.material?.dispose();
+        }
+      });
+      instancedMeshes.current.clear();
+      if (groupRef.current.parent) {
+        groupRef.current.parent.remove(groupRef.current);
+      }
+    };
+  }, [entry, instances, draco, castShadow, receiveShadow]);
+  return null;
+};
+
+// src/react/components/LODSystem.tsx
+import { useEffect as useEffect23 } from "react";
+var LODSystem = ({
+  levels,
+  hysteresis = 0.1
+}) => {
+  const orchestrator = useScene2();
+  useEffect23(() => {
+    const plugin = new LODSystemPlugin([{ levels, hysteresis }]);
+    orchestrator.use(plugin);
+    return () => {
+      plugin.dispose();
+    };
+  }, [levels, hysteresis]);
+  return null;
+};
+
+// src/react/components/MeasurementTool.tsx
+import { useEffect as useEffect24 } from "react";
+var MeasurementTool = ({
+  enabled = true,
+  color = "#00ff00",
+  onMeasure
+}) => {
+  const orchestrator = useScene2();
+  useEffect24(() => {
+    if (!enabled) {
+      return;
+    }
+    const plugin = new MeasurementToolPlugin((event) => {
+      if (event.distance !== void 0 && event.points.length === 2) {
+        onMeasure?.(event.distance, [event.points[0], event.points[1]]);
+      }
+    });
+    orchestrator.use(plugin);
+    return () => {
+      plugin.dispose();
+    };
+  }, [enabled, onMeasure]);
+  return null;
+};
+
+// src/react/components/Model.tsx
+import { useEffect as useEffect25, useState as useState7 } from "react";
+var Model = ({
+  entry,
+  draco = false,
+  children
+}) => {
+  const orchestrator = useScene2();
+  const [model, setModel] = useState7(null);
+  useEffect25(() => {
+    const load = async () => {
+      const gltf = await orchestrator.setModel(entry, { draco });
+      setModel(gltf);
+    };
+    load();
+  }, [entry.id, draco]);
+  if (!model) {
+    return null;
+  }
+  return children?.(model);
+};
+
+// src/react/components/ModelPreload.tsx
+import { useEffect as useEffect26 } from "react";
+var ModelPreload = ({
+  entries,
+  draco = false
+}) => {
+  useEffect26(() => {
+    entries.forEach((entry) => {
+      GLTFLoader2.load(entry, { draco }).catch(() => {
+      });
+    });
+  }, [entries, draco]);
+  return null;
+};
+
+// src/react/components/OrbitControls.tsx
+import { useEffect as useEffect27 } from "react";
+var OrbitControls4 = () => {
+  const orchestrator = useScene2();
+  useEffect27(() => {
+    orchestrator.use(new OrbitControlsPlugin());
+  }, []);
+  return null;
+};
+
+// src/react/components/PointLight.tsx
+import { useEffect as useEffect28 } from "react";
+var PointLight = ({
+  intensity = 1,
+  color = 16777215,
+  position = [0, 5, 0],
+  distance = 0,
+  decay = 2
+}) => {
+  const { scene } = useScene2();
+  useEffect28(() => {
+    const light = new THREE.PointLight(color, intensity, distance, decay);
+    light.position.set(...position);
+    scene.add(light);
+    if (process.env.NODE_ENV === "development") {
+      const helper = new THREE.PointLightHelper(light, 0.5);
+      scene.add(helper);
+      return () => {
+        scene.remove(light);
+        scene.remove(helper);
+        light.dispose();
+      };
+    }
+    return () => {
+      scene.remove(light);
+      light.dispose();
+    };
+  }, [intensity, color, position, distance, decay]);
+  return null;
+};
+
+// src/react/components/PostProcessing.tsx
+import { useEffect as useEffect29 } from "react";
+var PostProcessing = ({
+  bloom = { strength: 1.5, radius: 0.4, threshold: 0 },
+  enabled = true
+}) => {
+  const orchestrator = useScene2();
+  useEffect29(() => {
+    if (!enabled) {
+      return;
+    }
+    const plugin = new PostProcessingPlugin(bloom);
+    orchestrator.use(plugin);
+    return () => {
+    };
+  }, [enabled, bloom.strength, bloom.radius, bloom.threshold]);
+  return null;
+};
+
+// src/react/components/Raycaster.tsx
+import { useEffect as useEffect30 } from "react";
+var Raycaster = ({ onClick, onHover }) => {
+  const orchestrator = useScene2();
+  useEffect30(() => {
+    const plugin = new RaycasterPlugin((event) => {
+      if (event.type === "click" && onClick) {
+        onClick(event.object);
+      }
+      if (event.type === "hover" && onHover) {
+        onHover(event.object);
+      }
+    });
+    orchestrator.use(plugin);
+  }, [onClick, onHover]);
+  return null;
+};
+
+// src/react/components/SpotLight.tsx
+import { useEffect as useEffect31 } from "react";
+var SpotLight = ({
+  intensity = 5,
+  color = 16777215,
+  position = [0, 10, 0],
+  target,
+  angle = Math.PI / 6,
+  penumbra = 0.1,
+  distance = 50,
+  castShadow = true
+}) => {
+  const { scene } = useScene2();
+  useEffect31(() => {
+    const light = new THREE.SpotLight(
+      color,
+      intensity,
+      distance,
+      angle,
+      penumbra
+    );
+    light.position.set(...position);
+    light.castShadow = castShadow;
+    if (castShadow) {
+      light.shadow.mapSize.width = 2048;
+      light.shadow.mapSize.height = 2048;
+    }
+    scene.add(light);
+    if (target) {
+      if (typeof target === "string") {
+        const obj = scene.getObjectByName(target);
+        if (obj) {
+          light.target = obj;
+        }
+      } else {
+        light.target = target;
+        scene.add(target);
+      }
+    }
+    if (process.env.NODE_ENV === "development") {
+      const helper = new THREE.SpotLightHelper(light);
+      scene.add(helper);
+      return () => {
+        scene.remove(light);
+        scene.remove(helper);
+        light.dispose();
+      };
+    }
+    return () => {
+      scene.remove(light);
+      light.dispose();
+    };
+  }, [
+    intensity,
+    color,
+    position,
+    target,
+    angle,
+    penumbra,
+    distance,
+    castShadow
+  ]);
+  return null;
+};
+
+// src/react/components/Suspense.tsx
+import { Suspense as SuspenseReact } from "react";
+import { jsx as jsx8, jsxs as jsxs2 } from "react/jsx-runtime";
+var Suspense = ({
+  children,
+  fallback,
+  loadingMessage = "Loading 3D model..."
+}) => {
+  const defaultFallback = /* @__PURE__ */ jsx8("div", { className: "fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50", children: /* @__PURE__ */ jsxs2("div", { className: "bg-gray-900/90 border border-gray-700 rounded-xl p-8 shadow-2xl text-center", children: [
+    /* @__PURE__ */ jsx8("div", { className: "w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" }),
+    /* @__PURE__ */ jsx8("p", { className: "text-xl font-semibold text-white", children: loadingMessage }),
+    /* @__PURE__ */ jsx8("p", { className: "text-sm text-gray-400 mt-2", children: "This may take a few seconds..." })
+  ] }) });
+  return /* @__PURE__ */ jsx8(SuspenseReact, { fallback: fallback || defaultFallback, children });
+};
+
+// src/react/components/SuspenseModel.tsx
+import { jsx as jsx9, jsxs as jsxs3 } from "react/jsx-runtime";
+var SuspenseModel = ({
+  entry,
+  draco,
+  fallback = /* @__PURE__ */ jsxs3("div", { className: "text-white", children: [
+    "Loading model ",
+    entry.id,
+    "..."
+  ] }),
+  children
+}) => {
+  return /* @__PURE__ */ jsx9(Suspense, { fallback, children: /* @__PURE__ */ jsx9(Model, { entry, draco, children: (model) => children?.(model) }) });
+};
+
+// src/react/components/TheaterLighting.tsx
+import { useEffect as useEffect32 } from "react";
+var TheaterLighting = ({
+  intensity = 2,
+  count = 8
+}) => {
+  const { scene } = useScene2();
+  useEffect32(() => {
+    const lights = [];
+    for (let i = 0; i < count; i++) {
+      const angle = i / count * Math.PI * 2;
+      const light = new THREE.PointLight(16777215, intensity);
+      light.position.set(Math.cos(angle) * 5, 5, Math.sin(angle) * 5);
+      scene.add(light);
+      lights.push(light);
+    }
+    return () => {
+      lights.forEach((l) => {
+        scene.remove(l);
+        l.dispose();
+      });
+    };
+  }, [intensity, count]);
+  return null;
+};
+
+// src/react/components/VRButton.tsx
+import { useEffect as useEffect33 } from "react";
+import { VRButton as ThreeVRButton } from "three/examples/jsm/webxr/VRButton.js";
+var VRButton = () => {
+  const { renderer } = useScene2();
+  useEffect33(() => {
+    if (!renderer) {
+      return;
+    }
+    renderer.xr.enabled = true;
+    const button = ThreeVRButton.createButton(renderer);
+    document.body.appendChild(button);
+    return () => {
+      if (button.parentNode) {
+        button.parentNode.removeChild(button);
+      }
+    };
+  }, [renderer]);
+  return null;
+};
+
+// src/react/controls/AnimationController.tsx
+import { useEffect as useEffect34, useState as useState8 } from "react";
+import { jsx as jsx10 } from "react/jsx-runtime";
+var AnimationController = ({
+  children,
+  className
+}) => {
+  const model = useActiveModel();
+  const [clips, setClips] = useState8([]);
+  const [mixer, setMixer] = useState8(
+    () => new THREE.AnimationMixer(null)
+  );
+  const [actions, setActions] = useState8(
+    /* @__PURE__ */ new Map()
+  );
+  const [playing, setPlaying] = useState8(/* @__PURE__ */ new Set());
+  const [reversed, setReversed] = useState8(/* @__PURE__ */ new Set());
+  useEffect34(() => {
+    if (!model) {
+      setClips([]);
+      mixer.stopAllAction();
+      return;
+    }
+    if (model.animations && model.animations.length > 0) {
+      setClips(model.animations);
+      setMixer(new THREE.AnimationMixer(model));
+      mixer.setTime(0);
+      const newActions = /* @__PURE__ */ new Map();
+      model.animations.forEach((clip) => {
+        const action = mixer.clipAction(clip);
+        action.clampWhenFinished = true;
+        action.enabled = true;
+        action.setLoop(THREE.LoopOnce, 1);
+        action.reset();
+        newActions.set(clip.name, action);
+      });
+      setActions(newActions);
+    }
+    const clock = new THREE.Clock();
+    const animate = () => {
+      mixer.update(clock.getDelta());
+      requestAnimationFrame(animate);
+    };
+    animate();
+    return () => {
+      mixer.stopAllAction();
+    };
+  }, [model]);
+  const playForward = (name) => {
+    const action = actions.get(name);
+    if (!action) {
+      return;
+    }
+    actions.forEach((a, n) => {
+      if (n !== name) {
+        a.fadeOut(0.2);
+      }
+    });
+    action.reset().setEffectiveTimeScale(1).setEffectiveWeight(1).fadeIn(0.2).play();
+    setPlaying((prev) => new Set(prev).add(name));
+    setReversed((prev) => {
+      const next = new Set(prev);
+      next.delete(name);
+      return next;
+    });
+  };
+  const playBackward = (name) => {
+    const action = actions.get(name);
+    if (!action) {
+      return;
+    }
+    actions.forEach((a, n) => {
+      if (n !== name) {
+        a.fadeOut(0.2);
+      }
+    });
+    action.reset().setEffectiveTimeScale(-1).setEffectiveWeight(1).fadeIn(0.2).play();
+    setPlaying((prev) => new Set(prev).add(name));
+    setReversed((prev) => new Set(prev).add(name));
+  };
+  const toggle = (name) => {
+    if (reversed.has(name)) {
+      playForward(name);
+    } else {
+      playBackward(name);
+    }
+  };
+  const animationList = clips.map((clip) => ({
+    name: clip.name || `Animaci\xF3n ${clip.uuid.slice(0, 4)}`,
+    playForward: () => playForward(clip.name),
+    playBackward: () => playBackward(clip.name),
+    toggle: () => toggle(clip.name),
+    isPlaying: playing.has(clip.name),
+    isReversed: reversed.has(clip.name)
+  }));
+  if (animationList.length === 0) {
+    return null;
+  }
+  return /* @__PURE__ */ jsx10("div", { className, children: children(animationList) });
+};
+
+// src/react/controls/LightingController.tsx
+import React11, { useState as useState9 } from "react";
+import { jsx as jsx11, jsxs as jsxs4 } from "react/jsx-runtime";
+var LightingController = ({
+  className
+}) => {
+  const { scene } = useScene2();
+  const [intensity, setIntensity] = useState9(1);
+  const updateLights = (value) => {
+    setIntensity(value);
+    scene.traverse((obj) => {
+      if (obj instanceof THREE.Light) {
+        obj.intensity = value * (obj.userData.baseIntensity || 1);
+      }
+    });
+  };
+  React11.useEffect(() => {
+    scene.traverse((obj) => {
+      if (obj instanceof THREE.Light) {
+        obj.userData.baseIntensity = obj.intensity;
+      }
+    });
+  }, [scene]);
+  return /* @__PURE__ */ jsxs4("div", { className: `bg-black/80 text-white p-4 rounded-lg ${className || ""}`, children: [
+    /* @__PURE__ */ jsx11("h3", { className: "text-lg font-bold mb-3", children: "Iluminaci\xF3n Global" }),
+    /* @__PURE__ */ jsxs4("label", { className: "block", children: [
+      /* @__PURE__ */ jsxs4("span", { className: "text-sm", children: [
+        "Intensidad: ",
+        intensity.toFixed(2)
+      ] }),
+      /* @__PURE__ */ jsx11(
+        "input",
+        {
+          type: "range",
+          min: "0",
+          max: "3",
+          step: "0.01",
+          value: intensity,
+          onChange: (e) => updateLights(parseFloat(e.target.value)),
+          className: "w-full mt-2"
+        }
+      )
+    ] })
+  ] });
+};
+
+// src/react/controls/MaterialController.tsx
+import { useEffect as useEffect35, useState as useState10 } from "react";
+
+// src/core/utils/QuadWireframe.ts
+var createQuadWireframe = (geometry) => {
+  const position = geometry.attributes.position;
+  const indices = geometry.index?.array;
+  const vertices = [];
+  const edgeMap = /* @__PURE__ */ new Map();
+  const getKey = (a, b) => a < b ? `${a},${b}` : `${b},${a}`;
+  if (!indices) {
+    return new THREE.EdgesGeometry(geometry, 30);
+  }
+  if (!position) {
+    return new THREE.EdgesGeometry(geometry, 30);
+  }
+  const vertexPositions = [];
+  for (let i = 0; i < position.count; i++) {
+    vertexPositions.push([
+      position.array[i * 3],
+      position.array[i * 3 + 1],
+      position.array[i * 3 + 2]
+    ]);
+  }
+  const distanceSq = (a, b) => {
+    const [x1, y1, z1] = vertexPositions[a];
+    const [x2, y2, z2] = vertexPositions[b];
+    return (x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2;
+  };
+  const trianglePairs = /* @__PURE__ */ new Map();
+  for (let i = 0; i < indices.length; i += 3) {
+    const [a, b, c] = [indices[i], indices[i + 1], indices[i + 2]];
+    [getKey(a, b), getKey(b, c), getKey(c, a)].forEach((edge) => {
+      if (!trianglePairs.has(edge)) {
+        trianglePairs.set(edge, []);
+      }
+      trianglePairs.get(edge).push(i / 3);
+    });
+  }
+  for (let i = 0; i < indices.length; i += 3) {
+    const [a, b, c] = [indices[i], indices[i + 1], indices[i + 2]];
+    const edges = [
+      { key: getKey(a, b), verts: [a, b] },
+      { key: getKey(b, c), verts: [b, c] },
+      { key: getKey(c, a), verts: [c, a] }
+    ];
+    const lengths = [distanceSq(a, b), distanceSq(b, c), distanceSq(c, a)];
+    const maxIdx = lengths.indexOf(Math.max(...lengths));
+    const diagonal = edges[maxIdx];
+    const legs = edges.filter((_, i2) => i2 !== maxIdx);
+    const isQuad = (trianglePairs.get(diagonal.key)?.length || 0) > 1;
+    (isQuad ? legs : edges).forEach(({ verts: [V1, V2] }) => {
+      const v1 = V1;
+      const v2 = V2;
+      const key = getKey(v1, v2);
+      if (!edgeMap.has(key)) {
+        edgeMap.set(key, 1);
+        vertices.push(
+          position.array[v1 * 3],
+          position.array[v1 * 3 + 1],
+          position.array[v1 * 3 + 2],
+          position.array[v2 * 3],
+          position.array[v2 * 3 + 1],
+          position.array[v2 * 3 + 2]
+        );
+      }
+    });
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+  return geo;
+};
+
+// src/react/controls/MaterialController.tsx
+import { jsx as jsx12 } from "react/jsx-runtime";
+var MaterialController = ({
+  materials,
+  transitionDuration = 0,
+  children,
+  className
+}) => {
+  const model = useActiveModel();
+  const [activeName, setActiveName] = useState10(null);
+  const [isTransitioning, setIsTransitioning] = useState10(false);
+  useEffect35(() => {
+    if (!model) {
+      return;
+    }
+    model.traverse((child) => {
+      if (!(child instanceof THREE.Mesh)) {
+        return;
+      }
+      if (!child.userData.originalMaterial) {
+        child.userData.originalMaterial = child.material;
+      }
+      if (!child.getObjectByName(`${child.name}-wireframe`)) {
+        const wireGeo = createQuadWireframe(child.geometry);
+        const lineMat = new THREE.LineBasicMaterial({
+          color: 0,
+          linewidth: 3,
+          polygonOffset: true,
+          polygonOffsetFactor: 1,
+          polygonOffsetUnits: 1
+        });
+        const wireframe = new THREE.LineSegments(wireGeo, lineMat);
+        wireframe.name = `${child.name}-wireframe`;
+        wireframe.renderOrder = 999;
+        wireframe.visible = false;
+        child.add(wireframe);
+      }
+    });
+  }, [model]);
+  const applyMaterial = async (config) => {
+    if (!model || isTransitioning) {
+      return;
+    }
+    setIsTransitioning(transitionDuration > 0);
+    const meshes = [];
+    model.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        meshes.push(child);
+      }
+    });
+    if (transitionDuration === 0) {
+      meshes.forEach((child) => applyMaterialToMesh(child, config));
+      setActiveName(config.name);
+      setIsTransitioning(false);
+      return;
+    }
+    const delayPerMesh = transitionDuration / meshes.length;
+    for (let i = 0; i < meshes.length; i++) {
+      setTimeout(() => {
+        applyMaterialToMesh(meshes[i], config);
+        if (i === meshes.length - 1) {
+          setActiveName(config.name);
+          setIsTransitioning(false);
+        }
+      }, i * delayPerMesh);
+    }
+  };
+  const applyMaterialToMesh = (child, config) => {
+    const wireframe = child.getObjectByName(
+      `${child.name}-wireframe`
+    );
+    let newMat;
+    switch (config.type) {
+      case "textured":
+        newMat = child.userData.originalMaterial;
+        if (wireframe) {
+          wireframe.visible = false;
+        }
+        break;
+      case "solid":
+        newMat = new THREE.MeshStandardMaterial({
+          color: config.color ?? 8947848,
+          metalness: config.metalness ?? 0,
+          roughness: config.roughness ?? 0.9
+        });
+        if (wireframe) {
+          wireframe.visible = false;
+        }
+        break;
+      case "wireframe":
+        newMat = new THREE.MeshStandardMaterial({
+          color: config.color ?? 8947848,
+          metalness: config.metalness ?? 0,
+          roughness: config.roughness ?? 0.9,
+          transparent: true,
+          opacity: 0.95
+        });
+        if (wireframe) {
+          wireframe.visible = true;
+          wireframe.material.color.set(
+            config.lineColor ?? 0
+          );
+        }
+        break;
+      case "custom":
+        newMat = config.factory(child.userData.originalMaterial);
+        if (wireframe) {
+          wireframe.visible = false;
+        }
+        break;
+    }
+    child.material = newMat;
+  };
+  const items = materials.map((config) => ({
+    name: config.name,
+    apply: () => applyMaterial(config),
+    isActive: activeName === config.name
+  }));
+  useEffect35(() => {
+    if (items.length > 0 && !activeName) {
+      items[0]?.apply?.();
+    }
+  }, [items]);
+  if (!model || items.length === 0) {
+    return null;
+  }
+  return /* @__PURE__ */ jsx12("div", { className, children: children(items) });
+};
+
+// src/react/primitives/SceneObject.tsx
+import { useEffect as useEffect36 } from "react";
+var SceneObject = ({
+  object,
+  parent = "scene",
+  name,
+  position,
+  rotation,
+  scale = [1, 1, 1],
+  visible = true,
+  castShadow = false,
+  receiveShadow = false
+}) => {
+  const orchestrator = useScene2();
+  useEffect36(() => {
+    if (name) {
+      object.name = name;
+    }
+    object.visible = visible;
+    object.castShadow = castShadow;
+    object.receiveShadow = receiveShadow;
+    if (position) {
+      object.position.set(...position);
+    }
+    if (rotation) {
+      object.rotation.set(...rotation);
+    }
+    if (scale) {
+      object.scale.set(...scale);
+    }
+    let targetParent = null;
+    if (parent === "scene") {
+      targetParent = orchestrator.scene;
+    } else if (parent === "model") {
+      targetParent = orchestrator.getActiveModel();
+    } else if (typeof parent === "string") {
+      targetParent = orchestrator.scene.getObjectByName(parent) || null;
+    } else if (parent instanceof THREE.Object3D) {
+      targetParent = parent;
+    }
+    if (!targetParent) {
+      console.warn("[SceneObject] Padre no encontrado:", parent);
+      return;
+    }
+    targetParent.add(object);
+    return () => {
+      if (object.parent) {
+        object.parent.remove(object);
+      }
+      object.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.geometry?.dispose();
+          if (Array.isArray(child.material)) {
+            child.material.forEach((m) => m.dispose());
+          } else {
+            child.material?.dispose();
+          }
+        }
+      });
+    };
+  }, [
+    object,
+    parent,
+    name,
+    position,
+    rotation,
+    scale,
+    visible,
+    castShadow,
+    receiveShadow
+  ]);
+  return null;
+};
+export {
+  ARButton,
+  AdvancedCameraCollision,
+  AdvancedCameraCollisionPlugin,
+  AdvancedDragRaycaster,
+  AdvancedOrbitControls,
+  AdvancedOrbitControlsPlugin,
+  AdvancedRaycaster,
+  AdvancedRaycasterPlugin,
+  AmbientLight,
+  AnimationController,
+  AnimationTimeline,
+  Annotations,
+  AnnotationsPlugin,
+  AutoLODSystem,
+  AutoLODSystemPlugin,
+  CacheProvider,
+  CacheValidator,
+  Canvas,
+  DirectionalLight,
+  DistanceDisplay,
+  EnvironmentPreset,
+  ErrorBoundary3D,
+  FileWatcher,
+  GLTFLoader2 as GLTFLoader,
+  GroundSurface,
+  HDRI,
+  HDRILoader,
+  Hotspot,
+  HotspotPlugin,
+  Hotspots,
+  InstancedModel,
+  LODSystem,
+  LODSystemPlugin,
+  LightingController,
+  MaterialController,
+  MeasurementTool,
+  MeasurementToolPlugin,
+  Model,
+  ModelPreload,
+  ObjectCache,
+  OrbitControls4 as OrbitControls,
+  OrbitControlsPlugin,
+  PointLight,
+  PostProcessing,
+  PostProcessingPlugin,
+  Raycaster,
+  RaycasterPlugin,
+  SceneObject,
+  SceneOrchestrator,
+  SceneProvider,
+  SpotLight,
+  Suspense,
+  SuspenseModel,
+  THREE,
+  THREE_VERSION,
+  TheaterLighting,
+  DRACOLoader as ThreeDRACOLoader,
+  EXRLoader as ThreeEXRLoader,
+  EffectComposer as ThreeEffectComposer,
+  GLTFLoader as ThreeGLTFLoader,
+  OrbitControls as ThreeOrbitControls,
+  RGBELoader as ThreeRGBELoader,
+  RenderPass as ThreeRenderPass,
+  UnrealBloomPass as ThreeUnrealBloomPass,
+  VRButton,
+  WebPHDRLoader,
+  useActiveModel,
+  useAnimation,
+  useCache2 as useCache,
+  useHDRI,
+  useModel,
+  useRaycaster,
+  useScene2 as useScene
+};
