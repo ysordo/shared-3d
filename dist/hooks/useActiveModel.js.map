@@ -1,0 +1,1 @@
+{"version":3,"file":"useActiveModel.js","sourceRoot":"","sources":["../../src/hooks/useActiveModel.ts"],"names":[],"mappings":"AAAA,YAAY,CAAC;AACb,OAAO,EAAE,QAAQ,EAAE,MAAM,YAAY,CAAC;AAGtC,MAAM,CAAC,MAAM,cAAc,GAAG,GAAuB,EAAE;IACrD,MAAM,YAAY,GAAG,QAAQ,EAAE,CAAC;IAChC,OAAO,YAAY,CAAC,cAAc,EAAE,CAAC;AACvC,CAAC,CAAC"}

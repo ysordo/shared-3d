@@ -1,0 +1,1 @@
+{"version":3,"file":"useCache.js","sourceRoot":"","sources":["../../src/hooks/useCache.ts"],"names":[],"mappings":"AAAA,YAAY,CAAC;AACb,OAAO,EAAE,QAAQ,IAAI,eAAe,EAAE,MAAM,yBAAyB,CAAC;AAEtE,MAAM,CAAC,MAAM,QAAQ,GAAG,GAAG,EAAE;IAC3B,OAAO,eAAe,EAAE,CAAC;AAC3B,CAAC,CAAC"}

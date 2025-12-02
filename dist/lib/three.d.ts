@@ -1,14 +1,13 @@
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 export { THREE };
-export { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-export { GLTFLoader as ThreeGLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-export { DRACOLoader as ThreeDRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
-export { RGBELoader as ThreeRGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
-export { EXRLoader as ThreeEXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
-export { EffectComposer as ThreeEffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-export { RenderPass as ThreeRenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-export { UnrealBloomPass as ThreeUnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-
-declare const THREE_VERSION: string;
-
-export { THREE_VERSION };
+export { OrbitControls as ThreeOrbitControls, GLTFLoader as ThreeGLTFLoader, DRACOLoader as ThreeDRACOLoader, RGBELoader as ThreeRGBELoader, EXRLoader as ThreeEXRLoader, EffectComposer as ThreeEffectComposer, RenderPass as ThreeRenderPass, UnrealBloomPass as ThreeUnrealBloomPass, };
+export declare const THREE_VERSION: string;
+//# sourceMappingURL=three.d.ts.map

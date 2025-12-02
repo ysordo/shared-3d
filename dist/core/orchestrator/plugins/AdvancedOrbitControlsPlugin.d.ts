@@ -1,0 +1,15 @@
+import type { Plugin, PluginContext } from '../types';
+export declare class AdvancedOrbitControlsPlugin implements Plugin {
+    private options;
+    name: string;
+    private controls;
+    private config;
+    constructor(options?: Partial<typeof this.config>);
+    install({ camera, renderer }: PluginContext): void;
+    setPanEnabled(enabled: boolean): void;
+    setRotateEnabled(enabled: boolean): void;
+    setZoomEnabled(enabled: boolean): void;
+    setAllEnabled(enabled: boolean): void;
+    dispose(): void;
+}
+//# sourceMappingURL=AdvancedOrbitControlsPlugin.d.ts.map

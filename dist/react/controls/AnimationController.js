@@ -1,0 +1,108 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+import { useEffect, useState } from 'react';
+import { useActiveModel } from '../../hooks/useActiveModel';
+import { THREE } from '../../lib';
+export const AnimationController = ({ children, className, }) => {
+    const model = useActiveModel();
+    const [clips, setClips] = useState([]);
+    const [mixer, setMixer] = useState(() => new THREE.AnimationMixer(null));
+    const [actions, setActions] = useState(new Map());
+    const [playing, setPlaying] = useState(new Set());
+    const [reversed, setReversed] = useState(new Set());
+    useEffect(() => {
+        if (!model) {
+            setClips([]);
+            mixer.stopAllAction();
+            return;
+        }
+        if (model.animations && model.animations.length > 0) {
+            setClips(model.animations);
+            setMixer(new THREE.AnimationMixer(model));
+            mixer.setTime(0);
+            const newActions = new Map();
+            model.animations.forEach((clip) => {
+                const action = mixer.clipAction(clip);
+                action.clampWhenFinished = true;
+                action.enabled = true;
+                action.setLoop(THREE.LoopOnce, 1);
+                action.reset();
+                newActions.set(clip.name, action);
+            });
+            setActions(newActions);
+        }
+        const clock = new THREE.Clock();
+        const animate = () => {
+            mixer.update(clock.getDelta());
+            requestAnimationFrame(animate);
+        };
+        animate();
+        return () => {
+            mixer.stopAllAction();
+        };
+    }, [model]);
+    const playForward = (name) => {
+        const action = actions.get(name);
+        if (!action) {
+            return;
+        }
+        actions.forEach((a, n) => {
+            if (n !== name) {
+                a.fadeOut(0.2);
+            }
+        });
+        action
+            .reset()
+            .setEffectiveTimeScale(1)
+            .setEffectiveWeight(1)
+            .fadeIn(0.2)
+            .play();
+        setPlaying((prev) => new Set(prev).add(name));
+        setReversed((prev) => {
+            const next = new Set(prev);
+            next.delete(name);
+            return next;
+        });
+    };
+    const playBackward = (name) => {
+        const action = actions.get(name);
+        if (!action) {
+            return;
+        }
+        actions.forEach((a, n) => {
+            if (n !== name) {
+                a.fadeOut(0.2);
+            }
+        });
+        action
+            .reset()
+            .setEffectiveTimeScale(-1)
+            .setEffectiveWeight(1)
+            .fadeIn(0.2)
+            .play();
+        setPlaying((prev) => new Set(prev).add(name));
+        setReversed((prev) => new Set(prev).add(name));
+    };
+    const toggle = (name) => {
+        if (reversed.has(name)) {
+            playForward(name);
+        }
+        else {
+            playBackward(name);
+        }
+    };
+    const animationList = clips.map((clip) => ({
+        name: clip.name || `Animación ${clip.uuid.slice(0, 4)}`,
+        playForward: () => playForward(clip.name),
+        playBackward: () => playBackward(clip.name),
+        toggle: () => toggle(clip.name),
+        isPlaying: playing.has(clip.name),
+        isReversed: reversed.has(clip.name),
+    }));
+    if (animationList.length === 0) {
+        return null;
+    }
+    return _jsx("div", { className: className, children: children(animationList) });
+};
+//# sourceMappingURL=AnimationController.js.map

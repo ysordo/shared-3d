@@ -1,0 +1,1 @@
+{"version":3,"file":"generateManifest.d.ts","sourceRoot":"","sources":["../../../../src/core/cache/server/generateManifest.ts"],"names":[],"mappings":"AAIA,OAAO,KAAK,EAAE,aAAa,EAAE,MAAM,UAAU,CAAC;AAE9C,wBAAsB,gBAAgB,CACpC,SAAS,GAAE,MAAwB,EACnC,UAAU,CAAC,EAAE,MAAM,GAClB,OAAO,CAAC,aAAa,EAAE,CAAC,CAuC1B"}
