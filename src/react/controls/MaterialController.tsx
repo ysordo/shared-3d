@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import type { ReactNode } from 'react';
 import React, { useEffect, useState } from 'react';

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export type ManifestEntry = {
   id: string;
   url: string;

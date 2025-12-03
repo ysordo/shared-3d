@@ -6,7 +6,7 @@
 
 # Class: GLTFLoader
 
-Defined in: [src/core/loaders/GLTFLoader.ts:17](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L17)
+Defined in: [src/core/loaders/GLTFLoader.ts:16](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L16)
 
 ## Constructors
 
@@ -28,7 +28,7 @@ new GLTFLoader(): GLTFLoader;
 static load(entry, options): Promise<Group<Object3DEventMap>>;
 ```
 
-Defined in: [src/core/loaders/GLTFLoader.ts:42](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L42)
+Defined in: [src/core/loaders/GLTFLoader.ts:41](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L41)
 
 #### Parameters
 
@@ -52,7 +52,7 @@ static preload(
 onProgress?): Promise<void>;
 ```
 
-Defined in: [src/core/loaders/GLTFLoader.ts:115](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L115)
+Defined in: [src/core/loaders/GLTFLoader.ts:114](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L114)
 
 #### Parameters
 
@@ -74,7 +74,7 @@ Defined in: [src/core/loaders/GLTFLoader.ts:115](https://github.com/ysordo/share
 static invalidate(id): Promise<void>;
 ```
 
-Defined in: [src/core/loaders/GLTFLoader.ts:134](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L134)
+Defined in: [src/core/loaders/GLTFLoader.ts:133](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L133)
 
 #### Parameters
 
@@ -94,7 +94,7 @@ Defined in: [src/core/loaders/GLTFLoader.ts:134](https://github.com/ysordo/share
 static clearCache(): Promise<void>;
 ```
 
-Defined in: [src/core/loaders/GLTFLoader.ts:138](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L138)
+Defined in: [src/core/loaders/GLTFLoader.ts:137](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L137)
 
 #### Returns
 

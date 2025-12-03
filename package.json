@@ -52,7 +52,6 @@
       "import": "./dist/lib/three.js",
       "require": "./dist/lib/three.cjs"
     },
-
     "./react/*": "./dist/react/*",
     "./hooks/*": "./dist/hooks/*",
     "./core/*": "./dist/core/*",
@@ -81,20 +80,20 @@
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
     "@types/resize-observer-browser": "^0.1.11",
     "@types/three": "^0.177.0",
-    "@typescript-eslint/eslint-plugin": "^8.35.1",
-    "@typescript-eslint/parser": "^8.35.1",
-    "eslint": "^9.30.1",
+    "@typescript-eslint/eslint-plugin": "^8.48.1",
+    "@typescript-eslint/parser": "^8.48.1",
+    "eslint": "^9.39.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "globals": "^16.3.0",
-    "tsup": "^8.3.5",
-    "typedoc": "^0.28.7",
-    "typedoc-plugin-markdown": "^4.7.0",
-    "typescript": "^5.8.3"
+    "globals": "^16.5.0",
+    "tsup": "^8.5.1",
+    "typedoc": "^0.28.15",
+    "typedoc-plugin-markdown": "^4.9.0",
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "react": "^19.1.0",

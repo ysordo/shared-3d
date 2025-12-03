@@ -6,7 +6,7 @@
 
 # Class: ObjectCache
 
-Defined in: [src/core/cache/ObjectCache.ts:8](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L8)
+Defined in: [src/core/cache/ObjectCache.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L7)
 
 ## Constructors
 
@@ -32,7 +32,7 @@ static set<T>(
 updatedAt): Promise<void>;
 ```
 
-Defined in: [src/core/cache/ObjectCache.ts:13](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L13)
+Defined in: [src/core/cache/ObjectCache.ts:12](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L12)
 
 #### Type Parameters
 
@@ -61,7 +61,7 @@ Defined in: [src/core/cache/ObjectCache.ts:13](https://github.com/ysordo/shared-
 static get<T>(id): Promise<CacheEntry<T> | null>;
 ```
 
-Defined in: [src/core/cache/ObjectCache.ts:30](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L30)
+Defined in: [src/core/cache/ObjectCache.ts:29](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L29)
 
 #### Type Parameters
 
@@ -87,7 +87,7 @@ Defined in: [src/core/cache/ObjectCache.ts:30](https://github.com/ysordo/shared-
 static has(id): Promise<boolean>;
 ```
 
-Defined in: [src/core/cache/ObjectCache.ts:35](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L35)
+Defined in: [src/core/cache/ObjectCache.ts:34](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L34)
 
 #### Parameters
 
@@ -107,7 +107,7 @@ Defined in: [src/core/cache/ObjectCache.ts:35](https://github.com/ysordo/shared-
 static delete(id): Promise<void>;
 ```
 
-Defined in: [src/core/cache/ObjectCache.ts:41](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L41)
+Defined in: [src/core/cache/ObjectCache.ts:40](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L40)
 
 #### Parameters
 
@@ -127,7 +127,7 @@ Defined in: [src/core/cache/ObjectCache.ts:41](https://github.com/ysordo/shared-
 static clearAll(): Promise<void>;
 ```
 
-Defined in: [src/core/cache/ObjectCache.ts:50](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L50)
+Defined in: [src/core/cache/ObjectCache.ts:49](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/ObjectCache.ts#L49)
 
 #### Returns
 

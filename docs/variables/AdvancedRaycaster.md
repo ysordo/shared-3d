@@ -10,4 +10,4 @@
 const AdvancedRaycaster: React.FC<AdvancedRaycasterProps>;
 ```
 
-Defined in: [src/react/components/AdvancedRaycaster.tsx:22](https://github.com/ysordo/shared-3d/blob/main/src/react/components/AdvancedRaycaster.tsx#L22)
+Defined in: [src/react/components/AdvancedRaycaster.tsx:20](https://github.com/ysordo/shared-3d/blob/main/src/react/components/AdvancedRaycaster.tsx#L20)

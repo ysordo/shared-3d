@@ -10,7 +10,7 @@
 type GLTFLoaderOptions = object;
 ```
 
-Defined in: [src/core/loaders/GLTFLoader.ts:6](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L6)
+Defined in: [src/core/loaders/GLTFLoader.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L5)
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [src/core/loaders/GLTFLoader.ts:6](https://github.com/ysordo/shared-
 optional draco: boolean;
 ```
 
-Defined in: [src/core/loaders/GLTFLoader.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L7)
+Defined in: [src/core/loaders/GLTFLoader.ts:6](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L6)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/core/loaders/GLTFLoader.ts:7](https://github.com/ysordo/shared-
 optional decoderPath: string;
 ```
 
-Defined in: [src/core/loaders/GLTFLoader.ts:8](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L8)
+Defined in: [src/core/loaders/GLTFLoader.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/GLTFLoader.ts#L7)

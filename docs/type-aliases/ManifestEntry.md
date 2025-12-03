@@ -10,7 +10,7 @@
 type ManifestEntry = object;
 ```
 
-Defined in: [src/core/cache/types.ts:2](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L2)
+Defined in: [src/core/cache/types.ts:1](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L1)
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [src/core/cache/types.ts:2](https://github.com/ysordo/shared-3d/blob
 id: string;
 ```
 
-Defined in: [src/core/cache/types.ts:3](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L3)
+Defined in: [src/core/cache/types.ts:2](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L2)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/core/cache/types.ts:3](https://github.com/ysordo/shared-3d/blob
 url: string;
 ```
 
-Defined in: [src/core/cache/types.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L4)
+Defined in: [src/core/cache/types.ts:3](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L3)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/core/cache/types.ts:4](https://github.com/ysordo/shared-3d/blob
 hash: string;
 ```
 
-Defined in: [src/core/cache/types.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L5)
+Defined in: [src/core/cache/types.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L4)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [src/core/cache/types.ts:5](https://github.com/ysordo/shared-3d/blob
 size: number;
 ```
 
-Defined in: [src/core/cache/types.ts:6](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L6)
+Defined in: [src/core/cache/types.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L5)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/core/cache/types.ts:6](https://github.com/ysordo/shared-3d/blob
 updatedAt: number;
 ```
 
-Defined in: [src/core/cache/types.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L7)
+Defined in: [src/core/cache/types.ts:6](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L6)

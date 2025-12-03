@@ -10,4 +10,4 @@
 const TheaterLighting: React.FC<TheaterLightingProps>;
 ```
 
-Defined in: [src/react/components/TheaterLighting.tsx:13](https://github.com/ysordo/shared-3d/blob/main/src/react/components/TheaterLighting.tsx#L13)
+Defined in: [src/react/components/TheaterLighting.tsx:12](https://github.com/ysordo/shared-3d/blob/main/src/react/components/TheaterLighting.tsx#L12)

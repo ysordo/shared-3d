@@ -6,7 +6,7 @@
 
 # Class: MeasurementToolPlugin
 
-Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L11)
+Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:10](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L10)
 
 ## Implements
 
@@ -20,7 +20,7 @@ Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:11](https://
 new MeasurementToolPlugin(onMeasure?): MeasurementToolPlugin;
 ```
 
-Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:18](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L18)
+Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:17](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L17)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:18](https://
 install(__namedParameters): void;
 ```
 
-Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:22](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L22)
+Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:21](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L21)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:22](https://
 dispose(): void;
 ```
 
-Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:99](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L99)
+Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:98](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L98)
 
 #### Returns
 
@@ -82,7 +82,7 @@ Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:99](https://
 name: string = 'MeasurementTool';
 ```
 
-Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:12](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L12)
+Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L11)
 
 #### Implementation of
 

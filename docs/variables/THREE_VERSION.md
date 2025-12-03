@@ -10,4 +10,4 @@
 const THREE_VERSION: string = THREE.REVISION;
 ```
 
-Defined in: [src/lib/three.ts:28](https://github.com/ysordo/shared-3d/blob/main/src/lib/three.ts#L28)
+Defined in: [src/lib/three.ts:27](https://github.com/ysordo/shared-3d/blob/main/src/lib/three.ts#L27)

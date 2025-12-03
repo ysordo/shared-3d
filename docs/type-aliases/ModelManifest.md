@@ -10,4 +10,4 @@
 type ModelManifest = ManifestEntry[];
 ```
 
-Defined in: [src/core/cache/types.ts:27](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L27)
+Defined in: [src/core/cache/types.ts:26](https://github.com/ysordo/shared-3d/blob/main/src/core/cache/types.ts#L26)

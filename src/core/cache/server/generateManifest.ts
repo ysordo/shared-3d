@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-// src/core/cache/generateManifest.ts
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';

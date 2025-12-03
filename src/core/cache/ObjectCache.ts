@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { get, set, del, keys } from 'idb-keyval';
 import type { CacheEntry } from './types';
 import { THREE } from '../../lib';

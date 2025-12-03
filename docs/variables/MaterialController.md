@@ -10,4 +10,4 @@
 const MaterialController: React.FC<MaterialControllerProps>;
 ```
 
-Defined in: [src/react/controls/MaterialController.tsx:52](https://github.com/ysordo/shared-3d/blob/main/src/react/controls/MaterialController.tsx#L52)
+Defined in: [src/react/controls/MaterialController.tsx:50](https://github.com/ysordo/shared-3d/blob/main/src/react/controls/MaterialController.tsx#L50)

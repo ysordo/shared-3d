@@ -10,4 +10,4 @@
 const DirectionalLight: React.FC<DirectionalLightProps>;
 ```
 
-Defined in: [src/react/components/DirectionalLight.tsx:16](https://github.com/ysordo/shared-3d/blob/main/src/react/components/DirectionalLight.tsx#L16)
+Defined in: [src/react/components/DirectionalLight.tsx:15](https://github.com/ysordo/shared-3d/blob/main/src/react/components/DirectionalLight.tsx#L15)

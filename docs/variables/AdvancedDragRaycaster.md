@@ -10,4 +10,4 @@
 const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps>;
 ```
 
-Defined in: [src/react/components/AdvancedDragRaycaster.tsx:34](https://github.com/ysordo/shared-3d/blob/main/src/react/components/AdvancedDragRaycaster.tsx#L34)
+Defined in: [src/react/components/AdvancedDragRaycaster.tsx:32](https://github.com/ysordo/shared-3d/blob/main/src/react/components/AdvancedDragRaycaster.tsx#L32)

@@ -10,7 +10,7 @@
 const SceneObject: React.FC<SceneObjectProps>;
 ```
 
-Defined in: [src/react/primitives/SceneObject.tsx:27](https://github.com/ysordo/shared-3d/blob/main/src/react/primitives/SceneObject.tsx#L27)
+Defined in: [src/react/primitives/SceneObject.tsx:26](https://github.com/ysordo/shared-3d/blob/main/src/react/primitives/SceneObject.tsx#L26)
 
 Primitiva universal para añadir cualquier objeto 3D
 Puede ir en:

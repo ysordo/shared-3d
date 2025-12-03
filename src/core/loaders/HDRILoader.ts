@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { WebPHDRLoader } from './WebPHDRLoader';
 import { ObjectCache } from '../cache/ObjectCache';
 import type { ManifestEntry, ModelManifest } from '../cache/types';

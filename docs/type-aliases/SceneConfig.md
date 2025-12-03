@@ -10,7 +10,7 @@
 type SceneConfig = object;
 ```
 
-Defined in: [src/core/orchestrator/SceneOrchestrator.ts:8](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L8)
+Defined in: [src/core/orchestrator/SceneOrchestrator.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L7)
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [src/core/orchestrator/SceneOrchestrator.ts:8](https://github.com/ys
 optional antialias: boolean;
 ```
 
-Defined in: [src/core/orchestrator/SceneOrchestrator.ts:9](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L9)
+Defined in: [src/core/orchestrator/SceneOrchestrator.ts:8](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L8)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/core/orchestrator/SceneOrchestrator.ts:9](https://github.com/ys
 optional shadows: boolean;
 ```
 
-Defined in: [src/core/orchestrator/SceneOrchestrator.ts:10](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L10)
+Defined in: [src/core/orchestrator/SceneOrchestrator.ts:9](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L9)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/core/orchestrator/SceneOrchestrator.ts:10](https://github.com/y
 optional toneMapping: THREE.ToneMapping;
 ```
 
-Defined in: [src/core/orchestrator/SceneOrchestrator.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L11)
+Defined in: [src/core/orchestrator/SceneOrchestrator.ts:10](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L10)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [src/core/orchestrator/SceneOrchestrator.ts:11](https://github.com/y
 optional toneMappingExposure: number;
 ```
 
-Defined in: [src/core/orchestrator/SceneOrchestrator.ts:12](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L12)
+Defined in: [src/core/orchestrator/SceneOrchestrator.ts:11](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L11)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/core/orchestrator/SceneOrchestrator.ts:12](https://github.com/y
 optional background: THREE.Color | string | THREE.Texture;
 ```
 
-Defined in: [src/core/orchestrator/SceneOrchestrator.ts:13](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L13)
+Defined in: [src/core/orchestrator/SceneOrchestrator.ts:12](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L12)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/core/orchestrator/SceneOrchestrator.ts:13](https://github.com/y
 optional clearColor: THREE.ColorRepresentation;
 ```
 
-Defined in: [src/core/orchestrator/SceneOrchestrator.ts:14](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L14)
+Defined in: [src/core/orchestrator/SceneOrchestrator.ts:13](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/SceneOrchestrator.ts#L13)

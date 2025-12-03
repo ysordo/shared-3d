@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { ObjectCache } from '../cache/ObjectCache';
 import type { ModelManifest, ManifestEntry } from '../cache/types';
 import { THREE, ThreeGLTFLoader, ThreeDRACOLoader } from '../../lib';

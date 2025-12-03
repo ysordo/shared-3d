@@ -6,7 +6,7 @@
 
 # Class: ErrorBoundary3D
 
-Defined in: [src/react/components/ErrorBoundary3D.tsx:16](https://github.com/ysordo/shared-3d/blob/main/src/react/components/ErrorBoundary3D.tsx#L16)
+Defined in: [src/react/components/ErrorBoundary3D.tsx:15](https://github.com/ysordo/shared-3d/blob/main/src/react/components/ErrorBoundary3D.tsx#L15)
 
 ## Extends
 
@@ -71,7 +71,7 @@ Component<Props, State>.constructor
 static getDerivedStateFromError(): object;
 ```
 
-Defined in: [src/react/components/ErrorBoundary3D.tsx:19](https://github.com/ysordo/shared-3d/blob/main/src/react/components/ErrorBoundary3D.tsx#L19)
+Defined in: [src/react/components/ErrorBoundary3D.tsx:18](https://github.com/ysordo/shared-3d/blob/main/src/react/components/ErrorBoundary3D.tsx#L18)
 
 #### Returns
 
@@ -79,7 +79,7 @@ Defined in: [src/react/components/ErrorBoundary3D.tsx:19](https://github.com/yso
 
 | Name | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ |
-| `hasError` | `boolean` | `true` | [src/react/components/ErrorBoundary3D.tsx:20](https://github.com/ysordo/shared-3d/blob/main/src/react/components/ErrorBoundary3D.tsx#L20) |
+| `hasError` | `boolean` | `true` | [src/react/components/ErrorBoundary3D.tsx:19](https://github.com/ysordo/shared-3d/blob/main/src/react/components/ErrorBoundary3D.tsx#L19) |
 
 ***
 
@@ -89,7 +89,7 @@ Defined in: [src/react/components/ErrorBoundary3D.tsx:19](https://github.com/yso
 componentDidCatch(error, errorInfo): void;
 ```
 
-Defined in: [src/react/components/ErrorBoundary3D.tsx:23](https://github.com/ysordo/shared-3d/blob/main/src/react/components/ErrorBoundary3D.tsx#L23)
+Defined in: [src/react/components/ErrorBoundary3D.tsx:22](https://github.com/ysordo/shared-3d/blob/main/src/react/components/ErrorBoundary3D.tsx#L22)
 
 Catches exceptions generated in descendant components. Unhandled exceptions will cause
 the entire component tree to unmount.
@@ -128,7 +128,7 @@ render():
   | undefined;
 ```
 
-Defined in: [src/react/components/ErrorBoundary3D.tsx:27](https://github.com/ysordo/shared-3d/blob/main/src/react/components/ErrorBoundary3D.tsx#L27)
+Defined in: [src/react/components/ErrorBoundary3D.tsx:26](https://github.com/ysordo/shared-3d/blob/main/src/react/components/ErrorBoundary3D.tsx#L26)
 
 #### Returns
 
@@ -156,11 +156,11 @@ Component.render
 state: object;
 ```
 
-Defined in: [src/react/components/ErrorBoundary3D.tsx:17](https://github.com/ysordo/shared-3d/blob/main/src/react/components/ErrorBoundary3D.tsx#L17)
+Defined in: [src/react/components/ErrorBoundary3D.tsx:16](https://github.com/ysordo/shared-3d/blob/main/src/react/components/ErrorBoundary3D.tsx#L16)
 
 | Name | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ |
-| `hasError` | `boolean` | `false` | [src/react/components/ErrorBoundary3D.tsx:17](https://github.com/ysordo/shared-3d/blob/main/src/react/components/ErrorBoundary3D.tsx#L17) |
+| `hasError` | `boolean` | `false` | [src/react/components/ErrorBoundary3D.tsx:16](https://github.com/ysordo/shared-3d/blob/main/src/react/components/ErrorBoundary3D.tsx#L16) |
 
 #### Overrides
 

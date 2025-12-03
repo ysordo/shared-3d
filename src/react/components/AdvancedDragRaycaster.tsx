@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import React, { useEffect, useState, useRef } from 'react';
 import { useScene } from '../../hooks/useScene';

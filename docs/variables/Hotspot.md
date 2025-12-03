@@ -10,4 +10,4 @@
 const Hotspot: React.FC<HotspotProps>;
 ```
 
-Defined in: [src/react/components/Hotspot.tsx:16](https://github.com/ysordo/shared-3d/blob/main/src/react/components/Hotspot.tsx#L16)
+Defined in: [src/react/components/Hotspot.tsx:15](https://github.com/ysordo/shared-3d/blob/main/src/react/components/Hotspot.tsx#L15)

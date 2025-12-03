@@ -6,7 +6,7 @@
 
 # Class: HDRILoader
 
-Defined in: [src/core/loaders/HDRILoader.ts:20](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L20)
+Defined in: [src/core/loaders/HDRILoader.ts:19](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L19)
 
 ## Constructors
 
@@ -28,7 +28,7 @@ new HDRILoader(): HDRILoader;
 static load(entry, events): Promise<Texture>;
 ```
 
-Defined in: [src/core/loaders/HDRILoader.ts:27](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L27)
+Defined in: [src/core/loaders/HDRILoader.ts:26](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L26)
 
 Carga un HDRI de forma inteligente (con caché + hash)
 
@@ -51,7 +51,7 @@ Carga un HDRI de forma inteligente (con caché + hash)
 static preload(entries, onProgress?): Promise<void>;
 ```
 
-Defined in: [src/core/loaders/HDRILoader.ts:99](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L99)
+Defined in: [src/core/loaders/HDRILoader.ts:98](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L98)
 
 Precarga múltiples HDRIs
 
@@ -74,7 +74,7 @@ Precarga múltiples HDRIs
 static invalidate(id): Promise<void>;
 ```
 
-Defined in: [src/core/loaders/HDRILoader.ts:122](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L122)
+Defined in: [src/core/loaders/HDRILoader.ts:121](https://github.com/ysordo/shared-3d/blob/main/src/core/loaders/HDRILoader.ts#L121)
 
 Invalida caché de un HDRI específico
 

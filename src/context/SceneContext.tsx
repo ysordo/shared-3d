@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, forwardRef, useEffect, useState } from 'react';
@@ -22,33 +20,28 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
     const [orchestrator, setOrchestrator] = useState<SceneOrchestrator | null>(null);
 
     useEffect(() => {
-      // Validamos cuando el ref esté listo
       if (!ref) {
         return;
       }
 
-      // Si es función (ref callback), no tiene .current
       if (typeof ref === 'function') {
         throw new Error(
           'SceneProvider no soporta ref como función. Usa useRef()'
         );
       }
 
-      // Ahora sí: ref es RefObject → tiene .current
       if (!ref.current) {
         console.warn('SceneProvider: canvas ref no está asignado aún');
         return;
       }
 
-      // ¡Aquí ya es seguro!
       setOrchestrator((prev) => {
         if (prev) {
-          return prev; // Ya inicializado
+          return prev;
         }
         return SceneOrchestrator.getInstance(ref.current ?? undefined, config);
       });
 
-      // Opcional: exponer en window para debug
       if (process.env.NODE_ENV === 'development') {
         (window as any).__ORCHESTRATOR__ = orchestrator;
       }
@@ -64,7 +57,6 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
 
 SceneProvider.displayName = 'SceneProvider';
 
-// Hook seguro
 export const useScene = (): SceneOrchestrator => {
   const context = useContext(SceneContext);
   if (!context) {

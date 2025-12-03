@@ -10,4 +10,4 @@
 const SceneProvider: ForwardRefExoticComponent<SceneProviderProps & RefAttributes<HTMLCanvasElement>>;
 ```
 
-Defined in: [src/context/SceneContext.tsx:19](https://github.com/ysordo/shared-3d/blob/main/src/context/SceneContext.tsx#L19)
+Defined in: [src/context/SceneContext.tsx:18](https://github.com/ysordo/shared-3d/blob/main/src/context/SceneContext.tsx#L18)

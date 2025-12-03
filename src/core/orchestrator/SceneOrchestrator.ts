@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import * as THREE from 'three';
 import { GLTFLoader } from '../loaders/GLTFLoader';
 import { HDRILoader } from '../loaders/HDRILoader';

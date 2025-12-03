@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SimplifyModifier } from 'three/examples/jsm/modifiers/SimplifyModifier.js';
 import type { Plugin, PluginContext } from '../types';
 import { THREE } from '../../../lib/three';

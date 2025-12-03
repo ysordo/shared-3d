@@ -10,4 +10,4 @@
 const MeasurementTool: React.FC<MeasurementToolProps>;
 ```
 
-Defined in: [src/react/components/MeasurementTool.tsx:19](https://github.com/ysordo/shared-3d/blob/main/src/react/components/MeasurementTool.tsx#L19)
+Defined in: [src/react/components/MeasurementTool.tsx:17](https://github.com/ysordo/shared-3d/blob/main/src/react/components/MeasurementTool.tsx#L17)

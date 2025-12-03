@@ -6,7 +6,7 @@
 
 # Class: AdvancedRaycasterPlugin
 
-Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:193](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts#L193)
+Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:192](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts#L192)
 
 ## Implements
 
@@ -22,7 +22,7 @@ Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:193](https
 get manager(): RaycasterManager;
 ```
 
-Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:233](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts#L233)
+Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:232](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts#L232)
 
 ##### Returns
 
@@ -36,7 +36,7 @@ Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:233](https
 new AdvancedRaycasterPlugin(model?, onEvent?): AdvancedRaycasterPlugin;
 ```
 
-Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:197](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts#L197)
+Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:196](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts#L196)
 
 #### Parameters
 
@@ -57,7 +57,7 @@ Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:197](https
 install(__namedParameters): void;
 ```
 
-Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:204](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts#L204)
+Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:203](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts#L203)
 
 #### Parameters
 
@@ -81,7 +81,7 @@ Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:204](https
 dispose(): void;
 ```
 
-Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:231](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts#L231)
+Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:230](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts#L230)
 
 #### Returns
 
@@ -99,7 +99,7 @@ Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:231](https
 name: string = 'AdvancedRaycaster';
 ```
 
-Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:194](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts#L194)
+Defined in: [src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts:193](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/AdvancedRaycasterPlugin.ts#L193)
 
 #### Implementation of
 

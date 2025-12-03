@@ -10,7 +10,7 @@
 type MeasurementEvent = object;
 ```
 
-Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L5)
+Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:4](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L4)
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:5](https://g
 point: THREE.Vector3;
 ```
 
-Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:6](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L6)
+Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:5](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L5)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:6](https://g
 optional distance: number;
 ```
 
-Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L7)
+Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:6](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L6)
 
 ***
 
@@ -40,4 +40,4 @@ Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:7](https://g
 points: THREE.Vector3[];
 ```
 
-Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:8](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L8)
+Defined in: [src/core/orchestrator/plugins/MeasurementToolPlugin.ts:7](https://github.com/ysordo/shared-3d/blob/main/src/core/orchestrator/plugins/MeasurementToolPlugin.ts#L7)

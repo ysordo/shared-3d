@@ -10,7 +10,7 @@
 function CacheProvider(__namedParameters): Element;
 ```
 
-Defined in: [src/context/CacheContext.tsx:19](https://github.com/ysordo/shared-3d/blob/main/src/context/CacheContext.tsx#L19)
+Defined in: [src/context/CacheContext.tsx:18](https://github.com/ysordo/shared-3d/blob/main/src/context/CacheContext.tsx#L18)
 
 ## Parameters
 
