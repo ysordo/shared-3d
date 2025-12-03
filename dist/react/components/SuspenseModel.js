@@ -1,9 +1,9 @@
 "use client";
 import {
   SuspenseModel
-} from "../../chunk-6ELTNRD5.js";
-import "../../chunk-M3WZHTGS.js";
+} from "../../chunk-F6XUJOTZ.js";
 import "../../chunk-RUDNMJTZ.js";
+import "../../chunk-M3WZHTGS.js";
 import "../../chunk-OVWVQSTO.js";
 import "../../chunk-MZEYSNNV.js";
 import "../../chunk-53O3DZBZ.js";

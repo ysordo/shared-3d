@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { S as SceneConfig, a as SceneOrchestrator } from '../SceneOrchestrator-B4om0ttP.js';
+import { S as SceneConfig, a as SceneOrchestrator } from '../SceneOrchestrator-PJwPoCeo.js';
 import 'three';
 import '../core/cache/types.js';
 

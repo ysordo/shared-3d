@@ -1,5 +1,5 @@
 # Estructura de: shared-3d#v1.0.5/
-## Generated: 3/12/2025, 9:45:03 a.m.
+## Generated: 3/12/2025, 1:12:53 p.m.
 ---
 
 ```
@@ -113,7 +113,6 @@
 ├── 📄.gitignore
 ├── 📄.npmrc
 ├── 📄eslint.config.js
-├── 📄index.d.ts
 ├── 📄LICENSE
 ├── 📄package.json
 ├── 📄pnpm-lock.yaml
@@ -128,360 +127,514 @@
 ```
 📂dist/
 ├── 📁context/
+│   ├── 📄CacheContext.cjs
+│   ├── 📄CacheContext.d.cts
 │   ├── 📄CacheContext.d.ts
-│   ├── 📄CacheContext.d.ts.map
 │   ├── 📄CacheContext.js
-│   ├── 📄CacheContext.js.map
+│   ├── 📄index.cjs
+│   ├── 📄index.d.cts
 │   ├── 📄index.d.ts
-│   ├── 📄index.d.ts.map
 │   ├── 📄index.js
-│   ├── 📄index.js.map
+│   ├── 📄SceneContext.cjs
+│   ├── 📄SceneContext.d.cts
 │   ├── 📄SceneContext.d.ts
-│   ├── 📄SceneContext.d.ts.map
-│   ├── 📄SceneContext.js
-│   └── 📄SceneContext.js.map
+│   └── 📄SceneContext.js
 ├── 📁core/
 │   ├── 📁cache/
 │   │   ├── 📁server/
+│   │   │   ├── 📄generateManifest.cjs
+│   │   │   ├── 📄generateManifest.d.cts
 │   │   │   ├── 📄generateManifest.d.ts
-│   │   │   ├── 📄generateManifest.d.ts.map
 │   │   │   ├── 📄generateManifest.js
-│   │   │   ├── 📄generateManifest.js.map
+│   │   │   ├── 📄index.server.cjs
+│   │   │   ├── 📄index.server.d.cts
 │   │   │   ├── 📄index.server.d.ts
-│   │   │   ├── 📄index.server.d.ts.map
-│   │   │   ├── 📄index.server.js
-│   │   │   └── 📄index.server.js.map
+│   │   │   └── 📄index.server.js
 │   │   ├── 📁utils/
+│   │   │   ├── 📄env.cjs
+│   │   │   ├── 📄env.d.cts
 │   │   │   ├── 📄env.d.ts
-│   │   │   ├── 📄env.d.ts.map
-│   │   │   ├── 📄env.js
-│   │   │   └── 📄env.js.map
+│   │   │   └── 📄env.js
+│   │   ├── 📄CacheValidator.cjs
+│   │   ├── 📄CacheValidator.d.cts
 │   │   ├── 📄CacheValidator.d.ts
-│   │   ├── 📄CacheValidator.d.ts.map
 │   │   ├── 📄CacheValidator.js
-│   │   ├── 📄CacheValidator.js.map
+│   │   ├── 📄FileWatcher.cjs
+│   │   ├── 📄FileWatcher.d.cts
 │   │   ├── 📄FileWatcher.d.ts
-│   │   ├── 📄FileWatcher.d.ts.map
 │   │   ├── 📄FileWatcher.js
-│   │   ├── 📄FileWatcher.js.map
+│   │   ├── 📄index.cjs
+│   │   ├── 📄index.d.cts
 │   │   ├── 📄index.d.ts
-│   │   ├── 📄index.d.ts.map
 │   │   ├── 📄index.js
-│   │   ├── 📄index.js.map
+│   │   ├── 📄ObjectCache.cjs
+│   │   ├── 📄ObjectCache.d.cts
 │   │   ├── 📄ObjectCache.d.ts
-│   │   ├── 📄ObjectCache.d.ts.map
 │   │   ├── 📄ObjectCache.js
-│   │   ├── 📄ObjectCache.js.map
+│   │   ├── 📄types.cjs
+│   │   ├── 📄types.d.cts
 │   │   ├── 📄types.d.ts
-│   │   ├── 📄types.d.ts.map
-│   │   ├── 📄types.js
-│   │   └── 📄types.js.map
+│   │   └── 📄types.js
 │   ├── 📁loaders/
+│   │   ├── 📄GLTFLoader.cjs
+│   │   ├── 📄GLTFLoader.d.cts
 │   │   ├── 📄GLTFLoader.d.ts
-│   │   ├── 📄GLTFLoader.d.ts.map
 │   │   ├── 📄GLTFLoader.js
-│   │   ├── 📄GLTFLoader.js.map
+│   │   ├── 📄HDRILoader.cjs
+│   │   ├── 📄HDRILoader.d.cts
 │   │   ├── 📄HDRILoader.d.ts
-│   │   ├── 📄HDRILoader.d.ts.map
 │   │   ├── 📄HDRILoader.js
-│   │   ├── 📄HDRILoader.js.map
+│   │   ├── 📄index.cjs
+│   │   ├── 📄index.d.cts
 │   │   ├── 📄index.d.ts
-│   │   ├── 📄index.d.ts.map
 │   │   ├── 📄index.js
-│   │   ├── 📄index.js.map
+│   │   ├── 📄WebPHDRLoader.cjs
+│   │   ├── 📄WebPHDRLoader.d.cts
 │   │   ├── 📄WebPHDRLoader.d.ts
-│   │   ├── 📄WebPHDRLoader.d.ts.map
-│   │   ├── 📄WebPHDRLoader.js
-│   │   └── 📄WebPHDRLoader.js.map
+│   │   └── 📄WebPHDRLoader.js
 │   ├── 📁orchestrator/
 │   │   ├── 📁plugins/
+│   │   │   ├── 📄AdvancedCameraCollisionPlugin.cjs
+│   │   │   ├── 📄AdvancedCameraCollisionPlugin.d.cts
 │   │   │   ├── 📄AdvancedCameraCollisionPlugin.d.ts
-│   │   │   ├── 📄AdvancedCameraCollisionPlugin.d.ts.map
 │   │   │   ├── 📄AdvancedCameraCollisionPlugin.js
-│   │   │   ├── 📄AdvancedCameraCollisionPlugin.js.map
+│   │   │   ├── 📄AdvancedOrbitControlsPlugin.cjs
+│   │   │   ├── 📄AdvancedOrbitControlsPlugin.d.cts
 │   │   │   ├── 📄AdvancedOrbitControlsPlugin.d.ts
-│   │   │   ├── 📄AdvancedOrbitControlsPlugin.d.ts.map
 │   │   │   ├── 📄AdvancedOrbitControlsPlugin.js
-│   │   │   ├── 📄AdvancedOrbitControlsPlugin.js.map
+│   │   │   ├── 📄AdvancedRaycasterPlugin.cjs
+│   │   │   ├── 📄AdvancedRaycasterPlugin.d.cts
 │   │   │   ├── 📄AdvancedRaycasterPlugin.d.ts
-│   │   │   ├── 📄AdvancedRaycasterPlugin.d.ts.map
 │   │   │   ├── 📄AdvancedRaycasterPlugin.js
-│   │   │   ├── 📄AdvancedRaycasterPlugin.js.map
+│   │   │   ├── 📄AnnotationsPlugin.cjs
+│   │   │   ├── 📄AnnotationsPlugin.d.cts
 │   │   │   ├── 📄AnnotationsPlugin.d.ts
-│   │   │   ├── 📄AnnotationsPlugin.d.ts.map
 │   │   │   ├── 📄AnnotationsPlugin.js
-│   │   │   ├── 📄AnnotationsPlugin.js.map
+│   │   │   ├── 📄AutoLODSystemPlugin.cjs
+│   │   │   ├── 📄AutoLODSystemPlugin.d.cts
 │   │   │   ├── 📄AutoLODSystemPlugin.d.ts
-│   │   │   ├── 📄AutoLODSystemPlugin.d.ts.map
 │   │   │   ├── 📄AutoLODSystemPlugin.js
-│   │   │   ├── 📄AutoLODSystemPlugin.js.map
+│   │   │   ├── 📄HotspotPlugin.cjs
+│   │   │   ├── 📄HotspotPlugin.d.cts
 │   │   │   ├── 📄HotspotPlugin.d.ts
-│   │   │   ├── 📄HotspotPlugin.d.ts.map
 │   │   │   ├── 📄HotspotPlugin.js
-│   │   │   ├── 📄HotspotPlugin.js.map
+│   │   │   ├── 📄index.cjs
+│   │   │   ├── 📄index.d.cts
 │   │   │   ├── 📄index.d.ts
-│   │   │   ├── 📄index.d.ts.map
 │   │   │   ├── 📄index.js
-│   │   │   ├── 📄index.js.map
+│   │   │   ├── 📄LODSystemPlugin.cjs
+│   │   │   ├── 📄LODSystemPlugin.d.cts
 │   │   │   ├── 📄LODSystemPlugin.d.ts
-│   │   │   ├── 📄LODSystemPlugin.d.ts.map
 │   │   │   ├── 📄LODSystemPlugin.js
-│   │   │   ├── 📄LODSystemPlugin.js.map
+│   │   │   ├── 📄MeasurementToolPlugin.cjs
+│   │   │   ├── 📄MeasurementToolPlugin.d.cts
 │   │   │   ├── 📄MeasurementToolPlugin.d.ts
-│   │   │   ├── 📄MeasurementToolPlugin.d.ts.map
 │   │   │   ├── 📄MeasurementToolPlugin.js
-│   │   │   ├── 📄MeasurementToolPlugin.js.map
+│   │   │   ├── 📄OrbitControlsPlugin.cjs
+│   │   │   ├── 📄OrbitControlsPlugin.d.cts
 │   │   │   ├── 📄OrbitControlsPlugin.d.ts
-│   │   │   ├── 📄OrbitControlsPlugin.d.ts.map
 │   │   │   ├── 📄OrbitControlsPlugin.js
-│   │   │   ├── 📄OrbitControlsPlugin.js.map
+│   │   │   ├── 📄PostProcessingPlugin.cjs
+│   │   │   ├── 📄PostProcessingPlugin.d.cts
 │   │   │   ├── 📄PostProcessingPlugin.d.ts
-│   │   │   ├── 📄PostProcessingPlugin.d.ts.map
 │   │   │   ├── 📄PostProcessingPlugin.js
-│   │   │   ├── 📄PostProcessingPlugin.js.map
+│   │   │   ├── 📄RaycasterPlugin.cjs
+│   │   │   ├── 📄RaycasterPlugin.d.cts
 │   │   │   ├── 📄RaycasterPlugin.d.ts
-│   │   │   ├── 📄RaycasterPlugin.d.ts.map
-│   │   │   ├── 📄RaycasterPlugin.js
-│   │   │   └── 📄RaycasterPlugin.js.map
+│   │   │   └── 📄RaycasterPlugin.js
+│   │   ├── 📄index.cjs
+│   │   ├── 📄index.d.cts
 │   │   ├── 📄index.d.ts
-│   │   ├── 📄index.d.ts.map
 │   │   ├── 📄index.js
-│   │   ├── 📄index.js.map
+│   │   ├── 📄SceneOrchestrator.cjs
+│   │   ├── 📄SceneOrchestrator.d.cts
 │   │   ├── 📄SceneOrchestrator.d.ts
-│   │   ├── 📄SceneOrchestrator.d.ts.map
 │   │   ├── 📄SceneOrchestrator.js
-│   │   ├── 📄SceneOrchestrator.js.map
+│   │   ├── 📄types.cjs
+│   │   ├── 📄types.d.cts
 │   │   ├── 📄types.d.ts
-│   │   ├── 📄types.d.ts.map
-│   │   ├── 📄types.js
-│   │   └── 📄types.js.map
+│   │   └── 📄types.js
 │   ├── 📁utils/
+│   │   ├── 📄index.cjs
+│   │   ├── 📄index.d.cts
 │   │   ├── 📄index.d.ts
-│   │   ├── 📄index.d.ts.map
 │   │   ├── 📄index.js
-│   │   ├── 📄index.js.map
+│   │   ├── 📄QuadWireframe.cjs
+│   │   ├── 📄QuadWireframe.d.cts
 │   │   ├── 📄QuadWireframe.d.ts
-│   │   ├── 📄QuadWireframe.d.ts.map
-│   │   ├── 📄QuadWireframe.js
-│   │   └── 📄QuadWireframe.js.map
+│   │   └── 📄QuadWireframe.js
+│   ├── 📄index.cjs
+│   ├── 📄index.d.cts
 │   ├── 📄index.d.ts
-│   ├── 📄index.d.ts.map
-│   ├── 📄index.js
-│   └── 📄index.js.map
+│   └── 📄index.js
 ├── 📁hooks/
+│   ├── 📄index.cjs
+│   ├── 📄index.d.cts
 │   ├── 📄index.d.ts
-│   ├── 📄index.d.ts.map
 │   ├── 📄index.js
-│   ├── 📄index.js.map
+│   ├── 📄useActiveModel.cjs
+│   ├── 📄useActiveModel.d.cts
 │   ├── 📄useActiveModel.d.ts
-│   ├── 📄useActiveModel.d.ts.map
 │   ├── 📄useActiveModel.js
-│   ├── 📄useActiveModel.js.map
+│   ├── 📄useAnimation.cjs
+│   ├── 📄useAnimation.d.cts
 │   ├── 📄useAnimation.d.ts
-│   ├── 📄useAnimation.d.ts.map
 │   ├── 📄useAnimation.js
-│   ├── 📄useAnimation.js.map
+│   ├── 📄useCache.cjs
+│   ├── 📄useCache.d.cts
 │   ├── 📄useCache.d.ts
-│   ├── 📄useCache.d.ts.map
 │   ├── 📄useCache.js
-│   ├── 📄useCache.js.map
+│   ├── 📄useHDRI.cjs
+│   ├── 📄useHDRI.d.cts
 │   ├── 📄useHDRI.d.ts
-│   ├── 📄useHDRI.d.ts.map
 │   ├── 📄useHDRI.js
-│   ├── 📄useHDRI.js.map
+│   ├── 📄useModel.cjs
+│   ├── 📄useModel.d.cts
 │   ├── 📄useModel.d.ts
-│   ├── 📄useModel.d.ts.map
 │   ├── 📄useModel.js
-│   ├── 📄useModel.js.map
+│   ├── 📄useRaycaster.cjs
+│   ├── 📄useRaycaster.d.cts
 │   ├── 📄useRaycaster.d.ts
-│   ├── 📄useRaycaster.d.ts.map
 │   ├── 📄useRaycaster.js
-│   ├── 📄useRaycaster.js.map
+│   ├── 📄useScene.cjs
+│   ├── 📄useScene.d.cts
 │   ├── 📄useScene.d.ts
-│   ├── 📄useScene.d.ts.map
-│   ├── 📄useScene.js
-│   └── 📄useScene.js.map
+│   └── 📄useScene.js
 ├── 📁lib/
-│   ├── 📄index.d.ts
-│   ├── 📄index.d.ts.map
-│   ├── 📄index.js
-│   ├── 📄index.js.map
+│   ├── 📄three.cjs
+│   ├── 📄three.d.cts
 │   ├── 📄three.d.ts
-│   ├── 📄three.d.ts.map
-│   ├── 📄three.js
-│   ├── 📄three.js.map
-│   ├── 📄types.d.ts
-│   ├── 📄types.d.ts.map
-│   ├── 📄types.js
-│   └── 📄types.js.map
+│   └── 📄three.js
 ├── 📁react/
 │   ├── 📁components/
+│   │   ├── 📄AdvancedCameraCollision.cjs
+│   │   ├── 📄AdvancedCameraCollision.d.cts
 │   │   ├── 📄AdvancedCameraCollision.d.ts
-│   │   ├── 📄AdvancedCameraCollision.d.ts.map
 │   │   ├── 📄AdvancedCameraCollision.js
-│   │   ├── 📄AdvancedCameraCollision.js.map
+│   │   ├── 📄AdvancedDragRaycaster.cjs
+│   │   ├── 📄AdvancedDragRaycaster.d.cts
 │   │   ├── 📄AdvancedDragRaycaster.d.ts
-│   │   ├── 📄AdvancedDragRaycaster.d.ts.map
 │   │   ├── 📄AdvancedDragRaycaster.js
-│   │   ├── 📄AdvancedDragRaycaster.js.map
+│   │   ├── 📄AdvancedOrbitControls.cjs
+│   │   ├── 📄AdvancedOrbitControls.d.cts
 │   │   ├── 📄AdvancedOrbitControls.d.ts
-│   │   ├── 📄AdvancedOrbitControls.d.ts.map
 │   │   ├── 📄AdvancedOrbitControls.js
-│   │   ├── 📄AdvancedOrbitControls.js.map
+│   │   ├── 📄AdvancedRaycaster.cjs
+│   │   ├── 📄AdvancedRaycaster.d.cts
 │   │   ├── 📄AdvancedRaycaster.d.ts
-│   │   ├── 📄AdvancedRaycaster.d.ts.map
 │   │   ├── 📄AdvancedRaycaster.js
-│   │   ├── 📄AdvancedRaycaster.js.map
+│   │   ├── 📄AmbientLight.cjs
+│   │   ├── 📄AmbientLight.d.cts
 │   │   ├── 📄AmbientLight.d.ts
-│   │   ├── 📄AmbientLight.d.ts.map
 │   │   ├── 📄AmbientLight.js
-│   │   ├── 📄AmbientLight.js.map
+│   │   ├── 📄AnimationTimeline.cjs
+│   │   ├── 📄AnimationTimeline.d.cts
 │   │   ├── 📄AnimationTimeline.d.ts
-│   │   ├── 📄AnimationTimeline.d.ts.map
 │   │   ├── 📄AnimationTimeline.js
-│   │   ├── 📄AnimationTimeline.js.map
+│   │   ├── 📄Annotations.cjs
+│   │   ├── 📄Annotations.d.cts
 │   │   ├── 📄Annotations.d.ts
-│   │   ├── 📄Annotations.d.ts.map
 │   │   ├── 📄Annotations.js
-│   │   ├── 📄Annotations.js.map
+│   │   ├── 📄ARButton.cjs
+│   │   ├── 📄ARButton.d.cts
 │   │   ├── 📄ARButton.d.ts
-│   │   ├── 📄ARButton.d.ts.map
 │   │   ├── 📄ARButton.js
-│   │   ├── 📄ARButton.js.map
+│   │   ├── 📄AutoLODSystem.cjs
+│   │   ├── 📄AutoLODSystem.d.cts
 │   │   ├── 📄AutoLODSystem.d.ts
-│   │   ├── 📄AutoLODSystem.d.ts.map
 │   │   ├── 📄AutoLODSystem.js
-│   │   ├── 📄AutoLODSystem.js.map
+│   │   ├── 📄Canvas.cjs
+│   │   ├── 📄Canvas.d.cts
 │   │   ├── 📄Canvas.d.ts
-│   │   ├── 📄Canvas.d.ts.map
 │   │   ├── 📄Canvas.js
-│   │   ├── 📄Canvas.js.map
+│   │   ├── 📄DirectionalLight.cjs
+│   │   ├── 📄DirectionalLight.d.cts
 │   │   ├── 📄DirectionalLight.d.ts
-│   │   ├── 📄DirectionalLight.d.ts.map
 │   │   ├── 📄DirectionalLight.js
-│   │   ├── 📄DirectionalLight.js.map
+│   │   ├── 📄DistanceDisplay.cjs
+│   │   ├── 📄DistanceDisplay.d.cts
 │   │   ├── 📄DistanceDisplay.d.ts
-│   │   ├── 📄DistanceDisplay.d.ts.map
 │   │   ├── 📄DistanceDisplay.js
-│   │   ├── 📄DistanceDisplay.js.map
+│   │   ├── 📄EnvironmentPreset.cjs
+│   │   ├── 📄EnvironmentPreset.d.cts
 │   │   ├── 📄EnvironmentPreset.d.ts
-│   │   ├── 📄EnvironmentPreset.d.ts.map
 │   │   ├── 📄EnvironmentPreset.js
-│   │   ├── 📄EnvironmentPreset.js.map
+│   │   ├── 📄ErrorBoundary3D.cjs
+│   │   ├── 📄ErrorBoundary3D.d.cts
 │   │   ├── 📄ErrorBoundary3D.d.ts
-│   │   ├── 📄ErrorBoundary3D.d.ts.map
 │   │   ├── 📄ErrorBoundary3D.js
-│   │   ├── 📄ErrorBoundary3D.js.map
+│   │   ├── 📄GroundSurface.cjs
+│   │   ├── 📄GroundSurface.d.cts
 │   │   ├── 📄GroundSurface.d.ts
-│   │   ├── 📄GroundSurface.d.ts.map
 │   │   ├── 📄GroundSurface.js
-│   │   ├── 📄GroundSurface.js.map
+│   │   ├── 📄HDRI.cjs
+│   │   ├── 📄HDRI.d.cts
 │   │   ├── 📄HDRI.d.ts
-│   │   ├── 📄HDRI.d.ts.map
 │   │   ├── 📄HDRI.js
-│   │   ├── 📄HDRI.js.map
+│   │   ├── 📄Hotspot.cjs
+│   │   ├── 📄Hotspot.d.cts
 │   │   ├── 📄Hotspot.d.ts
-│   │   ├── 📄Hotspot.d.ts.map
 │   │   ├── 📄Hotspot.js
-│   │   ├── 📄Hotspot.js.map
+│   │   ├── 📄Hotspots.cjs
+│   │   ├── 📄Hotspots.d.cts
 │   │   ├── 📄Hotspots.d.ts
-│   │   ├── 📄Hotspots.d.ts.map
 │   │   ├── 📄Hotspots.js
-│   │   ├── 📄Hotspots.js.map
+│   │   ├── 📄index.cjs
+│   │   ├── 📄index.d.cts
 │   │   ├── 📄index.d.ts
-│   │   ├── 📄index.d.ts.map
 │   │   ├── 📄index.js
-│   │   ├── 📄index.js.map
+│   │   ├── 📄InstancedModel.cjs
+│   │   ├── 📄InstancedModel.d.cts
 │   │   ├── 📄InstancedModel.d.ts
-│   │   ├── 📄InstancedModel.d.ts.map
 │   │   ├── 📄InstancedModel.js
-│   │   ├── 📄InstancedModel.js.map
+│   │   ├── 📄LODSystem.cjs
+│   │   ├── 📄LODSystem.d.cts
 │   │   ├── 📄LODSystem.d.ts
-│   │   ├── 📄LODSystem.d.ts.map
 │   │   ├── 📄LODSystem.js
-│   │   ├── 📄LODSystem.js.map
+│   │   ├── 📄MeasurementTool.cjs
+│   │   ├── 📄MeasurementTool.d.cts
 │   │   ├── 📄MeasurementTool.d.ts
-│   │   ├── 📄MeasurementTool.d.ts.map
 │   │   ├── 📄MeasurementTool.js
-│   │   ├── 📄MeasurementTool.js.map
+│   │   ├── 📄Model.cjs
+│   │   ├── 📄Model.d.cts
 │   │   ├── 📄Model.d.ts
-│   │   ├── 📄Model.d.ts.map
 │   │   ├── 📄Model.js
-│   │   ├── 📄Model.js.map
+│   │   ├── 📄ModelPreload.cjs
+│   │   ├── 📄ModelPreload.d.cts
 │   │   ├── 📄ModelPreload.d.ts
-│   │   ├── 📄ModelPreload.d.ts.map
 │   │   ├── 📄ModelPreload.js
-│   │   ├── 📄ModelPreload.js.map
+│   │   ├── 📄OrbitControls.cjs
+│   │   ├── 📄OrbitControls.d.cts
 │   │   ├── 📄OrbitControls.d.ts
-│   │   ├── 📄OrbitControls.d.ts.map
 │   │   ├── 📄OrbitControls.js
-│   │   ├── 📄OrbitControls.js.map
+│   │   ├── 📄PointLight.cjs
+│   │   ├── 📄PointLight.d.cts
 │   │   ├── 📄PointLight.d.ts
-│   │   ├── 📄PointLight.d.ts.map
 │   │   ├── 📄PointLight.js
-│   │   ├── 📄PointLight.js.map
+│   │   ├── 📄PostProcessing.cjs
+│   │   ├── 📄PostProcessing.d.cts
 │   │   ├── 📄PostProcessing.d.ts
-│   │   ├── 📄PostProcessing.d.ts.map
 │   │   ├── 📄PostProcessing.js
-│   │   ├── 📄PostProcessing.js.map
+│   │   ├── 📄Raycaster.cjs
+│   │   ├── 📄Raycaster.d.cts
 │   │   ├── 📄Raycaster.d.ts
-│   │   ├── 📄Raycaster.d.ts.map
 │   │   ├── 📄Raycaster.js
-│   │   ├── 📄Raycaster.js.map
+│   │   ├── 📄SpotLight.cjs
+│   │   ├── 📄SpotLight.d.cts
 │   │   ├── 📄SpotLight.d.ts
-│   │   ├── 📄SpotLight.d.ts.map
 │   │   ├── 📄SpotLight.js
-│   │   ├── 📄SpotLight.js.map
+│   │   ├── 📄Suspense.cjs
+│   │   ├── 📄Suspense.d.cts
 │   │   ├── 📄Suspense.d.ts
-│   │   ├── 📄Suspense.d.ts.map
 │   │   ├── 📄Suspense.js
-│   │   ├── 📄Suspense.js.map
+│   │   ├── 📄SuspenseModel.cjs
+│   │   ├── 📄SuspenseModel.d.cts
 │   │   ├── 📄SuspenseModel.d.ts
-│   │   ├── 📄SuspenseModel.d.ts.map
 │   │   ├── 📄SuspenseModel.js
-│   │   ├── 📄SuspenseModel.js.map
+│   │   ├── 📄TheaterLighting.cjs
+│   │   ├── 📄TheaterLighting.d.cts
 │   │   ├── 📄TheaterLighting.d.ts
-│   │   ├── 📄TheaterLighting.d.ts.map
 │   │   ├── 📄TheaterLighting.js
-│   │   ├── 📄TheaterLighting.js.map
+│   │   ├── 📄VRButton.cjs
+│   │   ├── 📄VRButton.d.cts
 │   │   ├── 📄VRButton.d.ts
-│   │   ├── 📄VRButton.d.ts.map
-│   │   ├── 📄VRButton.js
-│   │   └── 📄VRButton.js.map
+│   │   └── 📄VRButton.js
 │   ├── 📁controls/
+│   │   ├── 📄AnimationController.cjs
+│   │   ├── 📄AnimationController.d.cts
 │   │   ├── 📄AnimationController.d.ts
-│   │   ├── 📄AnimationController.d.ts.map
 │   │   ├── 📄AnimationController.js
-│   │   ├── 📄AnimationController.js.map
+│   │   ├── 📄index.cjs
+│   │   ├── 📄index.d.cts
 │   │   ├── 📄index.d.ts
-│   │   ├── 📄index.d.ts.map
 │   │   ├── 📄index.js
-│   │   ├── 📄index.js.map
+│   │   ├── 📄LightingController.cjs
+│   │   ├── 📄LightingController.d.cts
 │   │   ├── 📄LightingController.d.ts
-│   │   ├── 📄LightingController.d.ts.map
 │   │   ├── 📄LightingController.js
-│   │   ├── 📄LightingController.js.map
+│   │   ├── 📄MaterialController.cjs
+│   │   ├── 📄MaterialController.d.cts
 │   │   ├── 📄MaterialController.d.ts
-│   │   ├── 📄MaterialController.d.ts.map
-│   │   ├── 📄MaterialController.js
-│   │   └── 📄MaterialController.js.map
+│   │   └── 📄MaterialController.js
 │   ├── 📁primitives/
+│   │   ├── 📄index.cjs
+│   │   ├── 📄index.d.cts
 │   │   ├── 📄index.d.ts
-│   │   ├── 📄index.d.ts.map
 │   │   ├── 📄index.js
-│   │   ├── 📄index.js.map
+│   │   ├── 📄SceneObject.cjs
+│   │   ├── 📄SceneObject.d.cts
 │   │   ├── 📄SceneObject.d.ts
-│   │   ├── 📄SceneObject.d.ts.map
-│   │   ├── 📄SceneObject.js
-│   │   └── 📄SceneObject.js.map
+│   │   └── 📄SceneObject.js
+│   ├── 📄index.cjs
+│   ├── 📄index.d.cts
 │   ├── 📄index.d.ts
-│   ├── 📄index.d.ts.map
-│   ├── 📄index.js
-│   └── 📄index.js.map
+│   └── 📄index.js
+├── 📄chunk-2JCTTRJK.cjs
+├── 📄chunk-2JRLTZTT.cjs
+├── 📄chunk-2JXECOVZ.cjs
+├── 📄chunk-2RPXTPO6.cjs
+├── 📄chunk-3EGJYHIY.js
+├── 📄chunk-3NLDE54Y.cjs
+├── 📄chunk-44UQAST6.cjs
+├── 📄chunk-4E2NMKOL.js
+├── 📄chunk-4E3EEOIL.js
+├── 📄chunk-4UVCRO2U.js
+├── 📄chunk-52BWUKU3.js
+├── 📄chunk-53O3DZBZ.js
+├── 📄chunk-5RGQXC4Q.js
+├── 📄chunk-63VW2TWG.js
+├── 📄chunk-6FCATWGW.js
+├── 📄chunk-6GG4QE2E.js
+├── 📄chunk-6GOT3LNE.cjs
+├── 📄chunk-6J2YPQ3V.cjs
+├── 📄chunk-6LCQVJO2.cjs
+├── 📄chunk-6V2VJ4DP.cjs
+├── 📄chunk-6XZVAT27.cjs
+├── 📄chunk-6ZMRVN4U.cjs
+├── 📄chunk-777TCJKN.js
+├── 📄chunk-7JTF6DFK.js
+├── 📄chunk-7NTLIQ5L.js
+├── 📄chunk-7QVNB5H2.cjs
+├── 📄chunk-7SKSOFDT.cjs
+├── 📄chunk-7T35AZSK.cjs
+├── 📄chunk-7WPOL7PK.cjs
+├── 📄chunk-7YGHNVSE.cjs
+├── 📄chunk-AAHJLMZR.cjs
+├── 📄chunk-ABM33I7Q.js
+├── 📄chunk-AOP7YC3S.js
+├── 📄chunk-AWDQRFMS.js
+├── 📄chunk-AWVHTM2E.js
+├── 📄chunk-B5ZMYPSV.cjs
+├── 📄chunk-BKZZWXN7.js
+├── 📄chunk-BLUMHM3U.cjs
+├── 📄chunk-CHORX2B2.js
+├── 📄chunk-CPKJTF7R.js
+├── 📄chunk-CPMHERKH.js
+├── 📄chunk-CQEMWGZM.cjs
+├── 📄chunk-DCRMKZQR.js
+├── 📄chunk-DF6YTEMA.cjs
+├── 📄chunk-DLGDBYNQ.js
+├── 📄chunk-DM3V3EJD.cjs
+├── 📄chunk-DQJ64W2A.cjs
+├── 📄chunk-DSWBE3MS.cjs
+├── 📄chunk-E355IQ54.cjs
+├── 📄chunk-E64RDZHI.js
+├── 📄chunk-EA3XQ4KJ.cjs
+├── 📄chunk-EC4WICT5.js
+├── 📄chunk-ENL3GCXS.cjs
+├── 📄chunk-EO54ZV26.cjs
+├── 📄chunk-F6XUJOTZ.js
+├── 📄chunk-F7F54MU6.js
+├── 📄chunk-FBPG64NM.js
+├── 📄chunk-FGTSUNZE.cjs
+├── 📄chunk-FOTZCW7M.js
+├── 📄chunk-FQDHSOLA.cjs
+├── 📄chunk-G5YWPRA4.js
+├── 📄chunk-GDQHY3XH.js
+├── 📄chunk-GICX4QCO.cjs
+├── 📄chunk-GJKUJGPC.cjs
+├── 📄chunk-GY6RJQO5.js
+├── 📄chunk-HB2MYA43.js
+├── 📄chunk-HEYWZZTH.cjs
+├── 📄chunk-HU5ILTIE.js
+├── 📄chunk-HVXJUMVE.js
+├── 📄chunk-HXIZIIK7.cjs
+├── 📄chunk-IAGIA7J5.cjs
+├── 📄chunk-IQZTNJXP.js
+├── 📄chunk-IURPS66O.js
+├── 📄chunk-IWWTL653.js
+├── 📄chunk-J3SAIRP2.js
+├── 📄chunk-JDA4ZSEU.cjs
+├── 📄chunk-JH6IQNCJ.js
+├── 📄chunk-JQEF7TLI.js
+├── 📄chunk-JRZZWX2L.cjs
+├── 📄chunk-JWY4ZHHB.js
+├── 📄chunk-K74YUHIW.js
+├── 📄chunk-L3G2QMBD.js
+├── 📄chunk-LKN5DUEK.cjs
+├── 📄chunk-LRQU432L.cjs
+├── 📄chunk-M3WZHTGS.js
+├── 📄chunk-MAROSTDG.js
+├── 📄chunk-MCYH2TBQ.cjs
+├── 📄chunk-MLONVM7E.cjs
+├── 📄chunk-MXTWNZ2R.cjs
+├── 📄chunk-MZEYSNNV.js
+├── 📄chunk-NJLVDX7J.cjs
+├── 📄chunk-NJTG637C.cjs
+├── 📄chunk-OASOCNNE.js
+├── 📄chunk-ODHFJDWB.js
+├── 📄chunk-OIMHWLGO.cjs
+├── 📄chunk-OQRRGPYA.js
+├── 📄chunk-OVHQQSEK.js
+├── 📄chunk-OVWVQSTO.js
+├── 📄chunk-OZMJ7FZP.cjs
+├── 📄chunk-P2AJYPTQ.js
+├── 📄chunk-PFUSRKMN.js
+├── 📄chunk-POOGUPPI.js
+├── 📄chunk-PRBLBCJY.cjs
+├── 📄chunk-PRNY2PGZ.js
+├── 📄chunk-PSPUBVLG.js
+├── 📄chunk-PU435NPJ.cjs
+├── 📄chunk-Q3PTDMXU.cjs
+├── 📄chunk-Q47SPRY7.js
+├── 📄chunk-Q7FTH3IX.js
+├── 📄chunk-QRVOSZH3.cjs
+├── 📄chunk-QXT4UOVW.cjs
+├── 📄chunk-R4RSFB4I.js
+├── 📄chunk-R55G7KGT.js
+├── 📄chunk-R65OL446.js
+├── 📄chunk-RBA35FKK.js
+├── 📄chunk-REQUZTZ4.js
+├── 📄chunk-RMDAOZAB.js
+├── 📄chunk-RSLPNPEF.js
+├── 📄chunk-RUDNMJTZ.js
+├── 📄chunk-RVXJL5Y6.cjs
+├── 📄chunk-S3UAQAG6.cjs
+├── 📄chunk-SCNS52XI.js
+├── 📄chunk-SGTRREOB.js
+├── 📄chunk-SR4V6L3A.cjs
+├── 📄chunk-SRDOYMT5.js
+├── 📄chunk-SRUKCELR.js
+├── 📄chunk-T2JEYSOH.cjs
+├── 📄chunk-T76SZNWB.cjs
+├── 📄chunk-TGXXEJSX.js
+├── 📄chunk-TOIGUY7S.cjs
+├── 📄chunk-U5CPUAWO.cjs
+├── 📄chunk-UHUPI6C6.js
+├── 📄chunk-UOOBMWYR.cjs
+├── 📄chunk-USBH24UK.cjs
+├── 📄chunk-VBJXO26F.cjs
+├── 📄chunk-VHIECBSI.js
+├── 📄chunk-VNBQSAVJ.js
+├── 📄chunk-VSGR5OAY.cjs
+├── 📄chunk-VTSNXELB.js
+├── 📄chunk-W2T32FMR.cjs
+├── 📄chunk-W4PDMXIP.cjs
+├── 📄chunk-WMVRZW2V.cjs
+├── 📄chunk-WNGGJVWU.cjs
+├── 📄chunk-WXJPQIIO.cjs
+├── 📄chunk-XCRTY56R.cjs
+├── 📄chunk-XDEX2LI3.cjs
+├── 📄chunk-XI27L5KU.cjs
+├── 📄chunk-XMJ5ENHF.cjs
+├── 📄chunk-XTA7BEZG.cjs
+├── 📄chunk-XTNUGFKY.cjs
+├── 📄chunk-XU4WJ4NO.cjs
+├── 📄chunk-XW2RYNM3.js
+├── 📄chunk-YWKI45MO.cjs
+├── 📄chunk-YWUD57CE.cjs
+├── 📄chunk-YXY77P4V.cjs
+├── 📄chunk-Z5NU22YL.js
+├── 📄chunk-ZC66QDE5.js
+├── 📄chunk-ZEGAOKBQ.cjs
+├── 📄chunk-ZRBGFD3Z.js
+├── 📄chunk-ZUME5OVE.cjs
+├── 📄index.cjs
+├── 📄index.d.cts
 ├── 📄index.d.ts
-├── 📄index.d.ts.map
 ├── 📄index.js
-└── 📄index.js.map
+├── 📄SceneOrchestrator-PJwPoCeo.d.ts
+└── 📄SceneOrchestrator-X3T7OXl7.d.cts
 ```
 
 ---

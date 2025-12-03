@@ -7,7 +7,7 @@ export { CacheEntry, CacheReport, ManifestEntry, ModelManifest } from './core/ca
 export { GLTFLoader, GLTFLoaderEvents, GLTFLoaderOptions } from './core/loaders/GLTFLoader.cjs';
 export { HDRIEvents, HDRILoader, HDRIProgress } from './core/loaders/HDRILoader.cjs';
 export { WebPHDRLoader } from './core/loaders/WebPHDRLoader.cjs';
-export { P as Plugin, b as PluginContext, S as SceneConfig, a as SceneOrchestrator } from './SceneOrchestrator-BeiVe8WF.cjs';
+export { b as Plugin, P as PluginContext, S as SceneConfig, a as SceneOrchestrator } from './SceneOrchestrator-X3T7OXl7.cjs';
 export { AdvancedCameraCollisionPlugin } from './core/orchestrator/plugins/AdvancedCameraCollisionPlugin.cjs';
 export { AdvancedOrbitControlsPlugin } from './core/orchestrator/plugins/AdvancedOrbitControlsPlugin.cjs';
 export { AdvancedRaycasterPlugin } from './core/orchestrator/plugins/AdvancedRaycasterPlugin.cjs';
@@ -61,7 +61,10 @@ export { Suspense } from './react/components/Suspense.cjs';
 export { SuspenseModel } from './react/components/SuspenseModel.cjs';
 export { TheaterLighting } from './react/components/TheaterLighting.cjs';
 export { VRButton } from './react/components/VRButton.cjs';
-import React, { ReactNode } from 'react';
+export { AnimationController } from './react/controls/AnimationController.cjs';
+export { LightingController } from './react/controls/LightingController.cjs';
+export { CustomMaterialFactory, MaterialConfig, MaterialController } from './react/controls/MaterialController.cjs';
+export { SceneObject } from './react/primitives/SceneObject.cjs';
 export { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 export { GLTFLoader as ThreeGLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 export { DRACOLoader as ThreeDRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
@@ -70,41 +73,8 @@ export { EXRLoader as ThreeEXRLoader } from 'three/examples/jsm/loaders/EXRLoade
 export { EffectComposer as ThreeEffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 export { RenderPass as ThreeRenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 export { UnrealBloomPass as ThreeUnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import 'react';
 import 'react/jsx-runtime';
-
-type CustomMaterialFactory = (originalMaterial: THREE.Material) => THREE.Material;
-type MaterialConfig = {
-    name: string;
-    type: 'textured';
-} | {
-    name: string;
-    type: 'solid';
-    color?: THREE.ColorRepresentation;
-    metalness?: number;
-    roughness?: number;
-} | {
-    name: string;
-    type: 'wireframe';
-    color?: THREE.ColorRepresentation;
-    lineColor?: THREE.ColorRepresentation;
-    [key: string]: any;
-} | {
-    name: string;
-    type: 'custom';
-    factory: CustomMaterialFactory;
-};
-type MaterialItem = {
-    name: string;
-    apply: () => void;
-    isActive: boolean;
-};
-type MaterialControllerProps = {
-    materials: MaterialConfig[];
-    transitionDuration?: number;
-    children: (items: MaterialItem[]) => ReactNode;
-    className?: string;
-};
-declare const MaterialController: React.FC<MaterialControllerProps>;
 
 type Vector3Tuple = [number, number, number];
 type ColorRepresentation = THREE.ColorRepresentation;
@@ -129,42 +99,4 @@ type DeepPartial<T> = T extends object ? {
     [P in keyof T]?: DeepPartial<T[P]>;
 } : T;
 
-type AnimationItem = {
-    name: string;
-    playForward: () => void;
-    playBackward: () => void;
-    toggle: () => void;
-    isPlaying: boolean;
-    isReversed: boolean;
-};
-type AnimationControllerProps = {
-    children: (animations: AnimationItem[]) => ReactNode;
-    className?: string;
-};
-declare const AnimationController: React.FC<AnimationControllerProps>;
-
-declare const LightingController: React.FC<{
-    className?: string;
-}>;
-
-type SceneObjectProps = {
-    object: THREE.Object3D;
-    parent?: 'scene' | 'model' | THREE.Object3D | string;
-    name?: string;
-    position?: [number, number, number];
-    rotation?: [number, number, number];
-    scale?: [number, number, number];
-    visible?: boolean;
-    castShadow?: boolean;
-    receiveShadow?: boolean;
-};
-/**
- * Primitiva universal para añadir cualquier objeto 3D
- * Puede ir en:
- * - La escena (scene)
- * - El modelo activo (model)
- * - Un objeto específico por nombre o referencia
- */
-declare const SceneObject: React.FC<SceneObjectProps>;
-
-export { AnimationController, type ClickEvent, type ColorRepresentation, type CustomMaterialFactory, type DeepPartial, type HoverEvent, type LightConfig, LightingController, type MaterialConfig, MaterialController, SceneObject, type Vector3Tuple };
+export type { ClickEvent, ColorRepresentation, DeepPartial, HoverEvent, LightConfig, Vector3Tuple };

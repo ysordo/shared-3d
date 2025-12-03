@@ -6,10 +6,10 @@ export default defineConfig([
   {
     entry: [
       'src/index.ts',
-      'src/react/components/**/*.tsx',
+      'src/react/**/*.(tsx|ts)',
       'src/hooks/**/*.ts',
       'src/core/**/*.ts',
-      'src/context/**/*.tsx',
+      'src/context/**/*.(tsx|ts)',
       'src/lib/three.ts',
     ],
     format: ['esm', 'cjs'],

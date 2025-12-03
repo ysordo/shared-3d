@@ -1,4 +1,4 @@
-import { P as Plugin, b as PluginContext } from '../../../SceneOrchestrator-B4om0ttP.js';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-PJwPoCeo.js';
 import * as THREE from 'three';
 import '../../cache/types.js';
 

@@ -46,4 +46,4 @@ declare class SceneOrchestrator {
     getActiveHDRI(): THREE.Texture | null;
 }
 
-export { type Plugin as P, type SceneConfig as S, SceneOrchestrator as a, type PluginContext as b };
+export { type PluginContext as P, type SceneConfig as S, SceneOrchestrator as a, type Plugin as b };
