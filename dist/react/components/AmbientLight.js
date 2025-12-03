@@ -1,18 +1,15 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-'use client';
-import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
-import { THREE } from '../../lib';
-export const AmbientLight = ({ intensity = 0.5, color = 0xffffff, }) => {
-    const { scene } = useScene();
-    useEffect(() => {
-        const light = new THREE.AmbientLight(color, intensity);
-        scene.add(light);
-        return () => {
-            scene.remove(light);
-            light.dispose();
-        };
-    }, [intensity, color]);
-    return null;
+"use client";
+import {
+  AmbientLight
+} from "../../chunk-ABM33I7Q.js";
+import "../../chunk-OVWVQSTO.js";
+import "../../chunk-MZEYSNNV.js";
+import "../../chunk-53O3DZBZ.js";
+import "../../chunk-JWY4ZHHB.js";
+import "../../chunk-7NTLIQ5L.js";
+import "../../chunk-J3SAIRP2.js";
+import "../../chunk-MAROSTDG.js";
+import "../../chunk-OVHQQSEK.js";
+export {
+  AmbientLight
 };
-//# sourceMappingURL=AmbientLight.js.map

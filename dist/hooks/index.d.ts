@@ -1,8 +1,11 @@
-export { useScene } from './useScene';
-export { useModel } from './useModel';
-export { useActiveModel } from './useActiveModel';
-export { useHDRI } from './useHDRI';
-export { useRaycaster } from './useRaycaster';
-export { useCache } from './useCache';
-export { useAnimation } from './useAnimation';
-//# sourceMappingURL=index.d.ts.map
+export { useScene } from './useScene.js';
+export { useModel } from './useModel.js';
+export { useActiveModel } from './useActiveModel.js';
+export { useHDRI } from './useHDRI.js';
+export { useRaycaster } from './useRaycaster.js';
+export { useCache } from './useCache.js';
+export { useAnimation } from './useAnimation.js';
+import '../SceneOrchestrator-B4om0ttP.js';
+import 'three';
+import '../core/cache/types.js';
+import '../core/orchestrator/plugins/RaycasterPlugin.js';

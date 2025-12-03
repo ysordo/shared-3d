@@ -1,8 +1,9 @@
-import type React from 'react';
-import type { ManifestEntry } from '../../core/cache/types';
+import React from 'react';
+import { ManifestEntry } from '../../core/cache/types.js';
+
 type HDRIProps = {
     entry: ManifestEntry;
 };
-export declare const HDRI: React.FC<HDRIProps>;
-export {};
-//# sourceMappingURL=HDRI.d.ts.map
+declare const HDRI: React.FC<HDRIProps>;
+
+export { HDRI };

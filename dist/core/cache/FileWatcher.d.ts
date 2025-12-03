@@ -1,5 +1,6 @@
-import type { ManifestEntry } from './types';
-export declare class FileWatcher {
+import { ManifestEntry } from './types.js';
+
+declare class FileWatcher {
     private static instance;
     private watchers;
     private manifest;
@@ -11,4 +12,5 @@ export declare class FileWatcher {
     private startPolling;
     dispose(): void;
 }
-//# sourceMappingURL=FileWatcher.d.ts.map
+
+export { FileWatcher };

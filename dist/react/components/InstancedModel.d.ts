@@ -1,6 +1,7 @@
-import type React from 'react';
-import type { ManifestEntry } from '../../core/cache/types';
-import { THREE } from '../../lib';
+import React from 'react';
+import { ManifestEntry } from '../../core/cache/types.js';
+import * as THREE from 'three';
+
 type InstanceData = {
     position: THREE.Vector3;
     rotation?: THREE.Euler | THREE.Quaternion;
@@ -15,6 +16,6 @@ type InstancedModelProps = {
     castShadow?: boolean;
     receiveShadow?: boolean;
 };
-export declare const InstancedModel: React.FC<InstancedModelProps>;
-export {};
-//# sourceMappingURL=InstancedModel.d.ts.map
+declare const InstancedModel: React.FC<InstancedModelProps>;
+
+export { InstancedModel };

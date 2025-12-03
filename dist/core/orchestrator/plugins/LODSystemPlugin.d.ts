@@ -1,5 +1,7 @@
-import type { Plugin, PluginContext } from '../types';
-import { THREE } from '../../../lib';
+import { P as Plugin, b as PluginContext } from '../../../SceneOrchestrator-B4om0ttP.js';
+import * as THREE from 'three';
+import '../../cache/types.js';
+
 type LODLevel = {
     distance: number;
     model: THREE.Object3D;
@@ -8,7 +10,7 @@ type LODConfig = {
     levels: LODLevel[];
     hysteresis?: number;
 };
-export declare class LODSystemPlugin implements Plugin {
+declare class LODSystemPlugin implements Plugin {
     private config;
     name: string;
     private lodObjects;
@@ -17,5 +19,5 @@ export declare class LODSystemPlugin implements Plugin {
     install({ camera, orchestrator }: PluginContext): void;
     dispose(): void;
 }
-export {};
-//# sourceMappingURL=LODSystemPlugin.d.ts.map
+
+export { LODSystemPlugin };

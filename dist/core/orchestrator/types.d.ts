@@ -1,14 +1,3 @@
-import type { SceneOrchestrator } from './SceneOrchestrator';
-import type { THREE } from '../../lib';
-export type PluginContext = {
-    scene: THREE.Scene;
-    camera: THREE.PerspectiveCamera;
-    renderer: THREE.WebGLRenderer;
-    orchestrator: SceneOrchestrator;
-};
-export interface Plugin {
-    name: string;
-    install(context: PluginContext): void;
-    dispose?(): void;
-}
-//# sourceMappingURL=types.d.ts.map
+export { P as Plugin, b as PluginContext } from '../../SceneOrchestrator-B4om0ttP.js';
+import 'three';
+import '../cache/types.js';

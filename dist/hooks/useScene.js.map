@@ -1,1 +1,0 @@
-{"version":3,"file":"useScene.js","sourceRoot":"","sources":["../../src/hooks/useScene.ts"],"names":[],"mappings":"AAAA,YAAY,CAAC;AACb,OAAO,EAAE,QAAQ,IAAI,eAAe,EAAE,MAAM,yBAAyB,CAAC;AAGtE,MAAM,CAAC,MAAM,QAAQ,GAAG,GAAsB,EAAE;IAC9C,OAAO,eAAe,EAAE,CAAC;AAC3B,CAAC,CAAC"}

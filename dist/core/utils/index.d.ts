@@ -1,2 +1,2 @@
-export * from './QuadWireframe';
-//# sourceMappingURL=index.d.ts.map
+export { createQuadWireframe } from './QuadWireframe.js';
+import 'three';

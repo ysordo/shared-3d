@@ -1,8 +1,11 @@
-import type { ReactNode } from 'react';
-import React from 'react';
-import type { SceneConfig } from '../../core/orchestrator/SceneOrchestrator';
-export declare const Canvas: React.ForwardRefExoticComponent<React.CanvasHTMLAttributes<HTMLCanvasElement> & {
+import React, { ReactNode } from 'react';
+import { S as SceneConfig } from '../../SceneOrchestrator-B4om0ttP.js';
+import 'three';
+import '../../core/cache/types.js';
+
+declare const Canvas: React.ForwardRefExoticComponent<React.CanvasHTMLAttributes<HTMLCanvasElement> & {
     config?: SceneConfig;
     children?: ReactNode;
 } & React.RefAttributes<HTMLCanvasElement>>;
-//# sourceMappingURL=Canvas.d.ts.map
+
+export { Canvas };

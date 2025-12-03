@@ -1,8 +1,17 @@
-'use client';
-import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
-import { Model } from './Model';
-import { Suspense } from './Suspense';
-export const SuspenseModel = ({ entry, draco, fallback = _jsxs("div", { className: "text-white", children: ["Loading model ", entry.id, "..."] }), children, }) => {
-    return (_jsx(Suspense, { fallback: fallback, children: _jsx(Model, { entry: entry, draco: draco, children: (model) => children?.(model) }) }));
+"use client";
+import {
+  SuspenseModel
+} from "../../chunk-6ELTNRD5.js";
+import "../../chunk-M3WZHTGS.js";
+import "../../chunk-RUDNMJTZ.js";
+import "../../chunk-OVWVQSTO.js";
+import "../../chunk-MZEYSNNV.js";
+import "../../chunk-53O3DZBZ.js";
+import "../../chunk-JWY4ZHHB.js";
+import "../../chunk-7NTLIQ5L.js";
+import "../../chunk-J3SAIRP2.js";
+import "../../chunk-MAROSTDG.js";
+import "../../chunk-OVHQQSEK.js";
+export {
+  SuspenseModel
 };
-//# sourceMappingURL=SuspenseModel.js.map

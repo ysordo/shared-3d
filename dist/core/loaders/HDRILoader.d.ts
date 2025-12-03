@@ -1,17 +1,18 @@
-import type { ManifestEntry, ModelManifest } from '../cache/types';
-import { THREE } from '../../lib';
-export type HDRIProgress = {
+import { ManifestEntry, ModelManifest } from '../cache/types.js';
+import * as THREE from 'three';
+
+type HDRIProgress = {
     loaded: number;
     total: number;
     percent: number;
     url: string;
 };
-export type HDRIEvents = {
+type HDRIEvents = {
     onProgress?: (progress: HDRIProgress) => void;
     onLoaded?: (texture: THREE.Texture, entry: ManifestEntry) => void;
     onError?: (error: Error, url: string) => void;
 };
-export declare class HDRILoader {
+declare class HDRILoader {
     private static rgbeLoader;
     private static webpLoader;
     /**
@@ -27,4 +28,5 @@ export declare class HDRILoader {
      */
     static invalidate(id: string): Promise<void>;
 }
-//# sourceMappingURL=HDRILoader.d.ts.map
+
+export { type HDRIEvents, HDRILoader, type HDRIProgress };

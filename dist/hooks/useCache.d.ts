@@ -1,7 +1,10 @@
-export declare const useCache: () => {
-    status: "error" | "idle" | "validating" | "ready";
+import { CacheReport, ModelManifest } from '../core/cache/types.js';
+
+declare const useCache: () => {
+    status: "idle" | "validating" | "ready" | "error";
     progress: number;
-    report: import("..").CacheReport | null;
-    validate: (manifest: import("..").ModelManifest) => Promise<import("..").CacheReport>;
+    report: CacheReport | null;
+    validate: (manifest: ModelManifest) => Promise<CacheReport>;
 };
-//# sourceMappingURL=useCache.d.ts.map
+
+export { useCache };

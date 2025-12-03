@@ -1,5 +1,7 @@
-import type { Plugin, PluginContext } from '../types';
-import { THREE } from '../../../lib';
+import { P as Plugin, b as PluginContext } from '../../../SceneOrchestrator-B4om0ttP.js';
+import * as THREE from 'three';
+import '../../cache/types.js';
+
 type AnnotationData = {
     id: string;
     position: THREE.Vector3;
@@ -8,7 +10,7 @@ type AnnotationData = {
     offset?: THREE.Vector3 | undefined;
     visible?: boolean | undefined;
 };
-export declare class AnnotationsPlugin implements Plugin {
+declare class AnnotationsPlugin implements Plugin {
     private data;
     name: string;
     private annotations;
@@ -19,5 +21,5 @@ export declare class AnnotationsPlugin implements Plugin {
     private createLabel;
     dispose(): void;
 }
-export {};
-//# sourceMappingURL=AnnotationsPlugin.d.ts.map
+
+export { AnnotationsPlugin };

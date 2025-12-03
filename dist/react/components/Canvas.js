@@ -1,9 +1,14 @@
-'use client';
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { forwardRef } from 'react';
-import { SceneProvider } from '../../context/SceneContext';
-export const Canvas = forwardRef(({ config, children, ...canvasProps }, ref) => {
-    return (_jsxs(SceneProvider, { ref: ref, config: config, children: [_jsx("canvas", { ref: ref, ...canvasProps }), children] }));
-});
-Canvas.displayName = 'Canvas';
-//# sourceMappingURL=Canvas.js.map
+"use client";
+import {
+  Canvas
+} from "../../chunk-6GG4QE2E.js";
+import "../../chunk-MZEYSNNV.js";
+import "../../chunk-53O3DZBZ.js";
+import "../../chunk-JWY4ZHHB.js";
+import "../../chunk-7NTLIQ5L.js";
+import "../../chunk-J3SAIRP2.js";
+import "../../chunk-MAROSTDG.js";
+import "../../chunk-OVHQQSEK.js";
+export {
+  Canvas
+};

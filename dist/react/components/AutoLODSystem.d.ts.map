@@ -1,1 +1,0 @@
-{"version":3,"file":"AutoLODSystem.d.ts","sourceRoot":"","sources":["../../../src/react/components/AutoLODSystem.tsx"],"names":[],"mappings":"AAEA,OAAO,KAAK,KAAK,MAAM,OAAO,CAAC;AAK/B,KAAK,kBAAkB,GAAG;IACxB,cAAc,CAAC,EAAE,MAAM,CAAC;IACxB,WAAW,CAAC,EAAE,MAAM,CAAC;IACrB,YAAY,CAAC,EAAE,MAAM,CAAC;CACvB,CAAC;AAEF,eAAO,MAAM,aAAa,EAAE,KAAK,CAAC,EAAE,CAAC,kBAAkB,CAmBtD,CAAC"}

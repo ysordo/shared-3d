@@ -1,30 +1,15 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { useScene } from './useScene';
-export const useModel = (entry, options = {}) => {
-    const { draco = false, autoLoad = true } = options;
-    const orchestrator = useScene();
-    const [model, setModel] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    useEffect(() => {
-        if (!entry || !autoLoad) {
-            return;
-        }
-        setLoading(true);
-        setError(null);
-        orchestrator
-            .setModel(entry, { draco })
-            .then((m) => {
-            setModel(m);
-            setLoading(false);
-        })
-            .catch((err) => {
-            setError(err);
-            setLoading(false);
-        });
-    }, [entry?.id, draco]);
-    const load = () => entry && orchestrator.setModel(entry, { draco });
-    return { model, loading, error, load };
+"use client";
+import {
+  useModel
+} from "../chunk-P2AJYPTQ.js";
+import "../chunk-OVWVQSTO.js";
+import "../chunk-MZEYSNNV.js";
+import "../chunk-53O3DZBZ.js";
+import "../chunk-JWY4ZHHB.js";
+import "../chunk-7NTLIQ5L.js";
+import "../chunk-J3SAIRP2.js";
+import "../chunk-MAROSTDG.js";
+import "../chunk-OVHQQSEK.js";
+export {
+  useModel
 };
-//# sourceMappingURL=useModel.js.map

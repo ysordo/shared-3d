@@ -1,20 +1,15 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-'use client';
-import { useEffect, useState } from 'react';
-import { useScene } from '../../hooks/useScene';
-export const Model = ({ entry, draco = false, children, }) => {
-    const orchestrator = useScene();
-    const [model, setModel] = useState(null);
-    useEffect(() => {
-        const load = async () => {
-            const gltf = await orchestrator.setModel(entry, { draco });
-            setModel(gltf);
-        };
-        load();
-    }, [entry.id, draco]);
-    if (!model) {
-        return null;
-    }
-    return children?.(model);
+"use client";
+import {
+  Model
+} from "../../chunk-M3WZHTGS.js";
+import "../../chunk-OVWVQSTO.js";
+import "../../chunk-MZEYSNNV.js";
+import "../../chunk-53O3DZBZ.js";
+import "../../chunk-JWY4ZHHB.js";
+import "../../chunk-7NTLIQ5L.js";
+import "../../chunk-J3SAIRP2.js";
+import "../../chunk-MAROSTDG.js";
+import "../../chunk-OVHQQSEK.js";
+export {
+  Model
 };
-//# sourceMappingURL=Model.js.map

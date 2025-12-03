@@ -1,24 +1,15 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { useScene } from './useScene';
-export const useHDRI = (entry) => {
-    const orchestrator = useScene();
-    const [hdri, setHDRI] = useState(null);
-    const [loading, setLoading] = useState(false);
-    useEffect(() => {
-        if (!entry) {
-            return;
-        }
-        setLoading(true);
-        orchestrator
-            .setHDRI(entry)
-            .then((tex) => {
-            setHDRI(tex);
-            setLoading(false);
-        })
-            .catch(() => setLoading(false));
-    }, [entry?.id]);
-    const clear = () => orchestrator.clearHDRI();
-    return { hdri, loading, clear };
+"use client";
+import {
+  useHDRI
+} from "../chunk-CPMHERKH.js";
+import "../chunk-OVWVQSTO.js";
+import "../chunk-MZEYSNNV.js";
+import "../chunk-53O3DZBZ.js";
+import "../chunk-JWY4ZHHB.js";
+import "../chunk-7NTLIQ5L.js";
+import "../chunk-J3SAIRP2.js";
+import "../chunk-MAROSTDG.js";
+import "../chunk-OVHQQSEK.js";
+export {
+  useHDRI
 };
-//# sourceMappingURL=useHDRI.js.map

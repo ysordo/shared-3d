@@ -1,5 +1,7 @@
-import type { ReactNode } from 'react';
-import type { ModelManifest, CacheReport } from '../core/cache/types';
+import * as react_jsx_runtime from 'react/jsx-runtime';
+import { ReactNode } from 'react';
+import { CacheReport, ModelManifest } from '../core/cache/types.js';
+
 type CacheStatus = 'idle' | 'validating' | 'ready' | 'error';
 type CacheContextValue = {
     status: CacheStatus;
@@ -7,9 +9,9 @@ type CacheContextValue = {
     report: CacheReport | null;
     validate: (manifest: ModelManifest) => Promise<CacheReport>;
 };
-export declare const CacheProvider: ({ children }: {
+declare const CacheProvider: ({ children }: {
     children: ReactNode;
-}) => import("react/jsx-runtime").JSX.Element;
-export declare const useCache: () => CacheContextValue;
-export {};
-//# sourceMappingURL=CacheContext.d.ts.map
+}) => react_jsx_runtime.JSX.Element;
+declare const useCache: () => CacheContextValue;
+
+export { CacheProvider, useCache };

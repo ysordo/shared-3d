@@ -33,22 +33,31 @@
   "homepage": "https://github.com/ysordo/shared-3d#readme",
   "bugs": "https://github.com/ysordo/shared-3d/issues",
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
-    "lib/*": "./dist/lib/types*",
-    "three/*": "./dist/lib/three*",
-    "server/*": "./dist/core/cache/server/*",
-    "core/*": "./dist/core/*",
-    "hooks/*": "./dist/hooks/*",
-    "components/*": "./dist/react/components/*",
-    "controls/*": "./dist/react/controls/*",
-    "primitives/*": "./dist/react/primitives/*"
+    "./server": {
+      "types": "./dist/core/cache/server/index.server.d.ts",
+      "import": "./dist/core/cache/server/index.server.js",
+      "require": "./dist/core/cache/server/index.server.cjs"
+    },
+    "./three": {
+      "types": "./dist/lib/three.d.ts",
+      "import": "./dist/lib/three.js",
+      "require": "./dist/lib/three.cjs"
+    },
+
+    "./react/*": "./dist/react/*",
+    "./hooks/*": "./dist/hooks/*",
+    "./core/*": "./dist/core/*",
+    "./context/*": "./dist/context/*",
+    "./lib/*": "./dist/lib/*"
   },
   "files": [
     "dist",
@@ -57,7 +66,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",

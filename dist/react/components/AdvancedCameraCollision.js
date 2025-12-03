@@ -1,20 +1,16 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-'use client';
-import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
-import { AdvancedCameraCollisionPlugin } from '../../core/orchestrator/plugins/AdvancedCameraCollisionPlugin';
-export const AdvancedCameraCollision = ({ distanceThreshold = 0.6, pushBackOffset = 0.1, enabled = true }) => {
-    const orchestrator = useScene();
-    useEffect(() => {
-        if (!enabled) {
-            return;
-        }
-        const plugin = new AdvancedCameraCollisionPlugin(distanceThreshold, pushBackOffset);
-        orchestrator.use(plugin);
-        return () => {
-            plugin.dispose();
-        };
-    }, [enabled, distanceThreshold, pushBackOffset]);
-    return null;
+"use client";
+import {
+  AdvancedCameraCollision
+} from "../../chunk-F7F54MU6.js";
+import "../../chunk-3EGJYHIY.js";
+import "../../chunk-OVWVQSTO.js";
+import "../../chunk-MZEYSNNV.js";
+import "../../chunk-53O3DZBZ.js";
+import "../../chunk-JWY4ZHHB.js";
+import "../../chunk-7NTLIQ5L.js";
+import "../../chunk-J3SAIRP2.js";
+import "../../chunk-MAROSTDG.js";
+import "../../chunk-OVHQQSEK.js";
+export {
+  AdvancedCameraCollision
 };
-//# sourceMappingURL=AdvancedCameraCollision.js.map

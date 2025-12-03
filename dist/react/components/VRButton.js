@@ -1,22 +1,15 @@
-'use client';
-import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
-import { VRButton as ThreeVRButton } from 'three/examples/jsm/webxr/VRButton.js';
-export const VRButton = () => {
-    const { renderer } = useScene();
-    useEffect(() => {
-        if (!renderer) {
-            return;
-        }
-        renderer.xr.enabled = true;
-        const button = ThreeVRButton.createButton(renderer);
-        document.body.appendChild(button);
-        return () => {
-            if (button.parentNode) {
-                button.parentNode.removeChild(button);
-            }
-        };
-    }, [renderer]);
-    return null;
+"use client";
+import {
+  VRButton
+} from "../../chunk-OASOCNNE.js";
+import "../../chunk-OVWVQSTO.js";
+import "../../chunk-MZEYSNNV.js";
+import "../../chunk-53O3DZBZ.js";
+import "../../chunk-JWY4ZHHB.js";
+import "../../chunk-7NTLIQ5L.js";
+import "../../chunk-J3SAIRP2.js";
+import "../../chunk-MAROSTDG.js";
+import "../../chunk-OVHQQSEK.js";
+export {
+  VRButton
 };
-//# sourceMappingURL=VRButton.js.map

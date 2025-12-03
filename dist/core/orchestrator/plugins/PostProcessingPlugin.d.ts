@@ -1,5 +1,8 @@
-import type { Plugin, PluginContext } from '../types';
-export declare class PostProcessingPlugin implements Plugin {
+import { P as Plugin, b as PluginContext } from '../../../SceneOrchestrator-B4om0ttP.js';
+import 'three';
+import '../../cache/types.js';
+
+declare class PostProcessingPlugin implements Plugin {
     private options;
     name: string;
     private composer;
@@ -13,4 +16,5 @@ export declare class PostProcessingPlugin implements Plugin {
     setBloom(strength: number): void;
     dispose(): void;
 }
-//# sourceMappingURL=PostProcessingPlugin.d.ts.map
+
+export { PostProcessingPlugin };

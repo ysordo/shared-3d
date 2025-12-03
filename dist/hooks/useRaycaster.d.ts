@@ -1,3 +1,8 @@
-import { type RaycasterEvent } from '../core/orchestrator/plugins';
-export declare const useRaycaster: (onEvent: (event: RaycasterEvent) => void) => void;
-//# sourceMappingURL=useRaycaster.d.ts.map
+import { RaycasterEvent } from '../core/orchestrator/plugins/RaycasterPlugin.js';
+import '../SceneOrchestrator-B4om0ttP.js';
+import 'three';
+import '../core/cache/types.js';
+
+declare const useRaycaster: (onEvent: (event: RaycasterEvent) => void) => void;
+
+export { useRaycaster };

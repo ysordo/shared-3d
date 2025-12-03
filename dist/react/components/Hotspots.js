@@ -1,26 +1,16 @@
-'use client';
-import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
-import { HotspotPlugin } from '../../core/orchestrator/plugins/HotspotPlugin';
-import * as THREE from 'three';
-export const Hotspots = ({ hotspots }) => {
-    const orchestrator = useScene();
-    useEffect(() => {
-        const data = hotspots.map((h) => ({
-            id: h.id,
-            position: new THREE.Vector3(...h.position),
-            target: typeof h.target === 'string'
-                ? orchestrator.scene.getObjectByName(h.target)
-                : h.target,
-            onClick: h.onClick,
-            offset: h.offset ? new THREE.Vector3(...h.offset) : undefined,
-        }));
-        const plugin = new HotspotPlugin(data);
-        orchestrator.use(plugin);
-        return () => {
-            plugin.dispose();
-        };
-    }, [hotspots, orchestrator]);
-    return null;
+"use client";
+import {
+  Hotspots
+} from "../../chunk-K74YUHIW.js";
+import "../../chunk-L3G2QMBD.js";
+import "../../chunk-OVWVQSTO.js";
+import "../../chunk-MZEYSNNV.js";
+import "../../chunk-53O3DZBZ.js";
+import "../../chunk-JWY4ZHHB.js";
+import "../../chunk-7NTLIQ5L.js";
+import "../../chunk-J3SAIRP2.js";
+import "../../chunk-MAROSTDG.js";
+import "../../chunk-OVHQQSEK.js";
+export {
+  Hotspots
 };
-//# sourceMappingURL=Hotspots.js.map

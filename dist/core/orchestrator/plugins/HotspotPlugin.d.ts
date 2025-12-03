@@ -1,12 +1,14 @@
-import type { Plugin, PluginContext } from '../types';
-import { THREE } from '../../../lib';
+import { P as Plugin, b as PluginContext } from '../../../SceneOrchestrator-B4om0ttP.js';
+import * as THREE from 'three';
+import '../../cache/types.js';
+
 type HotspotData = {
     id: string;
     position: THREE.Vector3;
     target?: THREE.Object3D | undefined;
     onClick: () => void;
 };
-export declare class HotspotPlugin implements Plugin {
+declare class HotspotPlugin implements Plugin {
     private data;
     name: string;
     private hotspots;
@@ -14,5 +16,5 @@ export declare class HotspotPlugin implements Plugin {
     install({ scene }: PluginContext): void;
     dispose(): void;
 }
-export {};
-//# sourceMappingURL=HotspotPlugin.d.ts.map
+
+export { HotspotPlugin };

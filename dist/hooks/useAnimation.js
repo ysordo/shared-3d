@@ -1,31 +1,16 @@
-'use client';
-import { useEffect } from 'react';
-import { useActiveModel } from './useActiveModel';
-import { THREE } from '../lib';
-export const useAnimation = (clipName, play = true) => {
-    const model = useActiveModel();
-    useEffect(() => {
-        if (!model || !model.animations) {
-            return;
-        }
-        const clip = model.animations.find(a => a.name === clipName);
-        if (!clip) {
-            return;
-        }
-        const mixer = new THREE.AnimationMixer(model);
-        const action = mixer.clipAction(clip);
-        if (play) {
-            action.play();
-        }
-        const clock = new THREE.Clock();
-        const animate = () => {
-            mixer.update(clock.getDelta());
-            requestAnimationFrame(animate);
-        };
-        animate();
-        return () => {
-            action.stop();
-        };
-    }, [model, clipName, play]);
+"use client";
+import {
+  useAnimation
+} from "../chunk-RMDAOZAB.js";
+import "../chunk-IWWTL653.js";
+import "../chunk-OVWVQSTO.js";
+import "../chunk-MZEYSNNV.js";
+import "../chunk-53O3DZBZ.js";
+import "../chunk-JWY4ZHHB.js";
+import "../chunk-7NTLIQ5L.js";
+import "../chunk-J3SAIRP2.js";
+import "../chunk-MAROSTDG.js";
+import "../chunk-OVHQQSEK.js";
+export {
+  useAnimation
 };
-//# sourceMappingURL=useAnimation.js.map

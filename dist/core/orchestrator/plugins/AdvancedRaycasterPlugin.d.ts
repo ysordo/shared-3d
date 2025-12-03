@@ -1,5 +1,7 @@
-import type { Plugin, PluginContext } from '../types';
-import { THREE } from '../../../lib';
+import { P as Plugin, b as PluginContext } from '../../../SceneOrchestrator-B4om0ttP.js';
+import * as THREE from 'three';
+import '../../cache/types.js';
+
 declare class RaycasterManager extends THREE.EventDispatcher {
     private raycaster;
     private pointer;
@@ -36,7 +38,7 @@ declare class RaycasterManager extends THREE.EventDispatcher {
     private onTouchMove;
     private onTouchEnd;
 }
-export declare class AdvancedRaycasterPlugin implements Plugin {
+declare class AdvancedRaycasterPlugin implements Plugin {
     private model?;
     private onEvent?;
     name: string;
@@ -46,5 +48,5 @@ export declare class AdvancedRaycasterPlugin implements Plugin {
     dispose(): void;
     get manager(): RaycasterManager;
 }
-export {};
-//# sourceMappingURL=AdvancedRaycasterPlugin.d.ts.map
+
+export { AdvancedRaycasterPlugin };

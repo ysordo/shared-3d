@@ -1,15 +1,27 @@
-'use client';
-import { useEffect } from 'react';
-import { useScene } from './useScene';
-import { RaycasterPlugin } from '../core/orchestrator/plugins';
-export const useRaycaster = (onEvent) => {
-    const orchestrator = useScene();
-    useEffect(() => {
-        const plugin = new RaycasterPlugin(onEvent);
-        orchestrator.use(plugin);
-        return () => {
-            // Opcional: remover plugin
-        };
-    }, [onEvent]);
+"use client";
+import {
+  useRaycaster
+} from "../chunk-4UVCRO2U.js";
+import "../chunk-DCRMKZQR.js";
+import "../chunk-FBPG64NM.js";
+import "../chunk-R4RSFB4I.js";
+import "../chunk-SRDOYMT5.js";
+import "../chunk-L3G2QMBD.js";
+import "../chunk-HVXJUMVE.js";
+import "../chunk-PRNY2PGZ.js";
+import "../chunk-CPKJTF7R.js";
+import "../chunk-UHUPI6C6.js";
+import "../chunk-3EGJYHIY.js";
+import "../chunk-VTSNXELB.js";
+import "../chunk-JQEF7TLI.js";
+import "../chunk-OVWVQSTO.js";
+import "../chunk-MZEYSNNV.js";
+import "../chunk-53O3DZBZ.js";
+import "../chunk-JWY4ZHHB.js";
+import "../chunk-7NTLIQ5L.js";
+import "../chunk-J3SAIRP2.js";
+import "../chunk-MAROSTDG.js";
+import "../chunk-OVHQQSEK.js";
+export {
+  useRaycaster
 };
-//# sourceMappingURL=useRaycaster.js.map

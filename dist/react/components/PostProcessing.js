@@ -1,18 +1,27 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-'use client';
-import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
-import { PostProcessingPlugin } from '../../core/orchestrator/plugins';
-export const PostProcessing = ({ bloom = { strength: 1.5, radius: 0.4, threshold: 0 }, enabled = true, }) => {
-    const orchestrator = useScene();
-    useEffect(() => {
-        if (!enabled) {
-            return;
-        }
-        const plugin = new PostProcessingPlugin(bloom);
-        orchestrator.use(plugin);
-        return () => { };
-    }, [enabled, bloom.strength, bloom.radius, bloom.threshold]);
-    return null;
+"use client";
+import {
+  PostProcessing
+} from "../../chunk-ODHFJDWB.js";
+import "../../chunk-DCRMKZQR.js";
+import "../../chunk-FBPG64NM.js";
+import "../../chunk-R4RSFB4I.js";
+import "../../chunk-SRDOYMT5.js";
+import "../../chunk-L3G2QMBD.js";
+import "../../chunk-HVXJUMVE.js";
+import "../../chunk-PRNY2PGZ.js";
+import "../../chunk-CPKJTF7R.js";
+import "../../chunk-UHUPI6C6.js";
+import "../../chunk-3EGJYHIY.js";
+import "../../chunk-VTSNXELB.js";
+import "../../chunk-JQEF7TLI.js";
+import "../../chunk-OVWVQSTO.js";
+import "../../chunk-MZEYSNNV.js";
+import "../../chunk-53O3DZBZ.js";
+import "../../chunk-JWY4ZHHB.js";
+import "../../chunk-7NTLIQ5L.js";
+import "../../chunk-J3SAIRP2.js";
+import "../../chunk-MAROSTDG.js";
+import "../../chunk-OVHQQSEK.js";
+export {
+  PostProcessing
 };
-//# sourceMappingURL=PostProcessing.js.map

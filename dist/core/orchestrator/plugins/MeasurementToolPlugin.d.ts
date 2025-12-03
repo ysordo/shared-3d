@@ -1,11 +1,13 @@
-import type { Plugin, PluginContext } from '../types';
-import { THREE } from '../../../lib';
-export type MeasurementEvent = {
+import { P as Plugin, b as PluginContext } from '../../../SceneOrchestrator-B4om0ttP.js';
+import * as THREE from 'three';
+import '../../cache/types.js';
+
+type MeasurementEvent = {
     point: THREE.Vector3;
     distance?: number;
     points: THREE.Vector3[];
 };
-export declare class MeasurementToolPlugin implements Plugin {
+declare class MeasurementToolPlugin implements Plugin {
     name: string;
     private points;
     private line?;
@@ -16,4 +18,5 @@ export declare class MeasurementToolPlugin implements Plugin {
     private reset;
     dispose(): void;
 }
-//# sourceMappingURL=MeasurementToolPlugin.d.ts.map
+
+export { type MeasurementEvent, MeasurementToolPlugin };

@@ -1,13 +1,15 @@
-import type { ManifestEntry, CacheReport } from './types';
-export type ValidationOptions = {
+import { ManifestEntry, CacheReport } from './types.js';
+
+type ValidationOptions = {
     manifest: ManifestEntry[];
     onProgress?: (progress: number, status: string) => void;
     onComplete?: (report: CacheReport) => void;
     forceUpdate?: boolean;
 };
-export declare class CacheValidator {
+declare class CacheValidator {
     private static isFirstLoad;
     static validate(options: ValidationOptions): Promise<CacheReport>;
     static reset(): void;
 }
-//# sourceMappingURL=CacheValidator.d.ts.map
+
+export { CacheValidator, type ValidationOptions };

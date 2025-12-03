@@ -1,5 +1,8 @@
-import type { Plugin, PluginContext } from '../types';
-export declare class AdvancedOrbitControlsPlugin implements Plugin {
+import { P as Plugin, b as PluginContext } from '../../../SceneOrchestrator-B4om0ttP.js';
+import 'three';
+import '../../cache/types.js';
+
+declare class AdvancedOrbitControlsPlugin implements Plugin {
     private options;
     name: string;
     private controls;
@@ -12,4 +15,5 @@ export declare class AdvancedOrbitControlsPlugin implements Plugin {
     setAllEnabled(enabled: boolean): void;
     dispose(): void;
 }
-//# sourceMappingURL=AdvancedOrbitControlsPlugin.d.ts.map
+
+export { AdvancedOrbitControlsPlugin };

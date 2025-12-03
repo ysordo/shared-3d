@@ -1,5 +1,4 @@
-export * from './CacheValidator';
-export * from './FileWatcher';
-export * from './ObjectCache';
-export * from './types';
-//# sourceMappingURL=index.d.ts.map
+export { CacheValidator, ValidationOptions } from './CacheValidator.js';
+export { FileWatcher } from './FileWatcher.js';
+export { ObjectCache } from './ObjectCache.js';
+export { CacheEntry, CacheReport, ManifestEntry, ModelManifest } from './types.js';

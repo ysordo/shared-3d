@@ -1,17 +1,16 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-'use client';
-import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
-import { LODSystemPlugin } from '../../core/orchestrator/plugins/LODSystemPlugin';
-export const LODSystem = ({ levels, hysteresis = 0.1, }) => {
-    const orchestrator = useScene();
-    useEffect(() => {
-        const plugin = new LODSystemPlugin([{ levels, hysteresis }]);
-        orchestrator.use(plugin);
-        return () => {
-            plugin.dispose();
-        };
-    }, [levels, hysteresis]);
-    return null;
+"use client";
+import {
+  LODSystem
+} from "../../chunk-FOTZCW7M.js";
+import "../../chunk-HVXJUMVE.js";
+import "../../chunk-OVWVQSTO.js";
+import "../../chunk-MZEYSNNV.js";
+import "../../chunk-53O3DZBZ.js";
+import "../../chunk-JWY4ZHHB.js";
+import "../../chunk-7NTLIQ5L.js";
+import "../../chunk-J3SAIRP2.js";
+import "../../chunk-MAROSTDG.js";
+import "../../chunk-OVHQQSEK.js";
+export {
+  LODSystem
 };
-//# sourceMappingURL=LODSystem.js.map

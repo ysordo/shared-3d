@@ -1,19 +1,16 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-'use client';
-import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
-import { AutoLODSystemPlugin } from '../../core/orchestrator/plugins/AutoLODSystemPlugin';
-export const AutoLODSystem = ({ mediumDistance = 20, lowDistance = 50, hideDistance = 100, }) => {
-    const orchestrator = useScene();
-    useEffect(() => {
-        const plugin = new AutoLODSystemPlugin({
-            distances: [mediumDistance, lowDistance, hideDistance],
-        });
-        orchestrator.use(plugin);
-        return () => {
-            plugin.dispose();
-        };
-    }, [mediumDistance, lowDistance, hideDistance]);
-    return null;
+"use client";
+import {
+  AutoLODSystem
+} from "../../chunk-AOP7YC3S.js";
+import "../../chunk-UHUPI6C6.js";
+import "../../chunk-OVWVQSTO.js";
+import "../../chunk-MZEYSNNV.js";
+import "../../chunk-53O3DZBZ.js";
+import "../../chunk-JWY4ZHHB.js";
+import "../../chunk-7NTLIQ5L.js";
+import "../../chunk-J3SAIRP2.js";
+import "../../chunk-MAROSTDG.js";
+import "../../chunk-OVHQQSEK.js";
+export {
+  AutoLODSystem
 };
-//# sourceMappingURL=AutoLODSystem.js.map

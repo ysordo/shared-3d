@@ -1,10 +1,11 @@
-import type { ModelManifest, ManifestEntry } from '../cache/types';
-import { THREE } from '../../lib';
-export type GLTFLoaderOptions = {
+import { ManifestEntry, ModelManifest } from '../cache/types.js';
+import * as THREE from 'three';
+
+type GLTFLoaderOptions = {
     draco?: boolean | undefined;
     decoderPath?: string | undefined;
 };
-export type GLTFLoaderEvents = {
+type GLTFLoaderEvents = {
     onProgress?: (p: {
         loaded: number;
         total: number;
@@ -14,7 +15,7 @@ export type GLTFLoaderEvents = {
     onLoaded?: (obj: THREE.Group, entry: ManifestEntry) => void | undefined;
     onError?: (err: Error, url: string) => void | undefined;
 };
-export declare class GLTFLoader {
+declare class GLTFLoader {
     private static plainLoader;
     private static dracoLoaderInstance;
     private static dracoDecoder;
@@ -25,4 +26,5 @@ export declare class GLTFLoader {
     static invalidate(id: string): Promise<void>;
     static clearCache(): Promise<void>;
 }
-//# sourceMappingURL=GLTFLoader.d.ts.map
+
+export { GLTFLoader, type GLTFLoaderEvents, type GLTFLoaderOptions };

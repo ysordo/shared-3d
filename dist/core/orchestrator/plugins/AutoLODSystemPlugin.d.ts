@@ -1,9 +1,12 @@
-import type { Plugin, PluginContext } from '../types';
+import { P as Plugin, b as PluginContext } from '../../../SceneOrchestrator-B4om0ttP.js';
+import 'three';
+import '../../cache/types.js';
+
 type AutoLODConfig = {
     distances: [number, number, number];
     reductionPercentages?: [number, number];
 };
-export declare class AutoLODSystemPlugin implements Plugin {
+declare class AutoLODSystemPlugin implements Plugin {
     private config;
     name: string;
     private lods;
@@ -14,5 +17,5 @@ export declare class AutoLODSystemPlugin implements Plugin {
     install({ camera, orchestrator }: PluginContext): void;
     dispose(): void;
 }
-export {};
-//# sourceMappingURL=AutoLODSystemPlugin.d.ts.map
+
+export { AutoLODSystemPlugin };

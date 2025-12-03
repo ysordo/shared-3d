@@ -1,22 +1,15 @@
-'use client';
-import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
-import { ARButton as ThreeARButton } from 'three/examples/jsm/webxr/ARButton.js';
-export const ARButton = () => {
-    const { renderer } = useScene();
-    useEffect(() => {
-        if (!renderer) {
-            return;
-        }
-        renderer.xr.enabled = true;
-        const button = ThreeARButton.createButton(renderer);
-        document.body.appendChild(button);
-        return () => {
-            if (button.parentNode) {
-                button.parentNode.removeChild(button);
-            }
-        };
-    }, [renderer]);
-    return null;
+"use client";
+import {
+  ARButton
+} from "../../chunk-SGTRREOB.js";
+import "../../chunk-OVWVQSTO.js";
+import "../../chunk-MZEYSNNV.js";
+import "../../chunk-53O3DZBZ.js";
+import "../../chunk-JWY4ZHHB.js";
+import "../../chunk-7NTLIQ5L.js";
+import "../../chunk-J3SAIRP2.js";
+import "../../chunk-MAROSTDG.js";
+import "../../chunk-OVHQQSEK.js";
+export {
+  ARButton
 };
-//# sourceMappingURL=ARButton.js.map

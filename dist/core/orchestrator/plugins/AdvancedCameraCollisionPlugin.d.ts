@@ -1,5 +1,8 @@
-import type { Plugin, PluginContext } from '../types';
-export declare class AdvancedCameraCollisionPlugin implements Plugin {
+import { P as Plugin, b as PluginContext } from '../../../SceneOrchestrator-B4om0ttP.js';
+import 'three';
+import '../../cache/types.js';
+
+declare class AdvancedCameraCollisionPlugin implements Plugin {
     readonly distanceThreshold: number;
     readonly pushBackOffset: number;
     name: string;
@@ -8,4 +11,5 @@ export declare class AdvancedCameraCollisionPlugin implements Plugin {
     install({ camera, orchestrator }: PluginContext): void;
     dispose(): void;
 }
-//# sourceMappingURL=AdvancedCameraCollisionPlugin.d.ts.map
+
+export { AdvancedCameraCollisionPlugin };

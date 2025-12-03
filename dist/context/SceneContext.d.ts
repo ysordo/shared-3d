@@ -1,12 +1,13 @@
-import type { ReactNode } from 'react';
-import React from 'react';
-import { SceneOrchestrator } from '../core/orchestrator/SceneOrchestrator';
-import type { SceneConfig } from '../core/orchestrator/SceneOrchestrator';
+import React, { ReactNode } from 'react';
+import { S as SceneConfig, a as SceneOrchestrator } from '../SceneOrchestrator-B4om0ttP.js';
+import 'three';
+import '../core/cache/types.js';
+
 type SceneProviderProps = {
     children: ReactNode;
     config?: SceneConfig | undefined;
 };
-export declare const SceneProvider: React.ForwardRefExoticComponent<SceneProviderProps & React.RefAttributes<HTMLCanvasElement>>;
-export declare const useScene: () => SceneOrchestrator;
-export {};
-//# sourceMappingURL=SceneContext.d.ts.map
+declare const SceneProvider: React.ForwardRefExoticComponent<SceneProviderProps & React.RefAttributes<HTMLCanvasElement>>;
+declare const useScene: () => SceneOrchestrator;
+
+export { SceneProvider, useScene };

@@ -1,6 +1,8 @@
-import type { Plugin, PluginContext } from '../types';
-import { THREE } from '../../../lib';
-export type RaycasterEvent = {
+import { P as Plugin, b as PluginContext } from '../../../SceneOrchestrator-B4om0ttP.js';
+import * as THREE from 'three';
+import '../../cache/types.js';
+
+type RaycasterEvent = {
     type: 'click';
     object: THREE.Object3D;
     point: THREE.Vector3;
@@ -12,7 +14,7 @@ export type RaycasterEvent = {
     type: 'leave';
     object: THREE.Object3D;
 };
-export declare class RaycasterPlugin implements Plugin {
+declare class RaycasterPlugin implements Plugin {
     name: string;
     private raycaster;
     private pointer;
@@ -24,4 +26,5 @@ export declare class RaycasterPlugin implements Plugin {
     private getIntersection;
     dispose(): void;
 }
-//# sourceMappingURL=RaycasterPlugin.d.ts.map
+
+export { type RaycasterEvent, RaycasterPlugin };
