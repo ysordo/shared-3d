@@ -41,14 +41,14 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "three": {
-      "types": "./dist/lib/three.d.ts",
-      "import": "./dist/lib/three.js"
-    },
-    "server": {
-      "types": "./dist/core/cache/server/index.server.d.ts",
-      "import": "./dist/core/cache/server/index.server.js"
-    }
+    "lib/*": "./dist/lib/types*",
+    "three/*": "./dist/lib/three*",
+    "server/*": "./dist/core/cache/server/*",
+    "core/*": "./dist/core/*",
+    "hooks/*": "./dist/hooks/*",
+    "components/*": "./dist/react/components/*",
+    "controls/*": "./dist/react/controls/*",
+    "primitives/*": "./dist/react/primitives/*"
   },
   "files": [
     "dist",
