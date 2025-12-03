@@ -52,11 +52,26 @@
       "import": "./dist/lib/three.js",
       "require": "./dist/lib/three.cjs"
     },
-    "./react/*": "./dist/react/*",
-    "./hooks/*": "./dist/hooks/*",
-    "./core/*": "./dist/core/*",
-    "./context/*": "./dist/context/*",
-    "./lib/*": "./dist/lib/*"
+    "./react/*": {
+      "types": "./dist/react/**/*.d.ts",
+      "import": "./dist/react/**/*.js",
+      "require": "./dist/react/**/*.cjs"
+    },
+    "./hooks/*": {
+      "types": "./dist/hooks/**/*.d.ts",
+      "import": "./dist/hooks/**/*.js",
+      "require": "./dist/hooks/**/*.cjs"
+    },
+    "./core/*": {
+      "types": "./dist/core/**/*.d.ts",
+      "import": "./dist/core/**/*.js",
+      "require": "./dist/core/**/*.cjs"
+    },
+    "./context/*": {
+      "types": "./dist/context/**/*.d.ts",
+      "import": "./dist/context/**/*.js",
+      "require": "./dist/context/**/*.cjs"
+    }
   },
   "files": [
     "dist",

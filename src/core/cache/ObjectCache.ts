@@ -1,11 +1,14 @@
-import { get, set, del, keys } from 'idb-keyval';
+import { get, set, del, keys, createStore } from 'idb-keyval';
 import type { CacheEntry } from './types';
 import { THREE } from '../../lib';
 
 const CACHE_PREFIX = 'shared-3d:asset:';
+const store = typeof window !== 'undefined' 
+  ? createStore('shared-3d-db', 'keyval')
+  : null;
 
 export class ObjectCache {
-  private static async getKey(id: string): Promise<string> {
+  private static getKey(id: string): string {
     return `${CACHE_PREFIX}${id}`;
   }
 
@@ -15,7 +18,9 @@ export class ObjectCache {
     hash: string,
     updatedAt: number = Date.now()
   ): Promise<void> {
-    const key = await this.getKey(id);
+    if (!store) {return;}
+
+    const key = this.getKey(id);
     const entry: CacheEntry<T> = {
       data,
       hash,
@@ -23,33 +28,40 @@ export class ObjectCache {
       size: this.estimateSize(data),
       updatedAt,
     };
-    await set(key, entry);
+
+    await set(key, entry, store);
   }
 
   static async get<T>(id: string): Promise<CacheEntry<T> | null> {
-    const key = await this.getKey(id);
-    return await get<CacheEntry<T>>(key) ?? null;
+    if (!store) {return null;}
+
+    const key = this.getKey(id);
+    return await get<CacheEntry<T>>(key, store) ?? null;
   }
 
   static async has(id: string): Promise<boolean> {
-    const key = await this.getKey(id);
-    const all = await keys();
-    return all.includes(key as string);
+    if (!store) {return false;}
+
+    const key = this.getKey(id);
+    const all = await keys(store);
+    return all.includes(key);
   }
 
   static async delete(id: string): Promise<void> {
-    const key = await this.getKey(id);
+    if (!store) {return;}
+
+    const key = this.getKey(id);
     const entry = await this.get(key);
-    if (entry) {
-      this.dispose(entry.data);
-    }
-    await del(key);
+    if (entry) {this.dispose(entry.data);}
+    await del(key, store);
   }
 
   static async clearAll(): Promise<void> {
-    const allKeys = await keys();
-    const ourKeys = allKeys.filter(k => typeof k === 'string' && k.startsWith(CACHE_PREFIX));
-    await Promise.all(ourKeys.map(k => del(k)));
+    if (!store) {return;}
+
+    const all = await keys(store);
+    const ours = all.filter(k => typeof k === 'string' && k.startsWith(CACHE_PREFIX));
+    await Promise.all(ours.map(k => del(k, store)));
   }
 
   private static dispose(data: any): void {

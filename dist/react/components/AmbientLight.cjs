@@ -1,15 +1,15 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkXDEX2LI3cjs = require('../../chunk-XDEX2LI3.cjs');
-require('../../chunk-W4PDMXIP.cjs');
-require('../../chunk-WXJPQIIO.cjs');
-require('../../chunk-VBJXO26F.cjs');
-require('../../chunk-AAHJLMZR.cjs');
-require('../../chunk-QXT4UOVW.cjs');
+var _chunkBY7CYI55cjs = require('../../chunk-BY7CYI55.cjs');
+require('../../chunk-3UB2S2P3.cjs');
+require('../../chunk-DMBKKF4K.cjs');
+require('../../chunk-UDB7CTUG.cjs');
+require('../../chunk-2N3CMCMJ.cjs');
+require('../../chunk-P6OCPOFS.cjs');
 require('../../chunk-QRVOSZH3.cjs');
-require('../../chunk-6XZVAT27.cjs');
+require('../../chunk-V5RHI4RO.cjs');
 require('../../chunk-EA3XQ4KJ.cjs');
 
 
-exports.AmbientLight = _chunkXDEX2LI3cjs.AmbientLight;
+exports.AmbientLight = _chunkBY7CYI55cjs.AmbientLight;

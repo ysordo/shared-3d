@@ -2,114 +2,114 @@ import "./chunk-GY6RJQO5.js";
 import "./chunk-VHIECBSI.js";
 import {
   VRButton
-} from "./chunk-OASOCNNE.js";
+} from "./chunk-3CNRH4UT.js";
 import "./chunk-5RGQXC4Q.js";
 import {
   SceneObject
-} from "./chunk-Z5NU22YL.js";
+} from "./chunk-4SF62XG7.js";
 import {
   OrbitControls as OrbitControls2
-} from "./chunk-HB2MYA43.js";
+} from "./chunk-4FQ5WUPP.js";
 import {
   PointLight
-} from "./chunk-7JTF6DFK.js";
+} from "./chunk-LSAWDQ7H.js";
 import {
   PostProcessing
-} from "./chunk-ODHFJDWB.js";
+} from "./chunk-P7KEZGIF.js";
 import {
   Raycaster
-} from "./chunk-4E2NMKOL.js";
+} from "./chunk-AUWLPTWP.js";
 import {
   SpotLight
-} from "./chunk-GDQHY3XH.js";
+} from "./chunk-COUNWCKR.js";
 import {
   SuspenseModel
-} from "./chunk-F6XUJOTZ.js";
+} from "./chunk-FQ4HX3X7.js";
 import {
   Suspense
 } from "./chunk-RUDNMJTZ.js";
 import {
   TheaterLighting
-} from "./chunk-BKZZWXN7.js";
+} from "./chunk-4MNHZXP7.js";
 import {
   HDRI
-} from "./chunk-Q7FTH3IX.js";
+} from "./chunk-CKTCKIZT.js";
 import {
   Hotspot
-} from "./chunk-R65OL446.js";
+} from "./chunk-DKN5SNPQ.js";
 import {
   Hotspots
-} from "./chunk-K74YUHIW.js";
+} from "./chunk-DCG3IW5U.js";
 import {
   InstancedModel
-} from "./chunk-PSPUBVLG.js";
+} from "./chunk-HBK4S6YC.js";
 import {
   LODSystem
-} from "./chunk-FOTZCW7M.js";
+} from "./chunk-BCUF2A4T.js";
 import {
   MeasurementTool
-} from "./chunk-TGXXEJSX.js";
+} from "./chunk-GMYNLPJE.js";
 import {
   Model
-} from "./chunk-M3WZHTGS.js";
+} from "./chunk-CAK4NWQ5.js";
 import {
   ModelPreload
-} from "./chunk-RBA35FKK.js";
+} from "./chunk-VV6UPFRO.js";
 import {
   Annotations
-} from "./chunk-IQZTNJXP.js";
+} from "./chunk-ZI4MW6U7.js";
 import {
   AutoLODSystem
-} from "./chunk-AOP7YC3S.js";
+} from "./chunk-MSLXRIJK.js";
 import {
   Canvas
-} from "./chunk-6GG4QE2E.js";
+} from "./chunk-FEGM6TGW.js";
 import {
   DirectionalLight
-} from "./chunk-REQUZTZ4.js";
+} from "./chunk-NM4MUJLG.js";
 import {
   DistanceDisplay
-} from "./chunk-VNBQSAVJ.js";
+} from "./chunk-VEO7JIWG.js";
 import {
   EnvironmentPreset
-} from "./chunk-CHORX2B2.js";
+} from "./chunk-WTF5V4LH.js";
 import {
   ErrorBoundary3D
 } from "./chunk-POOGUPPI.js";
 import {
   GroundSurface
-} from "./chunk-R55G7KGT.js";
+} from "./chunk-3VYEM4Q4.js";
 import "./chunk-JH6IQNCJ.js";
 import {
   ARButton
-} from "./chunk-SGTRREOB.js";
+} from "./chunk-OVD5J6YN.js";
 import {
   AdvancedCameraCollision
-} from "./chunk-F7F54MU6.js";
+} from "./chunk-VIQXYD7C.js";
 import {
   AdvancedDragRaycaster
-} from "./chunk-DLGDBYNQ.js";
+} from "./chunk-VQ4BFCS6.js";
 import {
   AdvancedOrbitControls
-} from "./chunk-XW2RYNM3.js";
+} from "./chunk-LBZZWKPO.js";
 import {
   AdvancedRaycaster
-} from "./chunk-HU5ILTIE.js";
+} from "./chunk-TBM5IYHG.js";
 import {
   AmbientLight
-} from "./chunk-ABM33I7Q.js";
+} from "./chunk-CJO2KUWV.js";
 import {
   AnimationTimeline
-} from "./chunk-6FCATWGW.js";
+} from "./chunk-2IHQMKDE.js";
 import {
   AnimationController
-} from "./chunk-OQRRGPYA.js";
+} from "./chunk-WKJTFTCT.js";
 import {
   LightingController
-} from "./chunk-IURPS66O.js";
+} from "./chunk-KT7DEWMB.js";
 import {
   MaterialController
-} from "./chunk-4E3EEOIL.js";
+} from "./chunk-OZPF2JDF.js";
 import "./chunk-52BWUKU3.js";
 import "./chunk-AWVHTM2E.js";
 import "./chunk-SCNS52XI.js";
@@ -121,19 +121,19 @@ import "./chunk-EC4WICT5.js";
 import "./chunk-Q47SPRY7.js";
 import {
   useCache
-} from "./chunk-63VW2TWG.js";
+} from "./chunk-RKTL5FBQ.js";
 import {
   useHDRI
-} from "./chunk-CPMHERKH.js";
+} from "./chunk-XTCSVJU7.js";
 import {
   useModel
-} from "./chunk-P2AJYPTQ.js";
+} from "./chunk-P3QICRKW.js";
 import {
   useRaycaster
-} from "./chunk-4UVCRO2U.js";
+} from "./chunk-3JYWY2Q5.js";
 import {
   CacheProvider
-} from "./chunk-RSLPNPEF.js";
+} from "./chunk-C24HDGGK.js";
 import "./chunk-DCRMKZQR.js";
 import {
   PostProcessingPlugin
@@ -170,38 +170,38 @@ import {
 } from "./chunk-JQEF7TLI.js";
 import {
   CacheValidator
-} from "./chunk-ZRBGFD3Z.js";
+} from "./chunk-LGRX4VCH.js";
 import {
   FileWatcher
 } from "./chunk-777TCJKN.js";
 import "./chunk-SRUKCELR.js";
 import {
   useAnimation
-} from "./chunk-RMDAOZAB.js";
+} from "./chunk-PY4BBQIC.js";
 import {
   useActiveModel
-} from "./chunk-IWWTL653.js";
+} from "./chunk-FNHN23NL.js";
 import {
   useScene
-} from "./chunk-OVWVQSTO.js";
+} from "./chunk-VNFDJQDF.js";
 import {
   SceneProvider
-} from "./chunk-MZEYSNNV.js";
+} from "./chunk-73OL7NMB.js";
 import {
   SceneOrchestrator
-} from "./chunk-53O3DZBZ.js";
+} from "./chunk-RMZIY7NS.js";
 import {
   GLTFLoader as GLTFLoader2
-} from "./chunk-JWY4ZHHB.js";
+} from "./chunk-ELDOC6OD.js";
 import {
   HDRILoader
-} from "./chunk-7NTLIQ5L.js";
+} from "./chunk-LDQMTWOM.js";
 import {
   WebPHDRLoader
 } from "./chunk-J3SAIRP2.js";
 import {
   ObjectCache
-} from "./chunk-MAROSTDG.js";
+} from "./chunk-P3SCCOYX.js";
 import {
   DRACOLoader,
   EXRLoader,
