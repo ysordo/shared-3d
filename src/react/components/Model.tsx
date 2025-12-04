@@ -20,12 +20,13 @@ export const Model: React.FC<ModelProps> = ({
   const [model, setModel] = useState<THREE.Group | null>(null);
 
   useEffect(() => {
+    if(!orchestrator){return;}
     const load = async () => {
       const gltf = await orchestrator.setModel(entry, { draco });
       setModel(gltf);
     };
     load();
-  }, [entry.id, draco]);
+  }, [entry.id, draco, orchestrator, entry]);
   if (!model) {
     return null;
   }

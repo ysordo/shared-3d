@@ -8,8 +8,9 @@ export const OrbitControls: React.FC = () => {
   const orchestrator = useScene();
 
   useEffect(() => {
+    if(!orchestrator) {return;}
     orchestrator.use(new OrbitControlsPlugin());
-  }, []);
+  }, [orchestrator]);
 
   return null;
 };

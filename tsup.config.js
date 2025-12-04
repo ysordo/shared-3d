@@ -1,8 +1,6 @@
-// tsup.config.ts
 import { defineConfig } from 'tsup';
 
 export default defineConfig([
-  // Cliente principal
   {
     entry: [
       'src/index.ts',
@@ -10,7 +8,7 @@ export default defineConfig([
       'src/hooks/**/*.ts',
       'src/core/**/*.ts',
       'src/context/**/*.{tsx,ts}',
-      'src/lib/three.ts',
+      'src/lib/**/*.ts',
     ],
     format: ['esm', 'cjs'],
     dts: true,

@@ -32,7 +32,7 @@ export class HDRILoader {
 
     const cached = await ObjectCache.get(id);
     if (cached && cached.hash === hash && cached.data instanceof THREE.Texture) {
-      console.info(`[HDRILoader] Cache hit: ${id}`);
+      console.warn(`[HDRILoader] Cache hit: ${id}`);
       const texture = cached.data.clone();
       texture.userData = { ...cached.data.userData, cached: true };
       onLoaded?.(texture, entry);
@@ -42,7 +42,7 @@ export class HDRILoader {
     const isWebP = url.toLowerCase().endsWith('.webp');
     const loader = isWebP ? this.webpLoader : this.rgbeLoader;
 
-    console.info(`[HDRILoader] Loading: ${id} (${isWebP ? 'WebP-HDR' : 'RGBE'})`);
+    console.warn(`[HDRILoader] Loading: ${id} (${isWebP ? 'WebP-HDR' : 'RGBE'})`);
 
     return new Promise((resolve, reject) => {
       loader.load(
@@ -64,7 +64,7 @@ export class HDRILoader {
               loadedAt: Date.now(),
             };
 
-            await ObjectCache.set(id, texture, hash);
+            await ObjectCache.set<THREE.Texture>(id, texture, hash);
 
             onLoaded?.(texture, entry);
             resolve(texture);

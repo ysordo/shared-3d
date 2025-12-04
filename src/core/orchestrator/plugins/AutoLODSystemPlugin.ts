@@ -1,6 +1,8 @@
 import { SimplifyModifier } from 'three/examples/jsm/modifiers/SimplifyModifier.js';
 import type { Plugin, PluginContext } from '../types';
 import { THREE } from '../../../lib/three';
+import type { SceneOrchestrator } from '../SceneOrchestrator';
+import type { ManifestEntry } from '../../cache';
 
 type AutoLODConfig = {
   distances: [number, number, number];
@@ -18,7 +20,7 @@ export class AutoLODSystemPlugin implements Plugin {
 
   private simplifyGeometry(geometry: THREE.BufferGeometry, percentage: number): THREE.BufferGeometry {
     const modifier = new SimplifyModifier();
-    const count = Math.floor((geometry.attributes.position as any).count * percentage);
+    const count = Math.floor((geometry.attributes.position as THREE.BufferAttribute | THREE.InterleavedBufferAttribute).count * percentage);
     return modifier.modify(geometry, count);
   }
 
@@ -77,15 +79,14 @@ export class AutoLODSystemPlugin implements Plugin {
     const activeModel = orchestrator.getActiveModel();
     if (activeModel) {applyLODToModel(activeModel);}
 
-    const originalSetModel = (orchestrator as any).setModel;
+    const originalSetModel = (orchestrator as SceneOrchestrator).setModel;
     if (originalSetModel) {
-      (orchestrator as any).setModel = (...args: any[]) => {
-        return originalSetModel.apply(orchestrator, args).then((model: THREE.Object3D) => {
-          this.lods.forEach(lod => lod.parent?.remove(lod));
-          this.lods.clear();
-          applyLODToModel(model);
-          return model;
-        });
+      (orchestrator as SceneOrchestrator).setModel = async (...args: [ManifestEntry,{draco?: boolean;} | undefined]) => {
+        const model = await originalSetModel.apply(orchestrator, args);
+        this.lods.forEach(lod => lod.parent?.remove(lod));
+        this.lods.clear();
+        applyLODToModel(model);
+        return model;
       };
     }
 

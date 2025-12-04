@@ -33,7 +33,7 @@ export class AdvancedCameraCollisionPlugin implements Plugin {
       const hits = ray.intersectObject(model, true);
 
       if (hits.length > 0) {
-        const hitDistance = (hits[0] as any).distance;
+        const hitDistance = (hits[0] as THREE.Intersection).distance;
         const desiredDistance = this.distanceThreshold;
 
         if (hitDistance < desiredDistance) {

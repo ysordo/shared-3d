@@ -48,7 +48,7 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
     }, [ref, config]);
 
     return (
-      <SceneContext.Provider value={{ orchestrator: orchestrator as any }}>
+      <SceneContext.Provider value={{ orchestrator: orchestrator as SceneOrchestrator }}>
         {children}
       </SceneContext.Provider>
     );

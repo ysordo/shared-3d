@@ -52,25 +52,65 @@
       "import": "./dist/lib/three.js",
       "require": "./dist/lib/three.cjs"
     },
-    "./react/*": {
-      "types": "./dist/react/**/*.d.ts",
-      "import": "./dist/react/**/*.js",
-      "require": "./dist/react/**/*.cjs"
+    "./types": {
+      "types": "./dist/lib/types.d.ts",
+      "import": "./dist/lib/types.js",
+      "require": "./dist/lib/types.cjs"
     },
-    "./hooks/*": {
-      "types": "./dist/hooks/**/*.d.ts",
-      "import": "./dist/hooks/**/*.js",
-      "require": "./dist/hooks/**/*.cjs"
+    "./react/components/*": {
+      "types": "./dist/react/components/*.d.ts",
+      "import": "./dist/react/components/*.js",
+      "require": "./dist/react/components/*.cjs"
     },
-    "./core/*": {
-      "types": "./dist/core/**/*.d.ts",
-      "import": "./dist/core/**/*.js",
-      "require": "./dist/core/**/*.cjs"
+    "./react/hooks/*": {
+      "types": "./dist/hooks/*.d.ts",
+      "import": "./dist/hooks/*.js",
+      "require": "./dist/hooks/*.cjs"
     },
-    "./context/*": {
-      "types": "./dist/context/**/*.d.ts",
-      "import": "./dist/context/**/*.js",
-      "require": "./dist/context/**/*.cjs"
+    "./react/controls/*": {
+      "types": "./dist/react/controls/*.d.ts",
+      "import": "./dist/react/controls/*.js",
+      "require": "./dist/react/controls/*.cjs"
+    },
+    "./react/primitives/*": {
+      "types": "./dist/react/primitives/*.d.ts",
+      "import": "./dist/react/primitives/*.js",
+      "require": "./dist/react/primitives/*.cjs"
+    },
+    "./react/context/*": {
+      "types": "./dist/context/*.d.ts",
+      "import": "./dist/context/*.js",
+      "require": "./dist/context/*.cjs"
+    },
+    "./core": {
+      "types": "./dist/core/index.d.ts",
+      "import": "./dist/core/index.js",
+      "require": "./dist/core/index.cjs"
+    },
+    "./core/cache/*": {
+      "types": "./dist/core/cache/*.d.ts",
+      "import": "./dist/core/cache/*.js",
+      "require": "./dist/core/cache/*.cjs"
+    },
+    "./core/loaders/*": {
+      "types": "./dist/core/loaders/*.d.ts",
+      "import": "./dist/core/loaders/*.js",
+      "require": "./dist/core/loaders/*.cjs"
+    },
+    "./core/orchestrator/*": {
+      "types": "./dist/core/orchestrator/*.d.ts",
+      "import": "./dist/core/orchestrator/*.js",
+      "require": "./dist/core/orchestrator/*.cjs"
+    },
+    "./core/orchestrator/plugins/*": {
+      "types": "./dist/core/orchestrator/plugins/*.d.ts",
+      "import": "./dist/core/orchestrator/plugins/*.js",
+      "require": "./dist/core/orchestrator/plugins/*.cjs"
+    },
+    "./core/utils/*": {
+      "types": "./dist/core/utils/*.d.ts",
+      "import": "./dist/core/utils/*.js",
+      "require": "./dist/core/utils/*.cjs"
     }
   },
   "files": [

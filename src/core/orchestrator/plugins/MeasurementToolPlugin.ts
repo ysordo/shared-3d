@@ -35,7 +35,7 @@ export class MeasurementToolPlugin implements Plugin {
       const intersects = raycaster.intersectObject(model, true);
       if (intersects.length === 0) {return;}
 
-      const point = (intersects[0] as any).point.clone();
+      const point = (intersects[0] as THREE.Intersection).point.clone();
       this.points.push(point);
 
       const sphere = new THREE.Mesh(
@@ -49,7 +49,7 @@ export class MeasurementToolPlugin implements Plugin {
       this.onMeasure?.({ point, points: [...this.points] });
 
       if (this.points.length === 2) {
-        const distance = (this.points[0] as any).distanceTo(this.points[1]);
+        const distance = (this.points[0] as THREE.Vector3).distanceTo(this.points[1] as THREE.Vector3);
         this.onMeasure?.({ point, distance, points: [...this.points] });
 
         const geometry = new THREE.BufferGeometry().setFromPoints(this.points);
@@ -64,7 +64,7 @@ export class MeasurementToolPlugin implements Plugin {
     renderer.domElement.addEventListener('pointerdown', handlePointerDown, { capture: true });
 
     this.dispose = () => {
-      renderer.domElement.removeEventListener('pointerdown', handlePointerDown, { capture: true } as any);
+      renderer.domElement.removeEventListener('pointerdown', handlePointerDown, { capture: true } as boolean | EventListenerOptions);
       this.reset();
     };
   }

@@ -42,7 +42,7 @@ class RaycasterManager extends THREE.EventDispatcher {
   private isInteractable(obj: THREE.Object3D): boolean {
     if (!obj.visible) {return false;}
     if (obj.userData.isNotRaycaster) {return false;}
-    if (!(obj as any).isMesh) {return false;}
+    if (!(obj instanceof THREE.Mesh)) {return false;}
     return true;
   }
 
@@ -184,9 +184,9 @@ class RaycasterManager extends THREE.EventDispatcher {
   }
 
   private onContextMenu = (e: Event) => e.preventDefault();
-  private onTouchStart = this.onPointerDown as any;
-  private onTouchMove = this.onPointerMove as any;
-  private onTouchEnd = this.onPointerUp as any;
+  private onTouchStart = this.onPointerDown as ((e: PointerEvent)=> void);
+  private onTouchMove = this.onPointerMove as ((e: PointerEvent)=> void);
+  private onTouchEnd = this.onPointerUp as ((e: PointerEvent)=> void);
 }
 
 export class AdvancedRaycasterPlugin implements Plugin {
@@ -195,7 +195,7 @@ export class AdvancedRaycasterPlugin implements Plugin {
 
   constructor(
     private model?: THREE.Object3D,
-    private onEvent?: (event: any) => void
+    private onEvent?: (event: unknown) => void
   ) {
     this._manager = new RaycasterManager(document.body);
   }
@@ -221,7 +221,7 @@ export class AdvancedRaycasterPlugin implements Plugin {
     ] as const;
 
     events.forEach((event) => {
-      this._manager.addEventListener(event as never, (e: any) => this.onEvent?.(e));
+      this._manager.addEventListener(event as never, (e: unknown) => this.onEvent?.(e));
     });
 
     this._manager.setEnabled(true);

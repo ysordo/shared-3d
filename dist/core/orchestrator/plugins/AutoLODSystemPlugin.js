@@ -1,6 +1,6 @@
 import {
   AutoLODSystemPlugin
-} from "../../../chunk-UHUPI6C6.js";
+} from "../../../chunk-D4NGW2TQ.js";
 import "../../../chunk-OVHQQSEK.js";
 export {
   AutoLODSystemPlugin

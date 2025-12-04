@@ -6,7 +6,7 @@ export type ManifestEntry = {
   updatedAt: number;
 };
 
-export type CacheEntry<T = any> = {
+export type CacheEntry<T = unknown> = {
   data: T;
   hash: string;
   timestamp: number;

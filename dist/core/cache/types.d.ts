@@ -5,7 +5,7 @@ type ManifestEntry = {
     size: number;
     updatedAt: number;
 };
-type CacheEntry<T = any> = {
+type CacheEntry<T = unknown> = {
     data: T;
     hash: string;
     timestamp: number;

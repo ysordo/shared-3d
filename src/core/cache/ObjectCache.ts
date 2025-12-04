@@ -19,8 +19,10 @@ export class ObjectCache {
     updatedAt: number = Date.now()
   ): Promise<void> {
     if (!store) {return;}
-
+    
     const key = this.getKey(id);
+    const t = await get<CacheEntry<T>>(key, store) ?? null;
+    if(t) {return;}
     const entry: CacheEntry<T> = {
       data,
       hash,
@@ -64,9 +66,9 @@ export class ObjectCache {
     await Promise.all(ours.map(k => del(k, store)));
   }
 
-  private static dispose(data: any): void {
+  private static dispose(data: unknown): void {
     if (data instanceof THREE.Object3D) {
-      data.traverse((child: any) => {
+      data.traverse((child: THREE.Object3D) => {
         if (child instanceof THREE.Mesh) {
           child.geometry?.dispose();
           if (Array.isArray(child.material)) {
@@ -81,11 +83,11 @@ export class ObjectCache {
     }
   }
 
-  private static estimateSize(data: any): number {
+  private static estimateSize(data: unknown): number {
     if (data instanceof THREE.Object3D) {
       let size = 0;
-      data.traverse((child: any) => {
-        if (child.isMesh && child.geometry?.attributes?.position?.array) {
+      data.traverse((child: THREE.Object3D) => {
+        if(child instanceof THREE.Mesh && child.geometry?.attributes?.position?.array){
           size += child.geometry.attributes.position.array.byteLength;
         }
       });

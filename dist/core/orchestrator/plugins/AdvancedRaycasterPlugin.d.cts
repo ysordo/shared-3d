@@ -43,7 +43,7 @@ declare class AdvancedRaycasterPlugin implements Plugin {
     private onEvent?;
     name: string;
     private _manager;
-    constructor(model?: THREE.Object3D | undefined, onEvent?: ((event: any) => void) | undefined);
+    constructor(model?: THREE.Object3D | undefined, onEvent?: ((event: unknown) => void) | undefined);
     install({ scene, camera, renderer, orchestrator }: PluginContext): void;
     dispose(): void;
     get manager(): RaycasterManager;

@@ -7,17 +7,17 @@ import type { ModelManifest } from '../../core/cache/types';
 type ModelPreloadProps = {
   entries: ModelManifest;
   draco?: boolean;
+  onProgress?: (completed: number, total: number) => void
 };
 
 export const ModelPreload: React.FC<ModelPreloadProps> = ({
   entries,
   draco = false,
+  onProgress,
 }) => {
   useEffect(() => {
-    entries.forEach((entry) => {
-      GLTFLoader.load(entry, { draco }).catch(() => {});
-    });
-  }, [entries, draco]);
+    GLTFLoader.preload(entries, {draco}, onProgress);
+  }, [entries, draco, onProgress]);
 
   return null;
 };

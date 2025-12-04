@@ -30,7 +30,7 @@ export class GLTFLoader {
         this.dracoDecoder.preload();
         this.dracoLoaderInstance.setDRACOLoader(this.dracoDecoder);
         this.isDracoInitialized = true;
-        console.info(`[GLTFLoader] Draco decoder initialized: ${path}`);
+        console.warn(`[GLTFLoader] Draco decoder initialized: ${path}`);
       }
       return this.dracoLoaderInstance;
     }
@@ -55,14 +55,14 @@ export class GLTFLoader {
 
     const cached = await ObjectCache.get<THREE.Group>(id);
     if (cached && cached.hash === hash) {
-      console.info(`[GLTFLoader] Cache hit: ${id} (${draco ? 'draco' : 'standard'})`);
+      console.warn(`[GLTFLoader] Cache hit: ${id} (${draco ? 'draco' : 'standard'})`);
       const model = cached.data.clone(true);
       model.userData = { ...cached.data.userData, cached: true };
       onLoaded?.(model, entry);
       return model;
     }
 
-    console.info(`[GLTFLoader] Loading: ${id} (${draco ? 'Draco' : 'Standard'})`);
+    console.warn(`[GLTFLoader] Loading: ${id} (${draco ? 'Draco' : 'Standard'})`);
 
     return new Promise((resolve, reject) => {
       loader.load(
@@ -84,7 +84,7 @@ export class GLTFLoader {
               draco,
             };
 
-            await ObjectCache.set(id, scene, hash);
+            await ObjectCache.set<THREE.Object3D>(id, scene, hash);
             onLoaded?.(scene, entry);
             resolve(scene);
           } catch (err) {

@@ -27,8 +27,7 @@ export { useRaycaster } from './hooks/useRaycaster.js';
 export { useCache } from './hooks/useCache.js';
 export { useAnimation } from './hooks/useAnimation.js';
 export { THREE_VERSION } from './lib/three.js';
-import * as THREE from 'three';
-export { THREE };
+export { ClickEvent, ColorRepresentation, DeepPartial, HoverEvent, LightConfig, Vector3Tuple } from './lib/types.js';
 export { AdvancedCameraCollision } from './react/components/AdvancedCameraCollision.js';
 export { AdvancedDragRaycaster } from './react/components/AdvancedDragRaycaster.js';
 export { AdvancedOrbitControls } from './react/components/AdvancedOrbitControls.js';
@@ -65,6 +64,8 @@ export { AnimationController } from './react/controls/AnimationController.js';
 export { LightingController } from './react/controls/LightingController.js';
 export { CustomMaterialFactory, MaterialConfig, MaterialController } from './react/controls/MaterialController.js';
 export { SceneObject } from './react/primitives/SceneObject.js';
+import * as THREE from 'three';
+export { THREE };
 export { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 export { GLTFLoader as ThreeGLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 export { DRACOLoader as ThreeDRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
@@ -75,28 +76,3 @@ export { RenderPass as ThreeRenderPass } from 'three/examples/jsm/postprocessing
 export { UnrealBloomPass as ThreeUnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import 'react';
 import 'react/jsx-runtime';
-
-type Vector3Tuple = [number, number, number];
-type ColorRepresentation = THREE.ColorRepresentation;
-
-type LightConfig = {
-    intensity?: number;
-    color?: ColorRepresentation;
-    position?: Vector3Tuple;
-    castShadow?: boolean;
-};
-type ClickEvent = {
-    object: THREE.Object3D;
-    point: THREE.Vector3;
-    distance: number;
-};
-type HoverEvent = {
-    object: THREE.Object3D;
-    point: THREE.Vector3;
-};
-
-type DeepPartial<T> = T extends object ? {
-    [P in keyof T]?: DeepPartial<T[P]>;
-} : T;
-
-export type { ClickEvent, ColorRepresentation, DeepPartial, HoverEvent, LightConfig, Vector3Tuple };

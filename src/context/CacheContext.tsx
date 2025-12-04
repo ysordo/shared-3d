@@ -28,7 +28,7 @@ export const CacheProvider = ({ children }: { children: ReactNode }) => {
       manifest,
       onProgress: (p, msg) => {
         setProgress(Math.round(p));
-        console.info(`[Cache] ${msg} (${p}%)`);
+        console.warn(`[Cache] ${msg} (${p}%)`);
       },
       onComplete: (r) => {
         setReport(r);
