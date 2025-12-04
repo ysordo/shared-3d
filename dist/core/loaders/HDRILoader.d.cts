@@ -1,4 +1,4 @@
-import { ManifestEntry, ModelManifest } from '../cache/types.cjs';
+import { ManifestEntry } from '../cache/types.cjs';
 import * as THREE from 'three';
 
 type HDRIProgress = {
@@ -15,17 +15,9 @@ type HDRIEvents = {
 declare class HDRILoader {
     private static rgbeLoader;
     private static webpLoader;
-    /**
-     * Carga un HDRI de forma inteligente (con caché + hash)
-     */
     static load(entry: ManifestEntry, events?: HDRIEvents): Promise<THREE.Texture>;
-    /**
-     * Precarga múltiples HDRIs
-     */
-    static preload(entries: ModelManifest, onProgress?: (completed: number, total: number) => void): Promise<void>;
-    /**
-     * Invalida caché de un HDRI específico
-     */
+    private static fetchAndLoad;
+    static preload(entries: ManifestEntry[], onProgress?: (completed: number, total: number) => void): Promise<void>;
     static invalidate(id: string): Promise<void>;
 }
 

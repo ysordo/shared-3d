@@ -38,77 +38,77 @@ export class GLTFLoader {
     return this.plainLoader;
   }
 
+
+  private static async fetchAndLoad(entry: ManifestEntry, options: GLTFLoaderOptions & GLTFLoaderEvents) {
+  const loader = this.getLoader(options);
+
+  return new Promise<THREE.Group>((resolve, reject) => {
+    loader.load(
+      entry.url,
+      (gltf) => {
+        const scene = gltf.scene;
+        scene.name = entry.id;
+        scene.userData = {
+          sourceUrl: entry.url,
+          manifestHash: entry.hash,
+          loadedAt: Date.now(),
+          format: options.draco ? 'gltf-draco' : 'gltf',
+        };
+
+        scene.animations= gltf.animations;
+
+        // Centrar modelo
+        const box = new THREE.Box3().setFromObject(scene);
+        const center = box.getCenter(new THREE.Vector3());
+        scene.position.sub(center);
+        options.onLoaded?.(scene, entry);
+
+        resolve(scene);
+      },
+      (progress) => {
+        if (progress.lengthComputable) {
+          const percent = (progress.loaded / progress.total) * 100;
+          options.onProgress?.({
+            loaded: progress.loaded,
+            total: progress.total,
+            percent,
+            url: entry.url,
+          });
+          console.info(`[GLTFLoader] ${entry.id}: ${percent.toFixed(1)}%`);
+        }
+      },
+      (error) => {
+        console.error(`[GLTFLoader] Error loading ${entry.id}:`, error);
+        options.onError?.(error as Error, entry.url);
+        reject(error);
+      }
+    );
+  });
+}
+
   static async load(
     entry: ManifestEntry,
     options: GLTFLoaderOptions & GLTFLoaderEvents = {}
   ): Promise<THREE.Group> {
-    const { id, url, hash } = entry;
-    const {
-      draco = false,
-      decoderPath,
-      onProgress,
-      onLoaded,
-      onError,
-    } = options;
+    const opts = {
+      draco: false,
+      dracoDecoder: '/draco/',
+      ...options,
+    };
 
-    const loader = this.getLoader({ draco, decoderPath });
+    const metadata = await ObjectCache.getMetadata(entry.id);
 
-    const cached = await ObjectCache.get<THREE.Group>(id);
-    if (cached && cached.hash === hash) {
-      console.warn(`[GLTFLoader] Cache hit: ${id} (${draco ? 'draco' : 'standard'})`);
-      const model = cached.data.clone(true);
-      model.userData = { ...cached.data.userData, cached: true };
-      onLoaded?.(model, entry);
-      return model;
+    if (metadata && metadata.hash === entry.hash) {
+      console.info(`[GLTFLoader] Cache hit: ${entry.id}`);
+      return this.fetchAndLoad(entry, opts);
     }
 
-    console.warn(`[GLTFLoader] Loading: ${id} (${draco ? 'Draco' : 'Standard'})`);
-
-    return new Promise((resolve, reject) => {
-      loader.load(
-        url,
-        async (gltf) => {
-          try {
-            const scene = gltf.scene as THREE.Group;
-            scene.name = id;
-            scene.animations = gltf.animations || [];
-
-            const box = new THREE.Box3().setFromObject(scene);
-            scene.position.sub(box.getCenter(new THREE.Vector3()));
-
-            scene.userData = {
-              sourceUrl: url,
-              manifestHash: hash,
-              loadedAt: Date.now(),
-              format: draco ? 'gltf-draco' : 'gltf',
-              draco,
-            };
-
-            await ObjectCache.set<THREE.Object3D>(id, scene, hash);
-            onLoaded?.(scene, entry);
-            resolve(scene);
-          } catch (err) {
-            onError?.(err as Error, url);
-            reject(err);
-          }
-        },
-        (progress) => {
-          if (progress.lengthComputable) {
-            onProgress?.({
-              loaded: progress.loaded,
-              total: progress.total,
-              percent: (progress.loaded / progress.total) * 100,
-              url,
-            });
-          }
-        },
-        (error) => {
-          console.error(`[GLTFLoader] Error: ${id}`, error);
-          onError?.(error as Error, url);
-          reject(error);
-        }
-      );
-    });
+    console.info(`[GLTFLoader] Loading: ${entry.id}`);
+    const scene = await this.fetchAndLoad(entry, opts);
+    
+    await ObjectCache.setMetadata(entry.id, entry.hash, entry.updatedAt);
+    
+    return scene;
   }
 
   static async preload(

@@ -64,7 +64,7 @@ export class CacheValidator {
     // Detectar qué hay que actualizar
     const toUpdate: ManifestEntry[] = [];
     for (const entry of manifest) {
-      const cached = await ObjectCache.get(entry.id);
+      const cached = await ObjectCache.getMetadata(entry.id);
 
       if (
         !cached ||

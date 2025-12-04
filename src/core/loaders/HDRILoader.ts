@@ -1,6 +1,7 @@
+// src/core/loaders/HDRILoader.ts
 import { WebPHDRLoader } from './WebPHDRLoader';
 import { ObjectCache } from '../cache/ObjectCache';
-import type { ManifestEntry, ModelManifest } from '../cache/types';
+import type { ManifestEntry } from '../cache/types';
 import { THREE, ThreeRGBELoader } from '../../lib';
 
 export type HDRIProgress = {
@@ -20,58 +21,56 @@ export class HDRILoader {
   private static rgbeLoader = new ThreeRGBELoader();
   private static webpLoader = new WebPHDRLoader();
 
-  /**
-   * Carga un HDRI de forma inteligente (con caché + hash)
-   */
   static async load(
     entry: ManifestEntry,
     events: HDRIEvents = {}
   ): Promise<THREE.Texture> {
-    const { id, url, hash } = entry;
-    const { onProgress, onLoaded, onError } = events;
+    const { id, hash } = entry;
 
-    const cached = await ObjectCache.get(id);
-    if (cached && cached.hash === hash && cached.data instanceof THREE.Texture) {
-      console.warn(`[HDRILoader] Cache hit: ${id}`);
-      const texture = cached.data.clone();
-      texture.userData = { ...cached.data.userData, cached: true };
-      onLoaded?.(texture, entry);
-      return texture;
+    const metadata = await ObjectCache.getMetadata(id);
+    if (metadata && metadata.hash === hash) {
+      console.info(`[HDRILoader] Cache hit: ${id}`);
+      return this.fetchAndLoad(entry, events);
     }
+
+    console.info(`[HDRILoader] Loading: ${id}`);
+    const texture = await this.fetchAndLoad(entry, events);
+
+    await ObjectCache.setMetadata(id, hash, entry.updatedAt);
+
+    return texture;
+  }
+
+  private static async fetchAndLoad(
+    entry: ManifestEntry,
+    events: HDRIEvents
+  ): Promise<THREE.Texture> {
+    const { url } = entry;
+    const { onProgress, onLoaded, onError } = events;
 
     const isWebP = url.toLowerCase().endsWith('.webp');
     const loader = isWebP ? this.webpLoader : this.rgbeLoader;
 
-    console.warn(`[HDRILoader] Loading: ${id} (${isWebP ? 'WebP-HDR' : 'RGBE'})`);
-
     return new Promise((resolve, reject) => {
       loader.load(
         url,
-        async (texture: THREE.Texture) => {
-          try {
-            texture.mapping = THREE.EquirectangularReflectionMapping;
-            texture.colorSpace = THREE.LinearSRGBColorSpace;
-            texture.minFilter = THREE.LinearFilter;
-            texture.magFilter = THREE.LinearFilter;
-            texture.generateMipmaps = false;
-            texture.needsUpdate = true;
+        (texture: THREE.Texture) => {
+          texture.mapping = THREE.EquirectangularReflectionMapping;
+          texture.colorSpace = THREE.LinearSRGBColorSpace;
+          texture.minFilter = THREE.LinearFilter;
+          texture.magFilter = THREE.LinearFilter;
+          texture.generateMipmaps = false;
+          texture.needsUpdate = true;
+          texture.name = entry.id;
+          texture.userData = {
+            sourceUrl: url,
+            manifestHash: entry.hash,
+            format: isWebP ? 'webp-hdr' : 'rgbe',
+            loadedAt: Date.now(),
+          };
 
-            texture.name = id;
-            texture.userData = {
-              sourceUrl: url,
-              manifestHash: hash,
-              format: isWebP ? 'webp-hdr' : 'rgbe',
-              loadedAt: Date.now(),
-            };
-
-            await ObjectCache.set<THREE.Texture>(id, texture, hash);
-
-            onLoaded?.(texture, entry);
-            resolve(texture);
-          } catch (err) {
-            onError?.(err as Error, url);
-            reject(err);
-          }
+          onLoaded?.(texture, entry);
+          resolve(texture);
         },
         (progress) => {
           if (progress.lengthComputable) {
@@ -84,7 +83,7 @@ export class HDRILoader {
           }
         },
         (error) => {
-          console.error(`[HDRILoader] Error loading ${id}:`, error);
+          console.error(`[HDRILoader] Error loading ${entry.id}:`, error);
           onError?.(error as Error, url);
           reject(error);
         }
@@ -92,11 +91,8 @@ export class HDRILoader {
     });
   }
 
-  /**
-   * Precarga múltiples HDRIs
-   */
   static async preload(
-    entries: ModelManifest,
+    entries: ManifestEntry[],
     onProgress?: (completed: number, total: number) => void
   ): Promise<void> {
     let completed = 0;
@@ -115,14 +111,7 @@ export class HDRILoader {
     );
   }
 
-  /**
-   * Invalida caché de un HDRI específico
-   */
   static async invalidate(id: string): Promise<void> {
-    const cached = await ObjectCache.get(id);
-    if (cached?.data instanceof THREE.Texture) {
-      cached.data.dispose();
-    }
     await ObjectCache.delete(id);
   }
 }

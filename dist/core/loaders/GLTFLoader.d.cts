@@ -21,6 +21,7 @@ declare class GLTFLoader {
     private static dracoDecoder;
     private static isDracoInitialized;
     private static getLoader;
+    private static fetchAndLoad;
     static load(entry: ManifestEntry, options?: GLTFLoaderOptions & GLTFLoaderEvents): Promise<THREE.Group>;
     static preload(entries: ModelManifest, options?: GLTFLoaderOptions, onProgress?: (completed: number, total: number) => void): Promise<void>;
     static invalidate(id: string): Promise<void>;
