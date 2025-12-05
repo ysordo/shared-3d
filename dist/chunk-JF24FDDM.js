@@ -9,7 +9,7 @@ import {
 } from "./chunk-OVHQQSEK.js";
 
 // src/react/controls/MaterialController.tsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { jsx } from "react/jsx-runtime";
 var MaterialController = ({
   materials,
@@ -20,8 +20,10 @@ var MaterialController = ({
   const model = useActiveModel();
   const [activeName, setActiveName] = useState(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const meshes = useRef([]);
+  const initialized = useRef(false);
   useEffect(() => {
-    if (!model) {
+    if (!model || initialized.current) {
       return;
     }
     model.traverse((child) => {
@@ -45,31 +47,27 @@ var MaterialController = ({
         wireframe.renderOrder = 999;
         wireframe.visible = false;
         child.add(wireframe);
+        meshes.current.push(child);
       }
     });
+    initialized.current = true;
   }, [model]);
   const applyMaterial = async (config) => {
     if (!model || isTransitioning) {
       return;
     }
     setIsTransitioning(transitionDuration > 0);
-    const meshes = [];
-    model.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
-        meshes.push(child);
-      }
-    });
     if (transitionDuration === 0) {
-      meshes.forEach((child) => applyMaterialToMesh(child, config));
+      meshes.current.forEach((child) => applyMaterialToMesh(child, config));
       setActiveName(config.name);
       setIsTransitioning(false);
       return;
     }
-    const delayPerMesh = transitionDuration / meshes.length;
-    for (let i = 0; i < meshes.length; i++) {
+    const delayPerMesh = transitionDuration / meshes.current.length;
+    for (let i = 0; i < meshes.current.length; i++) {
       setTimeout(() => {
-        applyMaterialToMesh(meshes[i], config);
-        if (i === meshes.length - 1) {
+        applyMaterialToMesh(meshes.current[i], config);
+        if (i === meshes.current.length - 1) {
           setActiveName(config.name);
           setIsTransitioning(false);
         }
@@ -101,8 +99,6 @@ var MaterialController = ({
       case "wireframe":
         newMat = new THREE.MeshStandardMaterial({
           color: config.color ?? 8947848,
-          metalness: config.metalness ?? 0,
-          roughness: config.roughness ?? 0.9,
           transparent: true,
           opacity: 0.95
         });
@@ -132,7 +128,7 @@ var MaterialController = ({
       items[0]?.apply?.();
     }
   }, [items]);
-  if (!model || items.length === 0) {
+  if (!model) {
     return null;
   }
   return /* @__PURE__ */ jsx("div", { className, children: children(items) });

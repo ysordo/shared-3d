@@ -46,7 +46,10 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
   );
 
   useEffect(() => {
-    const newPlugin = new AdvancedOrbitControlsPlugin(config);
+    const newPlugin = new AdvancedOrbitControlsPlugin({
+      enableDamping: defaultEnabled,
+      ...config,
+    });
     orchestrator.use(newPlugin);
     setPlugin(newPlugin);
 

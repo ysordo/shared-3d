@@ -1,6 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useActiveModel } from '../../hooks/useActiveModel';
 import { createQuadWireframe } from '../../core/utils';
 import { THREE } from '../../lib';
@@ -10,29 +10,10 @@ export type CustomMaterialFactory = (
 ) => THREE.Material;
 
 export type MaterialConfig =
-  | {
-      name: string;
-      type: 'textured';
-    }
-  | {
-      name: string;
-      type: 'solid';
-      color?: THREE.ColorRepresentation;
-      metalness?: number;
-      roughness?: number;
-    }
-  | {
-      name: string;
-      type: 'wireframe';
-      color?: THREE.ColorRepresentation;
-      lineColor?: THREE.ColorRepresentation;
-      [key: string]: any;
-    }
-  | {
-      name: string;
-      type: 'custom';
-      factory: CustomMaterialFactory;
-    };
+  | { name: string; type: 'textured' }
+  | { name: string; type: 'solid'; color?: THREE.ColorRepresentation; metalness?: number; roughness?: number; }
+  | { name: string; type: 'wireframe'; color?: THREE.ColorRepresentation; lineColor?: THREE.ColorRepresentation; [key: string]: any; }
+  | { name: string; type: 'custom'; factory: CustomMaterialFactory };
 
 type MaterialItem = {
   name: string;
@@ -56,21 +37,19 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   const model = useActiveModel();
   const [activeName, setActiveName] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const meshes = useRef<THREE.Mesh[]>([]);
+  const initialized = useRef(false);
 
   useEffect(() => {
-    if (!model) {
+    if (!model || initialized.current) {
       return;
     }
 
     model.traverse((child) => {
-      if (!(child instanceof THREE.Mesh)) {
-        return;
-      }
-
+      if (!(child instanceof THREE.Mesh)) {return;}
       if (!child.userData.originalMaterial) {
         child.userData.originalMaterial = child.material;
       }
-
       if (!child.getObjectByName(`${child.name}-wireframe`)) {
         const wireGeo = createQuadWireframe(child.geometry);
         const lineMat = new THREE.LineBasicMaterial({
@@ -85,37 +64,30 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         wireframe.renderOrder = 999;
         wireframe.visible = false;
         child.add(wireframe);
+        meshes.current.push(child);
       }
     });
+
+    initialized.current = true;
   }, [model]);
 
   const applyMaterial = async (config: MaterialConfig) => {
-    if (!model || isTransitioning) {
-      return;
-    }
+    if (!model || isTransitioning) {return;}
 
     setIsTransitioning(transitionDuration > 0);
 
-    const meshes: THREE.Mesh[] = [];
-    model.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
-        meshes.push(child);
-      }
-    });
-
     if (transitionDuration === 0) {
-      meshes.forEach((child) => applyMaterialToMesh(child, config));
+      meshes.current.forEach((child) => applyMaterialToMesh(child, config));
       setActiveName(config.name);
       setIsTransitioning(false);
       return;
     }
 
-    const delayPerMesh = transitionDuration / meshes.length;
-
-    for (let i = 0; i < meshes.length; i++) {
+    const delayPerMesh = transitionDuration / meshes.current.length;
+    for (let i = 0; i < meshes.current.length; i++) {
       setTimeout(() => {
-        applyMaterialToMesh(meshes[i] as THREE.Mesh, config);
-        if (i === meshes.length - 1) {
+        applyMaterialToMesh(meshes.current[i] as THREE.Mesh, config);
+        if (i === meshes.current.length - 1) {
           setActiveName(config.name);
           setIsTransitioning(false);
         }
@@ -127,7 +99,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     const wireframe = child.getObjectByName(
       `${child.name}-wireframe`
     ) as THREE.LineSegments;
-
     let newMat: THREE.Material;
 
     switch (config.type) {
@@ -137,7 +108,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
           wireframe.visible = false;
         }
         break;
-
       case 'solid':
         newMat = new THREE.MeshStandardMaterial({
           color: config.color ?? 0x888888,
@@ -148,12 +118,9 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
           wireframe.visible = false;
         }
         break;
-
       case 'wireframe':
         newMat = new THREE.MeshStandardMaterial({
           color: config.color ?? 0x888888,
-          metalness: config.metalness ?? 0,
-          roughness: config.roughness ?? 0.9,
           transparent: true,
           opacity: 0.95,
         });
@@ -164,7 +131,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
           );
         }
         break;
-
       case 'custom':
         newMat = config.factory(child.userData.originalMaterial);
         if (wireframe) {
@@ -188,9 +154,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     }
   }, [items]);
 
-  if (!model || items.length === 0) {
-    return null;
-  }
+  if (!model) { return null; }
 
   return <div className={className}>{children(items)}</div>;
 };

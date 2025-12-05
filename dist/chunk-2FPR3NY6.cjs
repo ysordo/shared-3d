@@ -20,8 +20,10 @@ var MaterialController = ({
   const model = _chunkZVSIH2EDcjs.useActiveModel.call(void 0, );
   const [activeName, setActiveName] = _react.useState.call(void 0, null);
   const [isTransitioning, setIsTransitioning] = _react.useState.call(void 0, false);
+  const meshes = _react.useRef.call(void 0, []);
+  const initialized = _react.useRef.call(void 0, false);
   _react.useEffect.call(void 0, () => {
-    if (!model) {
+    if (!model || initialized.current) {
       return;
     }
     model.traverse((child) => {
@@ -45,31 +47,27 @@ var MaterialController = ({
         wireframe.renderOrder = 999;
         wireframe.visible = false;
         child.add(wireframe);
+        meshes.current.push(child);
       }
     });
+    initialized.current = true;
   }, [model]);
   const applyMaterial = async (config) => {
     if (!model || isTransitioning) {
       return;
     }
     setIsTransitioning(transitionDuration > 0);
-    const meshes = [];
-    model.traverse((child) => {
-      if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh) {
-        meshes.push(child);
-      }
-    });
     if (transitionDuration === 0) {
-      meshes.forEach((child) => applyMaterialToMesh(child, config));
+      meshes.current.forEach((child) => applyMaterialToMesh(child, config));
       setActiveName(config.name);
       setIsTransitioning(false);
       return;
     }
-    const delayPerMesh = transitionDuration / meshes.length;
-    for (let i = 0; i < meshes.length; i++) {
+    const delayPerMesh = transitionDuration / meshes.current.length;
+    for (let i = 0; i < meshes.current.length; i++) {
       setTimeout(() => {
-        applyMaterialToMesh(meshes[i], config);
-        if (i === meshes.length - 1) {
+        applyMaterialToMesh(meshes.current[i], config);
+        if (i === meshes.current.length - 1) {
           setActiveName(config.name);
           setIsTransitioning(false);
         }
@@ -101,8 +99,6 @@ var MaterialController = ({
       case "wireframe":
         newMat = new _chunkEA3XQ4KJcjs.THREE.MeshStandardMaterial({
           color: _nullishCoalesce(config.color, () => ( 8947848)),
-          metalness: _nullishCoalesce(config.metalness, () => ( 0)),
-          roughness: _nullishCoalesce(config.roughness, () => ( 0.9)),
           transparent: true,
           opacity: 0.95
         });
@@ -132,7 +128,7 @@ var MaterialController = ({
       _optionalChain([items, 'access', _ => _[0], 'optionalAccess', _2 => _2.apply, 'optionalCall', _3 => _3()]);
     }
   }, [items]);
-  if (!model || items.length === 0) {
+  if (!model) {
     return null;
   }
   return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: children(items) });

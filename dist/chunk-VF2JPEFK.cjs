@@ -21,7 +21,10 @@ var AdvancedOrbitControls = ({
     null
   );
   _react.useEffect.call(void 0, () => {
-    const newPlugin = new (0, _chunkB5ZMYPSVcjs.AdvancedOrbitControlsPlugin)(config);
+    const newPlugin = new (0, _chunkB5ZMYPSVcjs.AdvancedOrbitControlsPlugin)({
+      enableDamping: defaultEnabled,
+      ...config
+    });
     orchestrator.use(newPlugin);
     setPlugin(newPlugin);
     newPlugin.setAllEnabled(defaultEnabled);

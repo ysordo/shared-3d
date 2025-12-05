@@ -91,7 +91,7 @@ import {
 } from "../chunk-474Y2VX2.js";
 import {
   MaterialController
-} from "../chunk-342NI5XT.js";
+} from "../chunk-JF24FDDM.js";
 import {
   ARButton
 } from "../chunk-XL456Z3K.js";
@@ -103,7 +103,7 @@ import {
 } from "../chunk-FMRDVK56.js";
 import {
   AdvancedOrbitControls
-} from "../chunk-ZF6E6O57.js";
+} from "../chunk-QFKHJTUA.js";
 import {
   AdvancedRaycaster
 } from "../chunk-XGYXUUSO.js";
