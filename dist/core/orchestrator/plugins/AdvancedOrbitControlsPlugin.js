@@ -1,6 +1,6 @@
 import {
   AdvancedOrbitControlsPlugin
-} from "../../../chunk-VTSNXELB.js";
+} from "../../../chunk-LQDI2YNL.js";
 export {
   AdvancedOrbitControlsPlugin
 };

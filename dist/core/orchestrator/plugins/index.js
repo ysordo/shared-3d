@@ -28,7 +28,7 @@ import {
 } from "../../../chunk-3EGJYHIY.js";
 import {
   AdvancedOrbitControlsPlugin
-} from "../../../chunk-VTSNXELB.js";
+} from "../../../chunk-LQDI2YNL.js";
 import {
   AdvancedRaycasterPlugin
 } from "../../../chunk-NNMHNVZD.js";

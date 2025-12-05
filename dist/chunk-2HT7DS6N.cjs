@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
 
-var _chunkB5ZMYPSVcjs = require('./chunk-B5ZMYPSV.cjs');
+var _chunkQMGNFVFTcjs = require('./chunk-QMGNFVFT.cjs');
 
 
 var _chunkUA2EXMCPcjs = require('./chunk-UA2EXMCP.cjs');
@@ -21,8 +21,7 @@ var AdvancedOrbitControls = ({
     null
   );
   _react.useEffect.call(void 0, () => {
-    const newPlugin = new (0, _chunkB5ZMYPSVcjs.AdvancedOrbitControlsPlugin)({
-      enableDamping: defaultEnabled,
+    const newPlugin = new (0, _chunkQMGNFVFTcjs.AdvancedOrbitControlsPlugin)({
       ...config
     });
     orchestrator.use(newPlugin);

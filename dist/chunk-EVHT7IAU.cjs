@@ -47,8 +47,8 @@ var MaterialController = ({
         wireframe.renderOrder = 999;
         wireframe.visible = false;
         child.add(wireframe);
-        meshes.current.push(child);
       }
+      meshes.current.push(child);
     });
     initialized.current = true;
   }, [model]);

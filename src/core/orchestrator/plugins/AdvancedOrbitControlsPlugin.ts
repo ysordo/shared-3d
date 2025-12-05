@@ -4,7 +4,6 @@ import type { Plugin, PluginContext } from '../types';
 export class AdvancedOrbitControlsPlugin implements Plugin {
   name = 'AdvancedOrbitControls';
   private controls!: OrbitControls;
-
   private config = {
     enableDamping: true,
     dampingFactor: 0.05,
@@ -17,16 +16,19 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
     maxPolarAngle: Math.PI,
   };
 
-  constructor(
-    private options: Partial<typeof this.config> = {}
-  ) {
+  constructor(options: Partial<typeof this.config> = {}) {
     Object.assign(this.config, options);
   }
 
   install({ camera, renderer }: PluginContext): void {
     this.controls = new OrbitControls(camera, renderer.domElement);
-
+    
+    // Aplicar config
     Object.assign(this.controls, this.config);
+    this.controls.enabled = true;
+
+    // Forzar un update inicial
+    this.controls.update();
 
     const animate = () => {
       this.controls.update();
@@ -35,23 +37,40 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
     animate();
   }
 
-  /* === API PÚBLICA === */
+  // ← AÑADIR RETRASO DE 1 FRAME
+  private safeUpdate(action: () => void) {
+    if (this.controls) {
+      requestAnimationFrame(() => {
+        if (this.controls) {action();}
+      });
+    }
+  }
+
   setPanEnabled(enabled: boolean) {
-    this.controls.enablePan = enabled;
+    this.safeUpdate(() => {
+      this.controls.enablePan = enabled;
+    });
   }
 
   setRotateEnabled(enabled: boolean) {
-    this.controls.enableRotate = enabled;
+    this.safeUpdate(() => {
+      this.controls.enableRotate = enabled;
+    });
   }
 
   setZoomEnabled(enabled: boolean) {
-    this.controls.enableZoom = enabled;
+    this.safeUpdate(() => {
+      this.controls.enableZoom = enabled;
+    });
   }
 
   setAllEnabled(enabled: boolean) {
-    this.controls.enablePan = enabled;
-    this.controls.enableRotate = enabled;
-    this.controls.enableZoom = enabled;
+    this.safeUpdate(() => {
+      this.controls.enablePan = enabled;
+      this.controls.enableRotate = enabled;
+      this.controls.enableZoom = enabled;
+      this.controls.enabled = enabled;
+    });
   }
 
   dispose(): void {

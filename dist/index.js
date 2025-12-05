@@ -91,7 +91,7 @@ import {
 } from "./chunk-474Y2VX2.js";
 import {
   MaterialController
-} from "./chunk-JF24FDDM.js";
+} from "./chunk-YWKHTZY5.js";
 import {
   ARButton
 } from "./chunk-XL456Z3K.js";
@@ -103,7 +103,7 @@ import {
 } from "./chunk-FMRDVK56.js";
 import {
   AdvancedOrbitControls
-} from "./chunk-QFKHJTUA.js";
+} from "./chunk-2NP2M4C5.js";
 import {
   AdvancedRaycaster
 } from "./chunk-XGYXUUSO.js";
@@ -164,7 +164,7 @@ import {
 } from "./chunk-3EGJYHIY.js";
 import {
   AdvancedOrbitControlsPlugin
-} from "./chunk-VTSNXELB.js";
+} from "./chunk-LQDI2YNL.js";
 import {
   AdvancedRaycasterPlugin
 } from "./chunk-NNMHNVZD.js";

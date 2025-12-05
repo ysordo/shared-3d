@@ -1,10 +1,6 @@
 // src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 var AdvancedOrbitControlsPlugin = class {
-  constructor(options = {}) {
-    this.options = options;
-    Object.assign(this.config, options);
-  }
   name = "AdvancedOrbitControls";
   controls;
   config = {
@@ -18,29 +14,52 @@ var AdvancedOrbitControlsPlugin = class {
     minPolarAngle: 0,
     maxPolarAngle: Math.PI
   };
+  constructor(options = {}) {
+    Object.assign(this.config, options);
+  }
   install({ camera, renderer }) {
     this.controls = new OrbitControls(camera, renderer.domElement);
     Object.assign(this.controls, this.config);
+    this.controls.enabled = true;
+    this.controls.update();
     const animate = () => {
       this.controls.update();
       requestAnimationFrame(animate);
     };
     animate();
   }
-  /* === API PÚBLICA === */
+  // ← AÑADIR RETRASO DE 1 FRAME
+  safeUpdate(action) {
+    if (this.controls) {
+      requestAnimationFrame(() => {
+        if (this.controls) {
+          action();
+        }
+      });
+    }
+  }
   setPanEnabled(enabled) {
-    this.controls.enablePan = enabled;
+    this.safeUpdate(() => {
+      this.controls.enablePan = enabled;
+    });
   }
   setRotateEnabled(enabled) {
-    this.controls.enableRotate = enabled;
+    this.safeUpdate(() => {
+      this.controls.enableRotate = enabled;
+    });
   }
   setZoomEnabled(enabled) {
-    this.controls.enableZoom = enabled;
+    this.safeUpdate(() => {
+      this.controls.enableZoom = enabled;
+    });
   }
   setAllEnabled(enabled) {
-    this.controls.enablePan = enabled;
-    this.controls.enableRotate = enabled;
-    this.controls.enableZoom = enabled;
+    this.safeUpdate(() => {
+      this.controls.enablePan = enabled;
+      this.controls.enableRotate = enabled;
+      this.controls.enableZoom = enabled;
+      this.controls.enabled = enabled;
+    });
   }
   dispose() {
     this.controls?.dispose();

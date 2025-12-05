@@ -1,6 +1,6 @@
 import {
   AdvancedOrbitControlsPlugin
-} from "./chunk-VTSNXELB.js";
+} from "./chunk-LQDI2YNL.js";
 import {
   useScene
 } from "./chunk-YXZQN2XJ.js";
@@ -22,7 +22,6 @@ var AdvancedOrbitControls = ({
   );
   useEffect(() => {
     const newPlugin = new AdvancedOrbitControlsPlugin({
-      enableDamping: defaultEnabled,
       ...config
     });
     orchestrator.use(newPlugin);
