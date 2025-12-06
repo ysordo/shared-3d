@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkMVJKBTOTcjs = require('../../../chunk-MVJKBTOT.cjs');
+var _chunkFLMTDYVFcjs = require('../../../chunk-FLMTDYVF.cjs');
 
 
-exports.generateManifest = _chunkMVJKBTOTcjs.generateManifest;
+exports.generateManifest = _chunkFLMTDYVFcjs.generateManifest;

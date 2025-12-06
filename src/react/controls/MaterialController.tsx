@@ -11,8 +11,20 @@ export type CustomMaterialFactory = (
 
 export type MaterialConfig =
   | { name: string; type: 'textured' }
-  | { name: string; type: 'solid'; color?: THREE.ColorRepresentation; metalness?: number; roughness?: number; }
-  | { name: string; type: 'wireframe'; color?: THREE.ColorRepresentation; lineColor?: THREE.ColorRepresentation; [key: string]: any; }
+  | {
+      name: string;
+      type: 'solid';
+      color?: THREE.ColorRepresentation;
+      metalness?: number;
+      roughness?: number;
+    }
+  | {
+      name: string;
+      type: 'wireframe';
+      color?: THREE.ColorRepresentation;
+      lineColor?: THREE.ColorRepresentation;
+      [key: string]: any;
+    }
   | { name: string; type: 'custom'; factory: CustomMaterialFactory };
 
 type MaterialItem = {
@@ -46,7 +58,9 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     }
 
     model.traverse((child) => {
-      if (!(child instanceof THREE.Mesh)) {return;}
+      if (!(child instanceof THREE.Mesh)) {
+        return;
+      }
       if (!child.userData.originalMaterial) {
         child.userData.originalMaterial = child.material;
       }
@@ -72,7 +86,9 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   }, [model]);
 
   const applyMaterial = async (config: MaterialConfig) => {
-    if (!model || isTransitioning) {return;}
+    if (!model || isTransitioning) {
+      return;
+    }
 
     setIsTransitioning(transitionDuration > 0);
 
@@ -113,6 +129,12 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
           color: config.color ?? 0x888888,
           metalness: config.metalness ?? 0,
           roughness: config.roughness ?? 0.9,
+          side: THREE.DoubleSide,
+          flatShading: false,
+          dithering: true,
+          precision: 'highp',
+          shadowSide: THREE.FrontSide,
+          clipShadows: true,
         });
         if (wireframe) {
           wireframe.visible = false;
@@ -123,6 +145,12 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
           color: config.color ?? 0x888888,
           transparent: true,
           opacity: 0.95,
+          side: THREE.DoubleSide,
+          flatShading: false,
+          dithering: true,
+          precision: 'highp',
+          shadowSide: THREE.FrontSide,
+          clipShadows: true,
         });
         if (wireframe) {
           wireframe.visible = true;
@@ -154,7 +182,9 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     }
   }, [items]);
 
-  if (!model) { return null; }
+  if (!model) {
+    return null;
+  }
 
   return <div className={className}>{children(items)}</div>;
 };

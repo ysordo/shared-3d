@@ -1,10 +1,10 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkXGJJC5C3cjs = require('../../chunk-XGJJC5C3.cjs');
-require('../../chunk-VMMDDH2L.cjs');
-require('../../chunk-JKED4DM6.cjs');
-require('../../chunk-YKRGO7DB.cjs');
+var _chunk5XXUKKZXcjs = require('../../chunk-5XXUKKZX.cjs');
+require('../../chunk-VD42DMQO.cjs');
+require('../../chunk-ISGVEW6B.cjs');
+require('../../chunk-RIJLTLXB.cjs');
 require('../../chunk-DXL4SHF5.cjs');
 require('../../chunk-QRVOSZH3.cjs');
 require('../../chunk-7W7IF4LU.cjs');
@@ -13,4 +13,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.Canvas = _chunkXGJJC5C3cjs.Canvas;
+exports.Canvas = _chunk5XXUKKZXcjs.Canvas;

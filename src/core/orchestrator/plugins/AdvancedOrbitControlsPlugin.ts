@@ -25,11 +25,14 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
   install({ camera, renderer }: PluginContext): void {
     this.controls = new OrbitControls(camera, renderer.domElement);
     
-    // Aplicar config
-    Object.assign(this.controls, this.config);
+    Object.assign(this.controls, {
+      enableDamping: true,
+      ...this.config,
+    });
 
-    // Forzar un update inicial
-    this.controls.update();
+    this.controls.enablePan = this.config.enablePan ?? true;
+    this.controls.enableRotate = this.config.enableRotate ?? true;
+    this.controls.enableZoom = this.config.enableZoom ?? true;
 
     const animate = () => {
       this.controls.update();
@@ -38,7 +41,6 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
     animate();
   }
 
-  // ← AÑADIR RETRASO DE 1 FRAME
   private safeUpdate(action: () => void) {
     if (this.controls) {
       requestAnimationFrame(() => {

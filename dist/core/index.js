@@ -14,14 +14,17 @@ import {
   RaycasterPlugin
 } from "../chunk-FBPG64NM.js";
 import {
-  HotspotPlugin
-} from "../chunk-L3G2QMBD.js";
-import {
   LODSystemPlugin
 } from "../chunk-HVXJUMVE.js";
 import {
   MeasurementToolPlugin
 } from "../chunk-PRNY2PGZ.js";
+import {
+  HotspotPlugin
+} from "../chunk-L3G2QMBD.js";
+import {
+  AdvancedOrbitControlsPlugin
+} from "../chunk-PXGD5QKC.js";
 import {
   AnnotationsPlugin
 } from "../chunk-CPKJTF7R.js";
@@ -31,9 +34,6 @@ import {
 import {
   AdvancedCameraCollisionPlugin
 } from "../chunk-3EGJYHIY.js";
-import {
-  AdvancedOrbitControlsPlugin
-} from "../chunk-RNLQ6KGZ.js";
 import {
   AdvancedRaycasterPlugin
 } from "../chunk-NNMHNVZD.js";
@@ -46,10 +46,10 @@ import {
 import "../chunk-SRUKCELR.js";
 import {
   SceneOrchestrator
-} from "../chunk-DJHUX7D3.js";
+} from "../chunk-YF5GNO44.js";
 import {
   GLTFLoader
-} from "../chunk-AGRGG67J.js";
+} from "../chunk-R4AEK7RE.js";
 import {
   HDRILoader
 } from "../chunk-7TRUDKXW.js";

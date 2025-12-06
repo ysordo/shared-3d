@@ -87,7 +87,7 @@ export class SceneOrchestrator {
   /* === PLUGIN SYSTEM === */
   use(plugin: Plugin): this {
     if (this.plugins.has(plugin.name)) {
-      console.warn(`[Orchestrator] Plugin "${plugin.name}" ya está instalado`);
+      console.info(`[Orchestrator] Plugin "${plugin.name}" ya está instalado`);
       return this;
     }
 
@@ -101,7 +101,7 @@ export class SceneOrchestrator {
     try {
       plugin.install(context);
       this.plugins.set(plugin.name, plugin);
-      console.warn(`[Orchestrator] Plugin instalado: ${plugin.name}`);
+      console.info(`[Orchestrator] Plugin instalado: ${plugin.name}`);
     } catch (err) {
       console.error(`[Orchestrator] Error instalando plugin ${plugin.name}:`, err);
     }
@@ -111,7 +111,7 @@ export class SceneOrchestrator {
 
   /* === MODELS === */
   async setModel(entry: ManifestEntry, options?: { draco?: boolean }): Promise<THREE.Group> {
-    console.warn(`[Orchestrator] Cambiando modelo → ${entry.id}`);
+    console.info(`[Orchestrator] Cambiando modelo → ${entry.id}`);
 
     if (this.activeModel) {
       this.scene.remove(this.activeModel);
@@ -123,7 +123,7 @@ export class SceneOrchestrator {
       onLoaded: (obj) => {
         this.activeModel = obj;
         this.scene.add(obj);
-        console.warn(`[Orchestrator] Modelo activo: ${entry.id}`);
+        console.info(`[Orchestrator] Modelo activo: ${entry.id}`);
       },
       onError: (err) => {
         console.error(`[Orchestrator] Error cargando modelo ${entry.id}`, err);
@@ -151,7 +151,7 @@ export class SceneOrchestrator {
         this.activeHDRI = tex;
         this.scene.environment = tex;
         this.scene.background = tex;
-        console.warn(`[Orchestrator] HDRI activo: ${entry.id}`);
+        console.info(`[Orchestrator] HDRI activo: ${entry.id}`);
       },
     });
 
@@ -190,7 +190,7 @@ export class SceneOrchestrator {
     this.canvas.height = 1;
 
     SceneOrchestrator.instance = null;
-    console.warn('[Orchestrator] Disposed completamente');
+    console.info('[Orchestrator] Disposed completamente');
   }
 
   /* === GETTERS === */

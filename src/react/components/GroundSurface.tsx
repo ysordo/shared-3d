@@ -1,6 +1,6 @@
 'use client';
 import type React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useScene } from '../../hooks/useScene';
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 import { THREE } from '../../lib';
@@ -25,6 +25,7 @@ type GroundSurfaceProps = {
   metalness?: number;
   opacity?: number;
   transparent?: boolean;
+  visible?: boolean;
 };
 
 const PRESETS: Record<
@@ -72,11 +73,13 @@ export const GroundSurface: React.FC<GroundSurfaceProps> = ({
   height = 0,
   blur = 0.8,
   resolution = 1024,
+  visible = true,
   ...custom
 }) => {
   const orchestrator = useScene();
   const scene = orchestrator.scene;
   const camera = orchestrator.camera;
+  const ground = useRef<THREE.Mesh | Reflector>(null);
 
   useEffect(() => {
     if (!camera) {
@@ -91,29 +94,29 @@ export const GroundSurface: React.FC<GroundSurfaceProps> = ({
     const finalOpacity = custom.opacity ?? preset.opacity ?? 1;
     const finalTransparent = custom.transparent ?? preset.transparent ?? false;
 
-    let ground: THREE.Mesh | Reflector;
-
     if (preset.reflective && size) {
       const geometry = new THREE.PlaneGeometry(size, size);
-      ground = new Reflector(geometry, {
+      ground.current = new Reflector(geometry, {
         clipBias: 0.003,
         textureWidth: resolution,
         textureHeight: resolution,
         color: new THREE.Color(finalColor),
       });
 
-      if (Array.isArray(ground.material)) {
-        ground.material.forEach((mat) => {
+      if (Array.isArray(ground.current.material)) {
+        ground.current.material.forEach((mat) => {
           (mat as any).roughness = finalRoughness;
           (mat as any).metalness = finalMetalness;
           mat.opacity = finalOpacity;
           mat.transparent = finalTransparent;
         });
+        ground.current.castShadow = true;
       } else {
-        (ground.material as any).roughness = finalRoughness;
-        (ground.material as any).metalness = finalMetalness;
-        ground.material.opacity = finalOpacity;
-        ground.material.transparent = finalTransparent;
+        (ground.current.material as any).roughness = finalRoughness;
+        (ground.current.material as any).metalness = finalMetalness;
+        ground.current.material.opacity = finalOpacity;
+        ground.current.material.transparent = finalTransparent;
+        ground.current.castShadow = true;
       }
     } else {
       const geometry = size
@@ -129,35 +132,43 @@ export const GroundSurface: React.FC<GroundSurfaceProps> = ({
         side: THREE.DoubleSide,
       });
 
-      ground = new THREE.Mesh(geometry, material);
-      ground.receiveShadow = true;
+      ground.current = new THREE.Mesh(geometry, material);
+      ground.current.receiveShadow = true;
 
       if (!size) {
-        ground.onBeforeRender = () => {
+        ground.current.onBeforeRender = () => {
           const dist = camera.position.length();
           const scale = dist * 10;
-          ground.scale.set(scale, scale, 1);
+          ground.current?.scale.set(scale, scale, 1);
         };
       }
     }
 
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.y = height;
+    ground.current.rotation.x = -Math.PI / 2;
+    ground.current.position.y = height;
 
-    scene.add(ground);
+    scene.add(ground.current);
 
     return () => {
-      scene.remove(ground);
-      if ('material' in ground) {
-        if (Array.isArray(ground.material)) {
-          ground.material.forEach((mat) => mat.dispose());
-        } else {
-          ground.material.dispose();
+      if (ground.current) {
+        scene.remove(ground.current);
+        if ('material' in ground.current) {
+          if (Array.isArray(ground.current.material)) {
+            ground.current.material.forEach((mat) => mat.dispose());
+          } else {
+            ground.current.material.dispose();
+          }
         }
+        ground.current.geometry.dispose();
       }
-      ground.geometry.dispose();
     };
   }, [type, size, height, blur, resolution, ...Object.values(custom)]);
+
+  useEffect(() => {
+    if (ground.current) {
+      ground.current.visible = visible;
+    }
+  }, [visible]);
 
   return null;
 };

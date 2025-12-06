@@ -13,6 +13,7 @@ type GroundSurfaceProps = {
     metalness?: number;
     opacity?: number;
     transparent?: boolean;
+    visible?: boolean;
 };
 declare const GroundSurface: React.FC<GroundSurfaceProps>;
 

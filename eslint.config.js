@@ -58,7 +58,7 @@ export default [
       '@typescript-eslint/consistent-type-imports': 'error',
 
       // Buenas prácticas
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
       curly: 'error',
     },
     settings: {

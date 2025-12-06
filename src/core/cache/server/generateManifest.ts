@@ -32,7 +32,7 @@ export async function generateManifest(
   for (const dir of dirs) {
     const resolvedDir = path.resolve(dir);
     if (!fs.existsSync(resolvedDir)) {
-      console.warn(`Carpeta no encontrada: ${resolvedDir}`);
+      console.info(`Carpeta no encontrada: ${resolvedDir}`);
       continue;
     }
 
@@ -64,10 +64,10 @@ export async function generateManifest(
   fs.mkdirSync(path.dirname(finalOutput), { recursive: true });
   fs.writeFileSync(finalOutput, JSON.stringify(manifest, null, 2));
 
-  console.warn('Manifest generado:');
-  console.warn(`  Models: ${Object.keys(manifest.models).length}`);
-  console.warn(`  HDRIs: ${Object.keys(manifest.hdris).length}`);
-  console.warn(`Guardado en: ${finalOutput}`);
+  console.info('Manifest generado:');
+  console.info(`  Models: ${Object.keys(manifest.models).length}`);
+  console.info(`  HDRIs: ${Object.keys(manifest.hdris).length}`);
+  console.info(`Guardado en: ${finalOutput}`);
 
   return manifest;
 }

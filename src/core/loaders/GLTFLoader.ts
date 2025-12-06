@@ -30,7 +30,7 @@ export class GLTFLoader {
         this.dracoDecoder.preload();
         this.dracoLoaderInstance.setDRACOLoader(this.dracoDecoder);
         this.isDracoInitialized = true;
-        console.warn(`[GLTFLoader] Draco decoder initialized: ${path}`);
+        console.info(`[GLTFLoader] Draco decoder initialized: ${path}`);
       }
       return this.dracoLoaderInstance;
     }

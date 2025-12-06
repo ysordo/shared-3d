@@ -51,10 +51,10 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
 
   useEffect(() => {
     const newPlugin = new AdvancedOrbitControlsPlugin({
-      ...config,
       enablePan,
       enableRotate,
       enableZoom,
+      ...config,
     });
     orchestrator.use(newPlugin);
     setPlugin(newPlugin);

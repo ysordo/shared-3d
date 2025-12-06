@@ -1,6 +1,6 @@
 import {
   generateManifest
-} from "../../../chunk-WSCGDMID.js";
+} from "../../../chunk-ZMCZI5UU.js";
 export {
   generateManifest
 };
