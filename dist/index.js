@@ -103,7 +103,7 @@ import {
 } from "./chunk-FMRDVK56.js";
 import {
   AdvancedOrbitControls
-} from "./chunk-2NP2M4C5.js";
+} from "./chunk-BLAITLXZ.js";
 import {
   AdvancedRaycaster
 } from "./chunk-XGYXUUSO.js";
@@ -164,7 +164,7 @@ import {
 } from "./chunk-3EGJYHIY.js";
 import {
   AdvancedOrbitControlsPlugin
-} from "./chunk-LQDI2YNL.js";
+} from "./chunk-RNLQ6KGZ.js";
 import {
   AdvancedRaycasterPlugin
 } from "./chunk-NNMHNVZD.js";

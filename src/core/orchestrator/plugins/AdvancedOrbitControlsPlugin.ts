@@ -5,7 +5,9 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
   name = 'AdvancedOrbitControls';
   private controls!: OrbitControls;
   private config = {
-    enableDamping: true,
+    enablePan: true,
+    enableRotate: true,
+    enableZoom: true,
     dampingFactor: 0.05,
     panSpeed: 1,
     rotateSpeed: 1,
@@ -25,7 +27,6 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
     
     // Aplicar config
     Object.assign(this.controls, this.config);
-    this.controls.enabled = true;
 
     // Forzar un update inicial
     this.controls.update();

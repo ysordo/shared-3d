@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
 
-var _chunkQMGNFVFTcjs = require('./chunk-QMGNFVFT.cjs');
+var _chunkTN2VVFEXcjs = require('./chunk-TN2VVFEX.cjs');
 
 
 var _chunkUA2EXMCPcjs = require('./chunk-UA2EXMCP.cjs');
@@ -10,23 +10,27 @@ var _react = require('react');
 var _jsxruntime = require('react/jsx-runtime');
 var AdvancedOrbitControls = ({
   children,
-  defaultEnabled = true,
+  enablePan = true,
+  enableRotate = true,
+  enableZoom = true,
   ...config
 }) => {
   const orchestrator = _chunkUA2EXMCPcjs.useScene.call(void 0, );
-  const [panEnabled, setPanEnabled] = _react.useState.call(void 0, defaultEnabled);
-  const [rotateEnabled, setRotateEnabled] = _react.useState.call(void 0, defaultEnabled);
-  const [zoomEnabled, setZoomEnabled] = _react.useState.call(void 0, defaultEnabled);
+  const [panEnabled, setPanEnabled] = _react.useState.call(void 0, enablePan);
+  const [rotateEnabled, setRotateEnabled] = _react.useState.call(void 0, enableRotate);
+  const [zoomEnabled, setZoomEnabled] = _react.useState.call(void 0, enableZoom);
   const [plugin, setPlugin] = _react.useState.call(void 0, 
     null
   );
   _react.useEffect.call(void 0, () => {
-    const newPlugin = new (0, _chunkQMGNFVFTcjs.AdvancedOrbitControlsPlugin)({
-      ...config
+    const newPlugin = new (0, _chunkTN2VVFEXcjs.AdvancedOrbitControlsPlugin)({
+      ...config,
+      enablePan,
+      enableRotate,
+      enableZoom
     });
     orchestrator.use(newPlugin);
     setPlugin(newPlugin);
-    newPlugin.setAllEnabled(defaultEnabled);
     return () => {
       newPlugin.dispose();
     };

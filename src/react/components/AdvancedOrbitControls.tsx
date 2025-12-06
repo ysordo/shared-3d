@@ -20,7 +20,9 @@ type OrbitState = {
 
 type AdvancedOrbitControlsProps = {
   children: (state: OrbitState) => React.ReactNode;
-  defaultEnabled?: boolean;
+  enablePan?: boolean;
+  enableRotate?: boolean;
+  enableZoom?: boolean;
   panSpeed?: number;
   rotateSpeed?: number;
   zoomSpeed?: number;
@@ -33,14 +35,16 @@ type AdvancedOrbitControlsProps = {
 
 export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
   children,
-  defaultEnabled = true,
+  enablePan = true,
+  enableRotate = true,
+  enableZoom = true,
   ...config
 }) => {
   const orchestrator = useScene();
 
-  const [panEnabled, setPanEnabled] = useState(defaultEnabled);
-  const [rotateEnabled, setRotateEnabled] = useState(defaultEnabled);
-  const [zoomEnabled, setZoomEnabled] = useState(defaultEnabled);
+  const [panEnabled, setPanEnabled] = useState(enablePan);
+  const [rotateEnabled, setRotateEnabled] = useState(enableRotate);
+  const [zoomEnabled, setZoomEnabled] = useState(enableZoom);
   const [plugin, setPlugin] = useState<AdvancedOrbitControlsPlugin | null>(
     null
   );
@@ -48,11 +52,12 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
   useEffect(() => {
     const newPlugin = new AdvancedOrbitControlsPlugin({
       ...config,
+      enablePan,
+      enableRotate,
+      enableZoom,
     });
     orchestrator.use(newPlugin);
     setPlugin(newPlugin);
-
-    newPlugin.setAllEnabled(defaultEnabled);
 
     return () => {
       newPlugin.dispose();

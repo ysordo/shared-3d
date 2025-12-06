@@ -4,7 +4,9 @@ var AdvancedOrbitControlsPlugin = (_class = class {
   __init() {this.name = "AdvancedOrbitControls"}
   
   __init2() {this.config = {
-    enableDamping: true,
+    enablePan: true,
+    enableRotate: true,
+    enableZoom: true,
     dampingFactor: 0.05,
     panSpeed: 1,
     rotateSpeed: 1,
@@ -20,7 +22,6 @@ var AdvancedOrbitControlsPlugin = (_class = class {
   install({ camera, renderer }) {
     this.controls = new (0, _OrbitControlsjs.OrbitControls)(camera, renderer.domElement);
     Object.assign(this.controls, this.config);
-    this.controls.enabled = true;
     this.controls.update();
     const animate = () => {
       this.controls.update();
