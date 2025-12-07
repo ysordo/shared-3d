@@ -1,6 +1,6 @@
 import {
   AdvancedOrbitControlsPlugin
-} from "./chunk-PXGD5QKC.js";
+} from "./chunk-GOXH75UP.js";
 import {
   useScene
 } from "./chunk-CSZ3E2ZE.js";
@@ -16,12 +16,12 @@ var AdvancedOrbitControls = ({
   ...config
 }) => {
   const orchestrator = useScene();
-  const [panEnabled, setPanEnabled] = useState(enablePan);
-  const [rotateEnabled, setRotateEnabled] = useState(enableRotate);
-  const [zoomEnabled, setZoomEnabled] = useState(enableZoom);
   const [plugin, setPlugin] = useState(
     null
   );
+  const [panEnabled, setPanEnabled] = useState(enablePan);
+  const [rotateEnabled, setRotateEnabled] = useState(enableRotate);
+  const [zoomEnabled, setZoomEnabled] = useState(enableZoom);
   useEffect(() => {
     const newPlugin = new AdvancedOrbitControlsPlugin({
       enablePan,
@@ -34,25 +34,30 @@ var AdvancedOrbitControls = ({
     return () => {
       newPlugin.dispose();
     };
-  }, []);
+  }, [
+    orchestrator,
+    enablePan,
+    enableRotate,
+    enableZoom,
+    ...Object.values(config)
+  ]);
   useEffect(() => {
-    plugin?.setPanEnabled(panEnabled);
-  }, [plugin, panEnabled]);
-  useEffect(() => {
-    plugin?.setRotateEnabled(rotateEnabled);
-  }, [plugin, rotateEnabled]);
-  useEffect(() => {
-    plugin?.setZoomEnabled(zoomEnabled);
-  }, [plugin, zoomEnabled]);
+    if (!plugin) {
+      return;
+    }
+    plugin.setPanEnabled(panEnabled);
+    plugin.setRotateEnabled(rotateEnabled);
+    plugin.setZoomEnabled(zoomEnabled);
+  }, [plugin, panEnabled, rotateEnabled, zoomEnabled]);
   const setAllEnabled = (value) => {
     setPanEnabled(value);
     setRotateEnabled(value);
     setZoomEnabled(value);
   };
-  const togglePan = () => setPanEnabled((prev) => !prev);
-  const toggleRotate = () => setRotateEnabled((prev) => !prev);
-  const toggleZoom = () => setZoomEnabled((prev) => !prev);
-  const toggleAll = () => setAllEnabled(!(rotateEnabled && panEnabled && zoomEnabled));
+  const togglePan = () => setPanEnabled((p) => !p);
+  const toggleRotate = () => setRotateEnabled((p) => !p);
+  const toggleZoom = () => setZoomEnabled((p) => !p);
+  const toggleAll = () => setAllEnabled(!(panEnabled && rotateEnabled && zoomEnabled));
   const state = {
     panEnabled,
     rotateEnabled,

@@ -25,8 +25,6 @@ type AdvancedOrbitControlsProps = {
     dampingFactor?: number;
     minDistance?: number;
     maxDistance?: number;
-    minPolarAngle?: number;
-    maxPolarAngle?: number;
 };
 declare const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps>;
 

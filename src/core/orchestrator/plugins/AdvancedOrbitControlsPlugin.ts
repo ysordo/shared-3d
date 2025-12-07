@@ -25,14 +25,19 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
   install({ camera, renderer }: PluginContext): void {
     this.controls = new OrbitControls(camera, renderer.domElement);
     
-    Object.assign(this.controls, {
-      enableDamping: true,
-      ...this.config,
-    });
+    this.controls.dampingFactor = this.config.dampingFactor ||  0.05;
+    this.controls.panSpeed = this.config.panSpeed ||  1;
+    this.controls.rotateSpeed = this.config.rotateSpeed ||  1;
+    this.controls.zoomSpeed = this.config.zoomSpeed ||  1;
+    this.controls.minDistance = this.config.minDistance ||  0.1;
+    this.controls.maxDistance = this.config.maxDistance ||  1000;
+    this.controls.minPolarAngle = this.config.minPolarAngle ||  0;
+    this.controls.maxPolarAngle = this.config.maxPolarAngle ||  Math.PI;
+    this.controls.enablePan = this.config.enablePan || true;
+    this.controls.enableRotate = this.config.enableRotate || true;
+    this.controls.enableZoom = this.config.enableZoom || true;
 
-    this.controls.enablePan = this.config.enablePan ?? true;
-    this.controls.enableRotate = this.config.enableRotate ?? true;
-    this.controls.enableZoom = this.config.enableZoom ?? true;
+    console.info(`[AdvancedOrbitControlsPlugin] Orbit Controls Plugin install: ${JSON.stringify(this.config, undefined, 2)}`);
 
     const animate = () => {
       this.controls.update();
