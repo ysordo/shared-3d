@@ -23,6 +23,9 @@ var AdvancedOrbitControls = ({
   const [rotateEnabled, setRotateEnabled] = _react.useState.call(void 0, enableRotate);
   const [zoomEnabled, setZoomEnabled] = _react.useState.call(void 0, enableZoom);
   _react.useEffect.call(void 0, () => {
+    if (!orchestrator) {
+      return;
+    }
     const newPlugin = new (0, _chunkTCGMY7MKcjs.AdvancedOrbitControlsPlugin)({
       enablePan,
       enableRotate,
@@ -34,13 +37,7 @@ var AdvancedOrbitControls = ({
     return () => {
       newPlugin.dispose();
     };
-  }, [
-    orchestrator,
-    enablePan,
-    enableRotate,
-    enableZoom,
-    ...Object.values(config)
-  ]);
+  }, [orchestrator]);
   _react.useEffect.call(void 0, () => {
     if (!plugin) {
       return;

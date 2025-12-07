@@ -23,6 +23,9 @@ var AdvancedOrbitControls = ({
   const [rotateEnabled, setRotateEnabled] = useState(enableRotate);
   const [zoomEnabled, setZoomEnabled] = useState(enableZoom);
   useEffect(() => {
+    if (!orchestrator) {
+      return;
+    }
     const newPlugin = new AdvancedOrbitControlsPlugin({
       enablePan,
       enableRotate,
@@ -34,13 +37,7 @@ var AdvancedOrbitControls = ({
     return () => {
       newPlugin.dispose();
     };
-  }, [
-    orchestrator,
-    enablePan,
-    enableRotate,
-    enableZoom,
-    ...Object.values(config)
-  ]);
+  }, [orchestrator]);
   useEffect(() => {
     if (!plugin) {
       return;

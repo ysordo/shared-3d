@@ -44,13 +44,12 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     null
   );
 
-  // ← ESTADO INTERNO que responde a props
   const [panEnabled, setPanEnabled] = useState(enablePan);
   const [rotateEnabled, setRotateEnabled] = useState(enableRotate);
   const [zoomEnabled, setZoomEnabled] = useState(enableZoom);
 
-  // ← RECREA EL PLUGIN SI CAMBIAN LAS PROPS INICIALES
   useEffect(() => {
+    if(!orchestrator) {return;}
     const newPlugin = new AdvancedOrbitControlsPlugin({
       enablePan,
       enableRotate,
@@ -64,18 +63,10 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     return () => {
       newPlugin.dispose();
     };
-  }, [
-    orchestrator,
-    enablePan,
-    enableRotate,
-    enableZoom,
-    ...Object.values(config),
-  ]);
+  }, [orchestrator]);
 
   useEffect(() => {
-    if (!plugin) {
-      return;
-    }
+    if (!plugin) {return;}
     plugin.setPanEnabled(panEnabled);
     plugin.setRotateEnabled(rotateEnabled);
     plugin.setZoomEnabled(zoomEnabled);
