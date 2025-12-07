@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunk2ZMAJ4IMcjs = require('./chunk-2ZMAJ4IM.cjs');
+var _chunkPZWUXSGWcjs = require('./chunk-PZWUXSGW.cjs');
 
 
 var _chunk4C4LEAFDcjs = require('./chunk-4C4LEAFD.cjs');
@@ -26,7 +26,7 @@ var AdvancedOrbitControls = ({
     if (!orchestrator) {
       return;
     }
-    setPlugin(new (0, _chunk2ZMAJ4IMcjs.AdvancedOrbitControlsPlugin)({
+    setPlugin(new (0, _chunkPZWUXSGWcjs.AdvancedOrbitControlsPlugin)({
       enablePan,
       enableRotate,
       enableZoom,
@@ -47,7 +47,7 @@ var AdvancedOrbitControls = ({
     plugin.setPanEnabled(panEnabled);
     plugin.setRotateEnabled(rotateEnabled);
     plugin.setZoomEnabled(zoomEnabled);
-  }, [plugin, panEnabled, rotateEnabled, zoomEnabled]);
+  }, [panEnabled, rotateEnabled, zoomEnabled]);
   const setAllEnabled = (value) => {
     setPanEnabled(value);
     setRotateEnabled(value);

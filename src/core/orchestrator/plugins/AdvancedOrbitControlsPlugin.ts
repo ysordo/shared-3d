@@ -1,4 +1,3 @@
-// src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { Plugin, PluginContext } from '../types';
 
@@ -49,20 +48,26 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
 
   setPanEnabled(enabled: boolean) {
     this.options.enablePan = enabled;
-    if (this.controls) {this.controls.enablePan = enabled;}
-    console.info(`[AdvancedOrbitControlsPlugin] Change state enablePan: ${this.controls.enablePan}, controls: ${this.controls}`);
+    if (this.controls) {
+      this.controls.enablePan = enabled;
+      console.info(`[AdvancedOrbitControlsPlugin] Change state enablePan: ${this.controls.enablePan}, controls: ${this.controls}`);
+    }
   }
 
   setRotateEnabled(enabled: boolean) {
     this.options.enableRotate = enabled;
-    if (this.controls) {this.controls.enableRotate = enabled;}
-    console.info(`[AdvancedOrbitControlsPlugin] Change state enableRotate: ${this.controls.enableRotate}, controls: ${this.controls}`);
+    if (this.controls) {
+      this.controls.enableRotate = enabled;
+      console.info(`[AdvancedOrbitControlsPlugin] Change state enableRotate: ${this.controls.enableRotate}, controls: ${this.controls}`);
+    }
   }
 
   setZoomEnabled(enabled: boolean) {
     this.options.enableZoom = enabled;
-    if (this.controls) {this.controls.enableZoom = enabled;}
-    console.info(`[AdvancedOrbitControlsPlugin] Change state enableZoom: ${this.controls.enableZoom}, controls: ${this.controls}`);
+    if (this.controls) {
+      this.controls.enableZoom = enabled;
+      console.info(`[AdvancedOrbitControlsPlugin] Change state enableZoom: ${this.controls.enableZoom}, controls: ${this.controls}`);
+    }
   }
 
   setAllEnabled(enabled: boolean) {

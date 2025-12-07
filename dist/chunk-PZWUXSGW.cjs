@@ -39,22 +39,22 @@ var AdvancedOrbitControlsPlugin = (_class = class {
     this.options.enablePan = enabled;
     if (this.controls) {
       this.controls.enablePan = enabled;
+      console.info(`[AdvancedOrbitControlsPlugin] Change state enablePan: ${this.controls.enablePan}, controls: ${this.controls}`);
     }
-    console.info(`[AdvancedOrbitControlsPlugin] Change state enablePan: ${this.controls.enablePan}, controls: ${this.controls}`);
   }
   setRotateEnabled(enabled) {
     this.options.enableRotate = enabled;
     if (this.controls) {
       this.controls.enableRotate = enabled;
+      console.info(`[AdvancedOrbitControlsPlugin] Change state enableRotate: ${this.controls.enableRotate}, controls: ${this.controls}`);
     }
-    console.info(`[AdvancedOrbitControlsPlugin] Change state enableRotate: ${this.controls.enableRotate}, controls: ${this.controls}`);
   }
   setZoomEnabled(enabled) {
     this.options.enableZoom = enabled;
     if (this.controls) {
       this.controls.enableZoom = enabled;
+      console.info(`[AdvancedOrbitControlsPlugin] Change state enableZoom: ${this.controls.enableZoom}, controls: ${this.controls}`);
     }
-    console.info(`[AdvancedOrbitControlsPlugin] Change state enableZoom: ${this.controls.enableZoom}, controls: ${this.controls}`);
   }
   setAllEnabled(enabled) {
     this.options.enablePan = enabled;

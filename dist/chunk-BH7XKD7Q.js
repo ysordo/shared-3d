@@ -1,6 +1,6 @@
 import {
   AdvancedOrbitControlsPlugin
-} from "./chunk-M5URL7MY.js";
+} from "./chunk-ZX3VBCOP.js";
 import {
   useScene
 } from "./chunk-EABNOBME.js";
@@ -47,7 +47,7 @@ var AdvancedOrbitControls = ({
     plugin.setPanEnabled(panEnabled);
     plugin.setRotateEnabled(rotateEnabled);
     plugin.setZoomEnabled(zoomEnabled);
-  }, [plugin, panEnabled, rotateEnabled, zoomEnabled]);
+  }, [panEnabled, rotateEnabled, zoomEnabled]);
   const setAllEnabled = (value) => {
     setPanEnabled(value);
     setRotateEnabled(value);

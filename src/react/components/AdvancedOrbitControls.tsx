@@ -70,7 +70,7 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     plugin.setPanEnabled(panEnabled);
     plugin.setRotateEnabled(rotateEnabled);
     plugin.setZoomEnabled(zoomEnabled);
-  }, [plugin, panEnabled, rotateEnabled, zoomEnabled]);
+  }, [panEnabled, rotateEnabled, zoomEnabled]);
 
   const setAllEnabled = (value: boolean) => {
     setPanEnabled(value);
