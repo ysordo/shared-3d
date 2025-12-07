@@ -26,18 +26,17 @@ var AdvancedOrbitControls = ({
     if (!orchestrator) {
       return;
     }
-    setPlugin(new (0, _chunkPZWUXSGWcjs.AdvancedOrbitControlsPlugin)({
+    const newPlugin = new (0, _chunkPZWUXSGWcjs.AdvancedOrbitControlsPlugin)({
       enablePan,
       enableRotate,
       enableZoom,
       ...config
-    }));
-    if (!plugin) {
-      return;
-    }
-    orchestrator.use(plugin);
+    });
+    orchestrator.use(newPlugin);
+    setPlugin(newPlugin);
     return () => {
-      plugin.dispose();
+      newPlugin.dispose();
+      setPlugin(null);
     };
   }, [orchestrator]);
   _react.useEffect.call(void 0, () => {
