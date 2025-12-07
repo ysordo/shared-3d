@@ -67,7 +67,7 @@ export class SceneOrchestrator {
       this.camera.aspect = clientWidth / clientHeight;
       this.camera.updateProjectionMatrix();
     };
-    window.addEventListener('resize', this.resizeHandler);
+    canvas.addEventListener('resize', this.resizeHandler);
 
     const animate = () => {
       this.animationId = requestAnimationFrame(animate);
@@ -87,7 +87,7 @@ export class SceneOrchestrator {
   /* === PLUGIN SYSTEM === */
   use(plugin: Plugin): this {
     if (this.plugins.has(plugin.name)) {
-      console.info(`[Orchestrator] Plugin "${plugin.name}" ya está instalado`);
+      console.info(`[Orchestrator] Plugin "${plugin.name}" is already installed`);
       return this;
     }
 
@@ -101,9 +101,9 @@ export class SceneOrchestrator {
     try {
       plugin.install(context);
       this.plugins.set(plugin.name, plugin);
-      console.info(`[Orchestrator] Plugin instalado: ${plugin.name}`);
+      console.info(`[Orchestrator] Install plugin: ${plugin.name}`);
     } catch (err) {
-      console.error(`[Orchestrator] Error instalando plugin ${plugin.name}:`, err);
+      console.error(`[Orchestrator] Error installed plugin ${plugin.name}:`, err);
     }
 
     return this;
@@ -111,7 +111,7 @@ export class SceneOrchestrator {
 
   /* === MODELS === */
   async setModel(entry: ManifestEntry, options?: { draco?: boolean }): Promise<THREE.Group> {
-    console.info(`[Orchestrator] Cambiando modelo → ${entry.id}`);
+    console.info(`[Orchestrator] Change model → ${entry.id}`);
 
     if (this.activeModel) {
       this.scene.remove(this.activeModel);
@@ -123,10 +123,10 @@ export class SceneOrchestrator {
       onLoaded: (obj) => {
         this.activeModel = obj;
         this.scene.add(obj);
-        console.info(`[Orchestrator] Modelo activo: ${entry.id}`);
+        console.info(`[Orchestrator] Active model: ${entry.id}`);
       },
       onError: (err) => {
-        console.error(`[Orchestrator] Error cargando modelo ${entry.id}`, err);
+        console.error(`[Orchestrator] Error model loaded ${entry.id}`, err);
       },
     });
 
@@ -174,7 +174,7 @@ export class SceneOrchestrator {
       this.animationId = null;
     }
 
-    window.removeEventListener('resize', this.resizeHandler);
+    this.canvas.removeEventListener('resize', this.resizeHandler);
 
     for (const plugin of this.plugins.values()) {
       plugin.dispose?.();
