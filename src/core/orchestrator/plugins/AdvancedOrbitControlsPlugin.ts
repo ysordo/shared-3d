@@ -46,39 +46,30 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
     animate();
   }
 
-  private safeUpdate(action: () => void) {
+  setPanEnabled(enabled: boolean) {
     if (this.controls) {
-      requestAnimationFrame(() => {
-        if (this.controls) {action();}
-      });
+      this.controls.enablePan = enabled;
     }
   }
 
-  setPanEnabled(enabled: boolean) {
-    this.safeUpdate(() => {
-      this.controls.enablePan = enabled;
-    });
-  }
-
   setRotateEnabled(enabled: boolean) {
-    this.safeUpdate(() => {
+    if (this.controls) {
       this.controls.enableRotate = enabled;
-    });
+    }
   }
 
   setZoomEnabled(enabled: boolean) {
-    this.safeUpdate(() => {
+    if (this.controls) {
       this.controls.enableZoom = enabled;
-    });
+    }
   }
 
   setAllEnabled(enabled: boolean) {
-    this.safeUpdate(() => {
+    if (this.controls) {
       this.controls.enablePan = enabled;
       this.controls.enableRotate = enabled;
       this.controls.enableZoom = enabled;
-      this.controls.enabled = enabled;
-    });
+    }
   }
 
   dispose(): void {

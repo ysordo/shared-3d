@@ -39,37 +39,27 @@ var AdvancedOrbitControlsPlugin = (_class = class {
     };
     animate();
   }
-  safeUpdate(action) {
+  setPanEnabled(enabled) {
     if (this.controls) {
-      requestAnimationFrame(() => {
-        if (this.controls) {
-          action();
-        }
-      });
+      this.controls.enablePan = enabled;
     }
   }
-  setPanEnabled(enabled) {
-    this.safeUpdate(() => {
-      this.controls.enablePan = enabled;
-    });
-  }
   setRotateEnabled(enabled) {
-    this.safeUpdate(() => {
+    if (this.controls) {
       this.controls.enableRotate = enabled;
-    });
+    }
   }
   setZoomEnabled(enabled) {
-    this.safeUpdate(() => {
+    if (this.controls) {
       this.controls.enableZoom = enabled;
-    });
+    }
   }
   setAllEnabled(enabled) {
-    this.safeUpdate(() => {
+    if (this.controls) {
       this.controls.enablePan = enabled;
       this.controls.enableRotate = enabled;
       this.controls.enableZoom = enabled;
-      this.controls.enabled = enabled;
-    });
+    }
   }
   dispose() {
     _optionalChain([this, 'access', _ => _.controls, 'optionalAccess', _2 => _2.dispose, 'call', _3 => _3()]);
