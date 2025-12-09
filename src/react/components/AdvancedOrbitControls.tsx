@@ -30,6 +30,8 @@ type AdvancedOrbitControlsProps = {
   dampingFactor?: number;
   minDistance?: number;
   maxDistance?: number;
+  minPolarAngle?: number;
+  maxPolarAngle?: number;
 };
 
 export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
@@ -46,8 +48,12 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
   const [zoomEnabled, setZoomEnabled] = useState(enableZoom);
 
   useEffect(() => {
-    if (!orchestrator) {return;}
-    if(orchestrator.has('AdvancedOrbitControls')) {return;}
+    if (!orchestrator) {
+      return;
+    }
+    if (orchestrator.has('AdvancedOrbitControls')) {
+      return;
+    }
 
     const plugin = new AdvancedOrbitControlsPlugin({
       enablePan,
