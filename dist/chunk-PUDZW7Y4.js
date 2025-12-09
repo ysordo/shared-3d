@@ -18,6 +18,7 @@ var AdvancedOrbitControlsPlugin = class {
       maxDistance: 1e3,
       ...this.options
     });
+    console.info(`[AdvancedOrbitControlsPlugin] Install plugin ${this.name}: ${this.controls}`);
     this.updateControlsState();
     const tick = () => {
       this.controls.update();

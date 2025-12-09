@@ -26,6 +26,8 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
       maxDistance: 1000,
       ...this.options,
     });
+    console.info(`[AdvancedOrbitControlsPlugin] Install plugin ${this.name}: ${this.controls}`);
+
 
     // APLICAR ESTADO INICIAL
     this.updateControlsState();

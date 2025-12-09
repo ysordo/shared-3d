@@ -1,6 +1,6 @@
 import {
   AdvancedOrbitControlsPlugin
-} from "./chunk-ZX3VBCOP.js";
+} from "./chunk-PUDZW7Y4.js";
 import {
   useScene
 } from "./chunk-EABNOBME.js";
@@ -24,6 +24,9 @@ var AdvancedOrbitControls = ({
   const [zoomEnabled, setZoomEnabled] = useState(enableZoom);
   useEffect(() => {
     if (!orchestrator) {
+      return;
+    }
+    if (plugin) {
       return;
     }
     const newPlugin = new AdvancedOrbitControlsPlugin({
