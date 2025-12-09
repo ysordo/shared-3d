@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkQXN2G65Ucjs = require('./chunk-QXN2G65U.cjs');
+var _chunkMO2C6OQIcjs = require('./chunk-MO2C6OQI.cjs');
 
 
 var _chunk4C4LEAFDcjs = require('./chunk-4C4LEAFD.cjs');
@@ -29,7 +29,7 @@ var AdvancedOrbitControls = ({
     if (plugin) {
       return;
     }
-    const newPlugin = new (0, _chunkQXN2G65Ucjs.AdvancedOrbitControlsPlugin)({
+    const newPlugin = new (0, _chunkMO2C6OQIcjs.AdvancedOrbitControlsPlugin)({
       enablePan,
       enableRotate,
       enableZoom,
@@ -41,8 +41,12 @@ var AdvancedOrbitControls = ({
       newPlugin.dispose();
       setPlugin(null);
     };
-  }, [orchestrator]);
+  }, [orchestrator, plugin]);
   _react.useEffect.call(void 0, () => {
+    console.info("[AdvancedOrbitControls] Change state options:", {
+      plugin,
+      orchestrator
+    });
     if (!plugin) {
       return;
     }

@@ -13,11 +13,9 @@ declare class AdvancedOrbitControlsPlugin implements Plugin {
         [key: string]: any;
     }>);
     install({ camera, renderer }: PluginContext): void;
-    updateControlsState(): void;
     setPanEnabled(enabled: boolean): void;
     setRotateEnabled(enabled: boolean): void;
     setZoomEnabled(enabled: boolean): void;
-    setAllEnabled(enabled: boolean): void;
     dispose(): void;
 }
 

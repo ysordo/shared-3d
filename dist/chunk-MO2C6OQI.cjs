@@ -1,21 +1,13 @@
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import type { Plugin, PluginContext } from '../types';
-
-export class AdvancedOrbitControlsPlugin implements Plugin {
-  name = 'AdvancedOrbitControls';
-  private controls!: OrbitControls;
-
-  constructor(private options: Partial<{
-    enablePan?: boolean;
-    enableRotate?: boolean;
-    enableZoom?: boolean;
-    [key: string]: any;
-  }> = {}) {}
-
-  install({ camera, renderer }: PluginContext): void {
-    this.controls = new OrbitControls(camera, renderer.domElement);
-
-    // Aplicar config básica
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); var _class;// src/core/orchestrator/plugins/AdvancedOrbitControlsPlugin.ts
+var _OrbitControlsjs = require('three/examples/jsm/controls/OrbitControls.js');
+var AdvancedOrbitControlsPlugin = (_class = class {
+  constructor(options = {}) {;_class.prototype.__init.call(this);
+    this.options = options;
+  }
+  __init() {this.name = "AdvancedOrbitControls"}
+  
+  install({ camera, renderer }) {
+    this.controls = new (0, _OrbitControlsjs.OrbitControls)(camera, renderer.domElement);
     Object.assign(this.controls, {
       enableDamping: true,
       dampingFactor: 0.05,
@@ -23,53 +15,51 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
       rotateSpeed: 1,
       zoomSpeed: 1,
       minDistance: 0.1,
-      maxDistance: 1000,
-      ...this.options,
+      maxDistance: 1e3,
+      ...this.options
     });
     console.info(`[AdvancedOrbitControlsPlugin] Install plugin ${this.name}:`, this.controls);
-
-
-    this.setPanEnabled = (enabled: boolean) => {
+    this.setPanEnabled = (enabled) => {
       this.options.enablePan = enabled;
       console.info(`[AdvancedOrbitControlsPlugin] Change state options: ${this.options}, controls:`, this.controls);
-
       if (this.controls) {
         this.controls.enablePan = enabled;
         console.info(`[AdvancedOrbitControlsPlugin] Change state enablePan: ${JSON.stringify(this.controls.enablePan)}, controls:`, this.controls);
       }
     };
-
-     this.setRotateEnabled = (enabled: boolean) => {
+    this.setRotateEnabled = (enabled) => {
       this.options.enableRotate = enabled;
       console.info(`[AdvancedOrbitControlsPlugin] Change state options: ${this.options}, controls:`, this.controls);
-
       if (this.controls) {
         this.controls.enableRotate = enabled;
         console.info(`[AdvancedOrbitControlsPlugin] Change state enableRotate: ${JSON.stringify(this.controls.enableRotate)}, controls:`, this.controls);
       }
     };
-
-    this.setZoomEnabled = (enabled: boolean) => {
+    this.setZoomEnabled = (enabled) => {
       this.options.enableZoom = enabled;
       console.info(`[AdvancedOrbitControlsPlugin] Change state options: ${this.options}, controls:`, this.controls);
-      
       if (this.controls) {
         this.controls.enableZoom = enabled;
         console.info(`[AdvancedOrbitControlsPlugin] Change state enableZoom: ${JSON.stringify(this.controls.enableZoom)}, controls:`, this.controls);
       }
     };
-
     this.dispose = () => this.controls.dispose();
-
     const animation = () => {
       this.controls.update();
       requestAnimationFrame(animation);
     };
     animation();
   }
+  setPanEnabled(enabled) {
+  }
+  setRotateEnabled(enabled) {
+  }
+  setZoomEnabled(enabled) {
+  }
+  dispose() {
+  }
+}, _class);
 
-  setPanEnabled(enabled: boolean) {}
-  setRotateEnabled(enabled: boolean) {}
-  setZoomEnabled(enabled: boolean) {}
-  dispose() {}
-}
+
+
+exports.AdvancedOrbitControlsPlugin = AdvancedOrbitControlsPlugin;

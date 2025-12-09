@@ -1,6 +1,6 @@
 import {
   AdvancedOrbitControlsPlugin
-} from "./chunk-XAD7UTSK.js";
+} from "./chunk-OVBEDQKS.js";
 import {
   useScene
 } from "./chunk-EABNOBME.js";
@@ -41,8 +41,12 @@ var AdvancedOrbitControls = ({
       newPlugin.dispose();
       setPlugin(null);
     };
-  }, [orchestrator]);
+  }, [orchestrator, plugin]);
   useEffect(() => {
+    console.info("[AdvancedOrbitControls] Change state options:", {
+      plugin,
+      orchestrator
+    });
     if (!plugin) {
       return;
     }
