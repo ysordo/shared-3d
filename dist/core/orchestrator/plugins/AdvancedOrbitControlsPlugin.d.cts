@@ -10,7 +10,14 @@ declare class AdvancedOrbitControlsPlugin implements Plugin {
         enablePan?: boolean;
         enableRotate?: boolean;
         enableZoom?: boolean;
-        [key: string]: any;
+        dampingFactor?: number;
+        panSpeed?: number;
+        rotateSpeed?: number;
+        zoomSpeed?: number;
+        minDistance?: number;
+        maxDistance?: number;
+        minPolarAngle?: number;
+        maxPolarAngle?: number;
     }>);
     install({ camera, renderer }: PluginContext): void;
     setPanEnabled(enabled: boolean): void;

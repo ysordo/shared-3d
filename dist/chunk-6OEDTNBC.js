@@ -1,6 +1,6 @@
 import {
   AdvancedOrbitControlsPlugin
-} from "./chunk-63XBJHPS.js";
+} from "./chunk-B6HCPKYS.js";
 import {
   useScene
 } from "./chunk-DNUS32TF.js";

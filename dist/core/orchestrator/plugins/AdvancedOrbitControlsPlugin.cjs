@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunk7BTT6PPBcjs = require('../../../chunk-7BTT6PPB.cjs');
+var _chunk2HS2IEDGcjs = require('../../../chunk-2HS2IEDG.cjs');
 
 
-exports.AdvancedOrbitControlsPlugin = _chunk7BTT6PPBcjs.AdvancedOrbitControlsPlugin;
+exports.AdvancedOrbitControlsPlugin = _chunk2HS2IEDGcjs.AdvancedOrbitControlsPlugin;

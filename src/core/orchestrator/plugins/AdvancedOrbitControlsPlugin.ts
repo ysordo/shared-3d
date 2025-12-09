@@ -9,27 +9,37 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
     enablePan?: boolean;
     enableRotate?: boolean;
     enableZoom?: boolean;
-    [key: string]: any;
+    dampingFactor?: number;
+    panSpeed?: number;
+    rotateSpeed?: number;
+    zoomSpeed?: number;
+    minDistance?: number;
+    maxDistance?: number;
+    minPolarAngle?: number;
+    maxPolarAngle?: number;
   }> = {}) {}
 
   install({ camera, renderer }: PluginContext): void {
     this.controls = new OrbitControls(camera, renderer.domElement);
 
-    Object.assign(this.controls, {
-      enableDamping: true,
-      dampingFactor: 0.05,
-      panSpeed: 1,
-      rotateSpeed: 1,
-      zoomSpeed: 1,
-      minDistance: 0.1,
-      maxDistance: 1000,
-      ...this.options,
-    });
+    this.controls.enableDamping = true;
+    this.controls.dampingFactor = this.options.dampingFactor ?? 0.05;
+    this.controls.panSpeed = this.options.panSpeed ?? 1;
+    this.controls.rotateSpeed = this.options.rotateSpeed ?? 1;
+    this.controls.zoomSpeed = this.options.zoomSpeed ?? 1;
+    this.controls.minDistance = this.options.minDistance ?? 0.1;
+    this.controls.maxDistance = this.options.maxDistance ?? 1000;
+    this.controls.minPolarAngle = this.options.minPolarAngle ?? 0;
+    this.controls.maxPolarAngle = this.options.maxPolarAngle ?? Math.PI;
+    this.controls.enablePan = this.options.enablePan ?? true;
+    this.controls.enableRotate = this.options.enableRotate ?? true;
+    this.controls.enableZoom = this.options.enableZoom ?? true;
+    this.controls.enabled = true;
+
     console.info(`[AdvancedOrbitControlsPlugin] Install plugin ${this.name}:`, this.controls);
     
     const animate = () => {
       console.info('[AdvancedOrbitControlsPlugin] Update');
-
       this.controls.update();
       requestAnimationFrame(animate);
     };
