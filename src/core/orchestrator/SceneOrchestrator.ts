@@ -108,7 +108,18 @@ export class SceneOrchestrator {
 
     return this;
   }
+  plugin(name: string): Plugin {
+    if (!this.plugins.has(name)) {
+       throw console.error(`[Orchestrator] Plugin "${name}" is not already installed`);
+    }
 
+    try {
+      const t = this.plugins.get(name);
+      return t!;
+    } catch (err) {
+      throw console.error(`[Orchestrator] Error get plugin ${name}:`, err);
+    }
+  }
   /* === MODELS === */
   async setModel(entry: ManifestEntry, options?: { draco?: boolean }): Promise<THREE.Group> {
     console.info(`[Orchestrator] Change model → ${entry.id}`);

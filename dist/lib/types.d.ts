@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 export { ManifestEntry, ModelManifest } from '../core/cache/types.js';
-export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-PJwPoCeo.js';
+export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-DfGaWCgX.js';
 export { CustomMaterialFactory, MaterialConfig } from '../react/controls/MaterialController.js';
 import 'react';
 

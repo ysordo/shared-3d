@@ -1,3 +1,3 @@
-export { b as Plugin, P as PluginContext } from '../../SceneOrchestrator-X3T7OXl7.cjs';
+export { b as Plugin, P as PluginContext } from '../../SceneOrchestrator-qQ99RpXe.cjs';
 import 'three';
 import '../cache/types.cjs';

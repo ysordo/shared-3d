@@ -1,4 +1,4 @@
-import { a as SceneOrchestrator } from '../SceneOrchestrator-PJwPoCeo.js';
+import { a as SceneOrchestrator } from '../SceneOrchestrator-DfGaWCgX.js';
 import 'three';
 import '../core/cache/types.js';
 

@@ -46,7 +46,7 @@ import {
 import "../chunk-SRUKCELR.js";
 import {
   SceneOrchestrator
-} from "../chunk-H2O5XIYF.js";
+} from "../chunk-BTXL7LPB.js";
 import {
   GLTFLoader
 } from "../chunk-R4AEK7RE.js";

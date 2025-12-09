@@ -1,5 +1,5 @@
 import { RaycasterEvent } from '../core/orchestrator/plugins/RaycasterPlugin.cjs';
-import '../SceneOrchestrator-X3T7OXl7.cjs';
+import '../SceneOrchestrator-qQ99RpXe.cjs';
 import 'three';
 import '../core/cache/types.cjs';
 
