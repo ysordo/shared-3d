@@ -65,6 +65,13 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
       }
     };
 
+    get maxDistance(): number {
+      return this.controls.maxDistance;
+    }
+    get minDistance(): number {
+      return this.controls.minDistance;
+    }
+
     dispose(): void {
       this.controls.disconnect();
       this.controls.dispose();

@@ -1,7 +1,7 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkG4XN7PBBcjs = require('../../chunk-G4XN7PBB.cjs');
+var _chunkYNC7WSEOcjs = require('../../chunk-YNC7WSEO.cjs');
 require('../../chunk-5C4PNMUP.cjs');
 require('../../chunk-AFM2WJP2.cjs');
 require('../../chunk-EHX6QSD4.cjs');
@@ -14,4 +14,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.DistanceDisplay = _chunkG4XN7PBBcjs.DistanceDisplay;
+exports.DistanceDisplay = _chunkYNC7WSEOcjs.DistanceDisplay;

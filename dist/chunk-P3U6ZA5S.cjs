@@ -17,6 +17,12 @@ var OrbitControlsPlugin = (_class = class {constructor() { _class.prototype.__in
     };
     animate();
   }
+  get maxDistance() {
+    return this.controls.maxDistance;
+  }
+  get minDistance() {
+    return this.controls.minDistance;
+  }
   dispose() {
     _optionalChain([this, 'access', _ => _.controls, 'optionalAccess', _2 => _2.dispose, 'call', _3 => _3()]);
   }

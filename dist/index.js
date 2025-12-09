@@ -55,7 +55,7 @@ import {
 } from "./chunk-C5LGQVDE.js";
 import {
   OrbitControls as OrbitControls2
-} from "./chunk-MHJTQ7BH.js";
+} from "./chunk-6FAH4KLP.js";
 import {
   PointLight
 } from "./chunk-TX7FD43Y.js";
@@ -67,7 +67,7 @@ import {
 } from "./chunk-B55N3L5Y.js";
 import {
   DistanceDisplay
-} from "./chunk-JGBNUCZN.js";
+} from "./chunk-7X5K4MAJ.js";
 import {
   EnvironmentPreset
 } from "./chunk-FWTASS3L.js";
@@ -85,13 +85,13 @@ import {
 } from "./chunk-DVGBS6P7.js";
 import {
   AdvancedCameraCollision
-} from "./chunk-4TN27BU4.js";
+} from "./chunk-AYJY74RR.js";
 import {
   AdvancedDragRaycaster
 } from "./chunk-FQHV4YJC.js";
 import {
   AdvancedOrbitControls
-} from "./chunk-6I2IX6ZK.js";
+} from "./chunk-24U7OT6F.js";
 import {
   AdvancedRaycaster
 } from "./chunk-AIAC2YOE.js";
@@ -137,7 +137,7 @@ import {
 import "./chunk-DCRMKZQR.js";
 import {
   OrbitControlsPlugin
-} from "./chunk-R4RSFB4I.js";
+} from "./chunk-QWI5ZSNU.js";
 import {
   PostProcessingPlugin
 } from "./chunk-SRDOYMT5.js";
@@ -155,10 +155,10 @@ import {
 } from "./chunk-L3G2QMBD.js";
 import {
   AdvancedCameraCollisionPlugin
-} from "./chunk-NS5SFJZT.js";
+} from "./chunk-7UK5WDJQ.js";
 import {
   AdvancedOrbitControlsPlugin
-} from "./chunk-TFQTAMML.js";
+} from "./chunk-VMEXRI7G.js";
 import {
   AdvancedRaycasterPlugin
 } from "./chunk-NNMHNVZD.js";

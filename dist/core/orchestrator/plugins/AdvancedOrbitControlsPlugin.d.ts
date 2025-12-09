@@ -23,6 +23,8 @@ declare class AdvancedOrbitControlsPlugin implements Plugin {
     setPanEnabled(enabled: boolean): void;
     setRotateEnabled(enabled: boolean): void;
     setZoomEnabled(enabled: boolean): void;
+    get maxDistance(): number;
+    get minDistance(): number;
     dispose(): void;
 }
 

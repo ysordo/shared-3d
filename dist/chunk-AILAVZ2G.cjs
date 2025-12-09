@@ -45,6 +45,12 @@ var AdvancedOrbitControlsPlugin = (_class = class {
       this.controls.enableZoom = enabled;
     }
   }
+  get maxDistance() {
+    return this.controls.maxDistance;
+  }
+  get minDistance() {
+    return this.controls.minDistance;
+  }
   dispose() {
     this.controls.disconnect();
     this.controls.dispose();

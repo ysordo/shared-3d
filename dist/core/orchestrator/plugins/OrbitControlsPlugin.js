@@ -1,6 +1,6 @@
 import {
   OrbitControlsPlugin
-} from "../../../chunk-R4RSFB4I.js";
+} from "../../../chunk-QWI5ZSNU.js";
 export {
   OrbitControlsPlugin
 };

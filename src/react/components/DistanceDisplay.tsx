@@ -22,17 +22,13 @@ const unitConversions: Record<DistanceUnit, number> = {
   m: 1,
   cm: 100,
   mm: 1000,
-  px: 3779.527559, // 1m ≈ 3779.53px (96 DPI)
+  px: 3779.527559,
   in: 39.3701,
   ft: 3.28084,
   km: 0.001,
 };
 
-const formatValue = (
-  value: number,
-  unit: DistanceUnit,
-  decimals: number
-): string => {
+const formatValue = (value: number, unit: DistanceUnit, decimals: number) => {
   const converted = value * unitConversions[unit];
   return `${converted.toFixed(decimals)}${unit}`;
 };
@@ -46,6 +42,8 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
   const orchestrator = useScene();
   const animationRef = useRef<number>(0);
   const [currentDistance, setCurrentDistance] = useState(0);
+  const [minDistance, setMinDistance] = useState(0);
+  const [maxDistance, setMaxDistance] = useState(0);
   const [initialDistance, setInitialDistance] = useState<number | null>(null);
 
   const getCurrentDistance = (): number => {
@@ -59,7 +57,49 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
     return orchestrator.camera.position.distanceTo(modelCenter);
   };
 
+  const calculateDistances = () => {
+    let minDist = 0;
+    let maxDist = 0;
+
+    const model = orchestrator.getActiveModel();
+    if (!model || !orchestrator.camera) {
+      return;
+    }
+
+    // Distancia real después del repeler de AdvancedCameraCollision
+    const collisionPlugin = orchestrator.plugin('AdvancedCameraCollision');
+    if (collisionPlugin) {
+      const threshold =
+        (collisionPlugin as any).distanceThreshold +
+        (collisionPlugin as any).pushBackOffset;
+
+      // Posición actual de la cámara
+      const camPos = orchestrator.camera.position.clone();
+      const modelCenter = new THREE.Vector3();
+      model.getWorldPosition(modelCenter);
+
+      const realDistance = camPos.distanceTo(modelCenter);
+      minDist = Math.max(threshold, realDistance);
+    }
+
+    // Revisar si hay OrbitControls o AdvancedOrbitControls
+    const controls =
+      orchestrator.plugin('AdvancedOrbitControls') ||
+      orchestrator.plugin('OrbitControls');
+    if (controls) {
+      maxDist = (controls as any).maxDistance ?? 50;
+      if (minDist === 0) {
+        minDist = (controls as any).minDistance ?? 0;
+      }
+    }
+
+    setMinDistance(minDist);
+    setMaxDistance(maxDist);
+  };
+
   useEffect(() => {
+    calculateDistances();
+
     const update = () => {
       const dist = getCurrentDistance();
 
@@ -84,10 +124,19 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
     return <div className={className}>Calculating initial distance…</div>;
   }
 
-  const percentage = Math.max(
-    0,
-    Math.min(100, (currentDistance / initialDistance) * 100)
-  );
+  // Calcular porcentaje relativo entre minDistance y maxDistance
+  const percentage =
+    maxDistance > minDistance
+      ? Math.max(
+          0,
+          Math.min(
+            100,
+            ((currentDistance - minDistance) / (maxDistance - minDistance)) *
+              100
+          )
+        )
+      : 0;
+
   const formatted = formatValue(currentDistance, unit, decimals);
   const formattedInitial = formatValue(initialDistance, unit, decimals);
 

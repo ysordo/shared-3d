@@ -21,6 +21,13 @@ export class OrbitControlsPlugin implements Plugin {
     animate();
   }
 
+  get maxDistance(): number {
+    return this.controls.maxDistance;
+  }
+  get minDistance(): number {
+    return this.controls.minDistance;
+  }
+  
   dispose(): void {
     this.controls?.dispose();
   }
