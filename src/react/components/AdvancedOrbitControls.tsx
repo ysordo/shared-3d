@@ -46,9 +46,8 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
   const [zoomEnabled, setZoomEnabled] = useState(enableZoom);
 
   useEffect(() => {
-    if (!orchestrator) {
-      return;
-    }
+    if (!orchestrator) {return;}
+    if(orchestrator.has('AdvancedOrbitControls')) {return;}
 
     const plugin = new AdvancedOrbitControlsPlugin({
       enablePan,
@@ -60,13 +59,13 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     orchestrator.use(plugin);
 
     return () => {
-      orchestrator.plugin('AdvancedOrbitControlsPlugin').dispose?.();
+      orchestrator.plugin('AdvancedOrbitControls').dispose?.();
     };
   }, [orchestrator]);
 
   useEffect(() => {
     const plugin = orchestrator.plugin(
-      'AdvancedOrbitControlsPlugin'
+      'AdvancedOrbitControls'
     ) as AdvancedOrbitControlsPlugin;
     console.info('[AdvancedOrbitControls] Change state options:', {
       orchestrator,

@@ -1,13 +1,13 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkUPQLZUZUcjs = require('../../chunk-UPQLZUZU.cjs');
+var _chunk24CVHURAcjs = require('../../chunk-24CVHURA.cjs');
 require('../../chunk-USBH24UK.cjs');
 require('../../chunk-GICX4QCO.cjs');
-require('../../chunk-QZS7SOEM.cjs');
-require('../../chunk-CNMTPCMI.cjs');
-require('../../chunk-QSBGRKGP.cjs');
-require('../../chunk-7SFJD5QN.cjs');
+require('../../chunk-VUZQJRX4.cjs');
+require('../../chunk-C7CPDDG7.cjs');
+require('../../chunk-I4HKIHVT.cjs');
+require('../../chunk-OCFLMGLY.cjs');
 require('../../chunk-RIJLTLXB.cjs');
 require('../../chunk-DXL4SHF5.cjs');
 require('../../chunk-QRVOSZH3.cjs');
@@ -17,4 +17,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.MaterialController = _chunkUPQLZUZUcjs.MaterialController;
+exports.MaterialController = _chunk24CVHURAcjs.MaterialController;

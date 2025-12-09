@@ -120,6 +120,7 @@ export class SceneOrchestrator {
       throw console.error(`[Orchestrator] Error get plugin ${name}:`, err);
     }
   }
+  has(name: string): boolean {return this.plugins.has(name);}
   /* === MODELS === */
   async setModel(entry: ManifestEntry, options?: { draco?: boolean }): Promise<THREE.Group> {
     console.info(`[Orchestrator] Change model → ${entry.id}`);

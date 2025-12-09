@@ -36,6 +36,6 @@ export { MaterialController } from './controls/MaterialController.js';
 export { SceneObject } from './primitives/SceneObject.js';
 import 'react';
 import 'three';
-import '../SceneOrchestrator-DfGaWCgX.js';
+import '../SceneOrchestrator-s_G1EW88.js';
 import '../core/cache/types.js';
 import 'react/jsx-runtime';

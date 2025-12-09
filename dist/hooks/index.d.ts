@@ -5,7 +5,7 @@ export { useHDRI } from './useHDRI.js';
 export { useRaycaster } from './useRaycaster.js';
 export { useCache } from './useCache.js';
 export { useAnimation } from './useAnimation.js';
-import '../SceneOrchestrator-DfGaWCgX.js';
+import '../SceneOrchestrator-s_G1EW88.js';
 import 'three';
 import '../core/cache/types.js';
 import '../core/orchestrator/plugins/RaycasterPlugin.js';
