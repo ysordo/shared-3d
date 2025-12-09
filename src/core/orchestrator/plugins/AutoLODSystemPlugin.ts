@@ -13,6 +13,9 @@ export class AutoLODSystemPlugin implements Plugin {
   name = 'AutoLODSystem';
   private lods = new Map<THREE.Object3D, THREE.LOD>();
   private camera!: THREE.Camera;
+  private rafId: number | null = null;
+  private orchestrator!: SceneOrchestrator;
+  private originalSetModel?: SceneOrchestrator['setModel'];
 
   constructor(private config: AutoLODConfig) {
     this.config.reductionPercentages = this.config.reductionPercentages || [0.5, 0.2];
@@ -36,7 +39,7 @@ export class AutoLODSystemPlugin implements Plugin {
     const medium = model.clone();
     medium.traverse((child) => {
       if (child instanceof THREE.Mesh && child.geometry) {
-        child.geometry = this.simplifyGeometry(child.geometry, this.config.reductionPercentages![0]);
+        child.geometry = this.simplifyGeometry(child.geometry.clone(), this.config.reductionPercentages![0]);
       }
     });
     lod.addLevel(medium, this.config.distances[0]);
@@ -45,7 +48,7 @@ export class AutoLODSystemPlugin implements Plugin {
     const low = model.clone();
     low.traverse((child) => {
       if (child instanceof THREE.Mesh && child.geometry) {
-        child.geometry = this.simplifyGeometry(child.geometry, this.config.reductionPercentages![1]);
+        child.geometry = this.simplifyGeometry(child.geometry.clone(), this.config.reductionPercentages![1]);
       }
     });
     lod.addLevel(low, this.config.distances[1]);
@@ -60,6 +63,7 @@ export class AutoLODSystemPlugin implements Plugin {
 
   install({ camera, orchestrator }: PluginContext): void {
     this.camera = camera;
+    this.orchestrator = orchestrator;
 
     const applyLODToModel = (model: THREE.Object3D) => {
       const lod = this.createLODLevels(model);
@@ -79,25 +83,28 @@ export class AutoLODSystemPlugin implements Plugin {
     const activeModel = orchestrator.getActiveModel();
     if (activeModel) {applyLODToModel(activeModel);}
 
-    const originalSetModel = (orchestrator as SceneOrchestrator).setModel;
-    if (originalSetModel) {
-      (orchestrator as SceneOrchestrator).setModel = async (...args: [ManifestEntry,{draco?: boolean;} | undefined]) => {
-        const model = await originalSetModel.apply(orchestrator, args);
+    this.originalSetModel = orchestrator.setModel.bind(orchestrator);
+
+    orchestrator.setModel = async (...args) => {
+        const model = await this.originalSetModel!(...args);
         this.lods.forEach(lod => lod.parent?.remove(lod));
         this.lods.clear();
         applyLODToModel(model);
         return model;
-      };
-    }
+    };
 
     const update = () => {
       this.lods.forEach(lod => lod.update(this.camera));
-      requestAnimationFrame(update);
+      this.rafId = requestAnimationFrame(update);
     };
-    update();
+    if (!this.rafId) {update();}
   }
-
+  
   dispose(): void {
+    if (this.originalSetModel) {
+        this.orchestrator.setModel = this.originalSetModel;
+    }
+    if(this.rafId){cancelAnimationFrame(this.rafId);}
     this.lods.forEach(lod => {
       if (lod.parent) {lod.parent.remove(lod);}
       lod.traverse(child => {

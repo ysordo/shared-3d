@@ -18,13 +18,33 @@ export const AutoLODSystem: React.FC<AutoLODSystemProps> = ({
   const orchestrator = useScene();
 
   useEffect(() => {
-    orchestrator.use(new AutoLODSystemPlugin({
-      distances: [mediumDistance, lowDistance, hideDistance],
-    }));
+    if (!orchestrator) {
+      return;
+    }
+    if (orchestrator.has('AutoLODSystem')) {
+      return;
+    }
+    orchestrator.use(
+      new AutoLODSystemPlugin({
+        distances: [mediumDistance, lowDistance, hideDistance],
+      })
+    );
 
     return () => {
       orchestrator.plugin('AutoLODSystem').dispose?.();
+      orchestrator.remove('AutoLODSystem');
     };
+  }, [orchestrator]);
+
+  useEffect(() => {
+    if (orchestrator.has('AutoLODSystem')) {
+      orchestrator.remove('AutoLODSystem');
+    }
+    orchestrator.use(
+      new AutoLODSystemPlugin({
+        distances: [mediumDistance, lowDistance, hideDistance],
+      })
+    );
   }, [mediumDistance, lowDistance, hideDistance]);
 
   return null;

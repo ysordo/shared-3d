@@ -1,6 +1,6 @@
 import {
   AdvancedCameraCollisionPlugin
-} from "./chunk-F54EHX65.js";
+} from "./chunk-NS5SFJZT.js";
 import {
   useScene
 } from "./chunk-KITXMCSG.js";
@@ -22,6 +22,7 @@ var AdvancedCameraCollision = ({ distanceThreshold = 0.6, pushBackOffset = 0.1, 
     ));
     return () => {
       orchestrator.plugin("AdvancedCameraCollision").dispose?.();
+      orchestrator.remove("AdvancedCameraCollision");
     };
   }, [enabled, distanceThreshold, pushBackOffset, orchestrator]);
   return null;

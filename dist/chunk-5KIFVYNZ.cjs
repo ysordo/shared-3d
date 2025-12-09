@@ -5,12 +5,15 @@ var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
 // src/core/orchestrator/plugins/AutoLODSystemPlugin.ts
 var _SimplifyModifierjs = require('three/examples/jsm/modifiers/SimplifyModifier.js');
 var AutoLODSystemPlugin = (_class = class {
-  constructor(config) {;_class.prototype.__init.call(this);_class.prototype.__init2.call(this);
+  constructor(config) {;_class.prototype.__init.call(this);_class.prototype.__init2.call(this);_class.prototype.__init3.call(this);
     this.config = config;
     this.config.reductionPercentages = this.config.reductionPercentages || [0.5, 0.2];
   }
   __init() {this.name = "AutoLODSystem"}
   __init2() {this.lods = /* @__PURE__ */ new Map()}
+  
+  __init3() {this.rafId = null}
+  
   
   simplifyGeometry(geometry, percentage) {
     const modifier = new (0, _SimplifyModifierjs.SimplifyModifier)();
@@ -25,14 +28,14 @@ var AutoLODSystemPlugin = (_class = class {
     const medium = model.clone();
     medium.traverse((child) => {
       if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh && child.geometry) {
-        child.geometry = this.simplifyGeometry(child.geometry, this.config.reductionPercentages[0]);
+        child.geometry = this.simplifyGeometry(child.geometry.clone(), this.config.reductionPercentages[0]);
       }
     });
     lod.addLevel(medium, this.config.distances[0]);
     const low = model.clone();
     low.traverse((child) => {
       if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh && child.geometry) {
-        child.geometry = this.simplifyGeometry(child.geometry, this.config.reductionPercentages[1]);
+        child.geometry = this.simplifyGeometry(child.geometry.clone(), this.config.reductionPercentages[1]);
       }
     });
     lod.addLevel(low, this.config.distances[1]);
@@ -43,6 +46,7 @@ var AutoLODSystemPlugin = (_class = class {
   }
   install({ camera, orchestrator }) {
     this.camera = camera;
+    this.orchestrator = orchestrator;
     const applyLODToModel = (model) => {
       const lod = this.createLODLevels(model);
       if (model.parent) {
@@ -58,23 +62,29 @@ var AutoLODSystemPlugin = (_class = class {
     if (activeModel) {
       applyLODToModel(activeModel);
     }
-    const originalSetModel = orchestrator.setModel;
-    if (originalSetModel) {
-      orchestrator.setModel = async (...args) => {
-        const model = await originalSetModel.apply(orchestrator, args);
-        this.lods.forEach((lod) => _optionalChain([lod, 'access', _ => _.parent, 'optionalAccess', _2 => _2.remove, 'call', _3 => _3(lod)]));
-        this.lods.clear();
-        applyLODToModel(model);
-        return model;
-      };
-    }
+    this.originalSetModel = orchestrator.setModel.bind(orchestrator);
+    orchestrator.setModel = async (...args) => {
+      const model = await this.originalSetModel(...args);
+      this.lods.forEach((lod) => _optionalChain([lod, 'access', _ => _.parent, 'optionalAccess', _2 => _2.remove, 'call', _3 => _3(lod)]));
+      this.lods.clear();
+      applyLODToModel(model);
+      return model;
+    };
     const update = () => {
       this.lods.forEach((lod) => lod.update(this.camera));
-      requestAnimationFrame(update);
+      this.rafId = requestAnimationFrame(update);
     };
-    update();
+    if (!this.rafId) {
+      update();
+    }
   }
   dispose() {
+    if (this.originalSetModel) {
+      this.orchestrator.setModel = this.originalSetModel;
+    }
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+    }
     this.lods.forEach((lod) => {
       if (lod.parent) {
         lod.parent.remove(lod);

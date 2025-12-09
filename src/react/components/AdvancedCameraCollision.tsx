@@ -26,6 +26,7 @@ export const AdvancedCameraCollision: React.FC<
 
     return () => {
       orchestrator.plugin('AdvancedCameraCollision').dispose?.();
+      orchestrator.remove('AdvancedCameraCollision');
     };
   }, [enabled, distanceThreshold, pushBackOffset, orchestrator]);
 

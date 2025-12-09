@@ -11,30 +11,30 @@ var AdvancedCameraCollisionPlugin = class {
   name = "AdvancedCameraCollision";
   handle = null;
   install({ camera, orchestrator }) {
-    if (!camera) {
-      return;
-    }
+    const dir = new THREE.Vector3();
+    const ray = new THREE.Raycaster();
+    ray.near = 0;
+    ray.far = this.distanceThreshold + this.pushBackOffset;
     const check = () => {
+      if (!camera) {
+        this.handle = requestAnimationFrame(check);
+        return;
+      }
       const model = orchestrator.getActiveModel();
       if (!model) {
         this.handle = requestAnimationFrame(check);
         return;
       }
-      const dir = new THREE.Vector3();
       camera.getWorldDirection(dir);
-      const ray = new THREE.Raycaster(
-        camera.position,
-        dir,
-        0,
-        this.distanceThreshold + this.pushBackOffset
-      );
+      ray.set(camera.position, dir);
       const hits = ray.intersectObject(model, true);
       if (hits.length > 0) {
         const hitDistance = hits[0].distance;
         const desiredDistance = this.distanceThreshold;
         if (hitDistance < desiredDistance) {
           const pushBack = desiredDistance - hitDistance + this.pushBackOffset;
-          camera.position.sub(dir.multiplyScalar(pushBack));
+          const pushVector = dir.clone().multiplyScalar(pushBack);
+          camera.position.lerp(camera.position.clone().sub(pushVector), 0.1);
         }
       }
       this.handle = requestAnimationFrame(check);

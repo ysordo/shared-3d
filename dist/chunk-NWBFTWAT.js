@@ -12,6 +12,9 @@ var AutoLODSystemPlugin = class {
   name = "AutoLODSystem";
   lods = /* @__PURE__ */ new Map();
   camera;
+  rafId = null;
+  orchestrator;
+  originalSetModel;
   simplifyGeometry(geometry, percentage) {
     const modifier = new SimplifyModifier();
     const count = Math.floor(geometry.attributes.position.count * percentage);
@@ -25,14 +28,14 @@ var AutoLODSystemPlugin = class {
     const medium = model.clone();
     medium.traverse((child) => {
       if (child instanceof THREE.Mesh && child.geometry) {
-        child.geometry = this.simplifyGeometry(child.geometry, this.config.reductionPercentages[0]);
+        child.geometry = this.simplifyGeometry(child.geometry.clone(), this.config.reductionPercentages[0]);
       }
     });
     lod.addLevel(medium, this.config.distances[0]);
     const low = model.clone();
     low.traverse((child) => {
       if (child instanceof THREE.Mesh && child.geometry) {
-        child.geometry = this.simplifyGeometry(child.geometry, this.config.reductionPercentages[1]);
+        child.geometry = this.simplifyGeometry(child.geometry.clone(), this.config.reductionPercentages[1]);
       }
     });
     lod.addLevel(low, this.config.distances[1]);
@@ -43,6 +46,7 @@ var AutoLODSystemPlugin = class {
   }
   install({ camera, orchestrator }) {
     this.camera = camera;
+    this.orchestrator = orchestrator;
     const applyLODToModel = (model) => {
       const lod = this.createLODLevels(model);
       if (model.parent) {
@@ -58,23 +62,29 @@ var AutoLODSystemPlugin = class {
     if (activeModel) {
       applyLODToModel(activeModel);
     }
-    const originalSetModel = orchestrator.setModel;
-    if (originalSetModel) {
-      orchestrator.setModel = async (...args) => {
-        const model = await originalSetModel.apply(orchestrator, args);
-        this.lods.forEach((lod) => lod.parent?.remove(lod));
-        this.lods.clear();
-        applyLODToModel(model);
-        return model;
-      };
-    }
+    this.originalSetModel = orchestrator.setModel.bind(orchestrator);
+    orchestrator.setModel = async (...args) => {
+      const model = await this.originalSetModel(...args);
+      this.lods.forEach((lod) => lod.parent?.remove(lod));
+      this.lods.clear();
+      applyLODToModel(model);
+      return model;
+    };
     const update = () => {
       this.lods.forEach((lod) => lod.update(this.camera));
-      requestAnimationFrame(update);
+      this.rafId = requestAnimationFrame(update);
     };
-    update();
+    if (!this.rafId) {
+      update();
+    }
   }
   dispose() {
+    if (this.originalSetModel) {
+      this.orchestrator.setModel = this.originalSetModel;
+    }
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+    }
     this.lods.forEach((lod) => {
       if (lod.parent) {
         lod.parent.remove(lod);

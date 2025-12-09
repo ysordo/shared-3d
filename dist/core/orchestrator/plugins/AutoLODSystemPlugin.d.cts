@@ -11,6 +11,9 @@ declare class AutoLODSystemPlugin implements Plugin {
     name: string;
     private lods;
     private camera;
+    private rafId;
+    private orchestrator;
+    private originalSetModel?;
     constructor(config: AutoLODConfig);
     private simplifyGeometry;
     private createLODLevels;
