@@ -1,7 +1,7 @@
 "use client";
 import {
   AdvancedCameraCollision
-} from "../../chunk-AYJY74RR.js";
+} from "../../chunk-3XKIPHL5.js";
 import "../../chunk-7UK5WDJQ.js";
 import "../../chunk-KITXMCSG.js";
 import "../../chunk-NFSCEQ4I.js";

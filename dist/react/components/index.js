@@ -52,7 +52,7 @@ import {
 } from "../../chunk-B55N3L5Y.js";
 import {
   DistanceDisplay
-} from "../../chunk-7X5K4MAJ.js";
+} from "../../chunk-S5ZHOJKY.js";
 import {
   EnvironmentPreset
 } from "../../chunk-FWTASS3L.js";
@@ -70,7 +70,7 @@ import {
 } from "../../chunk-DVGBS6P7.js";
 import {
   AdvancedCameraCollision
-} from "../../chunk-AYJY74RR.js";
+} from "../../chunk-3XKIPHL5.js";
 import {
   AdvancedDragRaycaster
 } from "../../chunk-FQHV4YJC.js";

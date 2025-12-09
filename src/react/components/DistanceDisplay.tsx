@@ -13,6 +13,7 @@ type DistanceDisplayProps = {
     initialDistance: number;
     formattedInitial: string;
   }) => React.ReactNode;
+  callback?: React.ReactNode;
   className?: string;
   unit?: DistanceUnit;
   decimals?: number;
@@ -35,6 +36,7 @@ const formatValue = (value: number, unit: DistanceUnit, decimals: number) => {
 
 export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
   children,
+  callback,
   className,
   unit = 'm',
   decimals = 2,
@@ -44,6 +46,7 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
   const [currentDistance, setCurrentDistance] = useState(0);
   const [minDistance, setMinDistance] = useState(0);
   const [maxDistance, setMaxDistance] = useState(0);
+  const percentage = useRef<number>(0);
   const [initialDistance, setInitialDistance] = useState<number | null>(null);
 
   const getCurrentDistance = (): number => {
@@ -120,22 +123,23 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
     };
   }, [orchestrator, initialDistance]);
 
-  if (initialDistance === null) {
-    return <div className={className}>Calculating initial distance…</div>;
-  }
-
-  // Calcular porcentaje relativo entre minDistance y maxDistance
-  const percentage =
-    maxDistance > minDistance
-      ? Math.max(
-          0,
-          Math.min(
-            100,
-            ((currentDistance - minDistance) / (maxDistance - minDistance)) *
-              100
+  useEffect(() => {
+    percentage.current =
+      maxDistance > minDistance
+        ? Math.max(
+            0,
+            Math.min(
+              100,
+              ((currentDistance - minDistance) / (maxDistance - minDistance)) *
+                100
+            )
           )
-        )
-      : 0;
+        : 0;
+  }, [currentDistance]);
+
+  if (initialDistance === null) {
+    return callback || null;
+  }
 
   const formatted = formatValue(currentDistance, unit, decimals);
   const formattedInitial = formatValue(initialDistance, unit, decimals);
@@ -145,7 +149,7 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
       {children({
         distance: currentDistance,
         formatted,
-        percentage,
+        percentage: percentage.current,
         initialDistance,
         formattedInitial,
       })}

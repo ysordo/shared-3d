@@ -7,24 +7,23 @@ var _chunk5C4PNMUPcjs = require('./chunk-5C4PNMUP.cjs');
 
 // src/react/components/AdvancedCameraCollision.tsx
 var _react = require('react');
-var AdvancedCameraCollision = ({ distanceThreshold = 0.6, pushBackOffset = 0.1, enabled = true }) => {
+var AdvancedCameraCollision = ({ enabled = true, ...config }) => {
   const orchestrator = _chunk5C4PNMUPcjs.useScene.call(void 0, );
   _react.useEffect.call(void 0, () => {
-    if (!enabled || !orchestrator) {
+    if (!enabled || !orchestrator || !orchestrator.getActiveModel()) {
       return;
     }
     if (orchestrator.has("AdvancedCameraCollision")) {
       return;
     }
-    orchestrator.use(new (0, _chunkMMMO3SNVcjs.AdvancedCameraCollisionPlugin)(
-      distanceThreshold,
-      pushBackOffset
-    ));
+    orchestrator.use(
+      new (0, _chunkMMMO3SNVcjs.AdvancedCameraCollisionPlugin)(...Object.values(config))
+    );
     return () => {
       _optionalChain([orchestrator, 'access', _ => _.plugin, 'call', _2 => _2("AdvancedCameraCollision"), 'access', _3 => _3.dispose, 'optionalCall', _4 => _4()]);
       orchestrator.remove("AdvancedCameraCollision");
     };
-  }, [enabled, distanceThreshold, pushBackOffset, orchestrator]);
+  }, [config, orchestrator, orchestrator.getActiveModel()]);
   return null;
 };
 

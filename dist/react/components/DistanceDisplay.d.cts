@@ -9,6 +9,7 @@ type DistanceDisplayProps = {
         initialDistance: number;
         formattedInitial: string;
     }) => React.ReactNode;
+    callback?: React.ReactNode;
     className?: string;
     unit?: DistanceUnit;
     decimals?: number;

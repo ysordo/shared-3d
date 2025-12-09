@@ -7,28 +7,32 @@ import { AdvancedCameraCollisionPlugin } from '../../core/orchestrator/plugins/A
 type AdvancedCameraCollisionProps = {
   distanceThreshold?: number;
   pushBackOffset?: number;
+  smooth?: number;
   enabled?: boolean;
 };
 
 export const AdvancedCameraCollision: React.FC<
   AdvancedCameraCollisionProps
-> = ({ distanceThreshold = 0.6, pushBackOffset = 0.1, enabled = true }) => {
+> = ({ enabled = true, ...config }) => {
   const orchestrator = useScene();
 
   useEffect(() => {
-    if (!enabled || !orchestrator) {return;}
-    if (orchestrator.has('AdvancedCameraCollision')) {return;}
+    if (!enabled || !orchestrator || !orchestrator.getActiveModel()) {
+      return;
+    }
+    if (orchestrator.has('AdvancedCameraCollision')) {
+      return;
+    }
 
-    orchestrator.use(new AdvancedCameraCollisionPlugin(
-      distanceThreshold,
-      pushBackOffset
-    ));
+    orchestrator.use(
+      new AdvancedCameraCollisionPlugin(...Object.values(config))
+    );
 
     return () => {
       orchestrator.plugin('AdvancedCameraCollision').dispose?.();
       orchestrator.remove('AdvancedCameraCollision');
     };
-  }, [enabled, distanceThreshold, pushBackOffset, orchestrator]);
+  }, [config, orchestrator, orchestrator.getActiveModel()]);
 
   return null;
 };

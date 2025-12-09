@@ -1,13 +1,13 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }
-
-var _chunk5C4PNMUPcjs = require('./chunk-5C4PNMUP.cjs');
-
-
-var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
+import {
+  useScene
+} from "./chunk-KITXMCSG.js";
+import {
+  THREE
+} from "./chunk-OVHQQSEK.js";
 
 // src/react/components/DistanceDisplay.tsx
-var _react = require('react');
-var _jsxruntime = require('react/jsx-runtime');
+import { useEffect, useRef, useState } from "react";
+import { jsx } from "react/jsx-runtime";
 var unitConversions = {
   m: 1,
   cm: 100,
@@ -23,22 +23,24 @@ var formatValue = (value, unit, decimals) => {
 };
 var DistanceDisplay = ({
   children,
+  callback,
   className,
   unit = "m",
   decimals = 2
 }) => {
-  const orchestrator = _chunk5C4PNMUPcjs.useScene.call(void 0, );
-  const animationRef = _react.useRef.call(void 0, 0);
-  const [currentDistance, setCurrentDistance] = _react.useState.call(void 0, 0);
-  const [minDistance, setMinDistance] = _react.useState.call(void 0, 0);
-  const [maxDistance, setMaxDistance] = _react.useState.call(void 0, 0);
-  const [initialDistance, setInitialDistance] = _react.useState.call(void 0, null);
+  const orchestrator = useScene();
+  const animationRef = useRef(0);
+  const [currentDistance, setCurrentDistance] = useState(0);
+  const [minDistance, setMinDistance] = useState(0);
+  const [maxDistance, setMaxDistance] = useState(0);
+  const percentage = useRef(0);
+  const [initialDistance, setInitialDistance] = useState(null);
   const getCurrentDistance = () => {
     const model = orchestrator.getActiveModel();
     if (!model || !orchestrator.camera) {
       return 0;
     }
-    const modelCenter = new _chunkEA3XQ4KJcjs.THREE.Vector3();
+    const modelCenter = new THREE.Vector3();
     model.getWorldPosition(modelCenter);
     return orchestrator.camera.position.distanceTo(modelCenter);
   };
@@ -53,22 +55,22 @@ var DistanceDisplay = ({
     if (collisionPlugin) {
       const threshold = collisionPlugin.distanceThreshold + collisionPlugin.pushBackOffset;
       const camPos = orchestrator.camera.position.clone();
-      const modelCenter = new _chunkEA3XQ4KJcjs.THREE.Vector3();
+      const modelCenter = new THREE.Vector3();
       model.getWorldPosition(modelCenter);
       const realDistance = camPos.distanceTo(modelCenter);
       minDist = Math.max(threshold, realDistance);
     }
     const controls = orchestrator.plugin("AdvancedOrbitControls") || orchestrator.plugin("OrbitControls");
     if (controls) {
-      maxDist = _nullishCoalesce(controls.maxDistance, () => ( 50));
+      maxDist = controls.maxDistance ?? 50;
       if (minDist === 0) {
-        minDist = _nullishCoalesce(controls.minDistance, () => ( 0));
+        minDist = controls.minDistance ?? 0;
       }
     }
     setMinDistance(minDist);
     setMaxDistance(maxDist);
   };
-  _react.useEffect.call(void 0, () => {
+  useEffect(() => {
     calculateDistances();
     const update = () => {
       const dist = getCurrentDistance();
@@ -85,27 +87,29 @@ var DistanceDisplay = ({
       }
     };
   }, [orchestrator, initialDistance]);
+  useEffect(() => {
+    percentage.current = maxDistance > minDistance ? Math.max(
+      0,
+      Math.min(
+        100,
+        (currentDistance - minDistance) / (maxDistance - minDistance) * 100
+      )
+    ) : 0;
+  }, [currentDistance]);
   if (initialDistance === null) {
-    return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: "Calculating initial distance\u2026" });
+    return callback || null;
   }
-  const percentage = maxDistance > minDistance ? Math.max(
-    0,
-    Math.min(
-      100,
-      (currentDistance - minDistance) / (maxDistance - minDistance) * 100
-    )
-  ) : 0;
   const formatted = formatValue(currentDistance, unit, decimals);
   const formattedInitial = formatValue(initialDistance, unit, decimals);
-  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: children({
+  return /* @__PURE__ */ jsx("div", { className, children: children({
     distance: currentDistance,
     formatted,
-    percentage,
+    percentage: percentage.current,
     initialDistance,
     formattedInitial
   }) });
 };
 
-
-
-exports.DistanceDisplay = DistanceDisplay;
+export {
+  DistanceDisplay
+};
