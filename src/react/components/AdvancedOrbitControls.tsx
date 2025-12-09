@@ -60,6 +60,7 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
 
     return () => {
       orchestrator.plugin('AdvancedOrbitControls').dispose?.();
+      orchestrator.remove('AdvancedOrbitControls');
     };
   }, [orchestrator]);
 
@@ -67,10 +68,6 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     const plugin = orchestrator.plugin(
       'AdvancedOrbitControls'
     ) as AdvancedOrbitControlsPlugin;
-    console.info('[AdvancedOrbitControls] Change state options:', {
-      orchestrator,
-      plugin,
-    });
     if (!plugin) {
       return;
     }

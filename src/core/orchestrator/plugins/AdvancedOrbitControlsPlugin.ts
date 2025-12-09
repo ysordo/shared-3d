@@ -34,12 +34,10 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
     this.controls.enablePan = this.options.enablePan ?? true;
     this.controls.enableRotate = this.options.enableRotate ?? true;
     this.controls.enableZoom = this.options.enableZoom ?? true;
-    this.controls.enabled = true;
-
-    console.info(`[AdvancedOrbitControlsPlugin] Install plugin ${this.name}:`, this.controls);
+    
+    this.controls.connect?.(renderer.domElement);
     
     const animate = () => {
-      console.info('[AdvancedOrbitControlsPlugin] Update');
       this.controls.update();
       requestAnimationFrame(animate);
     };
@@ -47,35 +45,29 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
   }
 
   setPanEnabled(enabled: boolean): void {
-      this.options.enablePan = enabled;
-      console.info(`[AdvancedOrbitControlsPlugin] Change state options: ${this.options}, controls:`, this.controls);
-
-      if (this.controls) {
+    if (this.controls) {
+        this.options.enablePan = enabled;
         this.controls.enablePan = enabled;
-        console.info(`[AdvancedOrbitControlsPlugin] Change state enablePan: ${JSON.stringify(this.controls.enablePan)}, controls:`, this.controls);
       }
     };
 
-     setRotateEnabled(enabled: boolean): void {
-      this.options.enableRotate = enabled;
-      console.info(`[AdvancedOrbitControlsPlugin] Change state options: ${this.options}, controls:`, this.controls);
-
+    setRotateEnabled(enabled: boolean): void {
       if (this.controls) {
+        this.options.enableRotate = enabled;
         this.controls.enableRotate = enabled;
-        console.info(`[AdvancedOrbitControlsPlugin] Change state enableRotate: ${JSON.stringify(this.controls.enableRotate)}, controls:`, this.controls);
       }
     };
 
     setZoomEnabled(enabled: boolean): void {
-      this.options.enableZoom = enabled;
-      console.info(`[AdvancedOrbitControlsPlugin] Change state options: ${this.options}, controls:`, this.controls);
-      
       if (this.controls) {
+        this.options.enableZoom = enabled;
         this.controls.enableZoom = enabled;
-        console.info(`[AdvancedOrbitControlsPlugin] Change state enableZoom: ${JSON.stringify(this.controls.enableZoom)}, controls:`, this.controls);
       }
     };
 
-    dispose(): void {this.controls?.dispose();}
+    dispose(): void {
+      this.controls.disconnect();
+      this.controls.dispose();
+    }
 
 }

@@ -121,6 +121,18 @@ export class SceneOrchestrator {
     }
   }
   has(name: string): boolean {return this.plugins.has(name);}
+  remove(name: string): void {
+    if (!this.plugins.has(name)) {
+       throw console.error(`[Orchestrator] Plugin "${name}" is not already installed`);
+    }
+
+    try {
+      this.plugins.delete(name);
+      console.info(`[Orchestrator] Plugin ${name} is already deleted`);
+    } catch (err) {
+      throw console.error(`[Orchestrator] Error get plugin ${name}:`, err);
+    }
+  }
   /* === MODELS === */
   async setModel(entry: ManifestEntry, options?: { draco?: boolean }): Promise<THREE.Group> {
     console.info(`[Orchestrator] Change model → ${entry.id}`);

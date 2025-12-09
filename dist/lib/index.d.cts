@@ -11,6 +11,6 @@ export { EffectComposer as ThreeEffectComposer } from 'three/examples/jsm/postpr
 export { RenderPass as ThreeRenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 export { UnrealBloomPass as ThreeUnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 export { ManifestEntry, ModelManifest } from '../core/cache/types.cjs';
-export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-_d3tKqav.cjs';
+export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-nyu4nGoT.cjs';
 export { CustomMaterialFactory, MaterialConfig } from '../react/controls/MaterialController.cjs';
 import 'react';

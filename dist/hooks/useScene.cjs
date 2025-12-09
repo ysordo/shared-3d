@@ -1,9 +1,9 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkC7CPDDG7cjs = require('../chunk-C7CPDDG7.cjs');
-require('../chunk-I4HKIHVT.cjs');
-require('../chunk-OCFLMGLY.cjs');
+var _chunk5C4PNMUPcjs = require('../chunk-5C4PNMUP.cjs');
+require('../chunk-AFM2WJP2.cjs');
+require('../chunk-EHX6QSD4.cjs');
 require('../chunk-RIJLTLXB.cjs');
 require('../chunk-DXL4SHF5.cjs');
 require('../chunk-QRVOSZH3.cjs');
@@ -13,4 +13,4 @@ require('../chunk-T2YGLA3W.cjs');
 require('../chunk-UW5RKAXQ.cjs');
 
 
-exports.useScene = _chunkC7CPDDG7cjs.useScene;
+exports.useScene = _chunk5C4PNMUPcjs.useScene;
