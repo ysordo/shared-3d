@@ -26,7 +26,7 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
       maxDistance: 1000,
       ...this.options,
     });
-    console.info(`[AdvancedOrbitControlsPlugin] Install plugin ${this.name}: ${this.controls}`);
+    console.info(`[AdvancedOrbitControlsPlugin] Install plugin ${this.name}:`, this.controls);
 
 
     // APLICAR ESTADO INICIAL
@@ -52,7 +52,7 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
     this.options.enablePan = enabled;
     if (this.controls) {
       this.controls.enablePan = enabled;
-      console.info(`[AdvancedOrbitControlsPlugin] Change state enablePan: ${this.controls.enablePan}, controls: ${this.controls}`);
+      console.info(`[AdvancedOrbitControlsPlugin] Change state enablePan: ${JSON.stringify(this.controls.enablePan)}, controls:`, this.controls);
     }
   }
 
@@ -60,7 +60,7 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
     this.options.enableRotate = enabled;
     if (this.controls) {
       this.controls.enableRotate = enabled;
-      console.info(`[AdvancedOrbitControlsPlugin] Change state enableRotate: ${this.controls.enableRotate}, controls: ${this.controls}`);
+      console.info(`[AdvancedOrbitControlsPlugin] Change state enableRotate: ${JSON.stringify(this.controls.enableRotate)}, controls:`, this.controls);
     }
   }
 
@@ -68,7 +68,7 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
     this.options.enableZoom = enabled;
     if (this.controls) {
       this.controls.enableZoom = enabled;
-      console.info(`[AdvancedOrbitControlsPlugin] Change state enableZoom: ${this.controls.enableZoom}, controls: ${this.controls}`);
+      console.info(`[AdvancedOrbitControlsPlugin] Change state enableZoom: ${JSON.stringify(this.controls.enableZoom)}, controls:`, this.controls);
     }
   }
 

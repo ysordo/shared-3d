@@ -1,13 +1,13 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true});
-
-var _chunkTK4GFD5Ecjs = require('./chunk-TK4GFD5E.cjs');
-
-
-var _chunk4C4LEAFDcjs = require('./chunk-4C4LEAFD.cjs');
+import {
+  AdvancedOrbitControlsPlugin
+} from "./chunk-XAD7UTSK.js";
+import {
+  useScene
+} from "./chunk-EABNOBME.js";
 
 // src/react/components/AdvancedOrbitControls.tsx
-var _react = require('react');
-var _jsxruntime = require('react/jsx-runtime');
+import { useEffect, useState } from "react";
+import { Fragment, jsx } from "react/jsx-runtime";
 var AdvancedOrbitControls = ({
   children,
   enablePan = true,
@@ -15,21 +15,21 @@ var AdvancedOrbitControls = ({
   enableZoom = true,
   ...config
 }) => {
-  const orchestrator = _chunk4C4LEAFDcjs.useScene.call(void 0, );
-  const [plugin, setPlugin] = _react.useState.call(void 0, 
+  const orchestrator = useScene();
+  const [plugin, setPlugin] = useState(
     null
   );
-  const [panEnabled, setPanEnabled] = _react.useState.call(void 0, enablePan);
-  const [rotateEnabled, setRotateEnabled] = _react.useState.call(void 0, enableRotate);
-  const [zoomEnabled, setZoomEnabled] = _react.useState.call(void 0, enableZoom);
-  _react.useEffect.call(void 0, () => {
+  const [panEnabled, setPanEnabled] = useState(enablePan);
+  const [rotateEnabled, setRotateEnabled] = useState(enableRotate);
+  const [zoomEnabled, setZoomEnabled] = useState(enableZoom);
+  useEffect(() => {
     if (!orchestrator) {
       return;
     }
     if (plugin) {
       return;
     }
-    const newPlugin = new (0, _chunkTK4GFD5Ecjs.AdvancedOrbitControlsPlugin)({
+    const newPlugin = new AdvancedOrbitControlsPlugin({
       enablePan,
       enableRotate,
       enableZoom,
@@ -42,7 +42,7 @@ var AdvancedOrbitControls = ({
       setPlugin(null);
     };
   }, [orchestrator]);
-  _react.useEffect.call(void 0, () => {
+  useEffect(() => {
     if (!plugin) {
       return;
     }
@@ -73,9 +73,9 @@ var AdvancedOrbitControls = ({
     toggleZoom,
     toggleAll
   };
-  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _jsxruntime.Fragment, { children: children(state) });
+  return /* @__PURE__ */ jsx(Fragment, { children: children(state) });
 };
 
-
-
-exports.AdvancedOrbitControls = AdvancedOrbitControls;
+export {
+  AdvancedOrbitControls
+};
