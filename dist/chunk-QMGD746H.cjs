@@ -33,73 +33,75 @@ var AdvancedDragRaycaster = ({
   const camera = orchestrator.camera;
   const [isEnabled, setIsEnabled] = _react.useState.call(void 0, defaultEnabled);
   const [isResetting, setIsResetting] = _react.useState.call(void 0, false);
-  const [plugin, setPlugin] = _react.useState.call(void 0, null);
   const originalStates = _react.useRef.call(void 0, /* @__PURE__ */ new Map());
   _react.useEffect.call(void 0, () => {
     if (!activeModel || !camera) {
       return;
     }
-    const newPlugin = new (0, _chunkR3D4E7BRcjs.AdvancedRaycasterPlugin)(activeModel, (event) => {
-      if (!isEnabled) {
-        return;
-      }
-      let isDragging = false;
-      let startPosition = new _chunkEA3XQ4KJcjs.THREE.Vector2();
-      let currentObject = null;
-      switch (event.type) {
-        case "objectdragstart":
-          isDragging = true;
-          currentObject = event.object;
-          startPosition.copy(event.startPosition);
-          if (currentObject && !originalStates.current.has(currentObject)) {
-            originalStates.current.set(currentObject, {
-              position: currentObject.position.clone(),
-              quaternion: currentObject.quaternion.clone()
-            });
-          }
-          _optionalChain([onDragStart, 'optionalCall', _ => _(event.object)]);
-          break;
-        case "objectdrag":
-          if (isDragging && currentObject) {
-            currentObject.getWorldPosition(tempVector1);
-            camera.getWorldDirection(tempVector2);
-            tempPlane.setFromNormalAndCoplanarPoint(tempVector2, tempVector1);
-            tempVector2_1.set(
-              event.currentPosition.x / window.innerWidth * 2 - 1,
-              -(event.currentPosition.y / window.innerHeight) * 2 + 1
-            );
-            tempVector2_2.set(
-              startPosition.x / window.innerWidth * 2 - 1,
-              -(startPosition.y / window.innerHeight) * 2 + 1
-            );
-            tempRaycaster.setFromCamera(tempVector2_1, camera);
-            tempRaycaster.ray.intersectPlane(tempPlane, tempVector1);
-            tempRaycaster.setFromCamera(tempVector2_2, camera);
-            tempRaycaster.ray.intersectPlane(tempPlane, tempVector2);
-            if (tempVector1 && tempVector2) {
-              tempVector3.subVectors(tempVector1, tempVector2);
-              if (enableRotationCompensation && activeModel) {
-                activeModel.getWorldQuaternion(tempQuaternion);
-                tempQuaternion.invert();
-                tempVector3.applyQuaternion(tempQuaternion);
-              }
-              currentObject.position.add(tempVector3);
-              _optionalChain([onDrag, 'optionalCall', _2 => _2(currentObject, tempVector3.clone())]);
+    if (orchestrator.has("AdvancedRaycaster")) {
+      return;
+    }
+    orchestrator.use(
+      new (0, _chunkR3D4E7BRcjs.AdvancedRaycasterPlugin)(activeModel, (event) => {
+        if (!isEnabled) {
+          return;
+        }
+        let isDragging = false;
+        let startPosition = new _chunkEA3XQ4KJcjs.THREE.Vector2();
+        let currentObject = null;
+        switch (event.type) {
+          case "objectdragstart":
+            isDragging = true;
+            currentObject = event.object;
+            startPosition.copy(event.startPosition);
+            if (currentObject && !originalStates.current.has(currentObject)) {
+              originalStates.current.set(currentObject, {
+                position: currentObject.position.clone(),
+                quaternion: currentObject.quaternion.clone()
+              });
             }
-            startPosition.copy(event.currentPosition);
-          }
-          break;
-        case "objectdragend":
-          if (isDragging) {
-            _optionalChain([onDragEnd, 'optionalCall', _3 => _3(event.object)]);
-          }
-          break;
-      }
-    });
-    orchestrator.use(newPlugin);
-    setPlugin(newPlugin);
+            _optionalChain([onDragStart, 'optionalCall', _ => _(event.object)]);
+            break;
+          case "objectdrag":
+            if (isDragging && currentObject) {
+              currentObject.getWorldPosition(tempVector1);
+              camera.getWorldDirection(tempVector2);
+              tempPlane.setFromNormalAndCoplanarPoint(tempVector2, tempVector1);
+              tempVector2_1.set(
+                event.currentPosition.x / window.innerWidth * 2 - 1,
+                -(event.currentPosition.y / window.innerHeight) * 2 + 1
+              );
+              tempVector2_2.set(
+                startPosition.x / window.innerWidth * 2 - 1,
+                -(startPosition.y / window.innerHeight) * 2 + 1
+              );
+              tempRaycaster.setFromCamera(tempVector2_1, camera);
+              tempRaycaster.ray.intersectPlane(tempPlane, tempVector1);
+              tempRaycaster.setFromCamera(tempVector2_2, camera);
+              tempRaycaster.ray.intersectPlane(tempPlane, tempVector2);
+              if (tempVector1 && tempVector2) {
+                tempVector3.subVectors(tempVector1, tempVector2);
+                if (enableRotationCompensation && activeModel) {
+                  activeModel.getWorldQuaternion(tempQuaternion);
+                  tempQuaternion.invert();
+                  tempVector3.applyQuaternion(tempQuaternion);
+                }
+                currentObject.position.add(tempVector3);
+                _optionalChain([onDrag, 'optionalCall', _2 => _2(currentObject, tempVector3.clone())]);
+              }
+              startPosition.copy(event.currentPosition);
+            }
+            break;
+          case "objectdragend":
+            if (isDragging) {
+              _optionalChain([onDragEnd, 'optionalCall', _3 => _3(event.object)]);
+            }
+            break;
+        }
+      })
+    );
     return () => {
-      newPlugin.dispose();
+      _optionalChain([orchestrator, 'access', _4 => _4.plugin, 'call', _5 => _5("AdvancedRaycaster"), 'access', _6 => _6.dispose, 'optionalCall', _7 => _7()]);
     };
   }, [
     activeModel,
@@ -110,8 +112,8 @@ var AdvancedDragRaycaster = ({
     enableRotationCompensation
   ]);
   _react.useEffect.call(void 0, () => {
-    _optionalChain([plugin, 'optionalAccess', _4 => _4.manager, 'access', _5 => _5.setEnabled, 'call', _6 => _6(isEnabled)]);
-  }, [plugin, isEnabled]);
+    _optionalChain([orchestrator, 'access', _8 => _8.plugin, 'call', _9 => _9("AdvancedRaycaster"), 'optionalAccess', _10 => _10.manager, 'access', _11 => _11.setEnabled, 'call', _12 => _12(isEnabled)]);
+  }, [orchestrator.plugin("AdvancedRaycaster"), isEnabled]);
   const toggleEnabled = () => setIsEnabled((prev) => !prev);
   const setEnabled = (value) => setIsEnabled(value);
   const resetAll = () => {

@@ -31,7 +31,10 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
   const activeModel = useActiveModel();
 
   useEffect(() => {
-    const plugin = new AdvancedRaycasterPlugin(
+    if (orchestrator.has('AdvancedRaycaster')) {
+      return;
+    }
+    orchestrator.use(new AdvancedRaycasterPlugin(
       customModel || activeModel || undefined,
       (e: any) => {
         switch (e.type) {
@@ -58,9 +61,7 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
             break;
         }
       }
-    );
-
-    orchestrator.use(plugin);
+    ));
   }, [
     customModel,
     activeModel,

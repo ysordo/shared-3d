@@ -16,18 +16,16 @@ export const AdvancedCameraCollision: React.FC<
   const orchestrator = useScene();
 
   useEffect(() => {
-    if (!enabled || !orchestrator) {
-      return;
-    }
+    if (!enabled || !orchestrator) {return;}
+    if (orchestrator.has('AdvancedCameraCollision')) {return;}
 
-    const plugin = new AdvancedCameraCollisionPlugin(
+    orchestrator.use(new AdvancedCameraCollisionPlugin(
       distanceThreshold,
       pushBackOffset
-    );
-    orchestrator.use(plugin);
+    ));
 
     return () => {
-      plugin.dispose();
+      orchestrator.plugin('AdvancedCameraCollision').dispose?.();
     };
   }, [enabled, distanceThreshold, pushBackOffset, orchestrator]);
 

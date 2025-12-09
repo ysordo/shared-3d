@@ -14,12 +14,11 @@ var AutoLODSystem = ({
 }) => {
   const orchestrator = useScene();
   useEffect(() => {
-    const plugin = new AutoLODSystemPlugin({
+    orchestrator.use(new AutoLODSystemPlugin({
       distances: [mediumDistance, lowDistance, hideDistance]
-    });
-    orchestrator.use(plugin);
+    }));
     return () => {
-      plugin.dispose();
+      orchestrator.plugin("AutoLODSystem").dispose?.();
     };
   }, [mediumDistance, lowDistance, hideDistance]);
   return null;

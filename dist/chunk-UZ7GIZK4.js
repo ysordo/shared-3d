@@ -23,7 +23,10 @@ var AdvancedRaycaster = ({
   const orchestrator = useScene();
   const activeModel = useActiveModel();
   useEffect(() => {
-    const plugin = new AdvancedRaycasterPlugin(
+    if (orchestrator.has("AdvancedRaycaster")) {
+      return;
+    }
+    orchestrator.use(new AdvancedRaycasterPlugin(
       customModel || activeModel || void 0,
       (e) => {
         switch (e.type) {
@@ -50,8 +53,7 @@ var AdvancedRaycaster = ({
             break;
         }
       }
-    );
-    orchestrator.use(plugin);
+    ));
   }, [
     customModel,
     activeModel,

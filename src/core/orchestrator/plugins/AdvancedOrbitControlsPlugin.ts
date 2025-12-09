@@ -15,7 +15,6 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
   install({ camera, renderer }: PluginContext): void {
     this.controls = new OrbitControls(camera, renderer.domElement);
 
-    // Aplicar config básica
     Object.assign(this.controls, {
       enableDamping: true,
       dampingFactor: 0.05,
@@ -27,9 +26,17 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
       ...this.options,
     });
     console.info(`[AdvancedOrbitControlsPlugin] Install plugin ${this.name}:`, this.controls);
+    
+    const animate = () => {
+      console.info('[AdvancedOrbitControlsPlugin] Update');
 
+      this.controls.update();
+      requestAnimationFrame(animate);
+    };
+    animate();
+  }
 
-    this.setPanEnabled = (enabled: boolean) => {
+  setPanEnabled(enabled: boolean): void {
       this.options.enablePan = enabled;
       console.info(`[AdvancedOrbitControlsPlugin] Change state options: ${this.options}, controls:`, this.controls);
 
@@ -39,7 +46,7 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
       }
     };
 
-     this.setRotateEnabled = (enabled: boolean) => {
+     setRotateEnabled(enabled: boolean): void {
       this.options.enableRotate = enabled;
       console.info(`[AdvancedOrbitControlsPlugin] Change state options: ${this.options}, controls:`, this.controls);
 
@@ -49,7 +56,7 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
       }
     };
 
-    this.setZoomEnabled = (enabled: boolean) => {
+    setZoomEnabled(enabled: boolean): void {
       this.options.enableZoom = enabled;
       console.info(`[AdvancedOrbitControlsPlugin] Change state options: ${this.options}, controls:`, this.controls);
       
@@ -59,17 +66,6 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
       }
     };
 
-    this.dispose = () => this.controls.dispose();
+    dispose(): void {this.controls?.dispose();}
 
-    const animation = () => {
-      this.controls.update();
-      requestAnimationFrame(animation);
-    };
-    animation();
-  }
-
-  setPanEnabled(enabled: boolean) {}
-  setRotateEnabled(enabled: boolean) {}
-  setZoomEnabled(enabled: boolean) {}
-  dispose() {}
 }

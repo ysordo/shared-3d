@@ -1,15 +1,15 @@
-import {
-  THREE
-} from "./chunk-OVHQQSEK.js";
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); var _class;
+
+var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
 
 // src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts
-var AdvancedCameraCollisionPlugin = class {
-  constructor(distanceThreshold = 0.6, pushBackOffset = 0.1) {
+var AdvancedCameraCollisionPlugin = (_class = class {
+  constructor(distanceThreshold = 0.6, pushBackOffset = 0.1) {;_class.prototype.__init.call(this);_class.prototype.__init2.call(this);
     this.distanceThreshold = distanceThreshold;
     this.pushBackOffset = pushBackOffset;
   }
-  name = "AdvancedCameraCollisionPlugin";
-  handle = null;
+  __init() {this.name = "AdvancedCameraCollision"}
+  __init2() {this.handle = null}
   install({ camera, orchestrator }) {
     if (!camera) {
       return;
@@ -20,9 +20,9 @@ var AdvancedCameraCollisionPlugin = class {
         this.handle = requestAnimationFrame(check);
         return;
       }
-      const dir = new THREE.Vector3();
+      const dir = new _chunkEA3XQ4KJcjs.THREE.Vector3();
       camera.getWorldDirection(dir);
-      const ray = new THREE.Raycaster(
+      const ray = new _chunkEA3XQ4KJcjs.THREE.Raycaster(
         camera.position,
         dir,
         0,
@@ -47,8 +47,8 @@ var AdvancedCameraCollisionPlugin = class {
       this.handle = null;
     }
   }
-};
+}, _class);
 
-export {
-  AdvancedCameraCollisionPlugin
-};
+
+
+exports.AdvancedCameraCollisionPlugin = AdvancedCameraCollisionPlugin;

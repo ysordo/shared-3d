@@ -1,5 +1,8 @@
 import "../../chunk-JH6IQNCJ.js";
 import {
+  AnimationController
+} from "../../chunk-URLKGM47.js";
+import {
   LightingController
 } from "../../chunk-WTL5LUKX.js";
 import {
@@ -7,9 +10,6 @@ import {
 } from "../../chunk-WNRVKAX6.js";
 import "../../chunk-52BWUKU3.js";
 import "../../chunk-AWVHTM2E.js";
-import {
-  AnimationController
-} from "../../chunk-URLKGM47.js";
 import "../../chunk-R64BBESO.js";
 import "../../chunk-DNUS32TF.js";
 import "../../chunk-FUHGADU4.js";

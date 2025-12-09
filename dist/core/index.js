@@ -23,20 +23,20 @@ import {
   HotspotPlugin
 } from "../chunk-L3G2QMBD.js";
 import {
+  AdvancedCameraCollisionPlugin
+} from "../chunk-F54EHX65.js";
+import {
   AdvancedOrbitControlsPlugin
-} from "../chunk-OVBEDQKS.js";
+} from "../chunk-63XBJHPS.js";
+import {
+  AdvancedRaycasterPlugin
+} from "../chunk-NNMHNVZD.js";
 import {
   AnnotationsPlugin
 } from "../chunk-CPKJTF7R.js";
 import {
   AutoLODSystemPlugin
 } from "../chunk-D4NGW2TQ.js";
-import {
-  AdvancedCameraCollisionPlugin
-} from "../chunk-3EGJYHIY.js";
-import {
-  AdvancedRaycasterPlugin
-} from "../chunk-NNMHNVZD.js";
 import {
   CacheValidator
 } from "../chunk-NQSGSI4W.js";

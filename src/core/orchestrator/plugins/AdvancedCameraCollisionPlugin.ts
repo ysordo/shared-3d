@@ -2,7 +2,7 @@ import type { Plugin, PluginContext } from '../types';
 import { THREE } from '../../../lib';
 
 export class AdvancedCameraCollisionPlugin implements Plugin {
-  name = 'AdvancedCameraCollisionPlugin';
+  name = 'AdvancedCameraCollision';
   private handle: number | null = null;
 
   constructor(

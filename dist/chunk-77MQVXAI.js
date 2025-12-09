@@ -1,6 +1,6 @@
 import {
   AdvancedCameraCollisionPlugin
-} from "./chunk-3EGJYHIY.js";
+} from "./chunk-F54EHX65.js";
 import {
   useScene
 } from "./chunk-DNUS32TF.js";
@@ -13,13 +13,15 @@ var AdvancedCameraCollision = ({ distanceThreshold = 0.6, pushBackOffset = 0.1, 
     if (!enabled || !orchestrator) {
       return;
     }
-    const plugin = new AdvancedCameraCollisionPlugin(
+    if (orchestrator.has("AdvancedCameraCollision")) {
+      return;
+    }
+    orchestrator.use(new AdvancedCameraCollisionPlugin(
       distanceThreshold,
       pushBackOffset
-    );
-    orchestrator.use(plugin);
+    ));
     return () => {
-      plugin.dispose();
+      orchestrator.plugin("AdvancedCameraCollision").dispose?.();
     };
   }, [enabled, distanceThreshold, pushBackOffset, orchestrator]);
   return null;
