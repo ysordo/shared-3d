@@ -146,6 +146,10 @@ export class SceneOrchestrator {
       draco: options?.draco,
       onLoaded: (obj) => {
         this.activeModel = obj;
+        const t = this.scene.getObjectByName(obj.name);
+        if(t){
+          this.scene.remove(t);
+        }
         this.scene.add(obj);
         console.info(`[Orchestrator] Active model: ${entry.id}`);
       },

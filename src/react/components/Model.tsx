@@ -26,6 +26,10 @@ export const Model: React.FC<ModelProps> = ({
       setModel(gltf);
     };
     load();
+    return ()=>{
+      setModel(null);
+      orchestrator.removeModel();
+    };
   }, [entry.id, draco, orchestrator, entry]);
   if (!model) {
     return null;
