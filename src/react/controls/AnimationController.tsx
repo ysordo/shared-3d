@@ -25,23 +25,38 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
   const model = useActiveModel() as THREE.Object3D | null;
 
   const [clips, setClips] = useState<THREE.AnimationClip[]>([]);
-  const [mixer, setMixer] = useState<THREE.AnimationMixer | null>(null);
   const [actions, setActions] = useState<Map<string, THREE.AnimationAction>>(
     new Map()
   );
   const [playing, setPlaying] = useState<Set<string>>(new Set());
   const [reversed, setReversed] = useState<Set<string>>(new Set());
 
-  // Crear mixer y acciones cuando el modelo cambie
+  const onFinished = (e: any) => {
+    const finishedName = e.action.getClip().name;
+    setReversed((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(finishedName)) {
+        newSet.delete(finishedName);
+      } else {
+        newSet.add(finishedName);
+      }
+      return newSet;
+    });
+
+    setPlaying((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(finishedName);
+      return newSet;
+    });
+  };
+
   useEffect(() => {
     if (!model) {
-      setMixer(null);
       setClips([]);
       return;
     }
 
     const _mixer = new THREE.AnimationMixer(model);
-    setMixer(_mixer);
 
     const _clips = model.animations ?? [];
     setClips(_clips);
@@ -64,31 +79,26 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
     };
     loop();
 
-    _mixer.addEventListener('finished', (e: any) => {
-      const finishedName = e.action.getClip().name;
-      const isReverse = reversed.has(finishedName);
-      setReversed((prev) => {
-        const newSet = new Set(prev);
-        if (isReverse) {
-          newSet.delete(finishedName);
-        } else {
-          newSet.add(finishedName);
-        }
-        return newSet;
-      });
-
-      setPlaying((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(finishedName);
-        return newSet;
-      });
-    });
+    _mixer.addEventListener('finished', onFinished);
 
     return () => {
       _mixer.stopAllAction();
-      _mixer.removeEventListener('finished', () => {});
+      _mixer.removeEventListener('finished', onFinished);
     };
   }, [model]);
+
+  const reset = (
+    action: THREE.AnimationAction,
+    scale: number,
+    time: number
+  ): THREE.AnimationAction => {
+    action.reset();
+    action.paused = false;
+    action.timeScale = scale;
+    action.time = time;
+    action.clampWhenFinished = true;
+    return action.setLoop(THREE.LoopOnce, 1);
+  };
 
   const playForward = (name: string) => {
     const action = actions.get(name);
@@ -98,7 +108,7 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
 
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
 
-    action.reset().setEffectiveTimeScale(1).fadeIn(0.2).play();
+    reset(action, 1, 0).fadeIn(0.2).play();
     setPlaying(new Set([name]));
   };
 
@@ -109,8 +119,7 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
     }
 
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
-    action.time = action.getClip().duration;
-    action.setEffectiveTimeScale(-1).fadeIn(0.2).play();
+    reset(action, -1, action.getClip().duration).fadeIn(0.2).play();
     setPlaying(new Set([name]));
   };
 

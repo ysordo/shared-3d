@@ -14,20 +14,34 @@ var AnimationController = ({
 }) => {
   const model = _chunkDEXPOPMYcjs.useActiveModel.call(void 0, );
   const [clips, setClips] = _react.useState.call(void 0, []);
-  const [mixer, setMixer] = _react.useState.call(void 0, null);
   const [actions, setActions] = _react.useState.call(void 0, 
     /* @__PURE__ */ new Map()
   );
   const [playing, setPlaying] = _react.useState.call(void 0, /* @__PURE__ */ new Set());
   const [reversed, setReversed] = _react.useState.call(void 0, /* @__PURE__ */ new Set());
+  const onFinished = (e) => {
+    const finishedName = e.action.getClip().name;
+    setReversed((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(finishedName)) {
+        newSet.delete(finishedName);
+      } else {
+        newSet.add(finishedName);
+      }
+      return newSet;
+    });
+    setPlaying((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(finishedName);
+      return newSet;
+    });
+  };
   _react.useEffect.call(void 0, () => {
     if (!model) {
-      setMixer(null);
       setClips([]);
       return;
     }
     const _mixer = new _chunkEA3XQ4KJcjs.THREE.AnimationMixer(model);
-    setMixer(_mixer);
     const _clips = _nullishCoalesce(model.animations, () => ( []));
     setClips(_clips);
     const _actions = /* @__PURE__ */ new Map();
@@ -46,37 +60,27 @@ var AnimationController = ({
       requestAnimationFrame(loop);
     };
     loop();
-    _mixer.addEventListener("finished", (e) => {
-      const finishedName = e.action.getClip().name;
-      const isReverse = reversed.has(finishedName);
-      setReversed((prev) => {
-        const newSet = new Set(prev);
-        if (isReverse) {
-          newSet.delete(finishedName);
-        } else {
-          newSet.add(finishedName);
-        }
-        return newSet;
-      });
-      setPlaying((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(finishedName);
-        return newSet;
-      });
-    });
+    _mixer.addEventListener("finished", onFinished);
     return () => {
       _mixer.stopAllAction();
-      _mixer.removeEventListener("finished", () => {
-      });
+      _mixer.removeEventListener("finished", onFinished);
     };
   }, [model]);
+  const reset = (action, scale, time) => {
+    action.reset();
+    action.paused = false;
+    action.timeScale = scale;
+    action.time = time;
+    action.clampWhenFinished = true;
+    return action.setLoop(_chunkEA3XQ4KJcjs.THREE.LoopOnce, 1);
+  };
   const playForward = (name) => {
     const action = actions.get(name);
     if (!action) {
       return;
     }
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
-    action.reset().setEffectiveTimeScale(1).fadeIn(0.2).play();
+    reset(action, 1, 0).fadeIn(0.2).play();
     setPlaying(/* @__PURE__ */ new Set([name]));
   };
   const playBackward = (name) => {
@@ -85,8 +89,7 @@ var AnimationController = ({
       return;
     }
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
-    action.time = action.getClip().duration;
-    action.setEffectiveTimeScale(-1).fadeIn(0.2).play();
+    reset(action, -1, action.getClip().duration).fadeIn(0.2).play();
     setPlaying(/* @__PURE__ */ new Set([name]));
   };
   const toggle = (name) => reversed.has(name) ? playBackward(name) : playForward(name);
