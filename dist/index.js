@@ -1,52 +1,18 @@
 import "./chunk-GY6RJQO5.js";
-import "./chunk-JH6IQNCJ.js";
-import {
-  AnimationController
-} from "./chunk-UZPXRB73.js";
-import {
-  LightingController
-} from "./chunk-ADC3NAII.js";
-import {
-  MaterialController
-} from "./chunk-AC3HOU5I.js";
-import "./chunk-5RGQXC4Q.js";
-import {
-  SceneObject
-} from "./chunk-7B2BDAZL.js";
 import "./chunk-VHIECBSI.js";
 import {
-  PostProcessing
-} from "./chunk-WJXWVKRA.js";
-import {
-  Raycaster
-} from "./chunk-LPH6H7W6.js";
-import {
-  SpotLight
-} from "./chunk-C3ED64PX.js";
-import {
   SuspenseModel
-} from "./chunk-WHIQ4XTQ.js";
-import {
-  Suspense
-} from "./chunk-RUDNMJTZ.js";
+} from "./chunk-F7EIJ5NN.js";
 import {
   TheaterLighting
 } from "./chunk-JVH5WHBM.js";
 import {
   VRButton
 } from "./chunk-WSMKKYK6.js";
+import "./chunk-5RGQXC4Q.js";
 import {
-  Hotspots
-} from "./chunk-JBWPUHH5.js";
-import {
-  InstancedModel
-} from "./chunk-WHVP3GFA.js";
-import {
-  LODSystem
-} from "./chunk-DYERUUWE.js";
-import {
-  MeasurementTool
-} from "./chunk-6SKKKQY7.js";
+  SceneObject
+} from "./chunk-7B2BDAZL.js";
 import {
   Model
 } from "./chunk-WZFR5VVA.js";
@@ -60,17 +26,17 @@ import {
   PointLight
 } from "./chunk-TDHQNPO5.js";
 import {
-  Canvas
-} from "./chunk-NDOSNN3Y.js";
+  PostProcessing
+} from "./chunk-WJXWVKRA.js";
 import {
-  DirectionalLight
-} from "./chunk-LO7BFRSI.js";
+  Raycaster
+} from "./chunk-LPH6H7W6.js";
 import {
-  DistanceDisplay
-} from "./chunk-WJL2I634.js";
+  SpotLight
+} from "./chunk-C3ED64PX.js";
 import {
-  EnvironmentPreset
-} from "./chunk-ZS57TJAV.js";
+  Suspense
+} from "./chunk-RUDNMJTZ.js";
 import {
   ErrorBoundary3D
 } from "./chunk-POOGUPPI.js";
@@ -84,17 +50,17 @@ import {
   Hotspot
 } from "./chunk-MSPXVVPQ.js";
 import {
-  AdvancedCameraCollision
-} from "./chunk-N3RD2HPA.js";
+  Hotspots
+} from "./chunk-JBWPUHH5.js";
 import {
-  AdvancedDragRaycaster
-} from "./chunk-VH6J7MDR.js";
+  InstancedModel
+} from "./chunk-WHVP3GFA.js";
 import {
-  AdvancedOrbitControls
-} from "./chunk-452FIKTS.js";
+  LODSystem
+} from "./chunk-DYERUUWE.js";
 import {
-  AdvancedRaycaster
-} from "./chunk-Q2HT7M4W.js";
+  MeasurementTool
+} from "./chunk-6SKKKQY7.js";
 import {
   AmbientLight
 } from "./chunk-T4PJIXEH.js";
@@ -107,17 +73,51 @@ import {
 import {
   AutoLODSystem
 } from "./chunk-7OC7TRFI.js";
-import "./chunk-52BWUKU3.js";
-import "./chunk-AWVHTM2E.js";
+import {
+  Canvas
+} from "./chunk-NDOSNN3Y.js";
+import {
+  DirectionalLight
+} from "./chunk-LO7BFRSI.js";
+import {
+  DistanceDisplay
+} from "./chunk-WJL2I634.js";
+import {
+  EnvironmentPreset
+} from "./chunk-ZS57TJAV.js";
+import "./chunk-JH6IQNCJ.js";
+import {
+  LightingController
+} from "./chunk-ADC3NAII.js";
+import {
+  MaterialController
+} from "./chunk-YZTIDNYY.js";
 import {
   ARButton
 } from "./chunk-CVBQRF53.js";
+import {
+  AdvancedCameraCollision
+} from "./chunk-N3RD2HPA.js";
+import {
+  AdvancedDragRaycaster
+} from "./chunk-VH6J7MDR.js";
+import {
+  AdvancedOrbitControls
+} from "./chunk-452FIKTS.js";
+import {
+  AdvancedRaycaster
+} from "./chunk-Q2HT7M4W.js";
+import "./chunk-52BWUKU3.js";
+import "./chunk-AWVHTM2E.js";
+import {
+  AnimationController
+} from "./chunk-UZPXRB73.js";
 import "./chunk-SCNS52XI.js";
 import "./chunk-PFUSRKMN.js";
-import "./chunk-EC4WICT5.js";
-import "./chunk-ZC66QDE5.js";
 import "./chunk-E64RDZHI.js";
 import "./chunk-G5YWPRA4.js";
+import "./chunk-ZC66QDE5.js";
+import "./chunk-EC4WICT5.js";
 import "./chunk-Q47SPRY7.js";
 import {
   useCache
@@ -145,14 +145,20 @@ import {
   RaycasterPlugin
 } from "./chunk-FBPG64NM.js";
 import {
+  HotspotPlugin
+} from "./chunk-L3G2QMBD.js";
+import {
   LODSystemPlugin
 } from "./chunk-HVXJUMVE.js";
 import {
   MeasurementToolPlugin
 } from "./chunk-PRNY2PGZ.js";
 import {
-  HotspotPlugin
-} from "./chunk-L3G2QMBD.js";
+  AnnotationsPlugin
+} from "./chunk-CPKJTF7R.js";
+import {
+  AutoLODSystemPlugin
+} from "./chunk-NWBFTWAT.js";
 import {
   AdvancedCameraCollisionPlugin
 } from "./chunk-7UK5WDJQ.js";
@@ -162,12 +168,6 @@ import {
 import {
   AdvancedRaycasterPlugin
 } from "./chunk-NNMHNVZD.js";
-import {
-  AnnotationsPlugin
-} from "./chunk-CPKJTF7R.js";
-import {
-  AutoLODSystemPlugin
-} from "./chunk-NWBFTWAT.js";
 import {
   CacheValidator
 } from "./chunk-NQSGSI4W.js";

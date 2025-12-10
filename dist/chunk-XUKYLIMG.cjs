@@ -21,10 +21,12 @@ var MaterialController = ({
   const [activeName, setActiveName] = _react.useState.call(void 0, null);
   const [isTransitioning, setIsTransitioning] = _react.useState.call(void 0, false);
   const meshes = _react.useRef.call(void 0, []);
+  const [items, setItems] = _react.useState.call(void 0, []);
   _react.useEffect.call(void 0, () => {
     if (!model) {
       return;
     }
+    meshes.current = [];
     model.traverse((child) => {
       if (!(child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh)) {
         return;
@@ -128,11 +130,15 @@ var MaterialController = ({
     }
     child.material = newMat;
   };
-  const items = materials.map((config) => ({
-    name: config.name,
-    apply: () => applyMaterial(config),
-    isActive: activeName === config.name
-  }));
+  _react.useEffect.call(void 0, () => {
+    setItems(
+      materials.map((config) => ({
+        name: config.name,
+        apply: () => applyMaterial(config),
+        isActive: activeName === config.name
+      }))
+    );
+  }, [materials]);
   _react.useEffect.call(void 0, () => {
     if (items.length > 0 && !activeName) {
       _optionalChain([items, 'access', _ => _[0], 'optionalAccess', _2 => _2.apply, 'optionalCall', _3 => _3()]);

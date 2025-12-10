@@ -50,12 +50,14 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   const [activeName, setActiveName] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const meshes = useRef<THREE.Mesh[]>([]);
+  const [items, setItems] = useState<MaterialItem[]>([]);
 
   useEffect(() => {
     if (!model) {
       return;
     }
 
+    meshes.current = [];
     model.traverse((child) => {
       if (!(child instanceof THREE.Mesh)) {
         return;
@@ -167,11 +169,15 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     child.material = newMat;
   };
 
-  const items: MaterialItem[] = materials.map((config) => ({
-    name: config.name,
-    apply: () => applyMaterial(config),
-    isActive: activeName === config.name,
-  }));
+  useEffect(() => {
+    setItems(
+      materials.map((config) => ({
+        name: config.name,
+        apply: () => applyMaterial(config),
+        isActive: activeName === config.name,
+      }))
+    );
+  }, [materials]);
 
   useEffect(() => {
     if (items.length > 0 && !activeName) {

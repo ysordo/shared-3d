@@ -21,10 +21,12 @@ var MaterialController = ({
   const [activeName, setActiveName] = useState(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const meshes = useRef([]);
+  const [items, setItems] = useState([]);
   useEffect(() => {
     if (!model) {
       return;
     }
+    meshes.current = [];
     model.traverse((child) => {
       if (!(child instanceof THREE.Mesh)) {
         return;
@@ -128,11 +130,15 @@ var MaterialController = ({
     }
     child.material = newMat;
   };
-  const items = materials.map((config) => ({
-    name: config.name,
-    apply: () => applyMaterial(config),
-    isActive: activeName === config.name
-  }));
+  useEffect(() => {
+    setItems(
+      materials.map((config) => ({
+        name: config.name,
+        apply: () => applyMaterial(config),
+        isActive: activeName === config.name
+      }))
+    );
+  }, [materials]);
   useEffect(() => {
     if (items.length > 0 && !activeName) {
       items[0]?.apply?.();
