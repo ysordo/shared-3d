@@ -9,10 +9,11 @@ import {
 } from "./chunk-OVHQQSEK.js";
 
 // src/react/controls/MaterialController.tsx
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { jsx } from "react/jsx-runtime";
 var MaterialController = ({
   materials,
+  activeDefault = materials[0].name,
   transitionDuration = 0,
   children,
   className
@@ -21,7 +22,6 @@ var MaterialController = ({
   const [activeName, setActiveName] = useState(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const meshes = useRef([]);
-  const [items, setItems] = useState([]);
   useEffect(() => {
     if (!model) {
       return;
@@ -130,20 +130,18 @@ var MaterialController = ({
     }
     child.material = newMat;
   };
-  useEffect(() => {
-    setItems(
-      materials.map((config) => ({
-        name: config.name,
-        apply: () => applyMaterial(config),
-        isActive: activeName === config.name
-      }))
-    );
-  }, [materials]);
+  const items = useMemo(() => {
+    return materials.map((config) => ({
+      name: config.name,
+      apply: () => applyMaterial(config),
+      isActive: activeName === config.name
+    }));
+  }, [materials, activeName, applyMaterial]);
   useEffect(() => {
     if (items.length > 0 && !activeName) {
-      items[0]?.apply?.();
+      items.find((n) => n.name === activeDefault)?.apply();
     }
-  }, [items]);
+  }, [activeDefault, items]);
   if (!model) {
     return null;
   }

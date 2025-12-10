@@ -1,6 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useActiveModel } from '../../hooks/useActiveModel';
 import { createQuadWireframe } from '../../core/utils';
 import { THREE } from '../../lib';
@@ -35,6 +35,7 @@ type MaterialItem = {
 
 type MaterialControllerProps = {
   materials: MaterialConfig[];
+  activeDefault?: MaterialConfig['name'];
   transitionDuration?: number;
   children: (items: MaterialItem[]) => ReactNode;
   className?: string;
@@ -42,6 +43,7 @@ type MaterialControllerProps = {
 
 export const MaterialController: React.FC<MaterialControllerProps> = ({
   materials,
+  activeDefault = materials[0]!.name,
   transitionDuration = 0,
   children,
   className,
@@ -50,7 +52,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   const [activeName, setActiveName] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const meshes = useRef<THREE.Mesh[]>([]);
-  const [items, setItems] = useState<MaterialItem[]>([]);
 
   useEffect(() => {
     if (!model) {
@@ -169,21 +170,19 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     child.material = newMat;
   };
 
-  useEffect(() => {
-    setItems(
-      materials.map((config) => ({
-        name: config.name,
-        apply: () => applyMaterial(config),
-        isActive: activeName === config.name,
-      }))
-    );
-  }, [materials]);
+  const items = useMemo(() => {
+    return materials.map((config) => ({
+      name: config.name,
+      apply: () => applyMaterial(config),
+      isActive: activeName === config.name,
+    }));
+  }, [materials, activeName, applyMaterial]);
 
   useEffect(() => {
     if (items.length > 0 && !activeName) {
-      items[0]?.apply?.();
+      items.find((n) => n.name === activeDefault)?.apply();
     }
-  }, [items]);
+  }, [activeDefault, items]);
 
   if (!model) {
     return null;

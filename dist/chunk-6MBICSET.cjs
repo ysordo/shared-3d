@@ -13,6 +13,7 @@ var _react = require('react');
 var _jsxruntime = require('react/jsx-runtime');
 var MaterialController = ({
   materials,
+  activeDefault = materials[0].name,
   transitionDuration = 0,
   children,
   className
@@ -21,7 +22,6 @@ var MaterialController = ({
   const [activeName, setActiveName] = _react.useState.call(void 0, null);
   const [isTransitioning, setIsTransitioning] = _react.useState.call(void 0, false);
   const meshes = _react.useRef.call(void 0, []);
-  const [items, setItems] = _react.useState.call(void 0, []);
   _react.useEffect.call(void 0, () => {
     if (!model) {
       return;
@@ -130,20 +130,18 @@ var MaterialController = ({
     }
     child.material = newMat;
   };
-  _react.useEffect.call(void 0, () => {
-    setItems(
-      materials.map((config) => ({
-        name: config.name,
-        apply: () => applyMaterial(config),
-        isActive: activeName === config.name
-      }))
-    );
-  }, [materials]);
+  const items = _react.useMemo.call(void 0, () => {
+    return materials.map((config) => ({
+      name: config.name,
+      apply: () => applyMaterial(config),
+      isActive: activeName === config.name
+    }));
+  }, [materials, activeName, applyMaterial]);
   _react.useEffect.call(void 0, () => {
     if (items.length > 0 && !activeName) {
-      _optionalChain([items, 'access', _ => _[0], 'optionalAccess', _2 => _2.apply, 'optionalCall', _3 => _3()]);
+      _optionalChain([items, 'access', _ => _.find, 'call', _2 => _2((n) => n.name === activeDefault), 'optionalAccess', _3 => _3.apply, 'call', _4 => _4()]);
     }
-  }, [items]);
+  }, [activeDefault, items]);
   if (!model) {
     return null;
   }

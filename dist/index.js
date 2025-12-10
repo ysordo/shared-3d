@@ -91,7 +91,7 @@ import {
 } from "./chunk-YHYHQ7A2.js";
 import {
   MaterialController
-} from "./chunk-VRUKTDDB.js";
+} from "./chunk-WYEESB3C.js";
 import {
   ARButton
 } from "./chunk-MTD52L5F.js";

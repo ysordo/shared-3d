@@ -29,6 +29,7 @@ type MaterialItem = {
 };
 type MaterialControllerProps = {
     materials: MaterialConfig[];
+    activeDefault?: MaterialConfig['name'];
     transitionDuration?: number;
     children: (items: MaterialItem[]) => ReactNode;
     className?: string;
