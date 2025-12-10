@@ -50,10 +50,9 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   const [activeName, setActiveName] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const meshes = useRef<THREE.Mesh[]>([]);
-  const initialized = useRef(false);
 
   useEffect(() => {
-    if (!model || initialized.current) {
+    if (!model) {
       return;
     }
 
@@ -81,8 +80,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       }
       meshes.current.push(child);
     });
-
-    initialized.current = true;
   }, [model]);
 
   const applyMaterial = async (config: MaterialConfig) => {

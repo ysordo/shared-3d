@@ -1,48 +1,47 @@
-import {
-  createQuadWireframe
-} from "./chunk-AWVHTM2E.js";
-import {
-  useActiveModel
-} from "./chunk-7OLVCU4T.js";
-import {
-  THREE
-} from "./chunk-OVHQQSEK.js";
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
+
+var _chunkGICX4QCOcjs = require('./chunk-GICX4QCO.cjs');
+
+
+var _chunk4QWKMFIQcjs = require('./chunk-4QWKMFIQ.cjs');
+
+
+var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
 
 // src/react/controls/MaterialController.tsx
-import { useEffect, useState, useRef } from "react";
-import { jsx } from "react/jsx-runtime";
+var _react = require('react');
+var _jsxruntime = require('react/jsx-runtime');
 var MaterialController = ({
   materials,
   transitionDuration = 0,
   children,
   className
 }) => {
-  const model = useActiveModel();
-  const [activeName, setActiveName] = useState(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const meshes = useRef([]);
-  const initialized = useRef(false);
-  useEffect(() => {
-    if (!model || initialized.current) {
+  const model = _chunk4QWKMFIQcjs.useActiveModel.call(void 0, );
+  const [activeName, setActiveName] = _react.useState.call(void 0, null);
+  const [isTransitioning, setIsTransitioning] = _react.useState.call(void 0, false);
+  const meshes = _react.useRef.call(void 0, []);
+  _react.useEffect.call(void 0, () => {
+    if (!model) {
       return;
     }
     model.traverse((child) => {
-      if (!(child instanceof THREE.Mesh)) {
+      if (!(child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh)) {
         return;
       }
       if (!child.userData.originalMaterial) {
         child.userData.originalMaterial = child.material;
       }
       if (!child.getObjectByName(`${child.name}-wireframe`)) {
-        const wireGeo = createQuadWireframe(child.geometry);
-        const lineMat = new THREE.LineBasicMaterial({
+        const wireGeo = _chunkGICX4QCOcjs.createQuadWireframe.call(void 0, child.geometry);
+        const lineMat = new _chunkEA3XQ4KJcjs.THREE.LineBasicMaterial({
           color: 0,
           linewidth: 3,
           polygonOffset: true,
           polygonOffsetFactor: 1,
           polygonOffsetUnits: 1
         });
-        const wireframe = new THREE.LineSegments(wireGeo, lineMat);
+        const wireframe = new _chunkEA3XQ4KJcjs.THREE.LineSegments(wireGeo, lineMat);
         wireframe.name = `${child.name}-wireframe`;
         wireframe.renderOrder = 999;
         wireframe.visible = false;
@@ -50,7 +49,6 @@ var MaterialController = ({
       }
       meshes.current.push(child);
     });
-    initialized.current = true;
   }, [model]);
   const applyMaterial = async (config) => {
     if (!model || isTransitioning) {
@@ -87,15 +85,15 @@ var MaterialController = ({
         }
         break;
       case "solid":
-        newMat = new THREE.MeshStandardMaterial({
-          color: config.color ?? 8947848,
-          metalness: config.metalness ?? 0,
-          roughness: config.roughness ?? 0.9,
-          side: THREE.DoubleSide,
+        newMat = new _chunkEA3XQ4KJcjs.THREE.MeshStandardMaterial({
+          color: _nullishCoalesce(config.color, () => ( 8947848)),
+          metalness: _nullishCoalesce(config.metalness, () => ( 0)),
+          roughness: _nullishCoalesce(config.roughness, () => ( 0.9)),
+          side: _chunkEA3XQ4KJcjs.THREE.DoubleSide,
           flatShading: false,
           dithering: true,
           precision: "highp",
-          shadowSide: THREE.FrontSide,
+          shadowSide: _chunkEA3XQ4KJcjs.THREE.FrontSide,
           clipShadows: true
         });
         if (wireframe) {
@@ -103,21 +101,21 @@ var MaterialController = ({
         }
         break;
       case "wireframe":
-        newMat = new THREE.MeshStandardMaterial({
-          color: config.color ?? 8947848,
+        newMat = new _chunkEA3XQ4KJcjs.THREE.MeshStandardMaterial({
+          color: _nullishCoalesce(config.color, () => ( 8947848)),
           transparent: true,
           opacity: 0.95,
-          side: THREE.DoubleSide,
+          side: _chunkEA3XQ4KJcjs.THREE.DoubleSide,
           flatShading: false,
           dithering: true,
           precision: "highp",
-          shadowSide: THREE.FrontSide,
+          shadowSide: _chunkEA3XQ4KJcjs.THREE.FrontSide,
           clipShadows: true
         });
         if (wireframe) {
           wireframe.visible = true;
           wireframe.material.color.set(
-            config.lineColor ?? 0
+            _nullishCoalesce(config.lineColor, () => ( 0))
           );
         }
         break;
@@ -135,17 +133,17 @@ var MaterialController = ({
     apply: () => applyMaterial(config),
     isActive: activeName === config.name
   }));
-  useEffect(() => {
+  _react.useEffect.call(void 0, () => {
     if (items.length > 0 && !activeName) {
-      items[0]?.apply?.();
+      _optionalChain([items, 'access', _ => _[0], 'optionalAccess', _2 => _2.apply, 'optionalCall', _3 => _3()]);
     }
   }, [items]);
   if (!model) {
     return null;
   }
-  return /* @__PURE__ */ jsx("div", { className, children: children(items) });
+  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: children(items) });
 };
 
-export {
-  MaterialController
-};
+
+
+exports.MaterialController = MaterialController;

@@ -1,15 +1,15 @@
 import "../../chunk-JH6IQNCJ.js";
 import {
+  AnimationController
+} from "../../chunk-UZPXRB73.js";
+import {
   LightingController
 } from "../../chunk-ADC3NAII.js";
 import {
   MaterialController
-} from "../../chunk-YKCBBVUM.js";
+} from "../../chunk-AC3HOU5I.js";
 import "../../chunk-52BWUKU3.js";
 import "../../chunk-AWVHTM2E.js";
-import {
-  AnimationController
-} from "../../chunk-UZPXRB73.js";
 import "../../chunk-7OLVCU4T.js";
 import "../../chunk-MJH7XTAB.js";
 import "../../chunk-XZ25IHDF.js";
