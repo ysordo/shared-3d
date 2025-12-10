@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useScene } from '../../hooks/useScene';
 import { THREE } from '../../lib';
+import type { AdvancedCameraCollisionPlugin } from '../../core';
 
 type DistanceUnit = 'm' | 'cm' | 'mm' | 'px' | 'in' | 'ft' | 'km';
 
@@ -61,38 +62,70 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
   };
 
   const calculateDistances = () => {
-    let minDist = 0;
-    let maxDist = 0;
-
     const model = orchestrator.getActiveModel();
-    if (!model || !orchestrator.camera) {
+    const camera = orchestrator.camera;
+    if (!model || !camera) {
       return;
     }
 
-    // Distancia real después del repeler de AdvancedCameraCollision
-    const collisionPlugin = orchestrator.plugin('AdvancedCameraCollision');
-    if (collisionPlugin) {
-      const threshold =
-        (collisionPlugin as any).distanceThreshold +
-        (collisionPlugin as any).pushBackOffset;
+    let minDist = 0;
+    let maxDist = 50; // valor por defecto
 
-      // Posición actual de la cámara
-      const camPos = orchestrator.camera.position.clone();
+    // --- Colisión avanzada ---
+    if (orchestrator.has('AdvancedCameraCollision')) {
+      const collisionPlugin = orchestrator.plugin(
+        'AdvancedCameraCollision'
+      ) as AdvancedCameraCollisionPlugin;
+
+      const threshold =
+        collisionPlugin.distanceThreshold + collisionPlugin.pushBackOffset;
+
       const modelCenter = new THREE.Vector3();
       model.getWorldPosition(modelCenter);
 
-      const realDistance = camPos.distanceTo(modelCenter);
-      minDist = Math.max(threshold, realDistance);
+      // Dirección desde el centro del modelo hacia la cámara
+      const dir = new THREE.Vector3().subVectors(camera.position, modelCenter);
+      const distanceToCenter = dir.length();
+      if (distanceToCenter === 0) {
+        dir.set(0, 0, 1);
+      } // proteger vector cero
+      dir.normalize();
+
+      // Raycast limitado a la distancia actual + margen
+      const ray = new THREE.Raycaster(
+        modelCenter,
+        dir,
+        0,
+        distanceToCenter + 0.1
+      );
+      const hits = ray.intersectObject(model, true);
+
+      if (hits.length > 0) {
+        const nearestHit = hits.reduce(
+          (closest, hit) => (hit.distance < closest!.distance ? hit : closest),
+          hits[0]
+        );
+        minDist = Math.max(
+          nearestHit!.distance + collisionPlugin.pushBackOffset,
+          threshold
+        );
+      } else {
+        minDist = threshold;
+      }
     }
 
-    // Revisar si hay OrbitControls o AdvancedOrbitControls
-    const controls =
-      orchestrator.plugin('AdvancedOrbitControls') ||
-      orchestrator.plugin('OrbitControls');
+    // --- Controles de cámara ---
+    let controls: any = null;
+    if (orchestrator.has('AdvancedOrbitControls')) {
+      controls = orchestrator.plugin('AdvancedOrbitControls');
+    } else if (orchestrator.has('OrbitControls')) {
+      controls = orchestrator.plugin('OrbitControls');
+    }
+
     if (controls) {
-      maxDist = (controls as any).maxDistance ?? 50;
+      maxDist = controls.maxDistance ?? maxDist;
       if (minDist === 0) {
-        minDist = (controls as any).minDistance ?? 0;
+        minDist = controls.minDistance ?? 0;
       }
     }
 

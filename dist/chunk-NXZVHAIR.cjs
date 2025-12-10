@@ -45,24 +45,54 @@ var DistanceDisplay = ({
     return orchestrator.camera.position.distanceTo(modelCenter);
   };
   const calculateDistances = () => {
-    let minDist = 0;
-    let maxDist = 0;
     const model = orchestrator.getActiveModel();
-    if (!model || !orchestrator.camera) {
+    const camera = orchestrator.camera;
+    if (!model || !camera) {
       return;
     }
-    const collisionPlugin = orchestrator.plugin("AdvancedCameraCollision");
-    if (collisionPlugin) {
+    let minDist = 0;
+    let maxDist = 50;
+    if (orchestrator.has("AdvancedCameraCollision")) {
+      const collisionPlugin = orchestrator.plugin(
+        "AdvancedCameraCollision"
+      );
       const threshold = collisionPlugin.distanceThreshold + collisionPlugin.pushBackOffset;
-      const camPos = orchestrator.camera.position.clone();
       const modelCenter = new _chunkEA3XQ4KJcjs.THREE.Vector3();
       model.getWorldPosition(modelCenter);
-      const realDistance = camPos.distanceTo(modelCenter);
-      minDist = Math.max(threshold, realDistance);
+      const dir = new _chunkEA3XQ4KJcjs.THREE.Vector3().subVectors(camera.position, modelCenter);
+      const distanceToCenter = dir.length();
+      if (distanceToCenter === 0) {
+        dir.set(0, 0, 1);
+      }
+      dir.normalize();
+      const ray = new _chunkEA3XQ4KJcjs.THREE.Raycaster(
+        modelCenter,
+        dir,
+        0,
+        distanceToCenter + 0.1
+      );
+      const hits = ray.intersectObject(model, true);
+      if (hits.length > 0) {
+        const nearestHit = hits.reduce(
+          (closest, hit) => hit.distance < closest.distance ? hit : closest,
+          hits[0]
+        );
+        minDist = Math.max(
+          nearestHit.distance + collisionPlugin.pushBackOffset,
+          threshold
+        );
+      } else {
+        minDist = threshold;
+      }
     }
-    const controls = orchestrator.plugin("AdvancedOrbitControls") || orchestrator.plugin("OrbitControls");
+    let controls = null;
+    if (orchestrator.has("AdvancedOrbitControls")) {
+      controls = orchestrator.plugin("AdvancedOrbitControls");
+    } else if (orchestrator.has("OrbitControls")) {
+      controls = orchestrator.plugin("OrbitControls");
+    }
     if (controls) {
-      maxDist = _nullishCoalesce(controls.maxDistance, () => ( 50));
+      maxDist = _nullishCoalesce(controls.maxDistance, () => ( maxDist));
       if (minDist === 0) {
         minDist = _nullishCoalesce(controls.minDistance, () => ( 0));
       }
