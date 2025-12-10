@@ -1,7 +1,7 @@
 "use client";
 import {
   AnimationController
-} from "../../chunk-56KMUPAK.js";
+} from "../../chunk-GOLUEN67.js";
 import "../../chunk-KJNAEIJW.js";
 import "../../chunk-KITXMCSG.js";
 import "../../chunk-NFSCEQ4I.js";

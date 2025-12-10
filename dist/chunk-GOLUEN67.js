@@ -1,52 +1,36 @@
-'use client';
-import type { ReactNode } from 'react';
-import React, { useEffect, useState } from 'react';
-import { useActiveModel } from '../../hooks/useActiveModel';
-import { THREE } from '../../lib';
+import {
+  useActiveModel
+} from "./chunk-KJNAEIJW.js";
+import {
+  THREE
+} from "./chunk-OVHQQSEK.js";
 
-type AnimationItem = {
-  name: string;
-  playForward: () => void;
-  playBackward: () => void;
-  toggle: () => void;
-  isPlaying: boolean;
-  isReversed: boolean;
-};
-
-type AnimationControllerProps = {
-  children: (animations: AnimationItem[]) => ReactNode;
-  className?: string;
-};
-
-export const AnimationController: React.FC<AnimationControllerProps> = ({
+// src/react/controls/AnimationController.tsx
+import { useEffect, useState } from "react";
+import { jsx } from "react/jsx-runtime";
+var AnimationController = ({
   children,
-  className,
+  className
 }) => {
-  const model = useActiveModel() as THREE.Object3D | null;
-
-  const [clips, setClips] = useState<THREE.AnimationClip[]>([]);
-  const [mixer, setMixer] = useState<THREE.AnimationMixer | null>(null);
-  const [actions, setActions] = useState<Map<string, THREE.AnimationAction>>(
-    new Map()
+  const model = useActiveModel();
+  const [clips, setClips] = useState([]);
+  const [mixer, setMixer] = useState(null);
+  const [actions, setActions] = useState(
+    /* @__PURE__ */ new Map()
   );
-  const [playing, setPlaying] = useState<Set<string>>(new Set());
-  const [reversed, setReversed] = useState<Set<string>>(new Set());
-
-  // Crear mixer y acciones cuando el modelo cambie
+  const [playing, setPlaying] = useState(/* @__PURE__ */ new Set());
+  const [reversed, setReversed] = useState(/* @__PURE__ */ new Set());
   useEffect(() => {
     if (!model) {
       setMixer(null);
       setClips([]);
       return;
     }
-
     const _mixer = new THREE.AnimationMixer(model);
     setMixer(_mixer);
-
     const _clips = model.animations ?? [];
     setClips(_clips);
-
-    const _actions = new Map<string, THREE.AnimationAction>();
+    const _actions = /* @__PURE__ */ new Map();
     _clips.forEach((clip) => {
       const action = _mixer.clipAction(clip);
       action.clampWhenFinished = true;
@@ -56,28 +40,22 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
       _actions.set(clip.name, action);
     });
     setActions(_actions);
-
     const clock = new THREE.Clock();
     const loop = () => {
       _mixer.update(clock.getDelta());
       requestAnimationFrame(loop);
     };
     loop();
-
     return () => {
       _mixer.stopAllAction();
     };
   }, [model]);
-
-  // --- Controles de reproducción ---
-  const playForward = (name: string) => {
+  const playForward = (name) => {
     const action = actions.get(name);
     if (!action) {
       return;
     }
-
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
-
     action.reset().setEffectiveTimeScale(1).fadeIn(0.2).play();
     setPlaying((p) => new Set(p).add(name));
     setReversed((r) => {
@@ -86,35 +64,31 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
       return n;
     });
   };
-
-  const playBackward = (name: string) => {
+  const playBackward = (name) => {
     const action = actions.get(name);
     if (!action) {
       return;
     }
-
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
-
     action.reset().setEffectiveTimeScale(-1).fadeIn(0.2).play();
     setPlaying((p) => new Set(p).add(name));
     setReversed((r) => new Set(r).add(name));
   };
-
-  const toggle = (name: string) =>
-    reversed.has(name) ? playForward(name) : playBackward(name);
-
-  const animationList: AnimationItem[] = clips.map((clip) => ({
+  const toggle = (name) => reversed.has(name) ? playForward(name) : playBackward(name);
+  const animationList = clips.map((clip) => ({
     name: clip.name || `Anim ${clip.uuid.slice(0, 4)}`,
     playForward: () => playForward(clip.name),
     playBackward: () => playBackward(clip.name),
     toggle: () => toggle(clip.name),
     isPlaying: playing.has(clip.name),
-    isReversed: reversed.has(clip.name),
+    isReversed: reversed.has(clip.name)
   }));
-
   if (animationList.length === 0) {
     return null;
   }
+  return /* @__PURE__ */ jsx("div", { className, children: children(animationList) });
+};
 
-  return <div className={className}>{children(animationList)}</div>;
+export {
+  AnimationController
 };
