@@ -64,25 +64,19 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
     };
     loop();
 
-    // 🔥 Detectar fin de animación
     _mixer.addEventListener('finished', (e: any) => {
       const finishedName = e.action.getClip().name;
       const isReverse = reversed.has(finishedName);
-
-      // al terminar forward → reversed = true
-      // al terminar backward → reversed = false
       setReversed((prev) => {
         const newSet = new Set(prev);
         if (isReverse) {
           newSet.delete(finishedName);
-        } // terminó backward
-        else {
+        } else {
           newSet.add(finishedName);
-        } // terminó forward
+        }
         return newSet;
       });
 
-      // al terminar siempre deja de estar reproduciendo
       setPlaying((prev) => {
         const newSet = new Set(prev);
         newSet.delete(finishedName);
@@ -96,7 +90,6 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
     };
   }, [model]);
 
-  // --- Controles de reproducción ---
   const playForward = (name: string) => {
     const action = actions.get(name);
     if (!action) {
@@ -116,8 +109,8 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
     }
 
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
-
-    action.reset().setEffectiveTimeScale(-1).fadeIn(0.2).play();
+    action.time = action.getClip().duration;
+    action.setEffectiveTimeScale(-1).fadeIn(0.2).play();
     setPlaying(new Set([name]));
   };
 
