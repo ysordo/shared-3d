@@ -92,7 +92,6 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
     scale: number,
     time: number
   ): THREE.AnimationAction => {
-    action.reset();
     action.paused = false;
     action.timeScale = scale;
     action.time = time;
