@@ -119,7 +119,6 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
 
     action.reset().setEffectiveTimeScale(-1).fadeIn(0.2).play();
     setPlaying(new Set([name]));
-    setReversed((prev) => new Set(prev).add(name));
   };
 
   const toggle = (name: string) =>

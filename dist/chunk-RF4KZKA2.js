@@ -1,46 +1,46 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }
-
-var _chunkDEXPOPMYcjs = require('./chunk-DEXPOPMY.cjs');
-
-
-var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
+import {
+  useActiveModel
+} from "./chunk-KJNAEIJW.js";
+import {
+  THREE
+} from "./chunk-OVHQQSEK.js";
 
 // src/react/controls/AnimationController.tsx
-var _react = require('react');
-var _jsxruntime = require('react/jsx-runtime');
+import { useEffect, useState } from "react";
+import { jsx } from "react/jsx-runtime";
 var AnimationController = ({
   children,
   className
 }) => {
-  const model = _chunkDEXPOPMYcjs.useActiveModel.call(void 0, );
-  const [clips, setClips] = _react.useState.call(void 0, []);
-  const [mixer, setMixer] = _react.useState.call(void 0, null);
-  const [actions, setActions] = _react.useState.call(void 0, 
+  const model = useActiveModel();
+  const [clips, setClips] = useState([]);
+  const [mixer, setMixer] = useState(null);
+  const [actions, setActions] = useState(
     /* @__PURE__ */ new Map()
   );
-  const [playing, setPlaying] = _react.useState.call(void 0, /* @__PURE__ */ new Set());
-  const [reversed, setReversed] = _react.useState.call(void 0, /* @__PURE__ */ new Set());
-  _react.useEffect.call(void 0, () => {
+  const [playing, setPlaying] = useState(/* @__PURE__ */ new Set());
+  const [reversed, setReversed] = useState(/* @__PURE__ */ new Set());
+  useEffect(() => {
     if (!model) {
       setMixer(null);
       setClips([]);
       return;
     }
-    const _mixer = new _chunkEA3XQ4KJcjs.THREE.AnimationMixer(model);
+    const _mixer = new THREE.AnimationMixer(model);
     setMixer(_mixer);
-    const _clips = _nullishCoalesce(model.animations, () => ( []));
+    const _clips = model.animations ?? [];
     setClips(_clips);
     const _actions = /* @__PURE__ */ new Map();
     _clips.forEach((clip) => {
       const action = _mixer.clipAction(clip);
       action.clampWhenFinished = true;
       action.enabled = true;
-      action.setLoop(_chunkEA3XQ4KJcjs.THREE.LoopOnce, 1);
+      action.setLoop(THREE.LoopOnce, 1);
       action.reset();
       _actions.set(clip.name, action);
     });
     setActions(_actions);
-    const clock = new _chunkEA3XQ4KJcjs.THREE.Clock();
+    const clock = new THREE.Clock();
     const loop = () => {
       _mixer.update(clock.getDelta());
       requestAnimationFrame(loop);
@@ -87,7 +87,6 @@ var AnimationController = ({
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
     action.reset().setEffectiveTimeScale(-1).fadeIn(0.2).play();
     setPlaying(/* @__PURE__ */ new Set([name]));
-    setReversed((prev) => new Set(prev).add(name));
   };
   const toggle = (name) => reversed.has(name) ? playBackward(name) : playForward(name);
   const animationList = clips.map((clip) => ({
@@ -101,9 +100,9 @@ var AnimationController = ({
   if (animationList.length === 0) {
     return null;
   }
-  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: children(animationList) });
+  return /* @__PURE__ */ jsx("div", { className, children: children(animationList) });
 };
 
-
-
-exports.AnimationController = AnimationController;
+export {
+  AnimationController
+};
