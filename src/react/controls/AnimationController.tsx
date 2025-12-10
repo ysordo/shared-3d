@@ -92,6 +92,7 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
     scale: number,
     time: number
   ): THREE.AnimationAction => {
+    action.reset();
     action.paused = false;
     action.timeScale = scale;
     action.time = time;
@@ -107,7 +108,7 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
 
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
 
-    reset(action, 1, 0).fadeIn(0.2).play();
+    reset(action, 1, 0).play();
     setPlaying(new Set([name]));
   };
 
@@ -118,7 +119,7 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
     }
 
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
-    reset(action, -1, action.getClip().duration).fadeIn(0.2).play();
+    reset(action, -1, action.getClip().duration).play();
     setPlaying(new Set([name]));
   };
 

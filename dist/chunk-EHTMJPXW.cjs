@@ -67,6 +67,7 @@ var AnimationController = ({
     };
   }, [model]);
   const reset = (action, scale, time) => {
+    action.reset();
     action.paused = false;
     action.timeScale = scale;
     action.time = time;
@@ -79,7 +80,7 @@ var AnimationController = ({
       return;
     }
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
-    reset(action, 1, 0).fadeIn(0.2).play();
+    reset(action, 1, 0).play();
     setPlaying(/* @__PURE__ */ new Set([name]));
   };
   const playBackward = (name) => {
@@ -88,7 +89,7 @@ var AnimationController = ({
       return;
     }
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
-    reset(action, -1, action.getClip().duration).fadeIn(0.2).play();
+    reset(action, -1, action.getClip().duration).play();
     setPlaying(/* @__PURE__ */ new Set([name]));
   };
   const toggle = (name) => reversed.has(name) ? playBackward(name) : playForward(name);
