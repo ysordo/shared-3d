@@ -1,6 +1,6 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-nyu4nGoT.cjs';
-import 'three';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-DI3vK_io.cjs';
 import '../../cache/types.cjs';
+import 'three';
 
 declare class OrbitControlsPlugin implements Plugin {
     name: string;

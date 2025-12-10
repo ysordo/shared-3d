@@ -1,11 +1,19 @@
 'use client';
 import type { ReactNode } from 'react';
-import React, { createContext, useContext, forwardRef, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  useContext,
+  forwardRef,
+  useEffect,
+  useState,
+} from 'react';
 import { SceneOrchestrator } from '../core/orchestrator/SceneOrchestrator';
 import type { SceneConfig } from '../core/orchestrator/SceneOrchestrator';
+import type { THREE } from '../lib';
 
 type SceneContextValue = {
   orchestrator: SceneOrchestrator;
+  activeModel: THREE.Group | null;
 };
 
 const SceneContext = createContext<SceneContextValue | null>(null);
@@ -17,7 +25,10 @@ type SceneProviderProps = {
 
 export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
   ({ children, config }, ref) => {
-    const [orchestrator, setOrchestrator] = useState<SceneOrchestrator | null>(null);
+    const [orchestrator, setOrchestrator] = useState<SceneOrchestrator | null>(
+      null
+    );
+    const [activeModel, setActiveModel] = useState<THREE.Group | null>(null);
 
     useEffect(() => {
       if (!ref) {
@@ -47,8 +58,23 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
       }
     }, [ref, config]);
 
+    useEffect(() => {
+      if (!orchestrator) {
+        return;
+      }
+      const updateActiveModel = () => {
+        const model = orchestrator.getActiveModel();
+        setActiveModel(model);
+      };
+      orchestrator.addEventListener('activeModelChanged' as never, updateActiveModel);
+      return () => {
+        orchestrator.removeEventListener('activeModelChanged' as never, updateActiveModel);
+      };
+    }, [orchestrator]);
+
     return (
-      <SceneContext.Provider value={{ orchestrator: orchestrator as SceneOrchestrator }}>
+      <SceneContext.Provider
+        value={{ orchestrator: orchestrator as SceneOrchestrator, activeModel }}>
         {children}
       </SceneContext.Provider>
     );
@@ -57,7 +83,7 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
 
 SceneProvider.displayName = 'SceneProvider';
 
-export const useScene = (): SceneOrchestrator => {
+export const useScene = (): SceneContextValue => {
   const context = useContext(SceneContext);
   if (!context) {
     throw new Error('useScene debe usarse dentro de <SceneProvider>');
@@ -67,5 +93,5 @@ export const useScene = (): SceneOrchestrator => {
       'SceneOrchestrator aún no está inicializado. Asegúrate de que el canvas esté montado'
     );
   }
-  return context.orchestrator;
+  return context;
 };

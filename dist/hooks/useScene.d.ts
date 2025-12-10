@@ -1,6 +1,6 @@
-import { a as SceneOrchestrator } from '../SceneOrchestrator-C0-hSjJ-.js';
-import 'three';
+import { a as SceneOrchestrator } from '../SceneOrchestrator-IMvwSmmi.js';
 import '../core/cache/types.js';
+import 'three';
 
 declare const useScene: () => SceneOrchestrator;
 

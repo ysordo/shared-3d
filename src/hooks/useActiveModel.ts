@@ -1,8 +1,8 @@
 'use client';
-import { useScene } from './useScene';
+import { useScene as useSceneContext } from '../context/SceneContext';
 import type { THREE } from '../lib';
 
 export const useActiveModel = (): THREE.Group | null => {
-  const orchestrator = useScene();
-  return orchestrator.getActiveModel();
+  const {activeModel} = useSceneContext();
+  return activeModel;
 };

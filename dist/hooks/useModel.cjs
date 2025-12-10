@@ -1,10 +1,10 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkTXG3AYFPcjs = require('../chunk-TXG3AYFP.cjs');
-require('../chunk-JE3CNDUJ.cjs');
-require('../chunk-YA3DZC5K.cjs');
-require('../chunk-SKUS5IVS.cjs');
+var _chunkTSTM4777cjs = require('../chunk-TSTM4777.cjs');
+require('../chunk-4F6P3R7R.cjs');
+require('../chunk-CVZT6BLD.cjs');
+require('../chunk-HZ2CTXRI.cjs');
 require('../chunk-RIJLTLXB.cjs');
 require('../chunk-DXL4SHF5.cjs');
 require('../chunk-QRVOSZH3.cjs');
@@ -14,4 +14,4 @@ require('../chunk-T2YGLA3W.cjs');
 require('../chunk-UW5RKAXQ.cjs');
 
 
-exports.useModel = _chunkTXG3AYFPcjs.useModel;
+exports.useModel = _chunkTSTM4777cjs.useModel;

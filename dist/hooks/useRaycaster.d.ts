@@ -1,7 +1,7 @@
 import { RaycasterEvent } from '../core/orchestrator/plugins/RaycasterPlugin.js';
-import '../SceneOrchestrator-C0-hSjJ-.js';
-import 'three';
+import '../SceneOrchestrator-IMvwSmmi.js';
 import '../core/cache/types.js';
+import 'three';
 
 declare const useRaycaster: (onEvent: (event: RaycasterEvent) => void) => void;
 

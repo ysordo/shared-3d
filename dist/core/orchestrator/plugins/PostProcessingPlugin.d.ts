@@ -1,6 +1,6 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-C0-hSjJ-.js';
-import 'three';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-IMvwSmmi.js';
 import '../../cache/types.js';
+import 'three';
 
 declare class PostProcessingPlugin implements Plugin {
     private options;

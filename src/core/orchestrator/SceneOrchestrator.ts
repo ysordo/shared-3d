@@ -1,8 +1,8 @@
-import * as THREE from 'three';
 import { GLTFLoader } from '../loaders/GLTFLoader';
 import { HDRILoader } from '../loaders/HDRILoader';
 import type { ManifestEntry } from '../cache/types';
 import type { Plugin, PluginContext } from './types';
+import { THREE } from '../../lib';
 
 export type SceneConfig = {
   antialias?: boolean;
@@ -13,7 +13,7 @@ export type SceneConfig = {
   clearColor?: THREE.ColorRepresentation;
 };
 
-export class SceneOrchestrator {
+export class SceneOrchestrator extends THREE.EventDispatcher {
   private static instance: SceneOrchestrator | null = null;
 
   public readonly scene: THREE.Scene;
@@ -28,6 +28,7 @@ export class SceneOrchestrator {
   private resizeHandler: () => void;
 
   private constructor(canvas: HTMLCanvasElement, config: SceneConfig = {}) {
+    super();
     this.canvas = canvas;
 
     this.renderer = new THREE.WebGLRenderer({
@@ -145,11 +146,13 @@ export class SceneOrchestrator {
     const model = await GLTFLoader.load(entry, {
       draco: options?.draco,
       onLoaded: (obj) => {
-        this.activeModel = obj;
         const t = this.scene.getObjectByName(obj.name);
         if(t){
           this.scene.remove(t);
         }
+
+        this.activeModel = obj;
+        this.dispatchEvent({ type: 'activeModelChanged', model: this.activeModel } as never);
         this.scene.add(obj);
         console.info(`[Orchestrator] Active model: ${entry.id}`);
       },
