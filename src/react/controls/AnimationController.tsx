@@ -64,8 +64,35 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
     };
     loop();
 
+    // 🔥 Detectar fin de animación
+    _mixer.addEventListener('finished', (e: any) => {
+      const finishedName = e.action.getClip().name;
+      const isReverse = reversed.has(finishedName);
+
+      // al terminar forward → reversed = true
+      // al terminar backward → reversed = false
+      setReversed((prev) => {
+        const newSet = new Set(prev);
+        if (isReverse) {
+          newSet.delete(finishedName);
+        } // terminó backward
+        else {
+          newSet.add(finishedName);
+        } // terminó forward
+        return newSet;
+      });
+
+      // al terminar siempre deja de estar reproduciendo
+      setPlaying((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(finishedName);
+        return newSet;
+      });
+    });
+
     return () => {
       _mixer.stopAllAction();
+      _mixer.removeEventListener('finished', () => {});
     };
   }, [model]);
 
@@ -79,12 +106,7 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
 
     action.reset().setEffectiveTimeScale(1).fadeIn(0.2).play();
-    setPlaying((p) => new Set(p).add(name));
-    setReversed((r) => {
-      const n = new Set(r);
-      n.delete(name);
-      return n;
-    });
+    setPlaying(new Set([name]));
   };
 
   const playBackward = (name: string) => {
@@ -96,12 +118,12 @@ export const AnimationController: React.FC<AnimationControllerProps> = ({
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
 
     action.reset().setEffectiveTimeScale(-1).fadeIn(0.2).play();
-    setPlaying((p) => new Set(p).add(name));
-    setReversed((r) => new Set(r).add(name));
+    setPlaying(new Set([name]));
+    setReversed((prev) => new Set(prev).add(name));
   };
 
   const toggle = (name: string) =>
-    reversed.has(name) ? playForward(name) : playBackward(name);
+    reversed.has(name) ? playBackward(name) : playForward(name);
 
   const animationList: AnimationItem[] = clips.map((clip) => ({
     name: clip.name || `Anim ${clip.uuid.slice(0, 4)}`,

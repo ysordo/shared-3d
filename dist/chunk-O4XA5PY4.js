@@ -46,8 +46,28 @@ var AnimationController = ({
       requestAnimationFrame(loop);
     };
     loop();
+    _mixer.addEventListener("finished", (e) => {
+      const finishedName = e.action.getClip().name;
+      const isReverse = reversed.has(finishedName);
+      setReversed((prev) => {
+        const newSet = new Set(prev);
+        if (isReverse) {
+          newSet.delete(finishedName);
+        } else {
+          newSet.add(finishedName);
+        }
+        return newSet;
+      });
+      setPlaying((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(finishedName);
+        return newSet;
+      });
+    });
     return () => {
       _mixer.stopAllAction();
+      _mixer.removeEventListener("finished", () => {
+      });
     };
   }, [model]);
   const playForward = (name) => {
@@ -57,12 +77,7 @@ var AnimationController = ({
     }
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
     action.reset().setEffectiveTimeScale(1).fadeIn(0.2).play();
-    setPlaying((p) => new Set(p).add(name));
-    setReversed((r) => {
-      const n = new Set(r);
-      n.delete(name);
-      return n;
-    });
+    setPlaying(/* @__PURE__ */ new Set([name]));
   };
   const playBackward = (name) => {
     const action = actions.get(name);
@@ -71,10 +86,10 @@ var AnimationController = ({
     }
     actions.forEach((a, n) => n !== name && a.fadeOut(0.2));
     action.reset().setEffectiveTimeScale(-1).fadeIn(0.2).play();
-    setPlaying((p) => new Set(p).add(name));
-    setReversed((r) => new Set(r).add(name));
+    setPlaying(/* @__PURE__ */ new Set([name]));
+    setReversed((prev) => new Set(prev).add(name));
   };
-  const toggle = (name) => reversed.has(name) ? playForward(name) : playBackward(name);
+  const toggle = (name) => reversed.has(name) ? playBackward(name) : playForward(name);
   const animationList = clips.map((clip) => ({
     name: clip.name || `Anim ${clip.uuid.slice(0, 4)}`,
     playForward: () => playForward(clip.name),
