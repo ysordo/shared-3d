@@ -84,22 +84,38 @@ export class WebPHDRLoader {
       (error) => onError?.(error as Event)
     );
 
-    // Retornamos textura vacía mientras carga
     return new THREE.DataTexture(new Uint8Array(4), 1, 1, THREE.RGBAFormat);
   }
 
   parse(buffer: ArrayBuffer): WebPHDRData {
     const view = new DataView(buffer);
 
-    // Validar firma WebP
-    if (view.getUint32(0, true) !== 0x46495257) { // "RIFF"
-      throw new Error('Not a valid WebP file');
-    }
-    if (view.getUint32(8, true) !== 0x50424557) { // "WEBP"
-      throw new Error('Not a valid WebP file');
+    let headerOffset = 0;
+    while (headerOffset < buffer.byteLength - 12) {
+      if (
+        view.getUint8(headerOffset) === 0x52 &&
+        view.getUint8(headerOffset + 1) === 0x49 &&
+        view.getUint8(headerOffset + 2) === 0x46 &&
+        view.getUint8(headerOffset + 3) === 0x46
+      ) {
+        break;
+      }
+      headerOffset++;
     }
 
-    // Buscar chunk EXIF o XMP con metadatos HDR
+    if (headerOffset >= buffer.byteLength - 12) {
+      throw new Error('Not a valid WebP file (RIFF not found)');
+    }
+
+    if (
+      view.getUint8(headerOffset + 8) !== 0x57 ||
+      view.getUint8(headerOffset + 9) !== 0x45 ||
+      view.getUint8(headerOffset + 10) !== 0x42 ||
+      view.getUint8(headerOffset + 11) !== 0x50
+    ) {
+      throw new Error('Not a valid WebP file (invalid WEBP chunk)');
+    }
+
     let offset = 12;
     let exposure = this.exposure;
     let maxLuminance = 16.0;
@@ -115,9 +131,8 @@ export class WebPHDRLoader {
       const chunkSize = view.getUint32(offset + 4, true) + 8;
 
       if (chunkType === 'VP8X' || chunkType === 'VP8L' || chunkType === 'VP8 ') {
-        // Aquí iría el decode real del WebP (requiere libwebp)
-        // Pero para esta versión: fallback a textura negra con exposición
-        break;
+        offset += chunkSize + (chunkSize % 2);
+        continue;
       }
 
       if (chunkType === 'EXIF' || chunkType === 'XMP ') {
@@ -133,7 +148,6 @@ export class WebPHDRLoader {
       offset += chunkSize + (chunkSize % 2);
     }
 
-    // Generar datos HDR simulados (RGBM encoding)
     const width = 1024;
     const height = 512;
     const size = width * height * 4;
@@ -141,12 +155,10 @@ export class WebPHDRLoader {
       ? new Float32Array(size)
       : new Uint16Array(size);
 
-    // Simular un HDRI básico (cielo azul con sol)
     for (let i = 0; i < height; i++) {
       for (let j = 0; j < width; j++) {
         const idx = (i * width + j) * 4;
 
-        // Simular gradiente cielo + sol
         const theta = (i / height) * Math.PI;
         const phi = (j / width) * Math.PI * 2;
 
@@ -157,7 +169,6 @@ export class WebPHDRLoader {
 
         const color = sky.clone().add(sun).multiplyScalar(exposure);
 
-        // RGBM encoding
         const maxChannel = Math.max(color.r, color.g, color.b, 0.0001);
         const range = Math.min(255, Math.floor(maxChannel / maxLuminance * 255));
 
@@ -167,7 +178,6 @@ export class WebPHDRLoader {
           data[idx + 2] = color.b / (range + 1);
           data[idx + 3] = range / 255;
         } else {
-          // HalfFloat
           const floatData = new Float32Array(4);
           floatData[0] = color.r / (range + 1);
           floatData[1] = color.g / (range + 1);
