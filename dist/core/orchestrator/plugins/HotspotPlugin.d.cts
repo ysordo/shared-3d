@@ -1,5 +1,6 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-DI3vK_io.cjs';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-Cl73AXK2.cjs';
 import * as THREE from 'three';
+import '../../loaders/HDRILoader.cjs';
 import '../../cache/types.cjs';
 
 type HotspotData = {

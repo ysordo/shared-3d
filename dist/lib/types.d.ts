@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 export { ManifestEntry, ModelManifest } from '../core/cache/types.js';
-export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-IMvwSmmi.js';
+export { HDRILoaderOptions } from '../core/loaders/HDRILoader.js';
+export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-BMDHZMn7.js';
 export { CustomMaterialFactory, MaterialConfig } from '../react/controls/MaterialController.js';
 import 'react';
 
@@ -13,6 +14,7 @@ type LightConfig = {
     position?: Vector3Tuple;
     castShadow?: boolean;
 };
+
 type ClickEvent = {
     object: THREE.Object3D;
     point: THREE.Vector3;

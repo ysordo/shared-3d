@@ -36,6 +36,7 @@ export { MaterialController } from './controls/MaterialController.js';
 export { SceneObject } from './primitives/SceneObject.js';
 import 'react';
 import 'three';
-import '../SceneOrchestrator-IMvwSmmi.js';
+import '../SceneOrchestrator-BMDHZMn7.js';
+import '../core/loaders/HDRILoader.js';
 import '../core/cache/types.js';
 import 'react/jsx-runtime';

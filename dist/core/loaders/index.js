@@ -4,10 +4,10 @@ import {
 } from "../../chunk-R4AEK7RE.js";
 import {
   HDRILoader
-} from "../../chunk-DEFMQKDC.js";
+} from "../../chunk-QZWQ3MT6.js";
 import {
   WebPHDRLoader
-} from "../../chunk-L2K54Z4D.js";
+} from "../../chunk-TANS7BA5.js";
 import "../../chunk-OK2NCVM7.js";
 import "../../chunk-OVHQQSEK.js";
 import "../../chunk-EPN65WJP.js";

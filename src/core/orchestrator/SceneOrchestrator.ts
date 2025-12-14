@@ -1,4 +1,5 @@
 import { GLTFLoader } from '../loaders/GLTFLoader';
+import type { HDRILoaderOptions } from '../loaders/HDRILoader';
 import { HDRILoader } from '../loaders/HDRILoader';
 import type { ManifestEntry } from '../cache/types';
 import type { Plugin, PluginContext } from './types';
@@ -152,7 +153,7 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
         }
 
         this.activeModel = obj;
-        this.dispatchEvent({ type: 'activeModelChanged', model: this.activeModel } as never);
+        this.dispatchEvent({ type: 'model::loaded', model: this.activeModel } as never);
         this.scene.add(obj);
         console.info(`[Orchestrator] Active model: ${entry.id}`);
       },
@@ -172,21 +173,66 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
   }
 
   /* === HDRI === */
-  async setHDRI(entry: ManifestEntry): Promise<THREE.Texture> {
-    if (this.activeHDRI) {
-      this.activeHDRI.dispose();
+  async setHDRI(
+    entry: ManifestEntry, 
+    config: Partial<Omit<HDRILoaderOptions, 'dataType' | 'preserveHDR' | 'rgbeLoaderOptions'>> = {}
+  ): Promise<THREE.Texture> {
+    try {
+      if (this.activeHDRI) {
+        this.activeHDRI.dispose();
+        this.activeHDRI = null;
+        
+        this.scene.environment = null;
+        this.scene.background = null;
+      }
+
+      const texture = await HDRILoader.load(
+        entry, 
+        {
+          onLoaded: (tex, loadedEntry) => {
+            this.activeHDRI = tex;
+            this.scene.environment = tex;
+            this.scene.background = tex;
+            
+            tex.userData = {
+              ...tex.userData,
+              manifestId: loadedEntry.id,
+              loadedBy: 'Orchestrator',
+              loadedAt: new Date().toISOString(),
+              config: config
+            };
+            
+            console.info(`[Orchestrator] HDRI activo: ${loadedEntry.id}`, {
+              size: `${tex.image.width}x${tex.image.height}`,
+              format: tex.userData?.format,
+              exposure: config.exposure || HDRILoader.getOptions().exposure
+            });
+            
+            this.dispatchEvent({type: 'hdri::loaded', texture, entry: loadedEntry, config } as never);
+          },
+          onProgress: (progress) => {
+            console.info(`[Orchestrator] HDRI loading: ${Math.round(progress.percent)}%`);
+            this.dispatchEvent({type: 'hdri::progress', progress, entry } as never);
+          },
+          onError: (error, url) => {
+            console.error(`[Orchestrator] Error cargando HDRI ${entry.id}:`, error);
+            this.dispatchEvent({type: 'hdri::error', error, entry } as never);
+          }
+        },
+        {
+          exposure: 1.0,
+          maxLuminance: 16.0,
+          ...config
+        }
+      );
+
+      return texture;
+
+    } catch (error) {
+      console.error(`[Orchestrator] Error en setHDRI para ${entry.id}:`, error);
+      this.dispatchEvent({type: 'hdri::error', error, entry } as never);
+      throw error;
     }
-
-    const texture = await HDRILoader.load(entry, {
-      onLoaded: (tex) => {
-        this.activeHDRI = tex;
-        this.scene.environment = tex;
-        this.scene.background = tex;
-        console.info(`[Orchestrator] HDRI activo: ${entry.id}`);
-      },
-    });
-
-    return texture;
   }
 
   clearHDRI(): void {

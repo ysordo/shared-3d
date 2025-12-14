@@ -66,9 +66,9 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
         const model = orchestrator.getActiveModel();
         setActiveModel(model);
       };
-      orchestrator.addEventListener('activeModelChanged' as never, updateActiveModel);
+      orchestrator.addEventListener('model::loaded' as never, updateActiveModel);
       return () => {
-        orchestrator.removeEventListener('activeModelChanged' as never, updateActiveModel);
+        orchestrator.removeEventListener('model::loaded' as never, updateActiveModel);
       };
     }, [orchestrator]);
 

@@ -15,6 +15,8 @@ export type LightConfig = {
   castShadow?: boolean;
 };
 
+export type { HDRILoaderOptions } from '../core/loaders/HDRILoader';
+
 /* === Common Events === */
 export type ClickEvent = {
   object: THREE.Object3D;

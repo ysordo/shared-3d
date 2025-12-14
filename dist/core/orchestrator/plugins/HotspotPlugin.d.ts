@@ -1,5 +1,6 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-IMvwSmmi.js';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-BMDHZMn7.js';
 import * as THREE from 'three';
+import '../../loaders/HDRILoader.js';
 import '../../cache/types.js';
 
 type HotspotData = {

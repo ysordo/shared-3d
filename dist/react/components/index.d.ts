@@ -32,6 +32,7 @@ export { TheaterLighting } from './TheaterLighting.js';
 export { VRButton } from './VRButton.js';
 import 'react';
 import 'three';
-import '../../SceneOrchestrator-IMvwSmmi.js';
+import '../../SceneOrchestrator-BMDHZMn7.js';
+import '../../core/loaders/HDRILoader.js';
 import '../../core/cache/types.js';
 import 'react/jsx-runtime';
