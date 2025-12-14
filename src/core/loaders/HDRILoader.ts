@@ -118,18 +118,13 @@ export class HDRILoader {
     const { onProgress, onLoaded, onError } = events;
 
     const isWebP = url.toLowerCase().endsWith('.webp');
-    
-    // Usa opciones personalizadas si se proporcionan, de lo contrario usa las globales
     const options = customOptions ? { ...this.currentOptions, ...customOptions } : this.currentOptions;
     
-    // Configura los loaders con las opciones apropiadas
     let loader = isWebP ? this.webpLoader : this.rgbeLoader;
     
     if (isWebP && customOptions) {
-      // Para WebP, crea un loader temporal con las opciones personalizadas
       const tempLoader = new WebPHDRLoader();
       
-      // Aplica todas las opciones relevantes
       if (customOptions.dataType !== undefined) {
         tempLoader.setDataType(customOptions.dataType);
       }
@@ -147,33 +142,33 @@ export class HDRILoader {
     }
 
     return new Promise((resolve, reject) => {
-      loader.load(
+      // loader.load() retorna una textura INMEDIATAMENTE
+      const texture = loader.load(
         url,
-        (texture: THREE.Texture) => {
-          texture.mapping = THREE.EquirectangularReflectionMapping;
-          texture.colorSpace = THREE.LinearSRGBColorSpace;
-          texture.minFilter = THREE.LinearFilter;
-          texture.magFilter = THREE.LinearFilter;
-          texture.generateMipmaps = false;
-          texture.needsUpdate = true;
-          texture.name = entry.id;
-          texture.userData = {
+        (loadedTexture: THREE.Texture, data?: any) => {
+          // Esta textura es la MISMA que se retornó arriba, ya actualizada
+          
+          // Aplicar configuración adicional
+          loadedTexture.mapping = THREE.EquirectangularReflectionMapping;
+          loadedTexture.colorSpace = THREE.LinearSRGBColorSpace;
+          loadedTexture.minFilter = THREE.LinearFilter;
+          loadedTexture.magFilter = THREE.LinearFilter;
+          loadedTexture.generateMipmaps = false;
+          loadedTexture.needsUpdate = true;
+          loadedTexture.name = entry.id;
+          
+          // Agregar metadata adicional
+          loadedTexture.userData = {
+            ...loadedTexture.userData,
             sourceUrl: url,
             manifestHash: entry.hash,
             format: isWebP ? 'webp-hdr' : 'rgbe',
             loadedAt: Date.now(),
-            loaderOptions: options, // Guarda las opciones usadas
-            ...(isWebP ? {
-              hdrStats: texture.userData?.maxLuminance ? {
-                maxLuminance: texture.userData.maxLuminance,
-                averageLuminance: texture.userData.averageLuminance,
-                exposure: options.exposure
-              } : undefined
-            } : {})
+            loaderOptions: options
           };
 
-          onLoaded?.(texture, entry);
-          resolve(texture);
+          onLoaded?.(loadedTexture, entry);
+          resolve(loadedTexture); // Resuelve la promesa con la textura actualizada
         },
         (progress) => {
           if (progress.lengthComputable) {

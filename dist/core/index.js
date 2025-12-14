@@ -14,20 +14,14 @@ import {
   RaycasterPlugin
 } from "../chunk-FBPG64NM.js";
 import {
-  HotspotPlugin
-} from "../chunk-L3G2QMBD.js";
-import {
   LODSystemPlugin
 } from "../chunk-HVXJUMVE.js";
 import {
   MeasurementToolPlugin
 } from "../chunk-PRNY2PGZ.js";
 import {
-  AnnotationsPlugin
-} from "../chunk-CPKJTF7R.js";
-import {
-  AutoLODSystemPlugin
-} from "../chunk-NWBFTWAT.js";
+  HotspotPlugin
+} from "../chunk-L3G2QMBD.js";
 import {
   AdvancedCameraCollisionPlugin
 } from "../chunk-7UK5WDJQ.js";
@@ -38,6 +32,12 @@ import {
   AdvancedRaycasterPlugin
 } from "../chunk-NNMHNVZD.js";
 import {
+  AnnotationsPlugin
+} from "../chunk-CPKJTF7R.js";
+import {
+  AutoLODSystemPlugin
+} from "../chunk-NWBFTWAT.js";
+import {
   CacheValidator
 } from "../chunk-NQSGSI4W.js";
 import {
@@ -46,16 +46,16 @@ import {
 import "../chunk-SRUKCELR.js";
 import {
   SceneOrchestrator
-} from "../chunk-BWAIE4KJ.js";
+} from "../chunk-Q6VAA3J3.js";
 import {
   GLTFLoader
 } from "../chunk-R4AEK7RE.js";
 import {
   HDRILoader
-} from "../chunk-QZWQ3MT6.js";
+} from "../chunk-VSTC7ZYY.js";
 import {
   WebPHDRLoader
-} from "../chunk-TANS7BA5.js";
+} from "../chunk-W5OYT3BE.js";
 import "../chunk-OK2NCVM7.js";
 import "../chunk-OVHQQSEK.js";
 import "../chunk-EPN65WJP.js";

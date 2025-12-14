@@ -115,45 +115,71 @@ export class WebPHDRLoader {
     const loader = new THREE.FileLoader(this.manager);
     loader.setResponseType('arraybuffer');
 
+    const texture = new THREE.DataTexture(
+      new Uint8Array([0, 0, 0, 255]),
+      1, 1,
+      THREE.RGBAFormat,
+      this.type
+    );
+    
+    texture.colorSpace = THREE.LinearSRGBColorSpace;
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.generateMipmaps = false;
+    texture.flipY = true;
+    texture.name = url;
+    
+    texture.userData = {
+      isLoading: true,
+      url: url
+    };
+    
     loader.load(
       url,
       async (buffer) => {
         try {
           const result = await this.parse(buffer as ArrayBuffer);
-          const texture = new THREE.DataTexture(
-            result.data,
-            result.width,
-            result.height,
-            THREE.RGBAFormat,
-            result.type
-          );
-
-          texture.colorSpace = THREE.LinearSRGBColorSpace;
-          texture.minFilter = THREE.LinearFilter;
-          texture.magFilter = THREE.LinearFilter;
-          texture.generateMipmaps = false;
+          
+          texture.image = {
+            width: result.width,
+            height: result.height,
+            data: result.data
+          } as any;
+          
+          texture.format = THREE.RGBAFormat;
+          texture.type = result.type;
           texture.needsUpdate = true;
-          texture.flipY = true;
-
+          
           texture.userData = {
+            ...texture.userData,
+            isLoading: false,
             format: 'webp-hdr',
             exposure: result.exposure,
             maxLuminance: result.maxLuminance,
             averageLuminance: result.averageLuminance,
             preserveHDR: this.preserveHDR,
-            metadata: result.metadata
+            metadata: result.metadata,
+            loadedAt: Date.now()
           };
 
-          onLoad?.(texture, result);
+          if (onLoad) {
+            onLoad(texture, result);
+          }
         } catch (error) {
+          texture.userData.error = error;
+          texture.userData.isLoading = false;
           onError?.(error as Event);
         }
       },
       onProgress,
-      (err)=>onError?.(err as Event)
+      (err) => {
+        texture.userData.error = err;
+        texture.userData.isLoading = false;
+        onError?.(err as Event);
+      }
     );
 
-    return new THREE.DataTexture(new Uint8Array(4), 1, 1, THREE.RGBAFormat);
+    return texture;
   }
 
   async parse(buffer: ArrayBuffer): Promise<WebPHDRData> {
