@@ -3,7 +3,7 @@ import {
 } from "./chunk-PQPQ6H52.js";
 
 // src/react/components/HDRI.tsx
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 var HDRI = ({
   entry,
   config = {},
@@ -12,6 +12,7 @@ var HDRI = ({
   onError
 }) => {
   const orchestrator = useScene();
+  const isHandle = useRef(false);
   const handleHDRIEvent = useCallback(
     (event) => {
       if (event.entry?.id !== entry.id) {
@@ -48,16 +49,27 @@ var HDRI = ({
     orchestrator.addEventListener("hdri::loaded", handleHDRIEvent);
     orchestrator.addEventListener("hdri::progress", handleHDRIEvent);
     orchestrator.addEventListener("hdri::error", handleHDRIEvent);
-    orchestrator.setHDRI(entry, config).catch(console.error);
+    isHandle.current = true;
     return () => {
+      isHandle.current = false;
       orchestrator.removeEventListener("hdri::loaded", handleHDRIEvent);
       orchestrator.removeEventListener("hdri::progress", handleHDRIEvent);
       orchestrator.removeEventListener("hdri::error", handleHDRIEvent);
+    };
+  }, [orchestrator]);
+  useEffect(() => {
+    if (!isHandle.current) {
+      return;
+    }
+    if (orchestrator.getActiveHDRI()?.name !== entry.id) {
+      orchestrator.setHDRI(entry, config).catch(console.error);
+    }
+    return () => {
       if (orchestrator.clearHDRI) {
         orchestrator.clearHDRI();
       }
     };
-  }, [orchestrator, entry.id, config]);
+  }, [entry.id, config, isHandle.current]);
   return null;
 };
 
