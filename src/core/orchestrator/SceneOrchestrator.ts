@@ -178,6 +178,7 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
     config: Partial<Omit<HDRILoaderOptions, 'dataType' | 'preserveHDR' | 'rgbeLoaderOptions'>> = {}
   ): Promise<THREE.Texture> {
     try {
+      if(this.activeHDRI?.name === entry.id) {return this.activeHDRI; }
       if (this.activeHDRI) {
         this.activeHDRI.dispose();
         this.activeHDRI = null;

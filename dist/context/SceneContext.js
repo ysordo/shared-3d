@@ -2,8 +2,8 @@
 import {
   SceneProvider,
   useScene
-} from "../chunk-I3JMAFDG.js";
-import "../chunk-W5OTAQTI.js";
+} from "../chunk-LMAPD2LC.js";
+import "../chunk-KXSVI2NK.js";
 import "../chunk-R4AEK7RE.js";
 import "../chunk-VSTC7ZYY.js";
 import "../chunk-W5OYT3BE.js";

@@ -79,7 +79,7 @@ export const HDRI: React.FC<HDRIProps> = ({
         orchestrator.clearHDRI();
       }
     };
-  }, [orchestrator, entry.id, handleHDRIEvent, config]);
+  }, [orchestrator, entry.id, config]);
 
   return null;
 };
