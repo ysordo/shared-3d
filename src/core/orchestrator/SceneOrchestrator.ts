@@ -208,7 +208,7 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
               exposure: config.exposure || HDRILoader.getOptions().exposure
             });
             
-            this.dispatchEvent({type: 'hdri::loaded', texture, entry: loadedEntry, config } as never);
+            this.dispatchEvent({type: 'hdri::loaded', texture: tex, entry: loadedEntry, config } as never);
           },
           onProgress: (progress) => {
             console.info(`[Orchestrator] HDRI loading: ${Math.round(progress.percent)}%`);
