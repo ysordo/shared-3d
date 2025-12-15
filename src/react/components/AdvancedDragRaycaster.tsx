@@ -98,24 +98,38 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
 
           case 'objectdrag':
             if (state.isDragging && state.currentObject) {
-              // Obtenemos el delta desde el evento
-              const delta2 = event.delta as THREE.Vector2;
+              (state.currentObject as any).getWorldPosition(tempVector1);
+              camera.getWorldDirection(tempVector2);
+              tempPlane.setFromNormalAndCoplanarPoint(tempVector2, tempVector1);
 
-              // Convertimos Vector2 a Vector3 para poder aplicar rotación y sumarlo a la posición
-              tempVector3.set(delta2.x, delta2.y, 0);
+              tempVector2_1.set(
+                (event.current.x / window.innerWidth) * 2 - 1,
+                -(event.current.y / window.innerHeight) * 2 + 1
+              );
+              tempVector2_2.set(
+                (state.startPosition.x / window.innerWidth) * 2 - 1,
+                -(state.startPosition.y / window.innerHeight) * 2 + 1
+              );
 
-              // Compensación de rotación del modelo si está habilitada
-              if (enableRotationCompensation && activeModel) {
-                activeModel.getWorldQuaternion(tempQuaternion);
-                tempQuaternion.invert();
-                tempVector3.applyQuaternion(tempQuaternion);
+              tempRaycaster.setFromCamera(tempVector2_1, camera);
+              tempRaycaster.ray.intersectPlane(tempPlane, tempVector1);
+              tempRaycaster.setFromCamera(tempVector2_2, camera);
+              tempRaycaster.ray.intersectPlane(tempPlane, tempVector2);
+
+              if (tempVector1 && tempVector2) {
+                tempVector3.subVectors(tempVector1, tempVector2);
+
+                if (enableRotationCompensation && activeModel) {
+                  activeModel.getWorldQuaternion(tempQuaternion);
+                  tempQuaternion.invert();
+                  tempVector3.applyQuaternion(tempQuaternion);
+                }
+
+                (state.currentObject as any).position.add(tempVector3);
+                onDrag?.(state.currentObject, tempVector3.clone());
               }
 
-              // Aplicamos el delta a la posición del objeto
-              (state.currentObject as any).position.add(tempVector3);
-              onDrag?.(state.currentObject, tempVector3.clone());
-
-              state.startPosition.add(delta2);
+              state.startPosition.copy(event.current);
             }
             break;
 

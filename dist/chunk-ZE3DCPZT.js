@@ -3,7 +3,7 @@ import {
 } from "./chunk-KHCQXOKB.js";
 import {
   AdvancedRaycasterPlugin
-} from "./chunk-RHWTPFHQ.js";
+} from "./chunk-OHN5TLPQ.js";
 import {
   useActiveModel
 } from "./chunk-MGCTEPFA.js";
@@ -70,16 +70,32 @@ var AdvancedDragRaycaster = ({
             break;
           case "objectdrag":
             if (state.isDragging && state.currentObject) {
-              const delta2 = event.delta;
-              tempVector3.set(delta2.x, delta2.y, 0);
-              if (enableRotationCompensation && activeModel) {
-                activeModel.getWorldQuaternion(tempQuaternion);
-                tempQuaternion.invert();
-                tempVector3.applyQuaternion(tempQuaternion);
+              state.currentObject.getWorldPosition(tempVector1);
+              camera.getWorldDirection(tempVector2);
+              tempPlane.setFromNormalAndCoplanarPoint(tempVector2, tempVector1);
+              tempVector2_1.set(
+                event.current.x / window.innerWidth * 2 - 1,
+                -(event.current.y / window.innerHeight) * 2 + 1
+              );
+              tempVector2_2.set(
+                state.startPosition.x / window.innerWidth * 2 - 1,
+                -(state.startPosition.y / window.innerHeight) * 2 + 1
+              );
+              tempRaycaster.setFromCamera(tempVector2_1, camera);
+              tempRaycaster.ray.intersectPlane(tempPlane, tempVector1);
+              tempRaycaster.setFromCamera(tempVector2_2, camera);
+              tempRaycaster.ray.intersectPlane(tempPlane, tempVector2);
+              if (tempVector1 && tempVector2) {
+                tempVector3.subVectors(tempVector1, tempVector2);
+                if (enableRotationCompensation && activeModel) {
+                  activeModel.getWorldQuaternion(tempQuaternion);
+                  tempQuaternion.invert();
+                  tempVector3.applyQuaternion(tempQuaternion);
+                }
+                state.currentObject.position.add(tempVector3);
+                onDrag?.(state.currentObject, tempVector3.clone());
               }
-              state.currentObject.position.add(tempVector3);
-              onDrag?.(state.currentObject, tempVector3.clone());
-              state.startPosition.add(delta2);
+              state.startPosition.copy(event.current);
             }
             break;
           case "objectdragend":

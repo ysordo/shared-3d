@@ -3,7 +3,7 @@
 var _chunkEQETDOY7cjs = require('./chunk-EQETDOY7.cjs');
 
 
-var _chunkFOACYFFCcjs = require('./chunk-FOACYFFC.cjs');
+var _chunkHPHYHDPRcjs = require('./chunk-HPHYHDPR.cjs');
 
 
 var _chunkNA7O33PYcjs = require('./chunk-NA7O33PY.cjs');
@@ -30,7 +30,7 @@ var AdvancedRaycaster = ({
       return;
     }
     orchestrator.use(
-      new (0, _chunkFOACYFFCcjs.AdvancedRaycasterPlugin)(customModel || activeModel, (e) => {
+      new (0, _chunkHPHYHDPRcjs.AdvancedRaycasterPlugin)(customModel || activeModel, (e) => {
         switch (e.type) {
           case "objectclick":
             _optionalChain([onClick, 'optionalCall', _ => _(e)]);

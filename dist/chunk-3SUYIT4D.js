@@ -1,9 +1,9 @@
 import {
-  Model
-} from "./chunk-5EA5F3OW.js";
-import {
   Suspense
 } from "./chunk-RUDNMJTZ.js";
+import {
+  Model
+} from "./chunk-5EA5F3OW.js";
 
 // src/react/components/SuspenseModel.tsx
 import { jsx, jsxs } from "react/jsx-runtime";

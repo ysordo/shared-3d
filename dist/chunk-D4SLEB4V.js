@@ -3,7 +3,7 @@ import {
 } from "./chunk-KHCQXOKB.js";
 import {
   AdvancedRaycasterPlugin
-} from "./chunk-RHWTPFHQ.js";
+} from "./chunk-OHN5TLPQ.js";
 import {
   useActiveModel
 } from "./chunk-MGCTEPFA.js";

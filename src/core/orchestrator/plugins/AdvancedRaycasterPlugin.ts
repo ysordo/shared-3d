@@ -125,6 +125,7 @@ class RaycasterManager extends THREE.EventDispatcher {
     this.dispatchEvent({
       type: 'objectdrag',
       object: this.currentDragObject!,
+      current,
       delta,
       normalizedDelta: new THREE.Vector2(delta.x / this.domElement.clientWidth, delta.y / this.domElement.clientHeight),
     } as never);
