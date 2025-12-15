@@ -145,6 +145,9 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   ]);
 
   useEffect(() => {
+    if (!orchestrator.has('AdvancedRaycaster')) {
+      return;
+    }
     (
       orchestrator.plugin('AdvancedRaycaster') as AdvancedRaycasterPlugin
     )?.manager.setEnabled(isEnabled);

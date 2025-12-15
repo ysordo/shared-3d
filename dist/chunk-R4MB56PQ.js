@@ -112,6 +112,9 @@ var AdvancedDragRaycaster = ({
     enableRotationCompensation
   ]);
   useEffect(() => {
+    if (!orchestrator.has("AdvancedRaycaster")) {
+      return;
+    }
     orchestrator.plugin("AdvancedRaycaster")?.manager.setEnabled(isEnabled);
   }, [orchestrator.plugin("AdvancedRaycaster"), isEnabled]);
   const toggleEnabled = () => setIsEnabled((prev) => !prev);
