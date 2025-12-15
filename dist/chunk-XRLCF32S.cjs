@@ -13,6 +13,7 @@ var HDRI = ({
 }) => {
   const orchestrator = _chunkVRE7SNBYcjs.useScene.call(void 0, );
   const isHandle = _react.useRef.call(void 0, false);
+  const isloaded = _react.useRef.call(void 0, false);
   const handleHDRIEvent = _react.useCallback.call(void 0, 
     (event) => {
       if (_optionalChain([event, 'access', _ => _.entry, 'optionalAccess', _2 => _2.id]) !== entry.id) {
@@ -31,6 +32,7 @@ var HDRI = ({
             progress: event.progress,
             entry: event.entry
           })]);
+          isloaded.current = true;
           break;
         case "hdri::error":
           _optionalChain([onError, 'optionalCall', _5 => _5({
@@ -46,27 +48,47 @@ var HDRI = ({
     if (!orchestrator || !orchestrator.addEventListener) {
       return;
     }
-    orchestrator.addEventListener("hdri::loaded", handleHDRIEvent);
-    orchestrator.addEventListener("hdri::progress", handleHDRIEvent);
-    orchestrator.addEventListener("hdri::error", handleHDRIEvent);
+    orchestrator.addEventListener(
+      "hdri::loaded",
+      handleHDRIEvent
+    );
+    orchestrator.addEventListener(
+      "hdri::progress",
+      handleHDRIEvent
+    );
+    orchestrator.addEventListener(
+      "hdri::error",
+      handleHDRIEvent
+    );
     isHandle.current = true;
     return () => {
       isHandle.current = false;
-      orchestrator.removeEventListener("hdri::loaded", handleHDRIEvent);
-      orchestrator.removeEventListener("hdri::progress", handleHDRIEvent);
-      orchestrator.removeEventListener("hdri::error", handleHDRIEvent);
+      orchestrator.removeEventListener(
+        "hdri::loaded",
+        handleHDRIEvent
+      );
+      orchestrator.removeEventListener(
+        "hdri::progress",
+        handleHDRIEvent
+      );
+      orchestrator.removeEventListener(
+        "hdri::error",
+        handleHDRIEvent
+      );
     };
   }, [orchestrator]);
   _react.useEffect.call(void 0, () => {
     if (!isHandle.current) {
       return;
     }
-    if (_optionalChain([orchestrator, 'access', _6 => _6.getActiveHDRI, 'call', _7 => _7(), 'optionalAccess', _8 => _8.name]) !== entry.id) {
+    if (_optionalChain([orchestrator, 'access', _6 => _6.getActiveHDRI, 'call', _7 => _7(), 'optionalAccess', _8 => _8.name]) !== entry.id && !isloaded.current) {
+      isloaded.current = false;
       orchestrator.setHDRI(entry, config).catch(console.error);
     }
     return () => {
       if (orchestrator.clearHDRI) {
         orchestrator.clearHDRI();
+        isloaded.current = false;
       }
     };
   }, [entry.id, config, isHandle.current]);

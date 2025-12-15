@@ -1,7 +1,7 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunk3FSGISRCcjs = require('../../chunk-3FSGISRC.cjs');
+var _chunkXRLCF32Scjs = require('../../chunk-XRLCF32S.cjs');
 require('../../chunk-VRE7SNBY.cjs');
 require('../../chunk-3GISW4KX.cjs');
 require('../../chunk-HFLOZGRV.cjs');
@@ -14,4 +14,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.HDRI = _chunk3FSGISRCcjs.HDRI;
+exports.HDRI = _chunkXRLCF32Scjs.HDRI;

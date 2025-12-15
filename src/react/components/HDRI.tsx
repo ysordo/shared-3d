@@ -28,10 +28,13 @@ export const HDRI: React.FC<HDRIProps> = ({
 }) => {
   const orchestrator = useScene();
   const isHandle = useRef(false);
+  const isloaded = useRef(false);
 
   const handleHDRIEvent = useCallback(
     (event: any) => {
-      if (event.entry?.id !== entry.id) {return;}
+      if (event.entry?.id !== entry.id) {
+        return;
+      }
 
       switch (event.type) {
         case 'hdri::loaded':
@@ -47,6 +50,7 @@ export const HDRI: React.FC<HDRIProps> = ({
             progress: event.progress,
             entry: event.entry,
           });
+          isloaded.current = true;
           break;
 
         case 'hdri::error':
@@ -60,38 +64,58 @@ export const HDRI: React.FC<HDRIProps> = ({
     [entry.id, onLoaded, onProgress, onError]
   );
 
-  useEffect(()=>{
-     if (!orchestrator || !orchestrator.addEventListener) {
+  useEffect(() => {
+    if (!orchestrator || !orchestrator.addEventListener) {
       return;
     }
 
-    orchestrator.addEventListener('hdri::loaded' as never, handleHDRIEvent as EventListener);
-    orchestrator.addEventListener('hdri::progress' as never, handleHDRIEvent as EventListener);
-    orchestrator.addEventListener('hdri::error' as never, handleHDRIEvent as EventListener);
+    orchestrator.addEventListener(
+      'hdri::loaded' as never,
+      handleHDRIEvent as EventListener
+    );
+    orchestrator.addEventListener(
+      'hdri::progress' as never,
+      handleHDRIEvent as EventListener
+    );
+    orchestrator.addEventListener(
+      'hdri::error' as never,
+      handleHDRIEvent as EventListener
+    );
 
     isHandle.current = true;
 
     return () => {
       isHandle.current = false;
 
-      orchestrator.removeEventListener('hdri::loaded' as never, handleHDRIEvent as EventListener);
-      orchestrator.removeEventListener('hdri::progress' as never, handleHDRIEvent as EventListener);
-      orchestrator.removeEventListener('hdri::error' as never, handleHDRIEvent as EventListener);
+      orchestrator.removeEventListener(
+        'hdri::loaded' as never,
+        handleHDRIEvent as EventListener
+      );
+      orchestrator.removeEventListener(
+        'hdri::progress' as never,
+        handleHDRIEvent as EventListener
+      );
+      orchestrator.removeEventListener(
+        'hdri::error' as never,
+        handleHDRIEvent as EventListener
+      );
     };
-  },[orchestrator]);
+  }, [orchestrator]);
 
   useEffect(() => {
     if (!isHandle.current) {
       return;
     }
 
-    if(orchestrator.getActiveHDRI()?.name !== entry.id){
+    if (orchestrator.getActiveHDRI()?.name !== entry.id && !isloaded.current) {
+      isloaded.current = false;
       orchestrator.setHDRI(entry, config).catch(console.error);
     }
 
     return () => {
       if (orchestrator.clearHDRI) {
         orchestrator.clearHDRI();
+        isloaded.current = false;
       }
     };
   }, [entry.id, config, isHandle.current]);

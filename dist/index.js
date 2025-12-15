@@ -79,7 +79,7 @@ import {
 } from "./chunk-QUR37VVV.js";
 import {
   HDRI
-} from "./chunk-TMRZBUIO.js";
+} from "./chunk-YIQ6Z4W4.js";
 import {
   Hotspot
 } from "./chunk-4QTEKSEQ.js";
