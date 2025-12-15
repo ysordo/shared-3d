@@ -70,32 +70,16 @@ var AdvancedDragRaycaster = ({
             break;
           case "objectdrag":
             if (state.isDragging && state.currentObject) {
-              state.currentObject.getWorldPosition(tempVector1);
-              camera.getWorldDirection(tempVector2);
-              tempPlane.setFromNormalAndCoplanarPoint(tempVector2, tempVector1);
-              tempVector2_1.set(
-                event.currentPosition.x / window.innerWidth * 2 - 1,
-                -(event.currentPosition.y / window.innerHeight) * 2 + 1
-              );
-              tempVector2_2.set(
-                state.startPosition.x / window.innerWidth * 2 - 1,
-                -(state.startPosition.y / window.innerHeight) * 2 + 1
-              );
-              tempRaycaster.setFromCamera(tempVector2_1, camera);
-              tempRaycaster.ray.intersectPlane(tempPlane, tempVector1);
-              tempRaycaster.setFromCamera(tempVector2_2, camera);
-              tempRaycaster.ray.intersectPlane(tempPlane, tempVector2);
-              if (tempVector1 && tempVector2) {
-                tempVector3.subVectors(tempVector1, tempVector2);
-                if (enableRotationCompensation && activeModel) {
-                  activeModel.getWorldQuaternion(tempQuaternion);
-                  tempQuaternion.invert();
-                  tempVector3.applyQuaternion(tempQuaternion);
-                }
-                state.currentObject.position.add(tempVector3);
-                _optionalChain([onDrag, 'optionalCall', _2 => _2(state.currentObject, tempVector3.clone())]);
+              const delta2 = event.delta;
+              tempVector3.set(delta2.x, delta2.y, 0);
+              if (enableRotationCompensation && activeModel) {
+                activeModel.getWorldQuaternion(tempQuaternion);
+                tempQuaternion.invert();
+                tempVector3.applyQuaternion(tempQuaternion);
               }
-              state.startPosition.copy(event.currentPosition);
+              state.currentObject.position.add(tempVector3);
+              _optionalChain([onDrag, 'optionalCall', _2 => _2(state.currentObject, tempVector3.clone())]);
+              state.startPosition.add(delta2);
             }
             break;
           case "objectdragend":
