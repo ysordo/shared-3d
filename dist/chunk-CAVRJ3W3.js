@@ -116,7 +116,7 @@ var AdvancedDragRaycaster = ({
       return;
     }
     orchestrator.plugin("AdvancedRaycaster")?.manager.setEnabled(isEnabled);
-  }, [orchestrator.plugin("AdvancedRaycaster"), isEnabled]);
+  }, [isEnabled]);
   const toggleEnabled = () => setIsEnabled((prev) => !prev);
   const setEnabled = (value) => setIsEnabled(value);
   const resetAll = () => {

@@ -151,7 +151,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
     (
       orchestrator.plugin('AdvancedRaycaster') as AdvancedRaycasterPlugin
     )?.manager.setEnabled(isEnabled);
-  }, [orchestrator.plugin('AdvancedRaycaster'), isEnabled]);
+  }, [isEnabled]);
 
   const toggleEnabled = () => setIsEnabled((prev) => !prev);
   const setEnabled = (value: boolean) => setIsEnabled(value);

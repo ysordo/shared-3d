@@ -116,7 +116,7 @@ var AdvancedDragRaycaster = ({
       return;
     }
     _optionalChain([orchestrator, 'access', _8 => _8.plugin, 'call', _9 => _9("AdvancedRaycaster"), 'optionalAccess', _10 => _10.manager, 'access', _11 => _11.setEnabled, 'call', _12 => _12(isEnabled)]);
-  }, [orchestrator.plugin("AdvancedRaycaster"), isEnabled]);
+  }, [isEnabled]);
   const toggleEnabled = () => setIsEnabled((prev) => !prev);
   const setEnabled = (value) => setIsEnabled(value);
   const resetAll = () => {
