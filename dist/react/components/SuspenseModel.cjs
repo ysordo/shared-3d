@@ -1,9 +1,9 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkSPQO2WH5cjs = require('../../chunk-SPQO2WH5.cjs');
-require('../../chunk-QBWUN56L.cjs');
+var _chunkK5V26CGLcjs = require('../../chunk-K5V26CGL.cjs');
 require('../../chunk-W2T32FMR.cjs');
+require('../../chunk-QBWUN56L.cjs');
 require('../../chunk-VRE7SNBY.cjs');
 require('../../chunk-3GISW4KX.cjs');
 require('../../chunk-HFLOZGRV.cjs');
@@ -16,4 +16,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.SuspenseModel = _chunkSPQO2WH5cjs.SuspenseModel;
+exports.SuspenseModel = _chunkK5V26CGLcjs.SuspenseModel;

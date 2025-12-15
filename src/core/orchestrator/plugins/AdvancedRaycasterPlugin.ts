@@ -224,9 +224,11 @@ export class AdvancedRaycasterPlugin implements Plugin {
       this._manager.addEventListener(event as never, (e: unknown) => this.onEvent?.(e));
     });
 
-    this._manager.setEnabled(true);
   }
 
+  setEnabled(enable: boolean) {
+    this._manager.setEnabled(enable);
+  }
   dispose(): void { this._manager.setEnabled(false); }
 
   get manager(): RaycasterManager { return this._manager; }

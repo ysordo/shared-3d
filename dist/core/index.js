@@ -14,20 +14,14 @@ import {
   RaycasterPlugin
 } from "../chunk-FBPG64NM.js";
 import {
-  HotspotPlugin
-} from "../chunk-L3G2QMBD.js";
-import {
   LODSystemPlugin
 } from "../chunk-HVXJUMVE.js";
 import {
   MeasurementToolPlugin
 } from "../chunk-PRNY2PGZ.js";
 import {
-  AnnotationsPlugin
-} from "../chunk-CPKJTF7R.js";
-import {
-  AutoLODSystemPlugin
-} from "../chunk-NWBFTWAT.js";
+  HotspotPlugin
+} from "../chunk-L3G2QMBD.js";
 import {
   AdvancedCameraCollisionPlugin
 } from "../chunk-7UK5WDJQ.js";
@@ -36,7 +30,13 @@ import {
 } from "../chunk-VMEXRI7G.js";
 import {
   AdvancedRaycasterPlugin
-} from "../chunk-NNMHNVZD.js";
+} from "../chunk-2QM3N6LT.js";
+import {
+  AnnotationsPlugin
+} from "../chunk-CPKJTF7R.js";
+import {
+  AutoLODSystemPlugin
+} from "../chunk-NWBFTWAT.js";
 import {
   CacheValidator
 } from "../chunk-NQSGSI4W.js";

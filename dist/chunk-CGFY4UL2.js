@@ -1,24 +1,27 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
-
-var _chunkVRE7SNBYcjs = require('./chunk-VRE7SNBY.cjs');
-
-
-var _chunkR3D4E7BRcjs = require('./chunk-R3D4E7BR.cjs');
-
-
-var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
+import {
+  useScene
+} from "./chunk-PQPQ6H52.js";
+import {
+  AdvancedRaycasterPlugin
+} from "./chunk-2QM3N6LT.js";
+import {
+  useActiveModel
+} from "./chunk-F6WCVJEJ.js";
+import {
+  THREE
+} from "./chunk-OVHQQSEK.js";
 
 // src/react/components/AdvancedDragRaycaster.tsx
-var _react = require('react');
-var _jsxruntime = require('react/jsx-runtime');
-var tempVector1 = new _chunkEA3XQ4KJcjs.THREE.Vector3();
-var tempVector2 = new _chunkEA3XQ4KJcjs.THREE.Vector3();
-var tempVector3 = new _chunkEA3XQ4KJcjs.THREE.Vector3();
-var tempVector2_1 = new _chunkEA3XQ4KJcjs.THREE.Vector2();
-var tempVector2_2 = new _chunkEA3XQ4KJcjs.THREE.Vector2();
-var tempPlane = new _chunkEA3XQ4KJcjs.THREE.Plane();
-var tempQuaternion = new _chunkEA3XQ4KJcjs.THREE.Quaternion();
-var tempRaycaster = new _chunkEA3XQ4KJcjs.THREE.Raycaster();
+import { useEffect, useState, useRef } from "react";
+import { Fragment, jsx } from "react/jsx-runtime";
+var tempVector1 = new THREE.Vector3();
+var tempVector2 = new THREE.Vector3();
+var tempVector3 = new THREE.Vector3();
+var tempVector2_1 = new THREE.Vector2();
+var tempVector2_2 = new THREE.Vector2();
+var tempPlane = new THREE.Plane();
+var tempQuaternion = new THREE.Quaternion();
+var tempRaycaster = new THREE.Raycaster();
 var AdvancedDragRaycaster = ({
   children,
   defaultEnabled = true,
@@ -28,26 +31,29 @@ var AdvancedDragRaycaster = ({
   onDrag,
   onDragEnd
 }) => {
-  const orchestrator = _chunkVRE7SNBYcjs.useScene.call(void 0, );
-  const activeModel = orchestrator.getActiveModel();
-  const camera = orchestrator.camera;
-  const [isEnabled, setIsEnabled] = _react.useState.call(void 0, defaultEnabled);
-  const [isResetting, setIsResetting] = _react.useState.call(void 0, false);
-  const originalStates = _react.useRef.call(void 0, /* @__PURE__ */ new Map());
-  _react.useEffect.call(void 0, () => {
-    if (!activeModel || !camera) {
+  const orchestrator = useScene();
+  const activeModel = useActiveModel();
+  const [isEnabled, setIsEnabled] = useState(defaultEnabled);
+  const [isResetting, setIsResetting] = useState(false);
+  const originalStates = useRef(/* @__PURE__ */ new Map());
+  useEffect(() => {
+    if (!orchestrator) {
       return;
     }
+    if (!activeModel || !orchestrator.camera) {
+      return;
+    }
+    const camera = orchestrator.camera;
     if (orchestrator.has("AdvancedRaycaster")) {
       return;
     }
     orchestrator.use(
-      new (0, _chunkR3D4E7BRcjs.AdvancedRaycasterPlugin)(activeModel, (event) => {
+      new AdvancedRaycasterPlugin(activeModel, (event) => {
         if (!isEnabled) {
           return;
         }
         let isDragging = false;
-        let startPosition = new _chunkEA3XQ4KJcjs.THREE.Vector2();
+        let startPosition = new THREE.Vector2();
         let currentObject = null;
         switch (event.type) {
           case "objectdragstart":
@@ -60,7 +66,7 @@ var AdvancedDragRaycaster = ({
                 quaternion: currentObject.quaternion.clone()
               });
             }
-            _optionalChain([onDragStart, 'optionalCall', _ => _(event.object)]);
+            onDragStart?.(event.object);
             break;
           case "objectdrag":
             if (isDragging && currentObject) {
@@ -87,35 +93,36 @@ var AdvancedDragRaycaster = ({
                   tempVector3.applyQuaternion(tempQuaternion);
                 }
                 currentObject.position.add(tempVector3);
-                _optionalChain([onDrag, 'optionalCall', _2 => _2(currentObject, tempVector3.clone())]);
+                onDrag?.(currentObject, tempVector3.clone());
               }
               startPosition.copy(event.currentPosition);
             }
             break;
           case "objectdragend":
             if (isDragging) {
-              _optionalChain([onDragEnd, 'optionalCall', _3 => _3(event.object)]);
+              onDragEnd?.(event.object);
             }
             break;
         }
       })
     );
     return () => {
-      _optionalChain([orchestrator, 'access', _4 => _4.plugin, 'call', _5 => _5("AdvancedRaycaster"), 'access', _6 => _6.dispose, 'optionalCall', _7 => _7()]);
+      orchestrator.plugin("AdvancedRaycaster").dispose?.();
+      orchestrator.remove("AdvancedRaycaster");
     };
   }, [
     activeModel,
-    camera,
+    orchestrator,
     onDragStart,
     onDrag,
     onDragEnd,
     enableRotationCompensation
   ]);
-  _react.useEffect.call(void 0, () => {
+  useEffect(() => {
     if (!orchestrator.has("AdvancedRaycaster")) {
       return;
     }
-    _optionalChain([orchestrator, 'access', _8 => _8.plugin, 'call', _9 => _9("AdvancedRaycaster"), 'optionalAccess', _10 => _10.manager, 'access', _11 => _11.setEnabled, 'call', _12 => _12(isEnabled)]);
+    orchestrator.plugin("AdvancedRaycaster").setEnabled(isEnabled);
   }, [isEnabled]);
   const toggleEnabled = () => setIsEnabled((prev) => !prev);
   const setEnabled = (value) => setIsEnabled(value);
@@ -149,7 +156,7 @@ var AdvancedDragRaycaster = ({
     };
     requestAnimationFrame(animate);
   };
-  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _jsxruntime.Fragment, { children: children({
+  return /* @__PURE__ */ jsx(Fragment, { children: children({
     isEnabled,
     toggleEnabled,
     setEnabled,
@@ -158,6 +165,6 @@ var AdvancedDragRaycaster = ({
   }) });
 };
 
-
-
-exports.AdvancedDragRaycaster = AdvancedDragRaycaster;
+export {
+  AdvancedDragRaycaster
+};

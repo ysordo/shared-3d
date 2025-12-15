@@ -3,7 +3,7 @@
 var _chunkVRE7SNBYcjs = require('./chunk-VRE7SNBY.cjs');
 
 
-var _chunkR3D4E7BRcjs = require('./chunk-R3D4E7BR.cjs');
+var _chunkH665QQ43cjs = require('./chunk-H665QQ43.cjs');
 
 
 var _chunkN5F52EFEcjs = require('./chunk-N5F52EFE.cjs');
@@ -26,7 +26,7 @@ var AdvancedRaycaster = ({
     if (orchestrator.has("AdvancedRaycaster")) {
       return;
     }
-    orchestrator.use(new (0, _chunkR3D4E7BRcjs.AdvancedRaycasterPlugin)(
+    orchestrator.use(new (0, _chunkH665QQ43cjs.AdvancedRaycasterPlugin)(
       customModel || activeModel || void 0,
       (e) => {
         switch (e.type) {

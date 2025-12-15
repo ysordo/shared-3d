@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useScene } from '../../hooks/useScene';
 import { AdvancedRaycasterPlugin } from '../../core/orchestrator/plugins/AdvancedRaycasterPlugin';
 import { THREE } from '../../lib';
+import { useActiveModel } from '../../hooks';
 
 type AdvancedDragRaycasterProps = {
   children: (state: {
@@ -39,8 +40,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   onDragEnd,
 }) => {
   const orchestrator = useScene();
-  const activeModel = orchestrator.getActiveModel();
-  const camera = orchestrator.camera;
+  const activeModel = useActiveModel();
 
   const [isEnabled, setIsEnabled] = useState(defaultEnabled);
   const [isResetting, setIsResetting] = useState(false);
@@ -53,9 +53,13 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   >(new Map());
 
   useEffect(() => {
-    if (!activeModel || !camera) {
+    if (!orchestrator) {
       return;
     }
+    if (!activeModel || !orchestrator.camera) {
+      return;
+    }
+    const camera = orchestrator.camera;
     if (orchestrator.has('AdvancedRaycaster')) {
       return;
     }
@@ -134,10 +138,11 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
 
     return () => {
       orchestrator.plugin('AdvancedRaycaster').dispose?.();
+      orchestrator.remove('AdvancedRaycaster');
     };
   }, [
     activeModel,
-    camera,
+    orchestrator,
     onDragStart,
     onDrag,
     onDragEnd,
@@ -150,7 +155,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
     }
     (
       orchestrator.plugin('AdvancedRaycaster') as AdvancedRaycasterPlugin
-    )?.manager.setEnabled(isEnabled);
+    ).setEnabled(isEnabled);
   }, [isEnabled]);
 
   const toggleEnabled = () => setIsEnabled((prev) => !prev);

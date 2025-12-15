@@ -217,7 +217,9 @@ var AdvancedRaycasterPlugin = class {
     events.forEach((event) => {
       this._manager.addEventListener(event, (e) => this.onEvent?.(e));
     });
-    this._manager.setEnabled(true);
+  }
+  setEnabled(enable) {
+    this._manager.setEnabled(enable);
   }
   dispose() {
     this._manager.setEnabled(false);
