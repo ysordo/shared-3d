@@ -191,23 +191,19 @@ class RaycasterManager extends THREE.EventDispatcher {
 
 export class AdvancedRaycasterPlugin implements Plugin {
   name = 'AdvancedRaycaster';
-  private _manager: RaycasterManager;
+  private _manager!: RaycasterManager;
 
   constructor(
-    private model?: THREE.Object3D,
+    private model: THREE.Object3D,
     private onEvent?: (event: unknown) => void
-  ) {
-    this._manager = new RaycasterManager(document.body);
-  }
+  ) {}
 
-  install({ scene, camera, renderer, orchestrator }: PluginContext): void {
+  install({ scene, camera, renderer }: PluginContext): void {
     this._manager = new RaycasterManager(renderer.domElement);
     this._manager.initialize(scene, camera);
 
     if (this.model) {
       this._manager.setModel(this.model);
-    } else if (orchestrator.getActiveModel()) {
-      this._manager.setModel(orchestrator.getActiveModel()!);
     }
 
     const events: string[] = [

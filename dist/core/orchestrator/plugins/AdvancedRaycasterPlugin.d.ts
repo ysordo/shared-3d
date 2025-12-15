@@ -1,4 +1,4 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-BMDHZMn7.js';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-0U6fAu6q.js';
 import * as THREE from 'three';
 import '../../loaders/HDRILoader.js';
 import '../../cache/types.js';
@@ -40,12 +40,12 @@ declare class RaycasterManager extends THREE.EventDispatcher {
     private onTouchEnd;
 }
 declare class AdvancedRaycasterPlugin implements Plugin {
-    private model?;
+    private model;
     private onEvent?;
     name: string;
     private _manager;
-    constructor(model?: THREE.Object3D | undefined, onEvent?: ((event: unknown) => void) | undefined);
-    install({ scene, camera, renderer, orchestrator }: PluginContext): void;
+    constructor(model: THREE.Object3D, onEvent?: ((event: unknown) => void) | undefined);
+    install({ scene, camera, renderer }: PluginContext): void;
     setEnabled(enable: boolean): void;
     dispose(): void;
     get manager(): RaycasterManager;

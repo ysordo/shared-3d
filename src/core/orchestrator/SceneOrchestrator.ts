@@ -27,6 +27,7 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
   private animationId: number | null = null;
   private plugins: Map<string, Plugin> = new Map();
   private resizeHandler: () => void;
+  private resizeObserver: ResizeObserver;
 
   private constructor(canvas: HTMLCanvasElement, config: SceneConfig = {}) {
     super();
@@ -39,7 +40,7 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
       powerPreference: 'high-performance',
     });
     this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    this.renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
     this.renderer.shadowMap.enabled = config.shadows ?? true;
     this.renderer.toneMapping = config.toneMapping ?? THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = config.toneMappingExposure ?? 1.0;
@@ -65,11 +66,16 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
 
     this.resizeHandler = () => {
       const { clientWidth, clientHeight } = this.canvas;
-      this.renderer.setSize(clientWidth, clientHeight);
+      const pixelRatio = window.devicePixelRatio;
+      this.renderer.setSize(clientWidth * pixelRatio, clientHeight * pixelRatio, false);
       this.camera.aspect = clientWidth / clientHeight;
+      if(this.activeModel){
+        this.camera.lookAt(this.activeModel.position);
+      }
       this.camera.updateProjectionMatrix();
     };
-    canvas.addEventListener('resize', this.resizeHandler);
+    this.resizeObserver = new ResizeObserver(this.resizeHandler);
+    this.resizeObserver.observe(canvas);
 
     const animate = () => {
       this.animationId = requestAnimationFrame(animate);
@@ -155,6 +161,7 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
         this.activeModel = obj;
         this.dispatchEvent({ type: 'model::loaded', model: this.activeModel } as never);
         this.scene.add(obj);
+        this.camera.lookAt(obj.position);
         console.info(`[Orchestrator] Active model: ${entry.id}`);
       },
       onError: (err) => {

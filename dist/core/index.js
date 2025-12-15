@@ -30,7 +30,7 @@ import {
 } from "../chunk-VMEXRI7G.js";
 import {
   AdvancedRaycasterPlugin
-} from "../chunk-2QM3N6LT.js";
+} from "../chunk-RHWTPFHQ.js";
 import {
   AnnotationsPlugin
 } from "../chunk-CPKJTF7R.js";
@@ -38,15 +38,8 @@ import {
   AutoLODSystemPlugin
 } from "../chunk-NWBFTWAT.js";
 import {
-  CacheValidator
-} from "../chunk-NQSGSI4W.js";
-import {
-  FileWatcher
-} from "../chunk-777TCJKN.js";
-import "../chunk-SRUKCELR.js";
-import {
   SceneOrchestrator
-} from "../chunk-KXSVI2NK.js";
+} from "../chunk-RY4DFKLM.js";
 import {
   GLTFLoader
 } from "../chunk-R4AEK7RE.js";
@@ -59,6 +52,13 @@ import {
 import "../chunk-OK2NCVM7.js";
 import "../chunk-OVHQQSEK.js";
 import "../chunk-EPN65WJP.js";
+import {
+  CacheValidator
+} from "../chunk-NQSGSI4W.js";
+import {
+  FileWatcher
+} from "../chunk-777TCJKN.js";
+import "../chunk-SRUKCELR.js";
 import {
   ObjectCache
 } from "../chunk-5QJW7WE3.js";

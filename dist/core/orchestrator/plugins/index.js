@@ -25,7 +25,7 @@ import {
 } from "../../../chunk-VMEXRI7G.js";
 import {
   AdvancedRaycasterPlugin
-} from "../../../chunk-2QM3N6LT.js";
+} from "../../../chunk-RHWTPFHQ.js";
 import {
   AnnotationsPlugin
 } from "../../../chunk-CPKJTF7R.js";

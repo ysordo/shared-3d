@@ -31,12 +31,14 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
   const activeModel = useActiveModel();
 
   useEffect(() => {
+    if (!orchestrator || !activeModel) {
+      return;
+    }
     if (orchestrator.has('AdvancedRaycaster')) {
       return;
     }
-    orchestrator.use(new AdvancedRaycasterPlugin(
-      customModel || activeModel || undefined,
-      (e: any) => {
+    orchestrator.use(
+      new AdvancedRaycasterPlugin(customModel || activeModel, (e: any) => {
         switch (e.type) {
           case 'objectclick':
             onClick?.(e);
@@ -60,8 +62,8 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
             onDragEnd?.(e);
             break;
         }
-      }
-    ));
+      })
+    );
   }, [
     customModel,
     activeModel,

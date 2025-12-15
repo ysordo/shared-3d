@@ -2,141 +2,135 @@
 require('./chunk-3NLDE54Y.cjs');
 
 
-var _chunkWDVWQD5Xcjs = require('./chunk-WDVWQD5X.cjs');
+var _chunkEVTSUWICcjs = require('./chunk-EVTSUWIC.cjs');
 
 
-var _chunkPLOENY3Pcjs = require('./chunk-PLOENY3P.cjs');
+var _chunkDUJS7ZYHcjs = require('./chunk-DUJS7ZYH.cjs');
 
 
-var _chunkI37XXITIcjs = require('./chunk-I37XXITI.cjs');
+var _chunkI3MVYMOHcjs = require('./chunk-I3MVYMOH.cjs');
 require('./chunk-XTNUGFKY.cjs');
 
 
-var _chunkL4Z5UNZNcjs = require('./chunk-L4Z5UNZN.cjs');
+var _chunkQHNESM5Icjs = require('./chunk-QHNESM5I.cjs');
 require('./chunk-6J2YPQ3V.cjs');
 
 
-var _chunkVMATT7RPcjs = require('./chunk-VMATT7RP.cjs');
+var _chunkBKTYLRENcjs = require('./chunk-BKTYLREN.cjs');
 
 
-var _chunkTFOGAPWWcjs = require('./chunk-TFOGAPWW.cjs');
+var _chunkN5M2KSWOcjs = require('./chunk-N5M2KSWO.cjs');
 
 
-var _chunk6DNDPA2Icjs = require('./chunk-6DNDPA2I.cjs');
+var _chunk6J2ETMTZcjs = require('./chunk-6J2ETMTZ.cjs');
 
 
-var _chunkK5V26CGLcjs = require('./chunk-K5V26CGL.cjs');
+var _chunkJYRJDIKFcjs = require('./chunk-JYRJDIKF.cjs');
 
 
 var _chunkW2T32FMRcjs = require('./chunk-W2T32FMR.cjs');
 
 
-var _chunkYDXEXTLTcjs = require('./chunk-YDXEXTLT.cjs');
+var _chunkP62KCIATcjs = require('./chunk-P62KCIAT.cjs');
 
 
-var _chunkTVDE55F2cjs = require('./chunk-TVDE55F2.cjs');
+var _chunkOS5G633Wcjs = require('./chunk-OS5G633W.cjs');
 
 
-var _chunkAQCOI2XUcjs = require('./chunk-AQCOI2XU.cjs');
+var _chunkEMYREAIMcjs = require('./chunk-EMYREAIM.cjs');
 
 
-var _chunk5BNJQGDJcjs = require('./chunk-5BNJQGDJ.cjs');
+var _chunkTN3ZVGHWcjs = require('./chunk-TN3ZVGHW.cjs');
 
 
-var _chunk6O2IJUONcjs = require('./chunk-6O2IJUON.cjs');
+var _chunk3SEX4WD3cjs = require('./chunk-3SEX4WD3.cjs');
 
 
-var _chunk2MMGSM5Dcjs = require('./chunk-2MMGSM5D.cjs');
+var _chunkPULAHOW5cjs = require('./chunk-PULAHOW5.cjs');
 
 
-var _chunkQBWUN56Lcjs = require('./chunk-QBWUN56L.cjs');
+var _chunk5SF5NOHOcjs = require('./chunk-5SF5NOHO.cjs');
 
 
 var _chunk6URF3D3Qcjs = require('./chunk-6URF3D3Q.cjs');
 
 
-var _chunkMR2WPYIJcjs = require('./chunk-MR2WPYIJ.cjs');
+var _chunkFMF2ELK3cjs = require('./chunk-FMF2ELK3.cjs');
 
 
-var _chunk6EADYUO3cjs = require('./chunk-6EADYUO3.cjs');
+var _chunkVMKEFG3Ncjs = require('./chunk-VMKEFG3N.cjs');
 
 
-var _chunkKSSW5YQJcjs = require('./chunk-KSSW5YQJ.cjs');
+var _chunkBVVLWUDWcjs = require('./chunk-BVVLWUDW.cjs');
 
 
-var _chunkYYNOK4UQcjs = require('./chunk-YYNOK4UQ.cjs');
+var _chunkHHM44RXZcjs = require('./chunk-HHM44RXZ.cjs');
 
 
-var _chunkHIMUKFSTcjs = require('./chunk-HIMUKFST.cjs');
+var _chunkQL3ZXVD4cjs = require('./chunk-QL3ZXVD4.cjs');
 
 
-var _chunkPOLSVXGMcjs = require('./chunk-POLSVXGM.cjs');
+var _chunkQFHR5GRHcjs = require('./chunk-QFHR5GRH.cjs');
 
 
 var _chunkQ3PTDMXUcjs = require('./chunk-Q3PTDMXU.cjs');
 
 
-var _chunkXDMBGGFYcjs = require('./chunk-XDMBGGFY.cjs');
+var _chunkH4RQ27YMcjs = require('./chunk-H4RQ27YM.cjs');
 
 
-var _chunkXRLCF32Scjs = require('./chunk-XRLCF32S.cjs');
+var _chunk6TIFUDZWcjs = require('./chunk-6TIFUDZW.cjs');
 
 
-var _chunk5GCNNOTCcjs = require('./chunk-5GCNNOTC.cjs');
+var _chunkQXV7X7JOcjs = require('./chunk-QXV7X7JO.cjs');
 
 
-var _chunkEPTCPDGDcjs = require('./chunk-EPTCPDGD.cjs');
+var _chunkJ73GCKIZcjs = require('./chunk-J73GCKIZ.cjs');
 
 
-var _chunkWH2YOS7Xcjs = require('./chunk-WH2YOS7X.cjs');
+var _chunkGLNVZFJEcjs = require('./chunk-GLNVZFJE.cjs');
 
 
-var _chunkRVI7MEEBcjs = require('./chunk-RVI7MEEB.cjs');
+var _chunkL6CYRLWFcjs = require('./chunk-L6CYRLWF.cjs');
 
 
-var _chunkXCX6WNIJcjs = require('./chunk-XCX6WNIJ.cjs');
+var _chunkPOYGUDQBcjs = require('./chunk-POYGUDQB.cjs');
 
 
-var _chunkXOJY7DJJcjs = require('./chunk-XOJY7DJJ.cjs');
+var _chunkXLUYNZHEcjs = require('./chunk-XLUYNZHE.cjs');
 
 
-var _chunkE7KLY325cjs = require('./chunk-E7KLY325.cjs');
+var _chunkAT2T22BPcjs = require('./chunk-AT2T22BP.cjs');
 
 
-var _chunkNDL2ECL7cjs = require('./chunk-NDL2ECL7.cjs');
+var _chunkFKIFFSI6cjs = require('./chunk-FKIFFSI6.cjs');
 
 
-var _chunkAO6ARFPAcjs = require('./chunk-AO6ARFPA.cjs');
+var _chunkPF74FMPDcjs = require('./chunk-PF74FMPD.cjs');
 require('./chunk-USBH24UK.cjs');
 require('./chunk-GICX4QCO.cjs');
 
 
-var _chunkCSTG7STNcjs = require('./chunk-CSTG7STN.cjs');
-require('./chunk-S3UAQAG6.cjs');
+var _chunkVFPYMNJLcjs = require('./chunk-VFPYMNJL.cjs');
 require('./chunk-FGTSUNZE.cjs');
 require('./chunk-2JRLTZTT.cjs');
 require('./chunk-XMJ5ENHF.cjs');
 require('./chunk-SR4V6L3A.cjs');
 require('./chunk-2RPXTPO6.cjs');
+require('./chunk-S3UAQAG6.cjs');
 require('./chunk-ENL3GCXS.cjs');
 
 
-var _chunkOI5AUYJMcjs = require('./chunk-OI5AUYJM.cjs');
+var _chunkS6WEBH6Zcjs = require('./chunk-S6WEBH6Z.cjs');
 
 
-var _chunkAM37HJDWcjs = require('./chunk-AM37HJDW.cjs');
+var _chunkMZSKM64Scjs = require('./chunk-MZSKM64S.cjs');
 
 
-var _chunkISPXFRNMcjs = require('./chunk-ISPXFRNM.cjs');
+var _chunkCUVLR5CMcjs = require('./chunk-CUVLR5CM.cjs');
 
 
-var _chunkJKRFLNQGcjs = require('./chunk-JKRFLNQG.cjs');
-
-
-var _chunkVRE7SNBYcjs = require('./chunk-VRE7SNBY.cjs');
-
-
-var _chunkFHTGFC7Acjs = require('./chunk-FHTGFC7A.cjs');
+var _chunkEQETDOY7cjs = require('./chunk-EQETDOY7.cjs');
 require('./chunk-MLONVM7E.cjs');
 
 
@@ -164,7 +158,7 @@ var _chunkMMMO3SNVcjs = require('./chunk-MMMO3SNV.cjs');
 var _chunkAILAVZ2Gcjs = require('./chunk-AILAVZ2G.cjs');
 
 
-var _chunkH665QQ43cjs = require('./chunk-H665QQ43.cjs');
+var _chunkFOACYFFCcjs = require('./chunk-FOACYFFC.cjs');
 
 
 var _chunkDF6YTEMAcjs = require('./chunk-DF6YTEMA.cjs');
@@ -173,23 +167,16 @@ var _chunkDF6YTEMAcjs = require('./chunk-DF6YTEMA.cjs');
 var _chunk5KIFVYNZcjs = require('./chunk-5KIFVYNZ.cjs');
 
 
-var _chunkU6PBSE4Gcjs = require('./chunk-U6PBSE4G.cjs');
+var _chunk25F2YQAScjs = require('./chunk-25F2YQAS.cjs');
 
 
-var _chunk7YGHNVSEcjs = require('./chunk-7YGHNVSE.cjs');
-require('./chunk-7WPOL7PK.cjs');
+var _chunkNA7O33PYcjs = require('./chunk-NA7O33PY.cjs');
 
 
-var _chunkL765QSW6cjs = require('./chunk-L765QSW6.cjs');
+var _chunkECHRO5BZcjs = require('./chunk-ECHRO5BZ.cjs');
 
 
-var _chunkN5F52EFEcjs = require('./chunk-N5F52EFE.cjs');
-
-
-var _chunk3GISW4KXcjs = require('./chunk-3GISW4KX.cjs');
-
-
-var _chunkHFLOZGRVcjs = require('./chunk-HFLOZGRV.cjs');
+var _chunk23UCKWWAcjs = require('./chunk-23UCKWWA.cjs');
 
 
 var _chunkRIJLTLXBcjs = require('./chunk-RIJLTLXB.cjs');
@@ -213,6 +200,19 @@ require('./chunk-7W7IF4LU.cjs');
 
 var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
 require('./chunk-T2YGLA3W.cjs');
+
+
+var _chunkOI5AUYJMcjs = require('./chunk-OI5AUYJM.cjs');
+
+
+var _chunkFHTGFC7Acjs = require('./chunk-FHTGFC7A.cjs');
+
+
+var _chunkU6PBSE4Gcjs = require('./chunk-U6PBSE4G.cjs');
+
+
+var _chunk7YGHNVSEcjs = require('./chunk-7YGHNVSE.cjs');
+require('./chunk-7WPOL7PK.cjs');
 
 
 var _chunkUW5RKAXQcjs = require('./chunk-UW5RKAXQ.cjs');
@@ -290,4 +290,4 @@ var _chunkUW5RKAXQcjs = require('./chunk-UW5RKAXQ.cjs');
 
 
 
-exports.ARButton = _chunkCSTG7STNcjs.ARButton; exports.AdvancedCameraCollision = _chunkEPTCPDGDcjs.AdvancedCameraCollision; exports.AdvancedCameraCollisionPlugin = _chunkMMMO3SNVcjs.AdvancedCameraCollisionPlugin; exports.AdvancedDragRaycaster = _chunkWH2YOS7Xcjs.AdvancedDragRaycaster; exports.AdvancedOrbitControls = _chunkRVI7MEEBcjs.AdvancedOrbitControls; exports.AdvancedOrbitControlsPlugin = _chunkAILAVZ2Gcjs.AdvancedOrbitControlsPlugin; exports.AdvancedRaycaster = _chunkXCX6WNIJcjs.AdvancedRaycaster; exports.AdvancedRaycasterPlugin = _chunkH665QQ43cjs.AdvancedRaycasterPlugin; exports.AmbientLight = _chunkXOJY7DJJcjs.AmbientLight; exports.AnimationController = _chunkWDVWQD5Xcjs.AnimationController; exports.AnimationTimeline = _chunkE7KLY325cjs.AnimationTimeline; exports.Annotations = _chunkNDL2ECL7cjs.Annotations; exports.AnnotationsPlugin = _chunkDF6YTEMAcjs.AnnotationsPlugin; exports.AutoLODSystem = _chunkAO6ARFPAcjs.AutoLODSystem; exports.AutoLODSystemPlugin = _chunk5KIFVYNZcjs.AutoLODSystemPlugin; exports.CacheProvider = _chunkFHTGFC7Acjs.CacheProvider; exports.CacheValidator = _chunkU6PBSE4Gcjs.CacheValidator; exports.Canvas = _chunkKSSW5YQJcjs.Canvas; exports.DirectionalLight = _chunkYYNOK4UQcjs.DirectionalLight; exports.DistanceDisplay = _chunkHIMUKFSTcjs.DistanceDisplay; exports.EnvironmentPreset = _chunkPOLSVXGMcjs.EnvironmentPreset; exports.ErrorBoundary3D = _chunkQ3PTDMXUcjs.ErrorBoundary3D; exports.FileWatcher = _chunk7YGHNVSEcjs.FileWatcher; exports.GLTFLoader = _chunkRIJLTLXBcjs.GLTFLoader; exports.GroundSurface = _chunkXDMBGGFYcjs.GroundSurface; exports.HDRI = _chunkXRLCF32Scjs.HDRI; exports.HDRILoader = _chunkYAKUY6M3cjs.HDRILoader; exports.Hotspot = _chunk5GCNNOTCcjs.Hotspot; exports.HotspotPlugin = _chunkXTA7BEZGcjs.HotspotPlugin; exports.Hotspots = _chunkAQCOI2XUcjs.Hotspots; exports.InstancedModel = _chunk5BNJQGDJcjs.InstancedModel; exports.LODSystem = _chunk6O2IJUONcjs.LODSystem; exports.LODSystemPlugin = _chunkT2JEYSOHcjs.LODSystemPlugin; exports.LightingController = _chunkPLOENY3Pcjs.LightingController; exports.MaterialController = _chunkI37XXITIcjs.MaterialController; exports.MeasurementTool = _chunk2MMGSM5Dcjs.MeasurementTool; exports.MeasurementToolPlugin = _chunk44UQAST6cjs.MeasurementToolPlugin; exports.Model = _chunkQBWUN56Lcjs.Model; exports.ModelPreload = _chunk6URF3D3Qcjs.ModelPreload; exports.ObjectCache = _chunkUW5RKAXQcjs.ObjectCache; exports.OrbitControls = _chunkMR2WPYIJcjs.OrbitControls; exports.OrbitControlsPlugin = _chunkP3U6ZA5Scjs.OrbitControlsPlugin; exports.PointLight = _chunk6EADYUO3cjs.PointLight; exports.PostProcessing = _chunkVMATT7RPcjs.PostProcessing; exports.PostProcessingPlugin = _chunkMCYH2TBQcjs.PostProcessingPlugin; exports.Raycaster = _chunkTFOGAPWWcjs.Raycaster; exports.RaycasterPlugin = _chunk7T35AZSKcjs.RaycasterPlugin; exports.SceneObject = _chunkL4Z5UNZNcjs.SceneObject; exports.SceneOrchestrator = _chunkHFLOZGRVcjs.SceneOrchestrator; exports.SceneProvider = _chunk3GISW4KXcjs.SceneProvider; exports.SpotLight = _chunk6DNDPA2Icjs.SpotLight; exports.Suspense = _chunkW2T32FMRcjs.Suspense; exports.SuspenseModel = _chunkK5V26CGLcjs.SuspenseModel; exports.THREE = _chunkEA3XQ4KJcjs.THREE; exports.THREE_VERSION = _chunkEA3XQ4KJcjs.THREE_VERSION; exports.TheaterLighting = _chunkYDXEXTLTcjs.TheaterLighting; exports.ThreeDRACOLoader = _chunkEA3XQ4KJcjs.DRACOLoader; exports.ThreeEXRLoader = _chunkEA3XQ4KJcjs.EXRLoader; exports.ThreeEffectComposer = _chunkEA3XQ4KJcjs.EffectComposer; exports.ThreeGLTFLoader = _chunkEA3XQ4KJcjs.GLTFLoader; exports.ThreeOrbitControls = _chunkEA3XQ4KJcjs.OrbitControls; exports.ThreeRGBELoader = _chunkEA3XQ4KJcjs.RGBELoader; exports.ThreeRenderPass = _chunkEA3XQ4KJcjs.RenderPass; exports.ThreeUnrealBloomPass = _chunkEA3XQ4KJcjs.UnrealBloomPass; exports.VRButton = _chunkTVDE55F2cjs.VRButton; exports.WebPHDRLoader = _chunkZJAPFMHDcjs.WebPHDRLoader; exports.useActiveModel = _chunkN5F52EFEcjs.useActiveModel; exports.useAnimation = _chunkL765QSW6cjs.useAnimation; exports.useCache = _chunkOI5AUYJMcjs.useCache; exports.useHDRI = _chunkAM37HJDWcjs.useHDRI; exports.useModel = _chunkISPXFRNMcjs.useModel; exports.useRaycaster = _chunkJKRFLNQGcjs.useRaycaster; exports.useScene = _chunkVRE7SNBYcjs.useScene;
+exports.ARButton = _chunkVFPYMNJLcjs.ARButton; exports.AdvancedCameraCollision = _chunkJ73GCKIZcjs.AdvancedCameraCollision; exports.AdvancedCameraCollisionPlugin = _chunkMMMO3SNVcjs.AdvancedCameraCollisionPlugin; exports.AdvancedDragRaycaster = _chunkGLNVZFJEcjs.AdvancedDragRaycaster; exports.AdvancedOrbitControls = _chunkL6CYRLWFcjs.AdvancedOrbitControls; exports.AdvancedOrbitControlsPlugin = _chunkAILAVZ2Gcjs.AdvancedOrbitControlsPlugin; exports.AdvancedRaycaster = _chunkPOYGUDQBcjs.AdvancedRaycaster; exports.AdvancedRaycasterPlugin = _chunkFOACYFFCcjs.AdvancedRaycasterPlugin; exports.AmbientLight = _chunkXLUYNZHEcjs.AmbientLight; exports.AnimationController = _chunkEVTSUWICcjs.AnimationController; exports.AnimationTimeline = _chunkAT2T22BPcjs.AnimationTimeline; exports.Annotations = _chunkFKIFFSI6cjs.Annotations; exports.AnnotationsPlugin = _chunkDF6YTEMAcjs.AnnotationsPlugin; exports.AutoLODSystem = _chunkPF74FMPDcjs.AutoLODSystem; exports.AutoLODSystemPlugin = _chunk5KIFVYNZcjs.AutoLODSystemPlugin; exports.CacheProvider = _chunkFHTGFC7Acjs.CacheProvider; exports.CacheValidator = _chunkU6PBSE4Gcjs.CacheValidator; exports.Canvas = _chunkBVVLWUDWcjs.Canvas; exports.DirectionalLight = _chunkHHM44RXZcjs.DirectionalLight; exports.DistanceDisplay = _chunkQL3ZXVD4cjs.DistanceDisplay; exports.EnvironmentPreset = _chunkQFHR5GRHcjs.EnvironmentPreset; exports.ErrorBoundary3D = _chunkQ3PTDMXUcjs.ErrorBoundary3D; exports.FileWatcher = _chunk7YGHNVSEcjs.FileWatcher; exports.GLTFLoader = _chunkRIJLTLXBcjs.GLTFLoader; exports.GroundSurface = _chunkH4RQ27YMcjs.GroundSurface; exports.HDRI = _chunk6TIFUDZWcjs.HDRI; exports.HDRILoader = _chunkYAKUY6M3cjs.HDRILoader; exports.Hotspot = _chunkQXV7X7JOcjs.Hotspot; exports.HotspotPlugin = _chunkXTA7BEZGcjs.HotspotPlugin; exports.Hotspots = _chunkEMYREAIMcjs.Hotspots; exports.InstancedModel = _chunkTN3ZVGHWcjs.InstancedModel; exports.LODSystem = _chunk3SEX4WD3cjs.LODSystem; exports.LODSystemPlugin = _chunkT2JEYSOHcjs.LODSystemPlugin; exports.LightingController = _chunkDUJS7ZYHcjs.LightingController; exports.MaterialController = _chunkI3MVYMOHcjs.MaterialController; exports.MeasurementTool = _chunkPULAHOW5cjs.MeasurementTool; exports.MeasurementToolPlugin = _chunk44UQAST6cjs.MeasurementToolPlugin; exports.Model = _chunk5SF5NOHOcjs.Model; exports.ModelPreload = _chunk6URF3D3Qcjs.ModelPreload; exports.ObjectCache = _chunkUW5RKAXQcjs.ObjectCache; exports.OrbitControls = _chunkFMF2ELK3cjs.OrbitControls; exports.OrbitControlsPlugin = _chunkP3U6ZA5Scjs.OrbitControlsPlugin; exports.PointLight = _chunkVMKEFG3Ncjs.PointLight; exports.PostProcessing = _chunkBKTYLRENcjs.PostProcessing; exports.PostProcessingPlugin = _chunkMCYH2TBQcjs.PostProcessingPlugin; exports.Raycaster = _chunkN5M2KSWOcjs.Raycaster; exports.RaycasterPlugin = _chunk7T35AZSKcjs.RaycasterPlugin; exports.SceneObject = _chunkQHNESM5Icjs.SceneObject; exports.SceneOrchestrator = _chunk23UCKWWAcjs.SceneOrchestrator; exports.SceneProvider = _chunkECHRO5BZcjs.SceneProvider; exports.SpotLight = _chunk6J2ETMTZcjs.SpotLight; exports.Suspense = _chunkW2T32FMRcjs.Suspense; exports.SuspenseModel = _chunkJYRJDIKFcjs.SuspenseModel; exports.THREE = _chunkEA3XQ4KJcjs.THREE; exports.THREE_VERSION = _chunkEA3XQ4KJcjs.THREE_VERSION; exports.TheaterLighting = _chunkP62KCIATcjs.TheaterLighting; exports.ThreeDRACOLoader = _chunkEA3XQ4KJcjs.DRACOLoader; exports.ThreeEXRLoader = _chunkEA3XQ4KJcjs.EXRLoader; exports.ThreeEffectComposer = _chunkEA3XQ4KJcjs.EffectComposer; exports.ThreeGLTFLoader = _chunkEA3XQ4KJcjs.GLTFLoader; exports.ThreeOrbitControls = _chunkEA3XQ4KJcjs.OrbitControls; exports.ThreeRGBELoader = _chunkEA3XQ4KJcjs.RGBELoader; exports.ThreeRenderPass = _chunkEA3XQ4KJcjs.RenderPass; exports.ThreeUnrealBloomPass = _chunkEA3XQ4KJcjs.UnrealBloomPass; exports.VRButton = _chunkOS5G633Wcjs.VRButton; exports.WebPHDRLoader = _chunkZJAPFMHDcjs.WebPHDRLoader; exports.useActiveModel = _chunkNA7O33PYcjs.useActiveModel; exports.useAnimation = _chunk25F2YQAScjs.useAnimation; exports.useCache = _chunkOI5AUYJMcjs.useCache; exports.useHDRI = _chunkS6WEBH6Zcjs.useHDRI; exports.useModel = _chunkMZSKM64Scjs.useModel; exports.useRaycaster = _chunkCUVLR5CMcjs.useRaycaster; exports.useScene = _chunkEQETDOY7cjs.useScene;

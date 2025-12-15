@@ -44,6 +44,15 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
 
   const [isEnabled, setIsEnabled] = useState(defaultEnabled);
   const [isResetting, setIsResetting] = useState(false);
+  const dragState = useRef<{
+    isDragging: boolean;
+    startPosition: THREE.Vector2;
+    currentObject: THREE.Object3D | null;
+  }>({
+    isDragging: false,
+    startPosition: new THREE.Vector2(),
+    currentObject: null,
+  });
 
   const originalStates = useRef<
     Map<
@@ -66,24 +75,21 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
 
     orchestrator.use(
       new AdvancedRaycasterPlugin(activeModel, (event: any) => {
-        if (!isEnabled) {
-          return;
-        }
-
-        let isDragging = false;
-        let startPosition = new THREE.Vector2();
-        let currentObject: THREE.Object3D | null = null;
+        const state = dragState.current;
 
         switch (event.type) {
           case 'objectdragstart':
-            isDragging = true;
-            currentObject = event.object;
-            startPosition.copy(event.startPosition);
+            state.isDragging = true;
+            state.currentObject = event.object;
+            state.startPosition.copy(event.startPosition);
 
-            if (currentObject && !originalStates.current.has(currentObject)) {
-              originalStates.current.set(currentObject, {
-                position: currentObject.position.clone(),
-                quaternion: currentObject.quaternion.clone(),
+            if (
+              state.currentObject &&
+              !originalStates.current.has(state.currentObject)
+            ) {
+              originalStates.current.set(state.currentObject, {
+                position: state.currentObject.position.clone(),
+                quaternion: state.currentObject.quaternion.clone(),
               });
             }
 
@@ -91,8 +97,8 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
             break;
 
           case 'objectdrag':
-            if (isDragging && currentObject) {
-              (currentObject as any).getWorldPosition(tempVector1);
+            if (state.isDragging && state.currentObject) {
+              (state.currentObject as any).getWorldPosition(tempVector1);
               camera.getWorldDirection(tempVector2);
               tempPlane.setFromNormalAndCoplanarPoint(tempVector2, tempVector1);
 
@@ -101,8 +107,8 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
                 -(event.currentPosition.y / window.innerHeight) * 2 + 1
               );
               tempVector2_2.set(
-                (startPosition.x / window.innerWidth) * 2 - 1,
-                -(startPosition.y / window.innerHeight) * 2 + 1
+                (state.startPosition.x / window.innerWidth) * 2 - 1,
+                -(state.startPosition.y / window.innerHeight) * 2 + 1
               );
 
               tempRaycaster.setFromCamera(tempVector2_1, camera);
@@ -119,18 +125,21 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
                   tempVector3.applyQuaternion(tempQuaternion);
                 }
 
-                (currentObject as any).position.add(tempVector3);
-                onDrag?.(currentObject, tempVector3.clone());
+                (state.currentObject as any).position.add(tempVector3);
+                onDrag?.(state.currentObject, tempVector3.clone());
               }
 
-              startPosition.copy(event.currentPosition);
+              state.startPosition.copy(event.currentPosition);
             }
             break;
 
           case 'objectdragend':
-            if (isDragging) {
-              onDragEnd?.(event.object);
+            if (state.isDragging && state.currentObject) {
+              onDragEnd?.(state.currentObject);
             }
+
+            state.isDragging = false;
+            state.currentObject = null;
             break;
         }
       })
@@ -148,6 +157,15 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
     onDragEnd,
     enableRotationCompensation,
   ]);
+
+  useEffect(() => {
+    if (!activeModel || !orchestrator.has('AdvancedRaycaster')) {
+      return;
+    }
+    (
+      orchestrator.plugin('AdvancedRaycaster') as AdvancedRaycasterPlugin
+    ).manager.setModel(activeModel as THREE.Group);
+  }, [activeModel]);
 
   useEffect(() => {
     if (!orchestrator.has('AdvancedRaycaster')) {

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 export { ManifestEntry, ModelManifest } from '../core/cache/types.cjs';
 export { HDRILoaderOptions } from '../core/loaders/HDRILoader.cjs';
-export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-Cl73AXK2.cjs';
+export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-Bx7eqX8k.cjs';
 export { CustomMaterialFactory, MaterialConfig } from '../react/controls/MaterialController.cjs';
 import 'react';
 
