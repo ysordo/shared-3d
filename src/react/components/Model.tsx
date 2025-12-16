@@ -6,6 +6,7 @@ import type { ManifestEntry } from '../../core/cache/types';
 import type { THREE } from '../../lib';
 import type { GLTFLoaderEvents } from '../../core';
 import { usePreload } from '../../hooks/usePreload';
+import { useActiveModel } from '../../hooks';
 
 type ModelProps = {
   entry: ManifestEntry;
@@ -22,6 +23,7 @@ export const Model: React.FC<ModelProps & GLTFLoaderEvents> = ({
   children,
 }) => {
   const orchestrator = useScene();
+  const activeModel = useActiveModel();
   const preload = usePreload();
   const [model, setModel] = useState<THREE.Group | null>(null);
 
@@ -29,10 +31,13 @@ export const Model: React.FC<ModelProps & GLTFLoaderEvents> = ({
     if (!orchestrator) {
       return;
     }
+    if (activeModel && activeModel.name == entry.id) {
+      return;
+    }
     let cancelled = false;
     let template = entry;
     const temp = preload.get(entry.id);
-    if(temp) {
+    if (temp) {
       template = {
         obj: temp,
         manifest: entry,
@@ -65,7 +70,7 @@ export const Model: React.FC<ModelProps & GLTFLoaderEvents> = ({
       setModel(null);
       orchestrator.removeModel();
     };
-  }, [entry.id, draco, orchestrator, entry]);
+  }, [entry.id, draco, orchestrator]);
   if (!model) {
     return null;
   }

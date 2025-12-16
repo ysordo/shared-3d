@@ -1,10 +1,10 @@
 import React from 'react';
-import { ModelManifest } from '../../core/cache/types.js';
+import { ModelManifest, ManifestEntry } from '../../core/cache/types.js';
 
 type ModelPreloadProps = {
     entries: ModelManifest;
     draco?: boolean;
-    onProgress?: (completed: number, total: number) => void;
+    onProgress?: (completed: number, total: number, entry: ManifestEntry) => void;
 };
 declare const ModelPreload: React.FC<ModelPreloadProps>;
 

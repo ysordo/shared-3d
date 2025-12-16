@@ -1,6 +1,6 @@
 'use client';
 import type React from 'react';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useScene } from '../../hooks/useScene';
 import type { ManifestEntry } from '../../core/cache/types';
 import type { HDRILoaderOptions, THREE } from '../../lib';
@@ -29,6 +29,7 @@ export const HDRI: React.FC<HDRIProps> = ({
   const orchestrator = useScene();
   const isHandle = useRef(false);
   const isloaded = useRef(false);
+  const [texture, setTexture] = useState('');
 
   const handleHDRIEvent = useCallback(
     (event: any) => {
@@ -43,6 +44,7 @@ export const HDRI: React.FC<HDRIProps> = ({
             entry: event.entry,
             config: event.config,
           });
+          setTexture(event.texture.userData.manifestId);
           break;
 
         case 'hdri::progress':
@@ -107,7 +109,7 @@ export const HDRI: React.FC<HDRIProps> = ({
       return;
     }
 
-    if (orchestrator.getActiveHDRI()?.name !== entry.id && !isloaded.current) {
+    if (texture !== entry.id && !isloaded.current) {
       isloaded.current = false;
       orchestrator.setHDRI(entry, config).catch(console.error);
     }

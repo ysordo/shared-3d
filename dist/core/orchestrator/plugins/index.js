@@ -9,20 +9,14 @@ import {
   RaycasterPlugin
 } from "../../../chunk-FBPG64NM.js";
 import {
-  MeasurementToolPlugin
-} from "../../../chunk-PRNY2PGZ.js";
-import {
   HotspotPlugin
 } from "../../../chunk-L3G2QMBD.js";
 import {
   LODSystemPlugin
 } from "../../../chunk-HVXJUMVE.js";
 import {
-  AdvancedRaycasterPlugin
-} from "../../../chunk-OHN5TLPQ.js";
-import {
-  AnnotationsPlugin
-} from "../../../chunk-CPKJTF7R.js";
+  MeasurementToolPlugin
+} from "../../../chunk-PRNY2PGZ.js";
 import {
   AutoLODSystemPlugin
 } from "../../../chunk-NWBFTWAT.js";
@@ -32,6 +26,12 @@ import {
 import {
   AdvancedOrbitControlsPlugin
 } from "../../../chunk-VMEXRI7G.js";
+import {
+  AdvancedRaycasterPlugin
+} from "../../../chunk-OHN5TLPQ.js";
+import {
+  AnnotationsPlugin
+} from "../../../chunk-CPKJTF7R.js";
 import "../../../chunk-OK2NCVM7.js";
 import "../../../chunk-EPN65WJP.js";
 import "../../../chunk-OVHQQSEK.js";

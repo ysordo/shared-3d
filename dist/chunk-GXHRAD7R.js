@@ -1,0 +1,30 @@
+import {
+  useScene
+} from "./chunk-LT5F3BLV.js";
+import {
+  OrbitControlsPlugin
+} from "./chunk-QWI5ZSNU.js";
+
+// src/react/components/OrbitControls.tsx
+import { useEffect } from "react";
+var OrbitControls = () => {
+  const orchestrator = useScene();
+  useEffect(() => {
+    if (!orchestrator) {
+      return;
+    }
+    if (orchestrator.has("OrbitControls")) {
+      return;
+    }
+    orchestrator.use(new OrbitControlsPlugin());
+    return () => {
+      orchestrator.plugin("OrbitControls").dispose?.();
+      orchestrator.remove("OrbitControls");
+    };
+  }, [orchestrator]);
+  return null;
+};
+
+export {
+  OrbitControls
+};

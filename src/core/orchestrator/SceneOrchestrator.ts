@@ -152,14 +152,18 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
 
     if('obj' in entry && entry.obj instanceof THREE.Group){
       console.info(`[Orchestrator] Change model → ${entry.manifest.id}`);
-      const t = this.scene.getObjectByName(entry.obj.name);
-      if(t){
-        this.scene.remove(t);
-      }
-      
+
       this.activeModel = entry.obj;
       this.dispatchEvent({ type: 'model::loaded', model: this.activeModel } as never);
-      this.scene.add(entry.obj);
+      if(this.scene.getObjectByName && !this.scene.getObjectByName(entry.obj.name)){
+        this.scene.add(entry.obj);
+      }
+      const o = this.plugins.get('OrbitControls') || this.plugins.get('AdvancedOrbitControls');
+          this.camera.position.set(0, 1.6,
+            o
+            ? ( ( (o as any).maxDistance - (o as any).minDistance ) / 2 )
+            : 5
+          );
       this.camera.lookAt(entry.obj.position);
       options?.onLoaded?.(entry.obj,entry.manifest);
       return entry.obj;
@@ -168,14 +172,17 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
       const model = await GLTFLoader.load((entry as ManifestEntry), {
         draco: options?.draco,
         onLoaded: (obj) => {
-          const t = this.scene.getObjectByName(obj.name);
-          if(t){
-            this.scene.remove(t);
-          }
-  
           this.activeModel = obj;
           this.dispatchEvent({ type: 'model::loaded', model: this.activeModel } as never);
-          this.scene.add(obj);
+           if(this.scene.getObjectByName && !this.scene.getObjectByName(obj.name)){
+            this.scene.add(obj);
+          }
+          const o = this.plugins.get('OrbitControls') || this.plugins.get('AdvancedOrbitControls');
+          this.camera.position.set(0, 1.6,
+            o
+            ? ( ( (o as any).maxDistance - (o as any).minDistance ) / 2 )
+            : 5
+          );
           this.camera.lookAt(obj.position);
           options?.onLoaded?.(obj,(entry as ManifestEntry));
           console.info(`[Orchestrator] Active model: ${(entry as ManifestEntry).id}`);
