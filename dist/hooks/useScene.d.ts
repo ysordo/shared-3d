@@ -1,7 +1,8 @@
-import { a as SceneOrchestrator } from '../SceneOrchestrator-0U6fAu6q.js';
-import '../core/loaders/HDRILoader.js';
+import { a as SceneOrchestrator } from '../SceneOrchestrator-rsjgaMlg.js';
+import '../core/loaders/GLTFLoader.js';
 import '../core/cache/types.js';
 import 'three';
+import '../core/loaders/HDRILoader.js';
 
 declare const useScene: () => SceneOrchestrator;
 

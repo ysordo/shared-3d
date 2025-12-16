@@ -171,7 +171,7 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
   }, [currentDistance]);
 
   if (initialDistance === null) {
-    return callback || null;
+    return <>{callback}</>;
   }
 
   const formatted = formatValue(currentDistance, unit, decimals);

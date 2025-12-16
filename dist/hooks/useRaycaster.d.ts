@@ -1,8 +1,9 @@
 import { RaycasterEvent } from '../core/orchestrator/plugins/RaycasterPlugin.js';
-import '../SceneOrchestrator-0U6fAu6q.js';
-import '../core/loaders/HDRILoader.js';
+import '../SceneOrchestrator-rsjgaMlg.js';
+import '../core/loaders/GLTFLoader.js';
 import '../core/cache/types.js';
 import 'three';
+import '../core/loaders/HDRILoader.js';
 
 declare const useRaycaster: (onEvent: (event: RaycasterEvent) => void) => void;
 

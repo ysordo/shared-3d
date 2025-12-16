@@ -15,7 +15,7 @@ type OrbitState = {
     toggleAll: () => void;
 };
 type AdvancedOrbitControlsProps = {
-    children: (state: OrbitState) => React.ReactNode;
+    children?: (state: OrbitState) => React.ReactNode;
     enablePan?: boolean;
     enableRotate?: boolean;
     enableZoom?: boolean;

@@ -1,7 +1,8 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-0U6fAu6q.js';
-import '../../loaders/HDRILoader.js';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-rsjgaMlg.js';
+import '../../loaders/GLTFLoader.js';
 import '../../cache/types.js';
 import 'three';
+import '../../loaders/HDRILoader.js';
 
 declare class OrbitControlsPlugin implements Plugin {
     name: string;

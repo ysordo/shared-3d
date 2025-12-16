@@ -1,4 +1,4 @@
-export { S as SceneConfig, a as SceneOrchestrator } from '../../SceneOrchestrator-0U6fAu6q.js';
+export { S as SceneConfig, a as SceneOrchestrator } from '../../SceneOrchestrator-rsjgaMlg.js';
 export { AdvancedCameraCollisionPlugin } from './plugins/AdvancedCameraCollisionPlugin.js';
 export { AdvancedOrbitControlsPlugin } from './plugins/AdvancedOrbitControlsPlugin.js';
 export { AdvancedRaycasterPlugin } from './plugins/AdvancedRaycasterPlugin.js';
@@ -10,6 +10,7 @@ export { MeasurementEvent, MeasurementToolPlugin } from './plugins/MeasurementTo
 export { OrbitControlsPlugin } from './plugins/OrbitControlsPlugin.js';
 export { RaycasterEvent, RaycasterPlugin } from './plugins/RaycasterPlugin.js';
 export { PostProcessingPlugin } from './plugins/PostProcessingPlugin.js';
-import '../loaders/HDRILoader.js';
+import '../loaders/GLTFLoader.js';
 import '../cache/types.js';
 import 'three';
+import '../loaders/HDRILoader.js';

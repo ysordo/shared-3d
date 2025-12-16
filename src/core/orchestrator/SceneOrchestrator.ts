@@ -1,3 +1,4 @@
+import type { GLTFLoaderEvents } from '../loaders/GLTFLoader';
 import { GLTFLoader } from '../loaders/GLTFLoader';
 import type { HDRILoaderOptions } from '../loaders/HDRILoader';
 import { HDRILoader } from '../loaders/HDRILoader';
@@ -142,7 +143,7 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
     }
   }
   /* === MODELS === */
-  async setModel(entry: ManifestEntry, options?: { draco?: boolean }): Promise<THREE.Group> {
+  async setModel(entry: ManifestEntry, options?: { draco?: boolean } & GLTFLoaderEvents): Promise<THREE.Group> {
     console.info(`[Orchestrator] Change model → ${entry.id}`);
 
     if (this.activeModel) {
@@ -162,9 +163,12 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
         this.dispatchEvent({ type: 'model::loaded', model: this.activeModel } as never);
         this.scene.add(obj);
         this.camera.lookAt(obj.position);
+        options?.onLoaded?.(obj,entry);
         console.info(`[Orchestrator] Active model: ${entry.id}`);
       },
+      onProgress: (...prev)=>options?.onProgress?.(...prev),
       onError: (err) => {
+        options?.onError?.(err, entry.url);
         console.error(`[Orchestrator] Error model loaded ${entry.id}`, err);
       },
     });

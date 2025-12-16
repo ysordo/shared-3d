@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 export { ManifestEntry, ModelManifest } from '../core/cache/types.js';
 export { HDRILoaderOptions } from '../core/loaders/HDRILoader.js';
-export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-0U6fAu6q.js';
+export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-rsjgaMlg.js';
 export { CustomMaterialFactory, MaterialConfig } from '../react/controls/MaterialController.js';
+import '../core/loaders/GLTFLoader.js';
 import 'react';
 
 type Vector3Tuple = [number, number, number];

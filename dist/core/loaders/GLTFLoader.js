@@ -1,6 +1,6 @@
 import {
   GLTFLoader
-} from "../../chunk-R4AEK7RE.js";
+} from "../../chunk-CWPTMWDM.js";
 import "../../chunk-OK2NCVM7.js";
 import "../../chunk-OVHQQSEK.js";
 import "../../chunk-EPN65WJP.js";

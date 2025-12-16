@@ -20,7 +20,7 @@ type OrbitState = {
 };
 
 type AdvancedOrbitControlsProps = {
-  children: (state: OrbitState) => React.ReactNode;
+  children?: (state: OrbitState) => React.ReactNode;
   enablePan?: boolean;
   enableRotate?: boolean;
   enableZoom?: boolean;
@@ -109,5 +109,5 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     toggleAll,
   };
 
-  return <>{children(state)}</>;
+  return <>{children?.(state)}</>;
 };

@@ -1,8 +1,9 @@
 import React, { ReactNode } from 'react';
-import { S as SceneConfig, a as SceneOrchestrator } from '../SceneOrchestrator-Bx7eqX8k.cjs';
+import { S as SceneConfig, a as SceneOrchestrator } from '../SceneOrchestrator-BxRG1S6N.cjs';
 import * as THREE from 'three';
-import '../core/loaders/HDRILoader.cjs';
+import '../core/loaders/GLTFLoader.cjs';
 import '../core/cache/types.cjs';
+import '../core/loaders/HDRILoader.cjs';
 
 type SceneContextValue = {
     orchestrator: SceneOrchestrator;

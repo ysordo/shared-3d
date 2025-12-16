@@ -75,6 +75,15 @@ export class GLTFLoader {
             url: entry.url,
           });
           console.info(`[GLTFLoader] ${entry.id}: ${percent.toFixed(1)}%`);
+        }else {
+          const percent = (progress.loaded / entry.size) * 100;
+          options.onProgress?.({
+            loaded: progress.loaded,
+            total: entry.size,
+            percent,
+            url: entry.url,
+          });
+          console.info(`[GLTFLoader] ${entry.id}: ${percent.toFixed(1)}%`);
         }
       },
       (error) => {

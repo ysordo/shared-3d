@@ -6,7 +6,7 @@ import { THREE } from '../../lib';
 import { useActiveModel } from '../../hooks';
 
 type AdvancedDragRaycasterProps = {
-  children: (state: {
+  children?: (state: {
     isEnabled: boolean;
     toggleEnabled: () => void;
     setEnabled: (value: boolean) => void;
@@ -217,7 +217,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
 
   return (
     <>
-      {children({
+      {children?.({
         isEnabled,
         toggleEnabled,
         setEnabled,

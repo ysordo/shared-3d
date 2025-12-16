@@ -1,7 +1,7 @@
 import "../../chunk-EC4WICT5.js";
 import {
   GLTFLoader
-} from "../../chunk-R4AEK7RE.js";
+} from "../../chunk-CWPTMWDM.js";
 import {
   HDRILoader
 } from "../../chunk-VSTC7ZYY.js";

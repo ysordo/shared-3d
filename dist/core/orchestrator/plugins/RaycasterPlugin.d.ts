@@ -1,7 +1,8 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-0U6fAu6q.js';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-rsjgaMlg.js';
 import * as THREE from 'three';
-import '../../loaders/HDRILoader.js';
+import '../../loaders/GLTFLoader.js';
 import '../../cache/types.js';
+import '../../loaders/HDRILoader.js';
 
 type RaycasterEvent = {
     type: 'click';

@@ -2,7 +2,7 @@ import React from 'react';
 import * as THREE from 'three';
 
 type AdvancedDragRaycasterProps = {
-    children: (state: {
+    children?: (state: {
         isEnabled: boolean;
         toggleEnabled: () => void;
         setEnabled: (value: boolean) => void;
