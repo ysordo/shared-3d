@@ -148,6 +148,8 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
     
     if (this.activeModel) {
       if (this.activeModel?.name === entry.id) {
+        this.scene.remove(this.activeModel);
+        this.scene.add(this.activeModel);
         options?.onLoaded?.(this.activeModel, entry);
         return this.activeModel;
       }
@@ -166,6 +168,11 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
           ? ( ( (o as any).maxDistance - (o as any).minDistance ) / 2 )
           : 5
         );
+        this.scene.children.forEach((obj)=> {
+          if(obj instanceof THREE.Group){
+            this.scene.remove(obj);
+          }
+        });
         this.camera.lookAt(obj.position);
         this.scene.add(obj);
         this.dispatchEvent({ type: 'model::loaded', model: this.activeModel } as never);
