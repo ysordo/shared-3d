@@ -123,7 +123,7 @@ export class GLTFLoader {
   static async preload(
     entries: ModelManifest,
     options: GLTFLoaderOptions = {},
-    onProgress?: (completed: number, total: number) => void
+    onProgress?: (obj: THREE.Group, entry: ManifestEntry, completed: number, total: number) => void
   ) {
     let completed = 0;
     const total = entries.length;
@@ -132,7 +132,7 @@ export class GLTFLoader {
       entries.map(entry =>
         this.load(entry, {
           ...options,
-          onLoaded: () => onProgress?.(++completed, total),
+          onLoaded: (...prev) => onProgress?.(...prev, ++completed, total),
           onError: (err, url) => console.error(`Preload failed: ${url}`, err),
         })
       )

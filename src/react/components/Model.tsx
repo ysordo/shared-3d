@@ -5,6 +5,7 @@ import { useScene } from '../../hooks/useScene';
 import type { ManifestEntry } from '../../core/cache/types';
 import type { THREE } from '../../lib';
 import type { GLTFLoaderEvents } from '../../core';
+import { usePreload } from '../../hooks/usePreload';
 
 type ModelProps = {
   entry: ManifestEntry;
@@ -21,6 +22,7 @@ export const Model: React.FC<ModelProps & GLTFLoaderEvents> = ({
   children,
 }) => {
   const orchestrator = useScene();
+  const preload = usePreload();
   const [model, setModel] = useState<THREE.Group | null>(null);
 
   useEffect(() => {
@@ -28,7 +30,15 @@ export const Model: React.FC<ModelProps & GLTFLoaderEvents> = ({
       return;
     }
     let cancelled = false;
-    orchestrator.setModel(entry, {
+    let template = entry;
+    const temp = preload.get(entry.id);
+    if(temp) {
+      template = {
+        obj: temp,
+        manifest: entry,
+      } as any;
+    }
+    orchestrator.setModel(template, {
       draco,
       onLoaded: (...prev) => {
         if (cancelled) {

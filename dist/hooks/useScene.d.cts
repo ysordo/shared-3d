@@ -1,4 +1,4 @@
-import { a as SceneOrchestrator } from '../SceneOrchestrator-BxRG1S6N.cjs';
+import { a as SceneOrchestrator } from '../SceneOrchestrator-oKj90s6N.cjs';
 import '../core/loaders/GLTFLoader.cjs';
 import '../core/cache/types.cjs';
 import 'three';

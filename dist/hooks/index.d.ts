@@ -5,7 +5,7 @@ export { useHDRI } from './useHDRI.js';
 export { useRaycaster } from './useRaycaster.js';
 export { useCache } from './useCache.js';
 export { useAnimation } from './useAnimation.js';
-import '../SceneOrchestrator-rsjgaMlg.js';
+import '../SceneOrchestrator-BanCYJ3v.js';
 import '../core/loaders/GLTFLoader.js';
 import '../core/cache/types.js';
 import 'three';

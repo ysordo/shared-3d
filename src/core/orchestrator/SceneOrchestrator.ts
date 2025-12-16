@@ -143,37 +143,51 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
     }
   }
   /* === MODELS === */
-  async setModel(entry: ManifestEntry, options?: { draco?: boolean } & GLTFLoaderEvents): Promise<THREE.Group> {
-    console.info(`[Orchestrator] Change model → ${entry.id}`);
-
+  async setModel(entry: ManifestEntry | {manifest: ManifestEntry, obj: THREE.Group}, options?: { draco?: boolean } & GLTFLoaderEvents): Promise<THREE.Group> {
+    
     if (this.activeModel) {
       this.scene.remove(this.activeModel);
       this.activeModel = null;
     }
 
-    const model = await GLTFLoader.load(entry, {
-      draco: options?.draco,
-      onLoaded: (obj) => {
-        const t = this.scene.getObjectByName(obj.name);
-        if(t){
-          this.scene.remove(t);
-        }
-
-        this.activeModel = obj;
-        this.dispatchEvent({ type: 'model::loaded', model: this.activeModel } as never);
-        this.scene.add(obj);
-        this.camera.lookAt(obj.position);
-        options?.onLoaded?.(obj,entry);
-        console.info(`[Orchestrator] Active model: ${entry.id}`);
-      },
-      onProgress: (...prev)=>options?.onProgress?.(...prev),
-      onError: (err) => {
-        options?.onError?.(err, entry.url);
-        console.error(`[Orchestrator] Error model loaded ${entry.id}`, err);
-      },
-    });
-
-    return model;
+    if('obj' in entry && entry.obj instanceof THREE.Group){
+      console.info(`[Orchestrator] Change model → ${entry.manifest.id}`);
+      const t = this.scene.getObjectByName(entry.obj.name);
+      if(t){
+        this.scene.remove(t);
+      }
+      
+      this.activeModel = entry.obj;
+      this.dispatchEvent({ type: 'model::loaded', model: this.activeModel } as never);
+      this.scene.add(entry.obj);
+      this.camera.lookAt(entry.obj.position);
+      options?.onLoaded?.(entry.obj,entry.manifest);
+      return entry.obj;
+    } else {
+      console.info(`[Orchestrator] Change model → ${(entry as ManifestEntry).id}`);
+      const model = await GLTFLoader.load((entry as ManifestEntry), {
+        draco: options?.draco,
+        onLoaded: (obj) => {
+          const t = this.scene.getObjectByName(obj.name);
+          if(t){
+            this.scene.remove(t);
+          }
+  
+          this.activeModel = obj;
+          this.dispatchEvent({ type: 'model::loaded', model: this.activeModel } as never);
+          this.scene.add(obj);
+          this.camera.lookAt(obj.position);
+          options?.onLoaded?.(obj,(entry as ManifestEntry));
+          console.info(`[Orchestrator] Active model: ${(entry as ManifestEntry).id}`);
+        },
+        onProgress: (...prev)=>options?.onProgress?.(...prev),
+        onError: (err) => {
+          options?.onError?.(err, (entry as ManifestEntry).url);
+          console.error(`[Orchestrator] Error model loaded ${(entry as ManifestEntry).id}`, err);
+        },
+      });
+      return model;
+    }
   }
 
   removeModel(): void {

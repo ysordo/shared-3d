@@ -1,7 +1,7 @@
 export { SceneProvider } from './SceneContext.js';
 export { CacheProvider } from './CacheContext.js';
 import 'react';
-import '../SceneOrchestrator-rsjgaMlg.js';
+import '../SceneOrchestrator-BanCYJ3v.js';
 import '../core/loaders/GLTFLoader.js';
 import '../core/cache/types.js';
 import 'three';

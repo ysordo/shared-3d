@@ -6,6 +6,7 @@ import React, {
   forwardRef,
   useEffect,
   useState,
+  useRef,
 } from 'react';
 import { SceneOrchestrator } from '../core/orchestrator/SceneOrchestrator';
 import type { SceneConfig } from '../core/orchestrator/SceneOrchestrator';
@@ -14,6 +15,7 @@ import type { THREE } from '../lib';
 type SceneContextValue = {
   orchestrator: SceneOrchestrator;
   activeModel: THREE.Group | null;
+  preload: Map<string,THREE.Group>;
 };
 
 const SceneContext = createContext<SceneContextValue | null>(null);
@@ -29,6 +31,7 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
       null
     );
     const [activeModel, setActiveModel] = useState<THREE.Group | null>(null);
+    const preload = useRef<Map<string,THREE.Group>>(new Map());
 
     useEffect(() => {
       if (!ref) {
@@ -74,7 +77,7 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
 
     return (
       <SceneContext.Provider
-        value={{ orchestrator: orchestrator as SceneOrchestrator, activeModel }}>
+        value={{ orchestrator: orchestrator as SceneOrchestrator, activeModel, preload: preload.current }}>
         {children}
       </SceneContext.Provider>
     );
