@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { S as SceneConfig, a as SceneOrchestrator } from '../SceneOrchestrator-BanCYJ3v.js';
+import { S as SceneConfig, a as SceneOrchestrator } from '../SceneOrchestrator-rsjgaMlg.js';
 import * as THREE from 'three';
 import '../core/loaders/GLTFLoader.js';
 import '../core/cache/types.js';

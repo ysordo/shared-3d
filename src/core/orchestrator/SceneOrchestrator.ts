@@ -143,58 +143,42 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
     }
   }
   /* === MODELS === */
-  async setModel(entry: ManifestEntry | {manifest: ManifestEntry, obj: THREE.Group}, options?: { draco?: boolean } & GLTFLoaderEvents): Promise<THREE.Group> {
+  async setModel(entry: ManifestEntry, options?: { draco?: boolean } & GLTFLoaderEvents): Promise<THREE.Group> {
+
     
     if (this.activeModel) {
+      if (this.activeModel?.name === entry.id) {
+        options?.onLoaded?.(this.activeModel, entry);
+        return this.activeModel;
+      }
       this.scene.remove(this.activeModel);
       this.activeModel = null;
     }
 
-    if('obj' in entry && entry.obj instanceof THREE.Group){
-      console.info(`[Orchestrator] Change model → ${entry.manifest.id}`);
-
-      this.activeModel = entry.obj;
-      this.dispatchEvent({ type: 'model::loaded', model: this.activeModel } as never);
-      if(this.scene.getObjectByName && !this.scene.getObjectByName(entry.obj.name)){
-        this.scene.add(entry.obj);
-      }
-      const o = this.plugins.get('OrbitControls') || this.plugins.get('AdvancedOrbitControls');
-          this.camera.position.set(0, 1.6,
-            o
-            ? ( ( (o as any).maxDistance - (o as any).minDistance ) / 2 )
-            : 5
-          );
-      this.camera.lookAt(entry.obj.position);
-      options?.onLoaded?.(entry.obj,entry.manifest);
-      return entry.obj;
-    } else {
-      console.info(`[Orchestrator] Change model → ${(entry as ManifestEntry).id}`);
-      const model = await GLTFLoader.load((entry as ManifestEntry), {
-        draco: options?.draco,
-        onLoaded: (obj) => {
-          this.activeModel = obj;
-          this.dispatchEvent({ type: 'model::loaded', model: this.activeModel } as never);
-           if(this.scene.getObjectByName && !this.scene.getObjectByName(obj.name)){
-            this.scene.add(obj);
-          }
-          const o = this.plugins.get('OrbitControls') || this.plugins.get('AdvancedOrbitControls');
-          this.camera.position.set(0, 1.6,
-            o
-            ? ( ( (o as any).maxDistance - (o as any).minDistance ) / 2 )
-            : 5
-          );
-          this.camera.lookAt(obj.position);
-          options?.onLoaded?.(obj,(entry as ManifestEntry));
-          console.info(`[Orchestrator] Active model: ${(entry as ManifestEntry).id}`);
-        },
-        onProgress: (...prev)=>options?.onProgress?.(...prev),
-        onError: (err) => {
-          options?.onError?.(err, (entry as ManifestEntry).url);
-          console.error(`[Orchestrator] Error model loaded ${(entry as ManifestEntry).id}`, err);
-        },
-      });
-      return model;
-    }
+    console.info(`[Orchestrator] Change model → ${entry.id}`);
+    const model = await GLTFLoader.load(entry, {
+      draco: options?.draco,
+      onLoaded: (obj) => {
+        this.activeModel = obj;
+        const o = this.plugins.get('OrbitControls') || this.plugins.get('AdvancedOrbitControls');
+        this.camera.position.set(0, 1.6,
+          o
+          ? ( ( (o as any).maxDistance - (o as any).minDistance ) / 2 )
+          : 5
+        );
+        this.camera.lookAt(obj.position);
+        this.scene.add(obj);
+        this.dispatchEvent({ type: 'model::loaded', model: this.activeModel } as never);
+        options?.onLoaded?.(obj,entry);
+        console.info(`[Orchestrator] Active model: ${entry.id}`);
+      },
+      onProgress: (...prev)=>options?.onProgress?.(...prev),
+      onError: (err) => {
+        options?.onError?.(err, (entry as ManifestEntry).url);
+        console.error(`[Orchestrator] Error model loaded ${entry.id}`, err);
+      },
+    });
+    return model;
   }
 
   removeModel(): void {
@@ -210,8 +194,8 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
     config: Partial<Omit<HDRILoaderOptions, 'dataType' | 'preserveHDR' | 'rgbeLoaderOptions'>> = {}
   ): Promise<THREE.Texture> {
     try {
-      if(this.activeHDRI?.name === entry.id) {return this.activeHDRI; }
       if (this.activeHDRI) {
+        if(this.activeHDRI?.name === entry.id) {return this.activeHDRI; }
         this.activeHDRI.dispose();
         this.activeHDRI = null;
         

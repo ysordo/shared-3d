@@ -1,4 +1,4 @@
-export { S as SceneConfig, a as SceneOrchestrator } from '../../SceneOrchestrator-oKj90s6N.cjs';
+export { S as SceneConfig, a as SceneOrchestrator } from '../../SceneOrchestrator-BxRG1S6N.cjs';
 export { AdvancedCameraCollisionPlugin } from './plugins/AdvancedCameraCollisionPlugin.cjs';
 export { AdvancedOrbitControlsPlugin } from './plugins/AdvancedOrbitControlsPlugin.cjs';
 export { AdvancedRaycasterPlugin } from './plugins/AdvancedRaycasterPlugin.cjs';

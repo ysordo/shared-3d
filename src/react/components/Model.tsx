@@ -22,7 +22,6 @@ export const Model: React.FC<ModelProps & GLTFLoaderEvents> = ({
   children,
 }) => {
   const orchestrator = useScene();
-  const preload = usePreload();
   const [model, setModel] = useState<THREE.Group | null>(null);
 
   useEffect(() => {
@@ -30,15 +29,7 @@ export const Model: React.FC<ModelProps & GLTFLoaderEvents> = ({
       return;
     }
     let cancelled = false;
-    let template = entry;
-    const temp = preload.get(entry.id);
-    if(temp) {
-      template = {
-        obj: temp,
-        manifest: entry,
-      } as any;
-    }
-    orchestrator.setModel(template, {
+    orchestrator.setModel(entry, {
       draco,
       onLoaded: (...prev) => {
         if (cancelled) {

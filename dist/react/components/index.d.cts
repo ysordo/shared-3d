@@ -32,7 +32,7 @@ export { TheaterLighting } from './TheaterLighting.cjs';
 export { VRButton } from './VRButton.cjs';
 import 'react';
 import 'three';
-import '../../SceneOrchestrator-oKj90s6N.cjs';
+import '../../SceneOrchestrator-BxRG1S6N.cjs';
 import '../../core/loaders/GLTFLoader.cjs';
 import '../../core/cache/types.cjs';
 import '../../core/loaders/HDRILoader.cjs';

@@ -9,7 +9,7 @@ export { MeasurementEvent, MeasurementToolPlugin } from './MeasurementToolPlugin
 export { OrbitControlsPlugin } from './OrbitControlsPlugin.js';
 export { RaycasterEvent, RaycasterPlugin } from './RaycasterPlugin.js';
 export { PostProcessingPlugin } from './PostProcessingPlugin.js';
-import '../../../SceneOrchestrator-BanCYJ3v.js';
+import '../../../SceneOrchestrator-rsjgaMlg.js';
 import 'three';
 import '../../loaders/GLTFLoader.js';
 import '../../cache/types.js';
