@@ -4,9 +4,10 @@ import '../../core/loaders/HDRILoader.cjs';
 import '../../core/cache/types.cjs';
 import 'three';
 
-declare const Canvas: React.ForwardRefExoticComponent<React.CanvasHTMLAttributes<HTMLCanvasElement> & {
+type CanvasProps = React.CanvasHTMLAttributes<HTMLCanvasElement> & {
     config?: SceneConfig;
     children?: ReactNode;
-} & React.RefAttributes<HTMLCanvasElement>>;
+};
+declare const Canvas: React.FC<CanvasProps>;
 
 export { Canvas };

@@ -1,6 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
-import React, { forwardRef } from 'react';
+import React, { useRef } from 'react';
 import { SceneProvider } from '../../context/SceneContext';
 import type { SceneConfig } from '../../core/orchestrator/SceneOrchestrator';
 
@@ -9,15 +9,20 @@ type CanvasProps = React.CanvasHTMLAttributes<HTMLCanvasElement> & {
   children?: ReactNode;
 };
 
-export const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
-  ({ config, children, ...canvasProps }, ref) => {
-    return (
+export const Canvas: React.FC<CanvasProps> = ({
+  config,
+  children,
+  ...canvasProps
+}) => {
+  const ref = useRef<HTMLCanvasElement>(null);
+  return (
+    <>
+      <canvas ref={ref} {...canvasProps} />
       <SceneProvider ref={ref} config={config}>
-        <canvas ref={ref} {...canvasProps} />
         {children}
       </SceneProvider>
-    );
-  }
-);
+    </>
+  );
+};
 
 Canvas.displayName = 'Canvas';
