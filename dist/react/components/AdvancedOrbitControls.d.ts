@@ -1,32 +1,31 @@
-import React from 'react';
-
-type OrbitState = {
-    panEnabled: boolean;
-    rotateEnabled: boolean;
-    zoomEnabled: boolean;
-    isActive: boolean;
-    setPanEnabled: (value: boolean) => void;
-    setRotateEnabled: (value: boolean) => void;
-    setZoomEnabled: (value: boolean) => void;
-    setAllEnabled: (value: boolean) => void;
-    togglePan: () => void;
-    toggleRotate: () => void;
-    toggleZoom: () => void;
-    toggleAll: () => void;
+type StateProps = {
+    readonly enablePan: boolean;
+    readonly enableRotate: boolean;
+    readonly enableZoom: boolean;
+    readonly minDistance: number;
+    readonly maxDistance: number;
+    setEnablePan: (enablePan: boolean) => void;
+    setEnableRotate: (enableRotate: boolean) => void;
+    setEnableZoom: (enableZoom: boolean) => void;
+    setMinDistance: (minDistance: number) => void;
+    setMaxDistance: (maxDistance: number) => void;
 };
 type AdvancedOrbitControlsProps = {
-    children?: (state: OrbitState) => React.ReactNode;
-    enablePan?: boolean;
-    enableRotate?: boolean;
-    enableZoom?: boolean;
-    panSpeed?: number;
-    rotateSpeed?: number;
-    zoomSpeed?: number;
-    dampingFactor?: number;
-    minDistance?: number;
-    maxDistance?: number;
-    minPolarAngle?: number;
-    maxPolarAngle?: number;
+    options?: Partial<{
+        enablePan?: boolean;
+        enableRotate?: boolean;
+        enableZoom?: boolean;
+        dampingFactor?: number;
+        panSpeed?: number;
+        rotateSpeed?: number;
+        zoomSpeed?: number;
+        minDistance?: number;
+        maxDistance?: number;
+        minPolarAngle?: number;
+        maxPolarAngle?: number;
+    }>;
+    enabled?: boolean;
+    children?: (state: StateProps) => React.ReactNode;
 };
 declare const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps>;
 

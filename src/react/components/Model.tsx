@@ -1,64 +1,64 @@
 'use client';
-import type React from 'react';
-import { useEffect, useState } from 'react';
+
+import { useEffect, useRef } from 'react';
 import { useScene } from '../../hooks/useScene';
 import type { ManifestEntry } from '../../core/cache/types';
-import type { THREE } from '../../lib';
-import type { GLTFLoaderEvents } from '../../core';
-import { usePreload } from '../../hooks/usePreload';
+import type { GLTFLoaderEvents } from '../../core/loaders/GLTFLoader';
+import { GLTFLoader } from '../../core/loaders/GLTFLoader';
 
 type ModelProps = {
   entry: ManifestEntry;
   draco?: boolean | undefined;
-  children?: (model: THREE.Group) => React.ReactNode;
-};
+  children?: (model: any) => React.ReactNode | undefined;
+} & Partial<GLTFLoaderEvents>;
 
-export const Model: React.FC<ModelProps & GLTFLoaderEvents> = ({
+export const Model: React.FC<ModelProps> = ({
   entry,
   draco = false,
+  children,
   onLoaded,
   onProgress,
   onError,
-  children,
 }) => {
   const orchestrator = useScene();
-  const [model, setModel] = useState<THREE.Group | null>(null);
+  const cancelledRef = useRef(false);
 
   useEffect(() => {
-    if (!orchestrator) {
-      return;
-    }
-    let cancelled = false;
-    orchestrator.setModel(entry, {
+    cancelledRef.current = false;
+
+    GLTFLoader.load(entry, {
       draco,
-      onLoaded: (...prev) => {
-        if (cancelled) {
+      onLoaded: (obj, manifestEntry) => {
+        if (cancelledRef.current) {
           return;
         }
-        setModel(prev[0]);
-        onLoaded?.(...prev);
+        orchestrator.setModel(obj);
+        onLoaded?.(obj, manifestEntry);
       },
-      onProgress: (...prev) => {
-        if (cancelled) {
+      onProgress: (...args) => {
+        if (cancelledRef.current) {
           return;
         }
-        onProgress?.(...prev);
+        onProgress?.(...args);
       },
-      onError: (...prev) => {
-        if (cancelled) {
+      onError: (...args) => {
+        if (cancelledRef.current) {
           return;
         }
-        onError?.(...prev);
+        onError?.(...args);
       },
     });
+
     return () => {
-      cancelled = true;
-      setModel(null);
+      cancelledRef.current = true;
       orchestrator.removeModel();
     };
-  }, [entry.id, draco, orchestrator, entry]);
-  if (!model) {
+  }, [entry.id, draco, orchestrator]);
+
+  const model = orchestrator.getActiveModel();
+  if (!model || !children) {
     return null;
   }
-  return children?.(model);
+
+  return children(model);
 };

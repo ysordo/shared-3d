@@ -62,6 +62,10 @@ export class RaycasterPlugin implements Plugin {
     }
   }
 
+  updateCallback(onEvent: (event: RaycasterEvent)=>void) {
+    this.onEvent = onEvent;
+  }
+
   private getIntersection(scene: THREE.Scene, camera: THREE.Camera) {
     this.raycaster.setFromCamera(this.pointer, camera);
     const intersects = this.raycaster.intersectObjects(scene.children, true);

@@ -86,11 +86,11 @@ export class AutoLODSystemPlugin implements Plugin {
     this.originalSetModel = orchestrator.setModel.bind(orchestrator);
 
     orchestrator.setModel = async (...args) => {
-        const model = await this.originalSetModel!(...args);
+        await this.originalSetModel!(...args);
+        const model = orchestrator.getActiveModel()!;
         this.lods.forEach(lod => lod.parent?.remove(lod));
         this.lods.clear();
         applyLODToModel(model);
-        return model;
     };
 
     const update = () => {

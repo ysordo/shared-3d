@@ -1,7 +1,7 @@
 'use client';
-import type React from 'react';
-import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
+
+import { useMemo } from 'react';
+import { usePlugin } from '../../hooks/usePlugin';
 import { LODSystemPlugin } from '../../core/orchestrator/plugins/LODSystemPlugin';
 import type { THREE } from '../../lib';
 
@@ -13,22 +13,20 @@ type LODLevel = {
 type LODSystemProps = {
   levels: LODLevel[];
   hysteresis?: number;
+  enabled?: boolean;
 };
 
 export const LODSystem: React.FC<LODSystemProps> = ({
   levels,
   hysteresis = 0.1,
+  enabled = true,
 }) => {
-  const orchestrator = useScene();
+  const config = useMemo(() => [{ levels, hysteresis }], [levels, hysteresis]);
 
-  useEffect(() => {
-    const plugin = new LODSystemPlugin([{ levels, hysteresis }]);
-    orchestrator.use(plugin);
+  usePlugin(() => new LODSystemPlugin(config), enabled ? config : []);
 
-    return () => {
-      plugin.dispose();
-    };
-  }, [levels, hysteresis]);
-
+  if (!enabled) {
+    return null;
+  }
   return null;
 };

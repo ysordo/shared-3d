@@ -1,7 +1,7 @@
 'use client';
-import type React from 'react';
-import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
+
+import { useCallback, useMemo } from 'react';
+import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedRaycasterPlugin } from '../../core/orchestrator/plugins/AdvancedRaycasterPlugin';
 import { useActiveModel } from '../../hooks/useActiveModel';
 import type { THREE } from '../../lib';
@@ -27,54 +27,52 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
   onDrag,
   onDragEnd,
 }) => {
-  const orchestrator = useScene();
   const activeModel = useActiveModel();
+  const targetModel = customModel ?? activeModel;
 
-  useEffect(() => {
-    if (!orchestrator || !activeModel) {
-      return;
-    }
-    if (orchestrator.has('AdvancedRaycaster')) {
-      return;
-    }
-    orchestrator.use(
-      new AdvancedRaycasterPlugin(customModel || activeModel, (e: any) => {
-        switch (e.type) {
-          case 'objectclick':
-            onClick?.(e);
-            break;
-          case 'objecthoverin':
-            onHoverIn?.(e);
-            break;
-          case 'objecthoverout':
-            onHoverOut?.(e);
-            break;
-          case 'objecthovermove':
-            onHoverMove?.(e);
-            break;
-          case 'objectdragstart':
-            onDragStart?.(e);
-            break;
-          case 'objectdrag':
-            onDrag?.(e);
-            break;
-          case 'objectdragend':
-            onDragEnd?.(e);
-            break;
-        }
-      })
-    );
-  }, [
-    customModel,
-    activeModel,
-    onClick,
-    onHoverIn,
-    onHoverOut,
-    onHoverMove,
-    onDragStart,
-    onDrag,
-    onDragEnd,
-  ]);
+  const handler = useCallback(
+    (event: any) => {
+      switch (event.type) {
+        case 'objectclick':
+          onClick?.(event);
+          break;
+        case 'objecthoverin':
+          onHoverIn?.(event);
+          break;
+        case 'objecthoverout':
+          onHoverOut?.(event);
+          break;
+        case 'objecthovermove':
+          onHoverMove?.(event);
+          break;
+        case 'objectdragstart':
+          onDragStart?.(event);
+          break;
+        case 'objectdrag':
+          onDrag?.(event);
+          break;
+        case 'objectdragend':
+          onDragEnd?.(event);
+          break;
+      }
+    },
+    [
+      onClick,
+      onHoverIn,
+      onHoverOut,
+      onHoverMove,
+      onDragStart,
+      onDrag,
+      onDragEnd,
+    ]
+  );
+
+  const deps = useMemo(() => [targetModel, handler], [targetModel, handler]);
+
+  usePlugin(
+    () => new AdvancedRaycasterPlugin(targetModel as THREE.Object3D, handler),
+    deps
+  );
 
   return null;
 };

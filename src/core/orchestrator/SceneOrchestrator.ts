@@ -117,81 +117,45 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
 
     return this;
   }
-  plugin(name: string): Plugin {
-    if (!this.plugins.has(name)) {
-       throw console.error(`[Orchestrator] Plugin "${name}" is not already installed`);
+  plugin<T extends Plugin = Plugin>(name: string): T | undefined {
+    const t = this.plugins.get(name);
+    if (!t) {
+       console.error(`[Orchestrator] Plugin "${name}" is not already installed`);
     }
 
-    try {
-      const t = this.plugins.get(name);
-      return t!;
-    } catch (err) {
-      throw console.error(`[Orchestrator] Error get plugin ${name}:`, err);
-    }
+    return t as T | undefined;
   }
   has(name: string): boolean {return this.plugins.has(name);}
   remove(name: string): void {
-    if (!this.plugins.has(name)) {
-       throw console.error(`[Orchestrator] Plugin "${name}" is not already installed`);
-    }
-
-    try {
-      this.plugins.delete(name);
+    if (this.plugins.delete(name)) {
       console.info(`[Orchestrator] Plugin ${name} is already deleted`);
-    } catch (err) {
-      throw console.error(`[Orchestrator] Error get plugin ${name}:`, err);
+    } else {
+      console.error(`[Orchestrator] Plugin "${name}" is not already installed`);
     }
   }
   /* === MODELS === */
-  async setModel(entry: ManifestEntry, options?: { draco?: boolean } & GLTFLoaderEvents): Promise<THREE.Group> {
-
-    
-    if (this.activeModel) {
-      if (this.activeModel?.name === entry.id) {
-        this.scene.remove(this.activeModel);
-        this.scene.add(this.activeModel);
-        options?.onLoaded?.(this.activeModel, entry);
-        return this.activeModel;
-      }
-      this.scene.remove(this.activeModel);
-      this.activeModel = null;
-    }
-
-    console.info(`[Orchestrator] Change model → ${entry.id}`);
-    const model = await GLTFLoader.load(entry, {
-      draco: options?.draco,
-      onLoaded: (obj) => {
-        this.activeModel = obj;
+async setModel(model: THREE.Group) {
+    this.removeModel();
         const o = this.plugins.get('OrbitControls') || this.plugins.get('AdvancedOrbitControls');
         this.camera.position.set(0, 1.6,
           o
           ? ( ( (o as any).maxDistance - (o as any).minDistance ) / 2 )
           : 5
         );
-        this.scene.children.forEach((obj)=> {
-          if(obj instanceof THREE.Group){
-            this.scene.remove(obj);
-          }
-        });
-        this.camera.lookAt(obj.position);
-        this.scene.add(obj);
-        this.dispatchEvent({ type: 'model::loaded', model: this.activeModel } as never);
-        options?.onLoaded?.(obj,entry);
-        console.info(`[Orchestrator] Active model: ${entry.id}`);
-      },
-      onProgress: (...prev)=>options?.onProgress?.(...prev),
-      onError: (err) => {
-        options?.onError?.(err, (entry as ManifestEntry).url);
-        console.error(`[Orchestrator] Error model loaded ${entry.id}`, err);
-      },
-    });
-    return model;
+        this.camera.lookAt(model.position);
+
+    this.activeModel = model;
+    this.scene.add(model);
+    this.dispatchEvent({type: 'model::loaded', model} as never);
+    console.info(`[Orchestrator] Active model: ${model.name}`);
+
   }
 
-  removeModel(): void {
+  removeModel() {
     if (this.activeModel) {
       this.scene.remove(this.activeModel);
       this.activeModel = null;
+      this.dispatchEvent({type: 'model::removed'} as never);
     }
   }
 

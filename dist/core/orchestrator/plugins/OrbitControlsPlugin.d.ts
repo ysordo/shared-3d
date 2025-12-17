@@ -1,8 +1,7 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-rsjgaMlg.js';
-import '../../loaders/GLTFLoader.js';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-D4TjWrSK.js';
+import '../../loaders/HDRILoader.js';
 import '../../cache/types.js';
 import 'three';
-import '../../loaders/HDRILoader.js';
 
 declare class OrbitControlsPlugin implements Plugin {
     name: string;
@@ -10,6 +9,9 @@ declare class OrbitControlsPlugin implements Plugin {
     install({ camera, renderer }: PluginContext): void;
     get maxDistance(): number;
     get minDistance(): number;
+    get enableRotate(): boolean;
+    get enableZoom(): boolean;
+    get enablePan(): boolean;
     dispose(): void;
 }
 

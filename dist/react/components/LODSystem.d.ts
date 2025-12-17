@@ -1,4 +1,3 @@
-import React from 'react';
 import * as THREE from 'three';
 
 type LODLevel = {
@@ -8,6 +7,7 @@ type LODLevel = {
 type LODSystemProps = {
     levels: LODLevel[];
     hysteresis?: number;
+    enabled?: boolean;
 };
 declare const LODSystem: React.FC<LODSystemProps>;
 

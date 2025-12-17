@@ -9,8 +9,7 @@ export { MeasurementEvent, MeasurementToolPlugin } from './MeasurementToolPlugin
 export { OrbitControlsPlugin } from './OrbitControlsPlugin.cjs';
 export { RaycasterEvent, RaycasterPlugin } from './RaycasterPlugin.cjs';
 export { PostProcessingPlugin } from './PostProcessingPlugin.cjs';
-import '../../../SceneOrchestrator-BxRG1S6N.cjs';
+import '../../../SceneOrchestrator-NoU3ML5L.cjs';
 import 'three';
-import '../../loaders/GLTFLoader.cjs';
-import '../../cache/types.cjs';
 import '../../loaders/HDRILoader.cjs';
+import '../../cache/types.cjs';

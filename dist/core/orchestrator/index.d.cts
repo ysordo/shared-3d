@@ -1,4 +1,4 @@
-export { S as SceneConfig, a as SceneOrchestrator } from '../../SceneOrchestrator-BxRG1S6N.cjs';
+export { S as SceneConfig, a as SceneOrchestrator } from '../../SceneOrchestrator-NoU3ML5L.cjs';
 export { AdvancedCameraCollisionPlugin } from './plugins/AdvancedCameraCollisionPlugin.cjs';
 export { AdvancedOrbitControlsPlugin } from './plugins/AdvancedOrbitControlsPlugin.cjs';
 export { AdvancedRaycasterPlugin } from './plugins/AdvancedRaycasterPlugin.cjs';
@@ -10,7 +10,6 @@ export { MeasurementEvent, MeasurementToolPlugin } from './plugins/MeasurementTo
 export { OrbitControlsPlugin } from './plugins/OrbitControlsPlugin.cjs';
 export { RaycasterEvent, RaycasterPlugin } from './plugins/RaycasterPlugin.cjs';
 export { PostProcessingPlugin } from './plugins/PostProcessingPlugin.cjs';
-import '../loaders/GLTFLoader.cjs';
+import '../loaders/HDRILoader.cjs';
 import '../cache/types.cjs';
 import 'three';
-import '../loaders/HDRILoader.cjs';

@@ -1,56 +1,40 @@
-import "../chunk-Q47SPRY7.js";
+import "../chunk-UBVYEZI3.js";
 import {
   useCache
-} from "../chunk-G3Y3C54O.js";
+} from "../chunk-ZGOLR5KC.js";
 import {
   useHDRI
-} from "../chunk-TIZVOJKL.js";
-import {
-  useModel
-} from "../chunk-6ZDPTCWM.js";
+} from "../chunk-UPQHXTGX.js";
 import {
   useRaycaster
-} from "../chunk-KFYDM3JH.js";
+} from "../chunk-YD2LV3UC.js";
 import {
   useScene
-} from "../chunk-BSKDNZA4.js";
-import "../chunk-MSNKDE3A.js";
-import "../chunk-DCRMKZQR.js";
-import "../chunk-QWI5ZSNU.js";
-import "../chunk-SRDOYMT5.js";
-import "../chunk-FBPG64NM.js";
-import "../chunk-L3G2QMBD.js";
-import "../chunk-HVXJUMVE.js";
-import "../chunk-PRNY2PGZ.js";
-import "../chunk-NWBFTWAT.js";
-import "../chunk-7UK5WDJQ.js";
-import "../chunk-VMEXRI7G.js";
-import "../chunk-OHN5TLPQ.js";
-import "../chunk-CPKJTF7R.js";
+} from "../chunk-7C6GE4GX.js";
+import "../chunk-TEX62OAE.js";
+import "../chunk-D6IH2BXA.js";
 import "../chunk-NQSGSI4W.js";
 import "../chunk-777TCJKN.js";
 import "../chunk-SRUKCELR.js";
 import {
   useAnimation
-} from "../chunk-2RAKUSW6.js";
+} from "../chunk-7L2FWQCH.js";
 import {
   useActiveModel
-} from "../chunk-O6QF3AJQ.js";
-import "../chunk-JNVJBYDD.js";
-import "../chunk-JZJ5QAQI.js";
+} from "../chunk-YUPROAUR.js";
+import "../chunk-ZHSOSDPU.js";
+import "../chunk-SENENRNP.js";
 import "../chunk-VSTC7ZYY.js";
 import "../chunk-W5OYT3BE.js";
-import "../chunk-W33WFURU.js";
 import "../chunk-OK2NCVM7.js";
-import "../chunk-EPN65WJP.js";
 import "../chunk-OVHQQSEK.js";
+import "../chunk-EPN65WJP.js";
 import "../chunk-5QJW7WE3.js";
 export {
   useActiveModel,
   useAnimation,
   useCache,
   useHDRI,
-  useModel,
   useRaycaster,
   useScene
 };

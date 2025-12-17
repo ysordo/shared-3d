@@ -1,9 +1,9 @@
 'use client';
-import type React from 'react';
-import { useScene } from '../../hooks/useScene';
+
+import { useMemo } from 'react';
+import { usePlugin } from '../../hooks/usePlugin';
 import { HotspotPlugin } from '../../core/orchestrator/plugins/HotspotPlugin';
 import { THREE } from '../../lib';
-import { useEffect } from 'react';
 
 type HotspotProps = {
   id: string;
@@ -18,21 +18,17 @@ export const Hotspot: React.FC<HotspotProps> = ({
   target,
   onClick,
 }) => {
-  const orchestrator = useScene();
+  const data = useMemo(
+    () => ({
+      id,
+      position: new THREE.Vector3(...position),
+      target,
+      onClick,
+    }),
+    [id, position, target, onClick]
+  );
 
-  useEffect(() => {
-    const plugin = new HotspotPlugin([
-      {
-        id,
-        position: new THREE.Vector3(...position),
-        target,
-        onClick,
-      },
-    ]);
-    orchestrator.use(plugin);
-
-    return () => plugin.dispose();
-  }, [id, position, target, onClick]);
+  usePlugin(() => new HotspotPlugin([data]), [data]);
 
   return null;
 };

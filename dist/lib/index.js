@@ -1,5 +1,4 @@
 import "../chunk-OK2NCVM7.js";
-import "../chunk-EPN65WJP.js";
 import {
   DRACOLoader,
   EXRLoader,
@@ -12,6 +11,7 @@ import {
   THREE_VERSION,
   UnrealBloomPass
 } from "../chunk-OVHQQSEK.js";
+import "../chunk-EPN65WJP.js";
 export {
   THREE,
   THREE_VERSION,

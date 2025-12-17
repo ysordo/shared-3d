@@ -1,5 +1,4 @@
-export { b as Plugin, P as PluginContext } from '../../SceneOrchestrator-BxRG1S6N.cjs';
+export { b as Plugin, P as PluginContext } from '../../SceneOrchestrator-NoU3ML5L.cjs';
 import 'three';
-import '../loaders/GLTFLoader.cjs';
-import '../cache/types.cjs';
 import '../loaders/HDRILoader.cjs';
+import '../cache/types.cjs';

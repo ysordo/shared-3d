@@ -1,8 +1,7 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-rsjgaMlg.js';
-import '../../loaders/GLTFLoader.js';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-D4TjWrSK.js';
+import '../../loaders/HDRILoader.js';
 import '../../cache/types.js';
 import 'three';
-import '../../loaders/HDRILoader.js';
 
 declare class AdvancedOrbitControlsPlugin implements Plugin {
     private options;
@@ -22,11 +21,16 @@ declare class AdvancedOrbitControlsPlugin implements Plugin {
         maxPolarAngle?: number;
     }>);
     install({ camera, renderer }: PluginContext): void;
-    setPanEnabled(enabled: boolean): void;
-    setRotateEnabled(enabled: boolean): void;
-    setZoomEnabled(enabled: boolean): void;
+    set enablePan(enabled: boolean);
+    set enableRotate(enabled: boolean);
+    set enableZoom(enabled: boolean);
+    set maxDistance(distance: number);
+    set minDistance(distance: number);
     get maxDistance(): number;
     get minDistance(): number;
+    get enableRotate(): boolean;
+    get enableZoom(): boolean;
+    get enablePan(): boolean;
     dispose(): void;
 }
 

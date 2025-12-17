@@ -1,43 +1,33 @@
 'use client';
-import type React from 'react';
-import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
-import { MeasurementToolPlugin } from '../../core/orchestrator/plugins/MeasurementToolPlugin';
-import type { THREE } from '../../lib';
+
+import { useMemo } from 'react';
+import { usePlugin } from '../../hooks/usePlugin';
+import { MeasurementToolPlugin } from '../../core/orchestrator/plugins';
 
 type MeasurementToolProps = {
   enabled?: boolean;
   color?: string;
-  onMeasure?: (
-    distance: number,
-    points: [THREE.Vector3, THREE.Vector3]
-  ) => void;
+  onMeasure?: (distance: number, points: [any, any]) => void;
 };
 
 export const MeasurementTool: React.FC<MeasurementToolProps> = ({
   enabled = true,
-  color = '#00ff00',
   onMeasure,
 }) => {
-  const orchestrator = useScene();
+  const callback = useMemo(() => onMeasure ?? (() => {}), [onMeasure]);
 
-  useEffect(() => {
-    if (!enabled) {
-      return;
-    }
+  usePlugin(
+    () =>
+      new MeasurementToolPlugin((event) => {
+        if (event.distance !== undefined && event.points.length === 2) {
+          callback(event.distance, [event.points[0], event.points[1]]);
+        }
+      }),
+    enabled ? [callback] : []
+  );
 
-    const plugin = new MeasurementToolPlugin((event) => {
-      if (event.distance !== undefined && event.points.length === 2) {
-        onMeasure?.(event.distance, [(event.points[0] as THREE.Vector3), (event.points[1] as THREE.Vector3)]);
-      }
-    });
-
-    orchestrator.use(plugin);
-
-    return () => {
-      plugin.dispose();
-    };
-  }, [enabled, onMeasure]);
-
+  if (!enabled) {
+    return null;
+  }
   return null;
 };

@@ -44,33 +44,33 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
     animate();
   }
 
-  setPanEnabled(enabled: boolean): void {
-    if (this.controls) {
-        this.options.enablePan = enabled;
-        this.controls.enablePan = enabled;
-      }
+  set enablePan(enabled: boolean) {
+      this.options.enablePan = enabled;
+      this.controls.enablePan = enabled;
     };
 
-    setRotateEnabled(enabled: boolean): void {
-      if (this.controls) {
-        this.options.enableRotate = enabled;
-        this.controls.enableRotate = enabled;
-      }
+    set enableRotate(enabled: boolean) {
+      this.options.enableRotate = enabled;
+      this.controls.enableRotate = enabled;
     };
 
-    setZoomEnabled(enabled: boolean): void {
-      if (this.controls) {
-        this.options.enableZoom = enabled;
-        this.controls.enableZoom = enabled;
-      }
+    set enableZoom(enabled: boolean) {
+      this.options.enableZoom = enabled;
+      this.controls.enableZoom = enabled;
     };
-
-    get maxDistance(): number {
-      return this.controls.maxDistance;
-    }
-    get minDistance(): number {
-      return this.controls.minDistance;
-    }
+    set maxDistance(distance: number) {
+      this.options.maxDistance = distance;
+      this.controls.maxDistance = distance;
+    };
+    set minDistance(distance: number) {
+      this.options.minDistance = distance;
+      this.controls.minDistance = distance;
+    };
+    get maxDistance(): number { return this.controls.maxDistance; }
+    get minDistance(): number { return this.controls.minDistance; }
+    get enableRotate(): boolean { return this.controls.enableRotate; }
+    get enableZoom(): boolean { return this.controls.enableZoom; }
+    get enablePan(): boolean { return this.controls.enablePan; }
 
     dispose(): void {
       this.controls.disconnect();

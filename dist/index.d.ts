@@ -7,7 +7,7 @@ export { CacheEntry, CacheReport, ManifestEntry, ModelManifest } from './core/ca
 export { GLTFLoader, GLTFLoaderEvents, GLTFLoaderOptions } from './core/loaders/GLTFLoader.js';
 export { HDRIEvents, HDRILoader, HDRILoaderOptions, HDRIProgress } from './core/loaders/HDRILoader.js';
 export { WebPHDRLoader } from './core/loaders/WebPHDRLoader.js';
-export { b as Plugin, P as PluginContext, S as SceneConfig, a as SceneOrchestrator } from './SceneOrchestrator-rsjgaMlg.js';
+export { b as Plugin, P as PluginContext, S as SceneConfig, a as SceneOrchestrator } from './SceneOrchestrator-D4TjWrSK.js';
 export { AdvancedCameraCollisionPlugin } from './core/orchestrator/plugins/AdvancedCameraCollisionPlugin.js';
 export { AdvancedOrbitControlsPlugin } from './core/orchestrator/plugins/AdvancedOrbitControlsPlugin.js';
 export { AdvancedRaycasterPlugin } from './core/orchestrator/plugins/AdvancedRaycasterPlugin.js';
@@ -20,7 +20,6 @@ export { OrbitControlsPlugin } from './core/orchestrator/plugins/OrbitControlsPl
 export { RaycasterEvent, RaycasterPlugin } from './core/orchestrator/plugins/RaycasterPlugin.js';
 export { PostProcessingPlugin } from './core/orchestrator/plugins/PostProcessingPlugin.js';
 export { useScene } from './hooks/useScene.js';
-export { useModel } from './hooks/useModel.js';
 export { useActiveModel } from './hooks/useActiveModel.js';
 export { useHDRI } from './hooks/useHDRI.js';
 export { useRaycaster } from './hooks/useRaycaster.js';

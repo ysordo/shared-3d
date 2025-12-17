@@ -1,8 +1,7 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-BxRG1S6N.cjs';
-import '../../loaders/GLTFLoader.cjs';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-NoU3ML5L.cjs';
+import '../../loaders/HDRILoader.cjs';
 import '../../cache/types.cjs';
 import 'three';
-import '../../loaders/HDRILoader.cjs';
 
 type AutoLODConfig = {
     distances: [number, number, number];

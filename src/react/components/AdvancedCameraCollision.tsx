@@ -1,8 +1,9 @@
 'use client';
-import type React from 'react';
-import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
+
+import { useMemo } from 'react';
+import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedCameraCollisionPlugin } from '../../core/orchestrator/plugins/AdvancedCameraCollisionPlugin';
+import { useActiveModel } from '../../hooks/useActiveModel';
 
 type AdvancedCameraCollisionProps = {
   distanceThreshold?: number;
@@ -13,26 +14,26 @@ type AdvancedCameraCollisionProps = {
 
 export const AdvancedCameraCollision: React.FC<
   AdvancedCameraCollisionProps
-> = ({ enabled = true, ...config }) => {
-  const orchestrator = useScene();
+> = ({
+  distanceThreshold = 0.6,
+  pushBackOffset = 0.1,
+  smooth = 0.1,
+  enabled = true,
+}) => {
+  const model = useActiveModel();
 
-  useEffect(() => {
-    if (!enabled || !orchestrator || !orchestrator.getActiveModel()) {
-      return;
-    }
-    if (orchestrator.has('AdvancedCameraCollision')) {
-      return;
-    }
+  const config = useMemo(
+    () => [distanceThreshold, pushBackOffset, smooth],
+    [distanceThreshold, pushBackOffset, smooth]
+  );
 
-    orchestrator.use(
-      new AdvancedCameraCollisionPlugin(...Object.values(config))
-    );
+  usePlugin(
+    () => new AdvancedCameraCollisionPlugin(...config),
+    enabled && model ? config : []
+  );
 
-    return () => {
-      orchestrator.plugin('AdvancedCameraCollision').dispose?.();
-      orchestrator.remove('AdvancedCameraCollision');
-    };
-  }, [config, orchestrator, orchestrator.getActiveModel()]);
-
+  if (!enabled || !model) {
+    return null;
+  }
   return null;
 };

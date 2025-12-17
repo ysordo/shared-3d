@@ -1,9 +1,8 @@
 import React, { ReactNode } from 'react';
-import { S as SceneConfig, a as SceneOrchestrator } from '../SceneOrchestrator-rsjgaMlg.js';
+import { S as SceneConfig, a as SceneOrchestrator } from '../SceneOrchestrator-D4TjWrSK.js';
 import * as THREE from 'three';
-import '../core/loaders/GLTFLoader.js';
-import '../core/cache/types.js';
 import '../core/loaders/HDRILoader.js';
+import '../core/cache/types.js';
 
 type SceneContextValue = {
     orchestrator: SceneOrchestrator;
@@ -15,6 +14,6 @@ type SceneProviderProps = {
     config?: SceneConfig | undefined;
 };
 declare const SceneProvider: React.ForwardRefExoticComponent<SceneProviderProps & React.RefAttributes<HTMLCanvasElement>>;
-declare const useScene: () => SceneContextValue;
+declare const useSceneContext: () => SceneContextValue;
 
-export { SceneProvider, useScene };
+export { SceneProvider, useSceneContext };

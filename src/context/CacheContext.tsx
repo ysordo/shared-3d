@@ -1,6 +1,7 @@
 'use client';
+
 import type { ReactNode } from 'react';
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useMemo, useState } from 'react';
 import { CacheValidator } from '../core/cache/CacheValidator';
 import type { ModelManifest, CacheReport } from '../core/cache/types';
 
@@ -20,16 +21,13 @@ export const CacheProvider = ({ children }: { children: ReactNode }) => {
   const [progress, setProgress] = useState(0);
   const [report, setReport] = useState<CacheReport | null>(null);
 
-  const validate = async (manifest: ModelManifest) => {
+  const validate = async (manifest: ModelManifest): Promise<CacheReport> => {
     setStatus('validating');
     setProgress(0);
 
     const result = await CacheValidator.validate({
       manifest,
-      onProgress: (p, msg) => {
-        setProgress(Math.round(p));
-        console.warn(`[Cache] ${msg} (${p}%)`);
-      },
+      onProgress: (p) => setProgress(Math.round(p)),
       onComplete: (r) => {
         setReport(r);
         setStatus(r.errors.length > 0 ? 'error' : 'ready');
@@ -39,14 +37,17 @@ export const CacheProvider = ({ children }: { children: ReactNode }) => {
     return result;
   };
 
+  const value = useMemo(
+    () => ({ status, progress, report, validate }),
+    [status, progress, report]
+  );
+
   return (
-    <CacheContext.Provider value={{ status, progress, report, validate }}>
-      {children}
-    </CacheContext.Provider>
+    <CacheContext.Provider value={value}>{children}</CacheContext.Provider>
   );
 };
 
-export const useCache = () => {
+export const useCache = (): CacheContextValue => {
   const context = useContext(CacheContext);
   if (!context) {
     throw new Error('useCache debe usarse dentro de <CacheProvider>');

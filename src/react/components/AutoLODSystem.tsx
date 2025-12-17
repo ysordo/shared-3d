@@ -1,51 +1,37 @@
 'use client';
-import type React from 'react';
-import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
+
+import { useMemo } from 'react';
+import { usePlugin } from '../../hooks/usePlugin';
 import { AutoLODSystemPlugin } from '../../core/orchestrator/plugins/AutoLODSystemPlugin';
 
 type AutoLODSystemProps = {
   mediumDistance?: number;
   lowDistance?: number;
   hideDistance?: number;
+  enabled?: boolean;
 };
 
 export const AutoLODSystem: React.FC<AutoLODSystemProps> = ({
   mediumDistance = 20,
   lowDistance = 50,
   hideDistance = 100,
+  enabled = true,
 }) => {
-  const orchestrator = useScene();
+  const config = useMemo(
+    () => ({
+      distances: [mediumDistance, lowDistance, hideDistance] as [
+        number,
+        number,
+        number
+      ],
+    }),
+    [mediumDistance, lowDistance, hideDistance]
+  );
 
-  useEffect(() => {
-    if (!orchestrator) {
-      return;
-    }
-    if (orchestrator.has('AutoLODSystem')) {
-      return;
-    }
-    orchestrator.use(
-      new AutoLODSystemPlugin({
-        distances: [mediumDistance, lowDistance, hideDistance],
-      })
-    );
+  usePlugin(() => new AutoLODSystemPlugin(config), enabled ? [config] : []);
 
-    return () => {
-      orchestrator.plugin('AutoLODSystem').dispose?.();
-      orchestrator.remove('AutoLODSystem');
-    };
-  }, [orchestrator]);
-
-  useEffect(() => {
-    if (orchestrator.has('AutoLODSystem')) {
-      orchestrator.remove('AutoLODSystem');
-    }
-    orchestrator.use(
-      new AutoLODSystemPlugin({
-        distances: [mediumDistance, lowDistance, hideDistance],
-      })
-    );
-  }, [mediumDistance, lowDistance, hideDistance]);
-
+  if (!enabled) {
+    return null;
+  }
   return null;
 };

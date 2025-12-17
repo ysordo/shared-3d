@@ -1,9 +1,9 @@
 'use client';
 import type React from 'react';
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 import { GLTFLoader } from '../../core/loaders/GLTFLoader';
 import type { ModelManifest } from '../../core/cache/types';
-import { usePreload } from '../../hooks/usePreload';
+import { usePreloadEffect } from '../../hooks/usePreloadEffect';
 
 type ModelPreloadProps = {
   entries: ModelManifest;
@@ -16,13 +16,17 @@ export const ModelPreload: React.FC<ModelPreloadProps> = ({
   draco = false,
   onProgress,
 }) => {
-  const preload = usePreload();
-  useEffect(() => {
-    GLTFLoader.preload(entries, { draco }, (...prev) => {
+  const data = useMemo(
+      () => ({entries, draco, onProgress}),
+      [entries, draco, onProgress]
+    );
+  
+  usePreloadEffect((preload)=>{
+    GLTFLoader.preload(data.entries, { draco: data.draco }, (...prev) => {
       preload.set(prev[1].id, prev[0]);
       onProgress?.(prev[2], prev[3]);
     });
-  }, [entries, draco, onProgress]);
+  },[Object.values(data)]);
 
   return null;
 };

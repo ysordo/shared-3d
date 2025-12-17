@@ -1,9 +1,8 @@
-import React from 'react';
-
 type AutoLODSystemProps = {
     mediumDistance?: number;
     lowDistance?: number;
     hideDistance?: number;
+    enabled?: boolean;
 };
 declare const AutoLODSystem: React.FC<AutoLODSystemProps>;
 

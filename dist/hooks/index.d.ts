@@ -1,13 +1,11 @@
 export { useScene } from './useScene.js';
-export { useModel } from './useModel.js';
 export { useActiveModel } from './useActiveModel.js';
 export { useHDRI } from './useHDRI.js';
 export { useRaycaster } from './useRaycaster.js';
 export { useCache } from './useCache.js';
 export { useAnimation } from './useAnimation.js';
-import '../SceneOrchestrator-rsjgaMlg.js';
-import '../core/loaders/GLTFLoader.js';
+import '../SceneOrchestrator-D4TjWrSK.js';
+import '../core/loaders/HDRILoader.js';
 import '../core/cache/types.js';
 import 'three';
-import '../core/loaders/HDRILoader.js';
 import '../core/orchestrator/plugins/RaycasterPlugin.js';

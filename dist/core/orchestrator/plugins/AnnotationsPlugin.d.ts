@@ -1,8 +1,7 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-rsjgaMlg.js';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-D4TjWrSK.js';
 import * as THREE from 'three';
-import '../../loaders/GLTFLoader.js';
-import '../../cache/types.js';
 import '../../loaders/HDRILoader.js';
+import '../../cache/types.js';
 
 type AnnotationData = {
     id: string;

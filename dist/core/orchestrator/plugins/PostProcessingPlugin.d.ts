@@ -1,8 +1,7 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-rsjgaMlg.js';
-import '../../loaders/GLTFLoader.js';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-D4TjWrSK.js';
+import '../../loaders/HDRILoader.js';
 import '../../cache/types.js';
 import 'three';
-import '../../loaders/HDRILoader.js';
 
 declare class PostProcessingPlugin implements Plugin {
     private options;

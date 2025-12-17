@@ -7,6 +7,7 @@ import React, {
   useEffect,
   useState,
   useRef,
+  useMemo,
 } from 'react';
 import { SceneOrchestrator } from '../core/orchestrator/SceneOrchestrator';
 import type { SceneConfig } from '../core/orchestrator/SceneOrchestrator';
@@ -15,7 +16,7 @@ import type { THREE } from '../lib';
 type SceneContextValue = {
   orchestrator: SceneOrchestrator;
   activeModel: THREE.Group | null;
-  preload: Map<string,THREE.Group>;
+  preload: Map<string, THREE.Group>;
 };
 
 const SceneContext = createContext<SceneContextValue | null>(null);
@@ -27,14 +28,12 @@ type SceneProviderProps = {
 
 export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
   ({ children, config }, ref) => {
-    const [orchestrator, setOrchestrator] = useState<SceneOrchestrator | null>(
-      null
-    );
-    const [activeModel, setActiveModel] = useState<THREE.Group | null>(null);
-    const preload = useRef<Map<string,THREE.Group>>(new Map());
+    const orchestratorRef = useRef<SceneOrchestrator | null>(null);
+    const activeModelRef = useRef<THREE.Group | null>(null);
+    const preloadRef = useRef<Map<string, THREE.Group>>(new Map());
 
     useEffect(() => {
-      if (!ref) {
+      if (!ref || orchestratorRef.current) {
         return;
       }
 
@@ -49,52 +48,65 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
         return;
       }
 
-      setOrchestrator((prev) => {
-        if (prev) {
-          return prev;
-        }
-        return SceneOrchestrator.getInstance(ref.current ?? undefined, config);
-      });
+      const orchestrator = SceneOrchestrator.getInstance(ref.current, config);
+      orchestratorRef.current = orchestrator;
+
+      const updateActiveModel = () => {
+        activeModelRef.current = orchestrator.getActiveModel();
+      };
+      orchestrator.addEventListener(
+        'model::loaded' as never,
+        updateActiveModel
+      );
+      orchestrator.addEventListener(
+        'model::removed' as never,
+        updateActiveModel
+      );
 
       if (process.env.NODE_ENV === 'development') {
-        (window as any).__ORCHESTRATOR__ = orchestrator;
+        (window as any).__ORCHESTRATOR__ = orchestratorRef.current;
       }
+      return () => {
+        orchestrator.removeEventListener(
+          'model::loaded' as never,
+          updateActiveModel
+        );
+        orchestrator.removeEventListener(
+          'model::removed' as never,
+          updateActiveModel
+        );
+        orchestrator.dispose();
+        orchestratorRef.current = null;
+        activeModelRef.current = null;
+        preloadRef.current.clear();
+      };
     }, [ref, config]);
 
-    useEffect(() => {
-      if (!orchestrator) {
-        return;
+    const value = useMemo<SceneContextValue>(() => {
+      if (!orchestratorRef.current) {
+        throw new Error(
+          'SceneOrchestrator no inicializado. Asegúrate de que el canvas esté montado.'
+        );
       }
-      const updateActiveModel = () => {
-        const model = orchestrator.getActiveModel();
-        setActiveModel(model);
+      return {
+        orchestrator: orchestratorRef.current,
+        activeModel: activeModelRef.current,
+        preload: preloadRef.current,
       };
-      orchestrator.addEventListener('model::loaded' as never, updateActiveModel);
-      return () => {
-        orchestrator.removeEventListener('model::loaded' as never, updateActiveModel);
-      };
-    }, [orchestrator]);
+    }, []);
 
     return (
-      <SceneContext.Provider
-        value={{ orchestrator: orchestrator as SceneOrchestrator, activeModel, preload: preload.current }}>
-        {children}
-      </SceneContext.Provider>
+      <SceneContext.Provider value={value}>{children}</SceneContext.Provider>
     );
   }
 );
 
 SceneProvider.displayName = 'SceneProvider';
 
-export const useScene = (): SceneContextValue => {
+export const useSceneContext = (): SceneContextValue => {
   const context = useContext(SceneContext);
   if (!context) {
     throw new Error('useScene debe usarse dentro de <SceneProvider>');
-  }
-  if (!context.orchestrator) {
-    throw new Error(
-      'SceneOrchestrator aún no está inicializado. Asegúrate de que el canvas esté montado'
-    );
   }
   return context;
 };

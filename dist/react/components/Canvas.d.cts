@@ -1,9 +1,8 @@
 import React, { ReactNode } from 'react';
-import { S as SceneConfig } from '../../SceneOrchestrator-BxRG1S6N.cjs';
-import '../../core/loaders/GLTFLoader.cjs';
+import { S as SceneConfig } from '../../SceneOrchestrator-NoU3ML5L.cjs';
+import '../../core/loaders/HDRILoader.cjs';
 import '../../core/cache/types.cjs';
 import 'three';
-import '../../core/loaders/HDRILoader.cjs';
 
 declare const Canvas: React.ForwardRefExoticComponent<React.CanvasHTMLAttributes<HTMLCanvasElement> & {
     config?: SceneConfig;

@@ -4,9 +4,8 @@ import * as THREE from 'three';
 type HotspotData = {
     id: string;
     position: [number, number, number];
-    target?: THREE.Object3D | string;
+    target?: THREE.Object3D;
     onClick: () => void;
-    offset?: [number, number, number];
 };
 type HotspotsProps = {
     hotspots: HotspotData[];

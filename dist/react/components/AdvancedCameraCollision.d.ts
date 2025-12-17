@@ -1,5 +1,3 @@
-import React from 'react';
-
 type AdvancedCameraCollisionProps = {
     distanceThreshold?: number;
     pushBackOffset?: number;

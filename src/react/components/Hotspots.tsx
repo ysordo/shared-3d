@@ -1,16 +1,16 @@
 'use client';
 import type React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useScene } from '../../hooks/useScene';
 import { HotspotPlugin } from '../../core/orchestrator/plugins/HotspotPlugin';
 import * as THREE from 'three';
+import { usePlugin } from '../../hooks/usePlugin';
 
 type HotspotData = {
   id: string;
   position: [number, number, number];
-  target?: THREE.Object3D | string;
+  target?: THREE.Object3D;
   onClick: () => void;
-  offset?: [number, number, number];
 };
 
 type HotspotsProps = {
@@ -20,25 +20,15 @@ type HotspotsProps = {
 export const Hotspots: React.FC<HotspotsProps> = ({ hotspots }) => {
   const orchestrator = useScene();
 
-  useEffect(() => {
-    const data = hotspots.map((h) => ({
-      id: h.id,
-      position: new THREE.Vector3(...h.position),
-      target:
-        typeof h.target === 'string'
-          ? orchestrator.scene.getObjectByName(h.target)
-          : h.target,
-      onClick: h.onClick,
-      offset: h.offset ? new THREE.Vector3(...h.offset) : undefined,
-    }));
-
-    const plugin = new HotspotPlugin(data);
-    orchestrator.use(plugin);
-
-    return () => {
-      plugin.dispose();
-    };
-  }, [hotspots, orchestrator]);
-
-  return null;
+    const data = useMemo(
+        () => hotspots.map(hotspot => ({
+          ...hotspot,
+          position: new THREE.Vector3(...hotspot.position)
+        })),
+        [...hotspots]
+      );
+    
+      usePlugin(() => new HotspotPlugin(data), [...data]);
+    
+      return null;
 };

@@ -1,112 +1,97 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useMemo } from 'react';
+import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedOrbitControlsPlugin } from '../../core/orchestrator/plugins/AdvancedOrbitControlsPlugin';
+import { useScene } from '../../hooks';
 
-type OrbitState = {
-  panEnabled: boolean;
-  rotateEnabled: boolean;
-  zoomEnabled: boolean;
-  isActive: boolean;
-  setPanEnabled: (value: boolean) => void;
-  setRotateEnabled: (value: boolean) => void;
-  setZoomEnabled: (value: boolean) => void;
-  setAllEnabled: (value: boolean) => void;
-  togglePan: () => void;
-  toggleRotate: () => void;
-  toggleZoom: () => void;
-  toggleAll: () => void;
+type StateProps = {
+  readonly enablePan: boolean;
+  readonly enableRotate: boolean;
+  readonly enableZoom: boolean;
+  readonly minDistance: number;
+  readonly maxDistance: number;
+  setEnablePan: (enablePan: boolean) => void;
+  setEnableRotate: (enableRotate: boolean) => void;
+  setEnableZoom: (enableZoom: boolean) => void;
+  setMinDistance: (minDistance: number) => void;
+  setMaxDistance: (maxDistance: number) => void;
 };
 
 type AdvancedOrbitControlsProps = {
-  children?: (state: OrbitState) => React.ReactNode;
-  enablePan?: boolean;
-  enableRotate?: boolean;
-  enableZoom?: boolean;
-  panSpeed?: number;
-  rotateSpeed?: number;
-  zoomSpeed?: number;
-  dampingFactor?: number;
-  minDistance?: number;
-  maxDistance?: number;
-  minPolarAngle?: number;
-  maxPolarAngle?: number;
+  options?: Partial<{
+    enablePan?: boolean;
+    enableRotate?: boolean;
+    enableZoom?: boolean;
+    dampingFactor?: number;
+    panSpeed?: number;
+    rotateSpeed?: number;
+    zoomSpeed?: number;
+    minDistance?: number;
+    maxDistance?: number;
+    minPolarAngle?: number;
+    maxPolarAngle?: number;
+  }>;
+  enabled?: boolean;
+  children?: (state: StateProps) => React.ReactNode;
 };
 
 export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
+  options = {},
+  enabled = true,
   children,
-  enablePan = true,
-  enableRotate = true,
-  enableZoom = true,
-  ...config
 }) => {
   const orchestrator = useScene();
+  const stableOptions = useMemo(
+    () => options,
+    [
+      options.enablePan,
+      options.enableRotate,
+      options.enableZoom,
+      options.dampingFactor,
+      options.panSpeed,
+      options.rotateSpeed,
+      options.zoomSpeed,
+      options.minDistance,
+      options.maxDistance,
+      options.minPolarAngle,
+      options.maxPolarAngle,
+    ]
+  );
 
-  const [panEnabled, setPanEnabled] = useState(enablePan);
-  const [rotateEnabled, setRotateEnabled] = useState(enableRotate);
-  const [zoomEnabled, setZoomEnabled] = useState(enableZoom);
+  usePlugin(
+    () => new AdvancedOrbitControlsPlugin(stableOptions),
+    enabled ? [stableOptions] : []
+  );
 
-  useEffect(() => {
-    if (!orchestrator) {
-      return;
-    }
-    if (orchestrator.has('AdvancedOrbitControls')) {
-      return;
-    }
-
-    const plugin = new AdvancedOrbitControlsPlugin({
-      enablePan,
-      enableRotate,
-      enableZoom,
-      ...config,
-    });
-
-    orchestrator.use(plugin);
-
-    return () => {
-      orchestrator.plugin('AdvancedOrbitControls').dispose?.();
-      orchestrator.remove('AdvancedOrbitControls');
-    };
-  }, [orchestrator]);
-
-  useEffect(() => {
-    const plugin = orchestrator.plugin(
-      'AdvancedOrbitControls'
-    ) as AdvancedOrbitControlsPlugin;
-    if (!plugin) {
-      return;
-    }
-    plugin.setPanEnabled(panEnabled);
-    plugin.setRotateEnabled(rotateEnabled);
-    plugin.setZoomEnabled(zoomEnabled);
-  }, [panEnabled, rotateEnabled, zoomEnabled]);
-
-  const setAllEnabled = (value: boolean) => {
-    setPanEnabled(value);
-    setRotateEnabled(value);
-    setZoomEnabled(value);
-  };
-
-  const togglePan = () => setPanEnabled((p) => !p);
-  const toggleRotate = () => setRotateEnabled((p) => !p);
-  const toggleZoom = () => setZoomEnabled((p) => !p);
-  const toggleAll = () =>
-    setAllEnabled(!(panEnabled && rotateEnabled && zoomEnabled));
-
-  const state: OrbitState = {
-    panEnabled,
-    rotateEnabled,
-    zoomEnabled,
-    isActive: panEnabled || rotateEnabled || zoomEnabled,
-    setPanEnabled,
-    setRotateEnabled,
-    setZoomEnabled,
-    setAllEnabled,
-    togglePan,
-    toggleRotate,
-    toggleZoom,
-    toggleAll,
+  if (!enabled || !orchestrator) {
+    return null;
+  }
+  const plugin = orchestrator.plugin('AdvancedOrbitControls');
+  if (!plugin) {
+    return null;
+  }
+  const state = {
+    enablePan: (plugin as AdvancedOrbitControlsPlugin).enablePan,
+    enableRotate: (plugin as AdvancedOrbitControlsPlugin).enableRotate,
+    enableZoom: (plugin as AdvancedOrbitControlsPlugin).enableZoom,
+    minDistance: (plugin as AdvancedOrbitControlsPlugin).minDistance,
+    maxDistance: (plugin as AdvancedOrbitControlsPlugin).maxDistance,
+    setEnablePan: (enablePan: boolean) => {
+      (plugin as AdvancedOrbitControlsPlugin).enablePan = enablePan;
+    },
+    setEnableRotate: (enableRotate: boolean) => {
+      (plugin as AdvancedOrbitControlsPlugin).enableRotate = enableRotate;
+    },
+    setEnableZoom: (enableZoom: boolean) => {
+      (plugin as AdvancedOrbitControlsPlugin).enableZoom = enableZoom;
+    },
+    setMinDistance: (minDistance: number) => {
+      (plugin as AdvancedOrbitControlsPlugin).minDistance = minDistance;
+    },
+    setMaxDistance: (maxDistance: number) => {
+      (plugin as AdvancedOrbitControlsPlugin).maxDistance = maxDistance;
+    },
   };
 
   return <>{children?.(state)}</>;

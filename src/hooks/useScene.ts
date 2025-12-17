@@ -1,8 +1,5 @@
 'use client';
-import { useScene as useSceneContext } from '../context/SceneContext';
+import { useSceneContext } from '../context/SceneContext';
 import type { SceneOrchestrator } from '../core/orchestrator/SceneOrchestrator';
 
-export const useScene = (): SceneOrchestrator => {
-  const {orchestrator} = useSceneContext();
-  return orchestrator;
-};
+export const useScene = (): SceneOrchestrator => useSceneContext().orchestrator;

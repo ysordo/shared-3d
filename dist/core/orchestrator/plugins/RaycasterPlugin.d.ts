@@ -1,8 +1,7 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-rsjgaMlg.js';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-D4TjWrSK.js';
 import * as THREE from 'three';
-import '../../loaders/GLTFLoader.js';
-import '../../cache/types.js';
 import '../../loaders/HDRILoader.js';
+import '../../cache/types.js';
 
 type RaycasterEvent = {
     type: 'click';
@@ -25,6 +24,7 @@ declare class RaycasterPlugin implements Plugin {
     constructor(onEvent?: (event: RaycasterEvent) => void);
     install({ scene, camera, renderer }: PluginContext): void;
     private checkIntersection;
+    updateCallback(onEvent: (event: RaycasterEvent) => void): void;
     private getIntersection;
     dispose(): void;
 }
