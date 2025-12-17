@@ -1,8 +1,8 @@
 "use client";
 import {
   Canvas
-} from "../../chunk-WO6NOABA.js";
-import "../../chunk-37SGICUP.js";
+} from "../../chunk-XWRHCGJK.js";
+import "../../chunk-PEPBYU36.js";
 import "../../chunk-SENENRNP.js";
 import "../../chunk-VSTC7ZYY.js";
 import "../../chunk-W5OYT3BE.js";

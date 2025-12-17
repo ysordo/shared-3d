@@ -84,7 +84,7 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
         activeModel: activeModelRef.current,
         preload: preloadRef.current,
       };
-    }, []);
+    }, [orchestratorRef]);
 
     return (
       <SceneContext.Provider value={value}>
