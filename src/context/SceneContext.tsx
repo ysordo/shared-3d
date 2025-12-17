@@ -24,31 +24,24 @@ const SceneContext = createContext<SceneContextValue | null>(null);
 type SceneProviderProps = {
   children: ReactNode;
   config?: SceneConfig | undefined;
+  canvasRef?: React.RefObject<HTMLCanvasElement>;
 };
 
 export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
-  ({ children, config }, ref) => {
+  ({ children, config, canvasRef }, forwardedRef) => {
+    const internalCanvasRef = useRef<HTMLCanvasElement>(null);
+    const canvas = (canvasRef ?? internalCanvasRef).current;
+
     const orchestratorRef = useRef<SceneOrchestrator | null>(null);
     const activeModelRef = useRef<THREE.Group | null>(null);
     const preloadRef = useRef<Map<string, THREE.Group>>(new Map());
 
     useEffect(() => {
-      if (!ref || orchestratorRef.current) {
+      if (!canvas || orchestratorRef.current) {
         return;
       }
 
-      if (typeof ref === 'function') {
-        throw new Error(
-          'SceneProvider no soporta ref como función. Usa useRef()'
-        );
-      }
-
-      if (!ref.current) {
-        console.warn('SceneProvider: canvas ref no está asignado aún');
-        return;
-      }
-
-      const orchestrator = SceneOrchestrator.getInstance(ref.current, config);
+      const orchestrator = SceneOrchestrator.getInstance(canvas, config);
       orchestratorRef.current = orchestrator;
 
       const updateActiveModel = () => {
@@ -80,7 +73,7 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
         activeModelRef.current = null;
         preloadRef.current.clear();
       };
-    }, [ref, config]);
+    }, [canvas, config]);
 
     const value = useMemo<SceneContextValue>(() => {
       if (!orchestratorRef.current) {
@@ -96,7 +89,10 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
     }, []);
 
     return (
-      <SceneContext.Provider value={value}>{children}</SceneContext.Provider>
+      <SceneContext.Provider value={value}>
+        <canvas ref={forwardedRef ?? internalCanvasRef} />
+        {children}
+      </SceneContext.Provider>
     );
   }
 );
