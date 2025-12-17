@@ -1,9 +1,9 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunk3GOLMOALcjs = require('../../chunk-3GOLMOAL.cjs');
-require('../../chunk-ACUUHTQK.cjs');
-require('../../chunk-YYS2V2UH.cjs');
+var _chunk6DYR6NIScjs = require('../../chunk-6DYR6NIS.cjs');
+require('../../chunk-LAEENZFR.cjs');
+require('../../chunk-QGWOD5X4.cjs');
 require('../../chunk-KD4SYTBB.cjs');
 require('../../chunk-YAKUY6M3.cjs');
 require('../../chunk-ZJAPFMHD.cjs');
@@ -13,4 +13,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.VRButton = _chunk3GOLMOALcjs.VRButton;
+exports.VRButton = _chunk6DYR6NIScjs.VRButton;

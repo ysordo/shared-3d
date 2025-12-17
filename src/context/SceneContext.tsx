@@ -75,11 +75,9 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
       };
     }, [canvas, config]);
 
-    const value = useMemo<SceneContextValue>(() => {
+    const value = useMemo<SceneContextValue | null>(() => {
       if (!orchestratorRef.current) {
-        throw new Error(
-          'SceneOrchestrator no inicializado. Asegúrate de que el canvas esté montado.'
-        );
+        return null;
       }
       return {
         orchestrator: orchestratorRef.current,

@@ -1,9 +1,9 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkLB2EXSWZcjs = require('../../chunk-LB2EXSWZ.cjs');
-require('../../chunk-ACUUHTQK.cjs');
-require('../../chunk-YYS2V2UH.cjs');
+var _chunkHZGN2VFUcjs = require('../../chunk-HZGN2VFU.cjs');
+require('../../chunk-LAEENZFR.cjs');
+require('../../chunk-QGWOD5X4.cjs');
 require('../../chunk-KD4SYTBB.cjs');
 require('../../chunk-YAKUY6M3.cjs');
 require('../../chunk-ZJAPFMHD.cjs');
@@ -13,4 +13,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.SpotLight = _chunkLB2EXSWZcjs.SpotLight;
+exports.SpotLight = _chunkHZGN2VFUcjs.SpotLight;
