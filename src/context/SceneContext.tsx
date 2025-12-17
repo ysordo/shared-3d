@@ -24,13 +24,12 @@ const SceneContext = createContext<SceneContextValue | null>(null);
 type SceneProviderProps = {
   children: ReactNode;
   config?: SceneConfig | undefined;
-  canvasRef?: React.RefObject<HTMLCanvasElement>;
 };
 
 export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
-  ({ children, config, canvasRef }, forwardedRef) => {
+  ({ children, config }, forwardedRef) => {
     const internalCanvasRef = useRef<HTMLCanvasElement>(null);
-    const canvas = (canvasRef ?? internalCanvasRef).current;
+    const canvas = ((forwardedRef ?? internalCanvasRef) as React.RefObject<HTMLCanvasElement>).current;
 
     const orchestratorRef = useRef<SceneOrchestrator | null>(null);
     const activeModelRef = useRef<THREE.Group | null>(null);
