@@ -29,15 +29,15 @@ type SceneProviderProps = {
 export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
   ({ children, config, ...props }, forwardedRef) => {
     const internalCanvasRef = useRef<HTMLCanvasElement>(null);
-    const canvas = (
-      (forwardedRef ?? internalCanvasRef) as React.RefObject<HTMLCanvasElement>
-    ).current;
 
     const orchestratorRef = useRef<SceneOrchestrator | null>(null);
     const activeModelRef = useRef<THREE.Group | null>(null);
     const preloadRef = useRef<Map<string, THREE.Group>>(new Map());
 
     useEffect(() => {
+      const canvas = (
+      (forwardedRef ?? internalCanvasRef) as React.RefObject<HTMLCanvasElement>
+    ).current;
       if (!canvas || orchestratorRef.current) {
         return;
       }
@@ -74,7 +74,7 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
         activeModelRef.current = null;
         preloadRef.current.clear();
       };
-    }, [canvas, config, forwardedRef, internalCanvasRef]);
+    }, [config, forwardedRef, internalCanvasRef]);
 
     const value = useMemo<SceneContextValue | null>(() => {
       if (!orchestratorRef.current) {
