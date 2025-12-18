@@ -74,7 +74,7 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
         activeModelRef.current = null;
         preloadRef.current.clear();
       };
-    }, [canvas, config]);
+    }, [canvas, config, forwardedRef, internalCanvasRef]);
 
     const value = useMemo<SceneContextValue | null>(() => {
       if (!orchestratorRef.current) {
