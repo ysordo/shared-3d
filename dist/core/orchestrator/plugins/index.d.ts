@@ -1,7 +1,7 @@
 export { AdvancedCameraCollisionPlugin } from './AdvancedCameraCollisionPlugin.js';
 export { AdvancedOrbitControlsPlugin } from './AdvancedOrbitControlsPlugin.js';
 export { AdvancedRaycasterPlugin } from './AdvancedRaycasterPlugin.js';
-export { AnnotationsPlugin } from './AnnotationsPlugin.js';
+export { AnnotationData, AnnotationsPlugin } from './AnnotationsPlugin.js';
 export { AutoLODSystemPlugin } from './AutoLODSystemPlugin.js';
 export { HotspotPlugin } from './HotspotPlugin.js';
 export { LODSystemPlugin } from './LODSystemPlugin.js';

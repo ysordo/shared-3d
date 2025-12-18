@@ -13,6 +13,6 @@ declare const SceneProvider: React.ForwardRefExoticComponent<{
     children: ReactNode;
     config?: SceneConfig | undefined;
 } & React.CanvasHTMLAttributes<HTMLCanvasElement> & React.RefAttributes<HTMLCanvasElement>>;
-declare const useSceneContext: () => SceneContextValue;
+declare const useSceneContext: () => SceneContextValue | null;
 
 export { SceneProvider, useSceneContext };

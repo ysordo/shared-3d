@@ -77,11 +77,15 @@ export const GroundSurface: React.FC<GroundSurfaceProps> = ({
   ...custom
 }) => {
   const orchestrator = useScene();
-  const scene = orchestrator.scene;
-  const camera = orchestrator.camera;
   const ground = useRef<THREE.Mesh | Reflector>(null);
 
   useEffect(() => {
+    if (!orchestrator) {
+      return;
+    }
+
+    const scene = orchestrator.scene;
+    const camera = orchestrator.camera;
     if (!camera) {
       return;
     }
@@ -162,7 +166,7 @@ export const GroundSurface: React.FC<GroundSurfaceProps> = ({
         ground.current.geometry.dispose();
       }
     };
-  }, [type, size, height, blur, resolution, ...Object.values(custom)]);
+  }, [orchestrator, type, size, height, blur, resolution, ...Object.values(custom)]);
 
   useEffect(() => {
     if (ground.current) {

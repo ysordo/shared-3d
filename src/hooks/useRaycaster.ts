@@ -12,6 +12,7 @@ export const useRaycaster = (
   const pluginRef = useRef<RaycasterPlugin | null>(null);
 
   useEffect(() => {
+    if(!orchestrator) {return;}
     if (pluginRef.current) {
       // Actualizar callback si cambia
       pluginRef.current.updateCallback(onEvent);

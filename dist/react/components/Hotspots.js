@@ -1,11 +1,11 @@
 "use client";
 import {
   Hotspots
-} from "../../chunk-P5R323LJ.js";
-import "../../chunk-S5BJDVTC.js";
+} from "../../chunk-SO3CFX7N.js";
+import "../../chunk-LLGU6H6V.js";
 import "../../chunk-L3G2QMBD.js";
-import "../../chunk-TYM6WY7X.js";
-import "../../chunk-VEHB7RU2.js";
+import "../../chunk-PQUWKDDP.js";
+import "../../chunk-VEIBNDEE.js";
 import "../../chunk-SENENRNP.js";
 import "../../chunk-VSTC7ZYY.js";
 import "../../chunk-W5OYT3BE.js";

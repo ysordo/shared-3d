@@ -1,6 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
-import React, { useEffect, useState, useRef, useMemo } from 'react';
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { useActiveModel } from '../../hooks/useActiveModel';
 import { createQuadWireframe } from '../../core/utils';
 import { THREE } from '../../lib';
@@ -29,8 +29,10 @@ export type MaterialConfig =
 
 type MaterialItem = {
   name: string;
+  oldName: string | null;
   apply: () => void;
   isActive: boolean;
+  percentage: number;
 };
 
 type MaterialControllerProps = {
@@ -50,8 +52,10 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
 }) => {
   const model = useActiveModel();
   const [activeName, setActiveName] = useState<string | null>(null);
+  const [oldName, setOldName] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const meshes = useRef<THREE.Mesh[]>([]);
+  const percentage = useRef<number>(0);
 
   useEffect(() => {
     if (!model) {
@@ -85,10 +89,11 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     });
   }, [model]);
 
-  const applyMaterial = async (config: MaterialConfig) => {
+  const applyMaterial = useCallback( async (config: MaterialConfig) => {
     if (!model || isTransitioning) {
       return;
     }
+    setOldName(activeName);
 
     setIsTransitioning(transitionDuration > 0);
 
@@ -103,13 +108,14 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     for (let i = 0; i < meshes.current.length; i++) {
       setTimeout(() => {
         applyMaterialToMesh(meshes.current[i] as THREE.Mesh, config);
+        percentage.current = Number.parseFloat(((i/ meshes.current.length - 1)/100).toFixed(1));
         if (i === meshes.current.length - 1) {
           setActiveName(config.name);
           setIsTransitioning(false);
         }
       }, i * delayPerMesh);
     }
-  };
+  },[]);
 
   const applyMaterialToMesh = (child: THREE.Mesh, config: MaterialConfig) => {
     const wireframe = child.getObjectByName(
@@ -173,10 +179,12 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   const items = useMemo(() => {
     return materials.map((config) => ({
       name: config.name,
+      oldName: oldName,
       apply: () => applyMaterial(config),
       isActive: activeName === config.name,
+      percentage: percentage.current
     }));
-  }, [materials, activeName, applyMaterial]);
+  }, [percentage, materials, activeName, applyMaterial, oldName]);
 
   useEffect(() => {
     if (items.length > 0 && !activeName) {

@@ -2,7 +2,7 @@
 
 
 
-var _chunkERMNU45Ncjs = require('../chunk-ERMNU45N.cjs');
+var _chunk4ELG7LDCcjs = require('../chunk-4ELG7LDC.cjs');
 require('../chunk-KD4SYTBB.cjs');
 require('../chunk-YAKUY6M3.cjs');
 require('../chunk-ZJAPFMHD.cjs');
@@ -13,4 +13,4 @@ require('../chunk-UW5RKAXQ.cjs');
 
 
 
-exports.SceneProvider = _chunkERMNU45Ncjs.SceneProvider; exports.useSceneContext = _chunkERMNU45Ncjs.useSceneContext;
+exports.SceneProvider = _chunk4ELG7LDCcjs.SceneProvider; exports.useSceneContext = _chunk4ELG7LDCcjs.useSceneContext;

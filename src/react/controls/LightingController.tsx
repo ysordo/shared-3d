@@ -6,12 +6,12 @@ import { THREE } from '../../lib';
 export const LightingController: React.FC<{ className?: string }> = ({
   className,
 }) => {
-  const { scene } = useScene();
+  const orchestrator = useScene();
   const [intensity, setIntensity] = useState(1);
 
   const updateLights = (value: number) => {
     setIntensity(value);
-    scene.traverse((obj) => {
+    orchestrator?.scene.traverse((obj) => {
       if (obj instanceof THREE.Light) {
         obj.intensity = value * (obj.userData.baseIntensity || 1);
       }
@@ -19,12 +19,13 @@ export const LightingController: React.FC<{ className?: string }> = ({
   };
 
   React.useEffect(() => {
-    scene.traverse((obj) => {
+    if(!orchestrator){return;}
+    orchestrator.scene.traverse((obj) => {
       if (obj instanceof THREE.Light) {
         obj.userData.baseIntensity = obj.intensity;
       }
     });
-  }, [scene]);
+  }, [orchestrator, orchestrator?.scene]);
 
   return (
     <div className={`bg-black/80 text-white p-4 rounded-lg ${className || ''}`}>

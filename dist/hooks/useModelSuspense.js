@@ -1,8 +1,8 @@
 "use client";
 import {
   usePreload
-} from "../chunk-GWA6ZHJF.js";
-import "../chunk-VEHB7RU2.js";
+} from "../chunk-VAWS73LP.js";
+import "../chunk-VEIBNDEE.js";
 import "../chunk-SENENRNP.js";
 import "../chunk-VSTC7ZYY.js";
 import "../chunk-W5OYT3BE.js";
@@ -12,23 +12,30 @@ import "../chunk-EPN65WJP.js";
 import "../chunk-5QJW7WE3.js";
 
 // src/hooks/useModelSuspense.ts
+import { useEffect, useRef } from "react";
 var useModelSuspense = (entry) => {
   const preload = usePreload();
-  const model = preload.get(entry.id);
-  if (!model) {
-    throw new Promise((resolve) => {
-      const check = () => {
-        const m = preload.get(entry.id);
-        if (m) {
-          resolve();
-        } else {
-          requestAnimationFrame(check);
-        }
-      };
-      check();
-    });
-  }
-  return model;
+  const model = useRef(void 0);
+  useEffect(() => {
+    if (!preload) {
+      return;
+    }
+    model.current = preload.get(entry.id);
+    if (!model.current) {
+      throw new Promise((resolve) => {
+        const check = () => {
+          const m = preload.get(entry.id);
+          if (m) {
+            resolve();
+          } else {
+            requestAnimationFrame(check);
+          }
+        };
+        check();
+      });
+    }
+  }, [preload]);
+  return model.current;
 };
 export {
   useModelSuspense

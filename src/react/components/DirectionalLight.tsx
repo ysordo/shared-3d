@@ -19,9 +19,10 @@ export const DirectionalLight: React.FC<DirectionalLightProps> = ({
   castShadow = true,
   shadowMapSize = 2048,
 }) => {
-  const { scene } = useScene();
+  const orchestrator = useScene();
 
   useEffect(() => {
+    if(!orchestrator){return;}
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(...position);
 
@@ -38,24 +39,24 @@ export const DirectionalLight: React.FC<DirectionalLightProps> = ({
       light.shadow.bias = -0.0001;
     }
 
-    scene.add(light);
+    orchestrator.scene.add(light);
 
     if (process.env.NODE_ENV === 'development') {
       const helper = new THREE.DirectionalLightHelper(light, 2);
-      scene.add(helper);
+      orchestrator.scene.add(helper);
       return () => {
-        scene.remove(light);
-        scene.remove(helper);
+        orchestrator.scene.remove(light);
+        orchestrator.scene.remove(helper);
         light.dispose();
         helper.dispose();
       };
     }
 
     return () => {
-      scene.remove(light);
+      orchestrator.scene.remove(light);
       light.dispose();
     };
-  }, [intensity, color, position, castShadow, shadowMapSize]);
+  }, [orchestrator, intensity, color, position, castShadow, shadowMapSize]);
 
   return null;
 };

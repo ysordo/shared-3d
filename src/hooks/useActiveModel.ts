@@ -2,4 +2,4 @@
 import { useSceneContext } from '../context/SceneContext';
 import type { THREE } from '../lib';
 
-export const useActiveModel = (): THREE.Group | null => useSceneContext().activeModel;
+export const useActiveModel = (): THREE.Group | null => useSceneContext()?.activeModel ?? null;

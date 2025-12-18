@@ -2,7 +2,7 @@ export { S as SceneConfig, a as SceneOrchestrator } from '../../SceneOrchestrato
 export { AdvancedCameraCollisionPlugin } from './plugins/AdvancedCameraCollisionPlugin.cjs';
 export { AdvancedOrbitControlsPlugin } from './plugins/AdvancedOrbitControlsPlugin.cjs';
 export { AdvancedRaycasterPlugin } from './plugins/AdvancedRaycasterPlugin.cjs';
-export { AnnotationsPlugin } from './plugins/AnnotationsPlugin.cjs';
+export { AnnotationData, AnnotationsPlugin } from './plugins/AnnotationsPlugin.cjs';
 export { AutoLODSystemPlugin } from './plugins/AutoLODSystemPlugin.cjs';
 export { HotspotPlugin } from './plugins/HotspotPlugin.cjs';
 export { LODSystemPlugin } from './plugins/LODSystemPlugin.cjs';

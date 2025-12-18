@@ -1,7 +1,7 @@
 import type { Plugin, PluginContext } from '../types';
 import { THREE } from '../../../lib';
 
-type AnnotationData = {
+export type AnnotationData = {
   id: string;
   position: THREE.Vector3;
   target?: THREE.Object3D | undefined;

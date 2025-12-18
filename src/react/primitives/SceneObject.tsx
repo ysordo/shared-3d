@@ -37,6 +37,7 @@ export const SceneObject: React.FC<SceneObjectProps> = ({
   const orchestrator = useScene();
 
   useEffect(() => {
+    if(!orchestrator){return;}
     if (name) {
       object.name = name;
     }
@@ -89,6 +90,7 @@ export const SceneObject: React.FC<SceneObjectProps> = ({
       });
     };
   }, [
+    orchestrator,
     object,
     parent,
     name,

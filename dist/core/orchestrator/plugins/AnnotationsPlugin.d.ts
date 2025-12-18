@@ -23,4 +23,4 @@ declare class AnnotationsPlugin implements Plugin {
     dispose(): void;
 }
 
-export { AnnotationsPlugin };
+export { type AnnotationData, AnnotationsPlugin };

@@ -2,7 +2,7 @@
 import {
   SceneProvider,
   useSceneContext
-} from "../chunk-VEHB7RU2.js";
+} from "../chunk-VEIBNDEE.js";
 import "../chunk-SENENRNP.js";
 import "../chunk-VSTC7ZYY.js";
 import "../chunk-W5OYT3BE.js";

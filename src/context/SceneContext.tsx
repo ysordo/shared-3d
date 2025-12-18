@@ -98,10 +98,7 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
 
 SceneProvider.displayName = 'SceneProvider';
 
-export const useSceneContext = (): SceneContextValue => {
+export const useSceneContext = (): SceneContextValue | null => {
   const context = useContext(SceneContext);
-  if (!context) {
-    throw new Error('useScene debe usarse dentro de <SceneProvider>');
-  }
   return context;
 };

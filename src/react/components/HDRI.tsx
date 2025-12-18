@@ -103,6 +103,9 @@ export const HDRI: React.FC<HDRIProps> = ({
   }, [orchestrator]);
 
   useEffect(() => {
+    if (!orchestrator) {
+      return;
+    }
     if (!isHandle.current) {
       return;
     }

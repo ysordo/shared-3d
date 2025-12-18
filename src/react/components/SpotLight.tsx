@@ -25,9 +25,10 @@ export const SpotLight: React.FC<SpotLightProps> = ({
   distance = 50,
   castShadow = true,
 }) => {
-  const { scene } = useScene();
+  const orchestrator = useScene();
 
   useEffect(() => {
+    if(!orchestrator){return;}
     const light = new THREE.SpotLight(
       color,
       intensity,
@@ -43,35 +44,36 @@ export const SpotLight: React.FC<SpotLightProps> = ({
       light.shadow.mapSize.height = 2048;
     }
 
-    scene.add(light);
+    orchestrator.scene.add(light);
 
     if (target) {
       if (typeof target === 'string') {
-        const obj = scene.getObjectByName(target);
+        const obj = orchestrator.scene.getObjectByName(target);
         if (obj) {
           light.target = obj;
         }
       } else {
         light.target = target;
-        scene.add(target);
+        orchestrator.scene.add(target);
       }
     }
 
     if (process.env.NODE_ENV === 'development') {
       const helper = new THREE.SpotLightHelper(light);
-      scene.add(helper);
+      orchestrator.scene.add(helper);
       return () => {
-        scene.remove(light);
-        scene.remove(helper);
+        orchestrator.scene.remove(light);
+        orchestrator.scene.remove(helper);
         light.dispose();
       };
     }
 
     return () => {
-      scene.remove(light);
+      orchestrator.scene.remove(light);
       light.dispose();
     };
   }, [
+    orchestrator,
     intensity,
     color,
     position,

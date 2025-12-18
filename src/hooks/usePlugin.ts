@@ -12,6 +12,7 @@ export const usePlugin = <T extends Plugin>(
   const pluginRef = useRef<T | null>(null);
 
   useEffect(() => {
+    if(!orchestrator){return;}
     if (!pluginRef.current) {
       pluginRef.current = factory();
       orchestrator.use(pluginRef.current);

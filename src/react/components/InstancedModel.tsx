@@ -30,11 +30,13 @@ export const InstancedModel: React.FC<InstancedModelProps> = ({
   receiveShadow = true,
 }) => {
   const orchestrator = useScene();
-  const scene = orchestrator.scene;
   const groupRef = useRef<THREE.Group>(new THREE.Group());
   const instancedMeshes = useRef<Map<string, THREE.InstancedMesh>>(new Map());
 
   useEffect(() => {
+    if(!orchestrator){return;}
+    const scene = orchestrator.scene;
+
     let isMounted = true;
 
     const loadAndCreateInstances = async () => {
@@ -153,7 +155,7 @@ export const InstancedModel: React.FC<InstancedModelProps> = ({
         groupRef.current.parent.remove(groupRef.current);
       }
     };
-  }, [entry, instances, draco, castShadow, receiveShadow]);
+  }, [orchestrator, entry, instances, draco, castShadow, receiveShadow]);
 
   return null;
 };

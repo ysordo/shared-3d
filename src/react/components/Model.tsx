@@ -5,6 +5,7 @@ import { useScene } from '../../hooks/useScene';
 import type { ManifestEntry } from '../../core/cache/types';
 import type { GLTFLoaderEvents } from '../../core/loaders/GLTFLoader';
 import { GLTFLoader } from '../../core/loaders/GLTFLoader';
+import { useActiveModel } from '../../hooks';
 
 type ModelProps = {
   entry: ManifestEntry;
@@ -24,6 +25,7 @@ export const Model: React.FC<ModelProps> = ({
   const cancelledRef = useRef(false);
 
   useEffect(() => {
+    if(!orchestrator){return;}
     cancelledRef.current = false;
 
     GLTFLoader.load(entry, {
@@ -55,7 +57,7 @@ export const Model: React.FC<ModelProps> = ({
     };
   }, [entry.id, draco, orchestrator]);
 
-  const model = orchestrator.getActiveModel();
+  const model = useActiveModel();
   if (!model || !children) {
     return null;
   }

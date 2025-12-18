@@ -50,6 +50,7 @@ export const EnvironmentPreset: React.FC<EnvironmentPresetProps> = ({
   const orchestrator = useScene();
 
   useEffect(() => {
+    if(!orchestrator){return;}
     const url = PRESETS[name];
     if (!url) {
       console.warn(`EnvironmentPreset: "${name}" no encontrado`);
@@ -80,7 +81,7 @@ export const EnvironmentPreset: React.FC<EnvironmentPresetProps> = ({
         orchestrator.scene.background = null;
       }
     };
-  }, [name, intensity, blur]);
+  }, [orchestrator,name, intensity, blur]);
 
   return null;
 };

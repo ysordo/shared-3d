@@ -24,8 +24,10 @@ type MaterialConfig = {
 };
 type MaterialItem = {
     name: string;
+    oldName: string | null;
     apply: () => void;
     isActive: boolean;
+    percentage: number;
 };
 type MaterialControllerProps = {
     materials: MaterialConfig[];

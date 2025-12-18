@@ -51,6 +51,7 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
   const [initialDistance, setInitialDistance] = useState<number | null>(null);
 
   const getCurrentDistance = (): number => {
+    if(!orchestrator){return 0;}
     const model = orchestrator.getActiveModel();
     if (!model || !orchestrator.camera) {
       return 0;
@@ -62,6 +63,7 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
   };
 
   const calculateDistances = () => {
+    if(!orchestrator){return;}
     const model = orchestrator.getActiveModel();
     const camera = orchestrator.camera;
     if (!model || !camera) {
@@ -134,6 +136,7 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
   };
 
   useEffect(() => {
+    if(!orchestrator){return;}
     calculateDistances();
 
     const update = () => {

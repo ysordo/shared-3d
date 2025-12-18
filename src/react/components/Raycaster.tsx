@@ -16,6 +16,7 @@ export const Raycaster: React.FC<RaycasterProps> = ({ onClick, onHover }) => {
   const orchestrator = useScene();
 
   useEffect(() => {
+    if(!orchestrator){return;}
     const plugin = new RaycasterPlugin((event) => {
       if (event.type === 'click' && onClick) {
         onClick(event.object);
@@ -25,7 +26,7 @@ export const Raycaster: React.FC<RaycasterProps> = ({ onClick, onHover }) => {
       }
     });
     orchestrator.use(plugin);
-  }, [onClick, onHover]);
+  }, [orchestrator,onClick, onHover]);
 
   return null;
 };

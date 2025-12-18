@@ -26,7 +26,7 @@ export const ModelPreload: React.FC<ModelPreloadProps> = ({
       preload.set(prev[1].id, prev[0]);
       onProgress?.(prev[2], prev[3]);
     });
-  },[Object.values(data)]);
+  },[...Object.values(data)]);
 
   return null;
 };

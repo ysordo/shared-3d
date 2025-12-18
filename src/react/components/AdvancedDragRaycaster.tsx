@@ -92,6 +92,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   );
   const handleDrag = useCallback(
     (current: THREE.Vector2) => {
+      if(!orchestrator){return;}
       const state = dragState.current;
       const camera = orchestrator.camera;
       if (state.isDragging && state.currentObject) {
@@ -132,7 +133,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
         state.startPosition.copy(current);
       }
     },
-    [onDrag]
+    [onDrag, orchestrator]
   );
   const handleDragEnd = useCallback(() => {
     const state = dragState.current;
@@ -158,7 +159,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
       enableRotationCompensation,
       handleDragStart,
       handleDrag,
-      handleDragEnd,
+      handleDragEnd
     ]
   );
 
@@ -184,11 +185,12 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
           }
         }
       ),
-    [config]
+    [...Object.values(config), orchestrator]
   );
 
   // Sincronizar enabled con plugin
   useEffect(() => {
+    if(!orchestrator){return;}
     const plugin =
       orchestrator.plugin<AdvancedRaycasterPlugin>('AdvancedRaycaster');
     if (!plugin) {
@@ -199,6 +201,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
 
   // Reset animado seguro
   const resetAll = useCallback(() => {
+    if(!orchestrator){return;}
     if (isResetting) {
       return;
     }

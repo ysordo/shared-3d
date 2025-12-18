@@ -13,6 +13,7 @@ export const useHDRI = (entry: ManifestEntry | null) => {
   const abortRef = useRef<() => void>(() => {});
 
   useEffect(() => {
+    if(!orchestrator){return;}
     if (!entry) {
       setHDRI(null);
       setLoading(false);
@@ -49,6 +50,9 @@ export const useHDRI = (entry: ManifestEntry | null) => {
   }, [entry?.id, orchestrator]);
 
   const clear = () => {
+    if(!orchestrator){
+      throw console.error('[useHDRI] Error orchestrator is not created.');
+    }
     orchestrator.clearHDRI();
     setHDRI(null);
   };

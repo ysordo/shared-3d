@@ -5,15 +5,15 @@ import { useScene } from '../../hooks/useScene';
 import { ARButton as ThreeARButton } from 'three/examples/jsm/webxr/ARButton.js';
 
 export const ARButton: React.FC = () => {
-  const { renderer } = useScene();
+  const orchestrator = useScene();
 
   useEffect(() => {
-    if (!renderer) {
+    if (!orchestrator || !orchestrator.renderer) {
       return;
     }
 
-    renderer.xr.enabled = true;
-    const button = ThreeARButton.createButton(renderer);
+    orchestrator.renderer.xr.enabled = true;
+    const button = ThreeARButton.createButton(orchestrator.renderer);
     document.body.appendChild(button);
 
     return () => {
@@ -21,7 +21,7 @@ export const ARButton: React.FC = () => {
         button.parentNode.removeChild(button);
       }
     };
-  }, [renderer]);
+  }, [orchestrator, orchestrator?.renderer]);
 
   return null;
 };
