@@ -7,7 +7,7 @@ var _react = require('react');
 var _jsxruntime = require('react/jsx-runtime');
 var Canvas = _react.forwardRef.call(void 0, 
   ({ config, children, ...canvasProps }, ref) => {
-    return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _chunk4ELG7LDCcjs.SceneProvider, { config, ref, children });
+    return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _chunk4ELG7LDCcjs.SceneProvider, { config, ref, ...canvasProps, children });
   }
 );
 Canvas.displayName = "Canvas";

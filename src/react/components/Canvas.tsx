@@ -13,7 +13,7 @@ type CanvasProps = React.CanvasHTMLAttributes<HTMLCanvasElement> & {
 export const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
   ({ config, children, ...canvasProps }, ref) => {
     return (
-      <SceneProvider config={config} ref={ref}>
+      <SceneProvider config={config} ref={ref} {...canvasProps}>
         {children}
       </SceneProvider>
     );

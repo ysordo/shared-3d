@@ -7,7 +7,7 @@ import { forwardRef } from "react";
 import { jsx } from "react/jsx-runtime";
 var Canvas = forwardRef(
   ({ config, children, ...canvasProps }, ref) => {
-    return /* @__PURE__ */ jsx(SceneProvider, { config, ref, children });
+    return /* @__PURE__ */ jsx(SceneProvider, { config, ref, ...canvasProps, children });
   }
 );
 Canvas.displayName = "Canvas";
