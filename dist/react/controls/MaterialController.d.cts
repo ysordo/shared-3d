@@ -16,7 +16,6 @@ type MaterialConfig = {
     type: 'wireframe';
     color?: THREE.ColorRepresentation;
     lineColor?: THREE.ColorRepresentation;
-    [key: string]: any;
 } | {
     name: string;
     type: 'custom';
@@ -24,14 +23,14 @@ type MaterialConfig = {
 };
 type MaterialItem = {
     name: string;
-    oldName: string | null;
+    oldName: string;
     apply: () => void;
     isActive: boolean;
     percentage: number;
 };
 type MaterialControllerProps = {
     materials: MaterialConfig[];
-    activeDefault?: MaterialConfig['name'];
+    activeDefault?: string;
     transitionDuration?: number;
     children: (items: MaterialItem[]) => ReactNode;
     className?: string;

@@ -10,15 +10,11 @@ var usePlugin = (factory, deps = []) => {
     if (!orch) {
       return;
     }
-    const plugin = orch.plugin(factory.name);
-    if (!plugin) {
-      orch.use(factory);
-    }
+    orch.remove(factory.name);
+    orch.use(factory);
     return () => {
-      if (plugin) {
-        _optionalChain([plugin, 'access', _ => _.dispose, 'optionalCall', _2 => _2()]);
-        orch.remove(factory.name);
-      }
+      _optionalChain([orch, 'access', _ => _.plugin, 'call', _2 => _2(factory.name), 'optionalAccess', _3 => _3.dispose, 'optionalCall', _4 => _4()]);
+      orch.remove(factory.name);
     };
   }, [orch, ...deps]);
   return orch.plugin(factory.name);

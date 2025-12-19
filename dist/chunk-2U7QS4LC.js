@@ -1,97 +1,58 @@
-'use client';
+import {
+  createQuadWireframe
+} from "./chunk-AWVHTM2E.js";
+import {
+  useActiveModel
+} from "./chunk-FSU35KMZ.js";
+import {
+  THREE
+} from "./chunk-OVHQQSEK.js";
 
-import type { ReactNode } from 'react';
-import React, {
+// src/react/controls/MaterialController.tsx
+import {
   useEffect,
   useState,
   useRef,
   useMemo,
-  useCallback,
-} from 'react';
-import { useActiveModel } from '../../hooks/useActiveModel';
-import { createQuadWireframe } from '../../core/utils';
-import { THREE } from '../../lib';
-
-export type CustomMaterialFactory = (
-  originalMaterial: THREE.Material
-) => THREE.Material;
-
-export type MaterialConfig =
-  | { name: string; type: 'textured' }
-  | {
-      name: string;
-      type: 'solid';
-      color?: THREE.ColorRepresentation;
-      metalness?: number;
-      roughness?: number;
-    }
-  | {
-      name: string;
-      type: 'wireframe';
-      color?: THREE.ColorRepresentation;
-      lineColor?: THREE.ColorRepresentation;
-    }
-  | { name: string; type: 'custom'; factory: CustomMaterialFactory };
-
-type MaterialItem = {
-  name: string;
-  oldName: string;
-  apply: () => void;
-  isActive: boolean;
-  percentage: number;
-};
-
-type MaterialControllerProps = {
-  materials: MaterialConfig[];
-  activeDefault?: string;
-  transitionDuration?: number;
-  children: (items: MaterialItem[]) => ReactNode;
-  className?: string;
-};
-
-export const MaterialController: React.FC<MaterialControllerProps> = ({
+  useCallback
+} from "react";
+import { jsx } from "react/jsx-runtime";
+var MaterialController = ({
   materials,
   activeDefault = materials[0]?.name,
   transitionDuration = 300,
   children,
-  className,
+  className
 }) => {
   const model = useActiveModel();
-  const [activeName, setActiveName] = useState<string | null>(null);
-  const [oldName, setOldName] = useState<string>('');
+  const [activeName, setActiveName] = useState(null);
+  const [oldName, setOldName] = useState("");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const percentageRef = useRef(0);
-  const timeoutsRef = useRef<number[]>([]);
-  const meshesRef = useRef<THREE.Mesh[]>([]);
-
-  // Inicialización de meshes y wireframes (solo cuando cambia model)
+  const timeoutsRef = useRef([]);
+  const meshesRef = useRef([]);
   useEffect(() => {
     if (!model) {
       meshesRef.current = [];
       return;
     }
-
     meshesRef.current = [];
-
     model.traverse((child) => {
       if (!(child instanceof THREE.Mesh)) {
         return;
       }
-
-      // Guardar material original
       if (!child.userData.originalMaterial) {
         child.userData.originalMaterial = child.material.clone();
       }
-
-      // Crear wireframe solo si no existe
       if (!child.getObjectByName(`${child.name}-wireframe`)) {
         const wireGeo = createQuadWireframe(child.geometry);
         const lineMat = new THREE.LineBasicMaterial({
-          color: 0x000000,
-          linewidth: 1, // Ignorado en WebGL, pero para referencia
+          color: 0,
+          linewidth: 1,
+          // Ignorado en WebGL, pero para referencia
           polygonOffset: true,
           polygonOffsetFactor: 1,
-          polygonOffsetUnits: 1,
+          polygonOffsetUnits: 1
         });
         const wireframe = new THREE.LineSegments(wireGeo, lineMat);
         wireframe.name = `${child.name}-wireframe`;
@@ -99,128 +60,103 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         wireframe.visible = false;
         child.add(wireframe);
       }
-
       meshesRef.current.push(child);
     });
   }, [model]);
-
-  // Aplicar material a un mesh individual
   const applyToMesh = useCallback(
-    (mesh: THREE.Mesh, config: MaterialConfig) => {
+    (mesh, config) => {
       const wireframe = mesh.getObjectByName(
         `${mesh.name}-wireframe`
-      ) as THREE.LineSegments;
-
-      let newMat: THREE.Material;
-
+      );
+      let newMat;
       switch (config.type) {
-        case 'textured':
+        case "textured":
           newMat = mesh.userData.originalMaterial;
           if (wireframe) {
             wireframe.visible = false;
           }
           break;
-
-        case 'solid':
+        case "solid":
           newMat = new THREE.MeshStandardMaterial({
-            color: config.color ?? 0x888888,
+            color: config.color ?? 8947848,
             metalness: config.metalness ?? 0.5,
             roughness: config.roughness ?? 0.7,
-            side: THREE.DoubleSide,
+            side: THREE.DoubleSide
           });
           if (wireframe) {
             wireframe.visible = false;
           }
           break;
-
-        case 'wireframe':
+        case "wireframe":
           newMat = new THREE.MeshStandardMaterial({
-            color: config.color ?? 0x888888,
+            color: config.color ?? 8947848,
             transparent: true,
             opacity: 0.05,
-            side: THREE.DoubleSide,
+            side: THREE.DoubleSide
           });
           if (wireframe) {
             wireframe.visible = true;
-            (wireframe.material as THREE.LineBasicMaterial).color.set(
-              config.lineColor ?? 0xffffff
+            wireframe.material.color.set(
+              config.lineColor ?? 16777215
             );
           }
           break;
-
-        case 'custom':
+        case "custom":
           newMat = config.factory(mesh.userData.originalMaterial);
           if (wireframe) {
             wireframe.visible = false;
           }
           break;
-
         default:
           return;
       }
-
       mesh.material = newMat;
     },
     []
   );
-
-  // Aplicar material con transición opcional
   const applyMaterial = useCallback(
-    (config: MaterialConfig) => {
+    (config) => {
       if (!model || isTransitioning || meshesRef.current.length === 0) {
         return;
       }
-      setOldName(activeName??'');
-
-      // Limpiar timeouts previos
+      setOldName(activeName ?? "");
       timeoutsRef.current.forEach(clearTimeout);
       timeoutsRef.current = [];
-
       setIsTransitioning(true);
       percentageRef.current = 0;
-
       if (transitionDuration === 0) {
         meshesRef.current.forEach((m) => applyToMesh(m, config));
         setActiveName(config.name);
         setIsTransitioning(false);
         return;
       }
-
       const delay = transitionDuration / meshesRef.current.length;
       let completed = 0;
-
       meshesRef.current.forEach((mesh, i) => {
         const timeoutId = window.setTimeout(() => {
           applyToMesh(mesh, config);
           completed++;
-          percentageRef.current = (completed / meshesRef.current.length) * 100;
-
+          percentageRef.current = completed / meshesRef.current.length * 100;
           if (completed === meshesRef.current.length) {
             setActiveName(config.name);
             setIsTransitioning(false);
           }
         }, i * delay);
-
         timeoutsRef.current.push(timeoutId);
       });
     },
     [model, isTransitioning, transitionDuration, applyToMesh]
   );
-
-  // Items estables para children
-  const items = useMemo<MaterialItem[]>(
-    () =>
-      materials.map((config) => ({
-        name: config.name,
-        oldName,
-        apply: () => applyMaterial(config),
-        isActive: activeName === config.name,
-        percentage: percentageRef.current,
-      })),
+  const items = useMemo(
+    () => materials.map((config) => ({
+      name: config.name,
+      oldName,
+      apply: () => applyMaterial(config),
+      isActive: activeName === config.name,
+      percentage: percentageRef.current
+    })),
     [materials, oldName, activeName, applyMaterial]
   );
-
-  // Aplicar default al montar o cambiar materials
   useEffect(() => {
     if (activeName || items.length === 0) {
       return;
@@ -230,17 +166,17 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       defaultItem.apply();
     }
   }, [items, activeDefault, activeName]);
-
-  // Cleanup timeouts en desmontaje
   useEffect(() => {
     return () => {
       timeoutsRef.current.forEach(clearTimeout);
     };
   }, []);
-
   if (!model) {
     return null;
   }
+  return /* @__PURE__ */ jsx("div", { className, children: children(items) });
+};
 
-  return <div className={className}>{children(items)}</div>;
+export {
+  MaterialController
 };

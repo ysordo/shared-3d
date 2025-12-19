@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunk3M257MS7cjs = require('./chunk-3M257MS7.cjs');
+var _chunkDLJXBVOIcjs = require('./chunk-DLJXBVOI.cjs');
 
 
 var _chunkFH6APZUOcjs = require('./chunk-FH6APZUO.cjs');
@@ -20,7 +20,7 @@ var Raycaster = ({ onClick, onHover }) => {
     [onClick, onHover]
   );
   const deps = _react.useMemo.call(void 0, () => [handle], [handle]);
-  _chunk3M257MS7cjs.usePlugin.call(void 0, new (0, _chunkFH6APZUOcjs.RaycasterPlugin)(handle), deps);
+  _chunkDLJXBVOIcjs.usePlugin.call(void 0, new (0, _chunkFH6APZUOcjs.RaycasterPlugin)(handle), deps);
   return null;
 };
 

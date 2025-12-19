@@ -1,8 +1,8 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunk3WE45CXHcjs = require('../../chunk-3WE45CXH.cjs');
-require('../../chunk-3M257MS7.cjs');
+var _chunkK4V2LJ2Rcjs = require('../../chunk-K4V2LJ2R.cjs');
+require('../../chunk-DLJXBVOI.cjs');
 require('../../chunk-MLONVM7E.cjs');
 require('../../chunk-44UQAST6.cjs');
 require('../../chunk-SD2EEMFK.cjs');
@@ -26,4 +26,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.OrbitControls = _chunk3WE45CXHcjs.OrbitControls;
+exports.OrbitControls = _chunkK4V2LJ2Rcjs.OrbitControls;

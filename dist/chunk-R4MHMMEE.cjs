@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunk3M257MS7cjs = require('./chunk-3M257MS7.cjs');
+var _chunkDLJXBVOIcjs = require('./chunk-DLJXBVOI.cjs');
 
 
 var _chunk2LFFYOLBcjs = require('./chunk-2LFFYOLB.cjs');
@@ -24,7 +24,7 @@ var AutoLODSystem = ({
     ],
     [mediumDistance, lowDistance, hideDistance, reductionPercentages, enabled]
   );
-  _chunk3M257MS7cjs.usePlugin.call(void 0, 
+  _chunkDLJXBVOIcjs.usePlugin.call(void 0, 
     new (0, _chunk2LFFYOLBcjs.AutoLODSystemPlugin)({
       distances: [mediumDistance, lowDistance, hideDistance],
       reductionPercentages

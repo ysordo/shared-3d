@@ -10,15 +10,11 @@ var usePlugin = (factory, deps = []) => {
     if (!orch) {
       return;
     }
-    const plugin = orch.plugin(factory.name);
-    if (!plugin) {
-      orch.use(factory);
-    }
+    orch.remove(factory.name);
+    orch.use(factory);
     return () => {
-      if (plugin) {
-        plugin.dispose?.();
-        orch.remove(factory.name);
-      }
+      orch.plugin(factory.name)?.dispose?.();
+      orch.remove(factory.name);
     };
   }, [orch, ...deps]);
   return orch.plugin(factory.name);

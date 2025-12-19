@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunk3M257MS7cjs = require('./chunk-3M257MS7.cjs');
+var _chunkDLJXBVOIcjs = require('./chunk-DLJXBVOI.cjs');
 
 
 var _chunkT2JEYSOHcjs = require('./chunk-T2JEYSOH.cjs');
@@ -13,7 +13,7 @@ var LODSystem = ({
   enabled = true
 }) => {
   const deps = _react.useMemo.call(void 0, () => [levels, hysteresis, enabled], [levels, hysteresis, enabled]);
-  _chunk3M257MS7cjs.usePlugin.call(void 0, new (0, _chunkT2JEYSOHcjs.LODSystemPlugin)([{ levels, hysteresis }]), deps);
+  _chunkDLJXBVOIcjs.usePlugin.call(void 0, new (0, _chunkT2JEYSOHcjs.LODSystemPlugin)([{ levels, hysteresis }]), deps);
   if (!enabled) {
     return null;
   }
