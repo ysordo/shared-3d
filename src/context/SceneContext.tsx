@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useRef,
   useMemo,
+  useState,
 } from 'react';
 import { SceneOrchestrator } from '../core/orchestrator/SceneOrchestrator';
 import type { SceneConfig } from '../core/orchestrator/SceneOrchestrator';
@@ -30,12 +31,12 @@ export const SceneProvider: React.FC<SceneProviderProps> = ({
   config,
   canvasRef,
 }) => {
-  const orchestratorRef = useRef<SceneOrchestrator | null>(null);
+  const [orchestratorRef, setOrchestratorRef] = useState<SceneOrchestrator | null>(null);
   const activeModelRef = useRef<THREE.Group | null>(null);
   const preloadRef = useRef<Map<string, THREE.Group>>(new Map());
 
   useEffect(() => {
-    if (!canvasRef.current || orchestratorRef.current) {
+    if (!canvasRef.current || orchestratorRef) {
       return;
     }
 
@@ -43,7 +44,7 @@ export const SceneProvider: React.FC<SceneProviderProps> = ({
       canvasRef.current,
       config
     );
-    orchestratorRef.current = orchestrator;
+    setOrchestratorRef(orchestrator);
 
     const updateActiveModel = () => {
       activeModelRef.current = orchestrator.getActiveModel();
@@ -52,7 +53,7 @@ export const SceneProvider: React.FC<SceneProviderProps> = ({
     orchestrator.addEventListener('model::removed' as never, updateActiveModel);
 
     if (process.env.NODE_ENV === 'development') {
-      (window as any).__ORCHESTRATOR__ = orchestratorRef.current;
+      (window as any).__ORCHESTRATOR__ = orchestratorRef;
     }
     return () => {
       orchestrator.removeEventListener(
@@ -64,18 +65,18 @@ export const SceneProvider: React.FC<SceneProviderProps> = ({
         updateActiveModel
       );
       orchestrator.dispose();
-      orchestratorRef.current = null;
+      setOrchestratorRef(null);
       activeModelRef.current = null;
       preloadRef.current.clear();
     };
   }, [config, canvasRef]);
 
   const value = useMemo<SceneContextValue | null>(() => {
-    if (!orchestratorRef.current) {
+    if (!orchestratorRef) {
       return null;
     }
     return {
-      orchestrator: orchestratorRef.current,
+      orchestrator: orchestratorRef,
       activeModel: activeModelRef.current,
       preload: preloadRef.current,
     };

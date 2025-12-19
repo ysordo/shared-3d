@@ -7,7 +7,7 @@ require('../chunk-7YGHNVSE.cjs');
 require('../chunk-7WPOL7PK.cjs');
 
 
-var _chunkM7PRZUXUcjs = require('../chunk-M7PRZUXU.cjs');
+var _chunk2LYQYXCGcjs = require('../chunk-2LYQYXCG.cjs');
 require('../chunk-KD4SYTBB.cjs');
 require('../chunk-YAKUY6M3.cjs');
 require('../chunk-ZJAPFMHD.cjs');
@@ -18,4 +18,4 @@ require('../chunk-UW5RKAXQ.cjs');
 
 
 
-exports.CacheProvider = _chunkMELGR4PBcjs.CacheProvider; exports.SceneProvider = _chunkM7PRZUXUcjs.SceneProvider;
+exports.CacheProvider = _chunkMELGR4PBcjs.CacheProvider; exports.SceneProvider = _chunk2LYQYXCGcjs.SceneProvider;
