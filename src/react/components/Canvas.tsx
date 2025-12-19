@@ -16,8 +16,8 @@ export const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
 
     return (
       <>
-        <canvas ref={canvasRef} {...props} />
         <SceneProvider canvasRef={canvasRef} config={config}>
+          <canvas ref={canvasRef} {...props} />
           {children}
         </SceneProvider>
       </>

@@ -1,8 +1,8 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkN2QDSU7Ecjs = require('../chunk-N2QDSU7E.cjs');
-require('../chunk-4AUN7VTH.cjs');
+var _chunkJE2KFCEYcjs = require('../chunk-JE2KFCEY.cjs');
+require('../chunk-2LYQYXCG.cjs');
 require('../chunk-KD4SYTBB.cjs');
 require('../chunk-YAKUY6M3.cjs');
 require('../chunk-ZJAPFMHD.cjs');
@@ -14,7 +14,7 @@ require('../chunk-UW5RKAXQ.cjs');
 // src/hooks/useModelSuspense.ts
 var _react = require('react');
 var useModelSuspense = (entry) => {
-  const preload = _chunkN2QDSU7Ecjs.usePreload.call(void 0, );
+  const preload = _chunkJE2KFCEYcjs.usePreload.call(void 0, );
   const model = _react.useRef.call(void 0, void 0);
   _react.useEffect.call(void 0, () => {
     if (!preload) {
