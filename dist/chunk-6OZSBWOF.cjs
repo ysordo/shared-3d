@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkHWEQELQ6cjs = require('./chunk-HWEQELQ6.cjs');
+var _chunk3M257MS7cjs = require('./chunk-3M257MS7.cjs');
 
 
 var _chunk2LFFYOLBcjs = require('./chunk-2LFFYOLB.cjs');
@@ -23,7 +23,7 @@ var AutoLODSystem = ({
     () => [...Object.values(config), enabled],
     [...Object.values(config), enabled]
   );
-  _chunkHWEQELQ6cjs.usePlugin.call(void 0, "AutoLODSystem", () => new (0, _chunk2LFFYOLBcjs.AutoLODSystemPlugin)(config), deps);
+  _chunk3M257MS7cjs.usePlugin.call(void 0, new (0, _chunk2LFFYOLBcjs.AutoLODSystemPlugin)(config), deps);
   return null;
 };
 

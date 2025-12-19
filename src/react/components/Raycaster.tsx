@@ -29,7 +29,7 @@ export const Raycaster: React.FC<RaycasterProps> = ({ onClick, onHover }) => {
   const config = useMemo(() => handle, [handle]);
   const deps = useMemo(() => [handle], [handle]);
 
-  usePlugin('Raycaster', () => new RaycasterPlugin(config), deps);
+  usePlugin(new RaycasterPlugin(config), deps);
 
   return null;
 };

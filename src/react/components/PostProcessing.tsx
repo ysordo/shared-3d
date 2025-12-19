@@ -26,8 +26,7 @@ export const PostProcessing: React.FC<PostProcessingProps> = ({
     [...Object.values(options), enabled]
   );
   usePlugin(
-    'PostProcessing',
-    () => new PostProcessingPlugin(options),
+    new PostProcessingPlugin(options),
     deps
   );
 

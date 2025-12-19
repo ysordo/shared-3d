@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-IF5HNNFI.js";
+} from "./chunk-UHZBSJS6.js";
 import {
   AdvancedRaycasterPlugin
 } from "./chunk-OHN5TLPQ.js";
@@ -60,8 +60,7 @@ var AdvancedRaycaster = ({
   const config = useMemo(() => ({ targetModel: customModel ?? activeModel, handler }), [customModel, activeModel, handler]);
   const deps = useMemo(() => [...Object.values(config)], [...Object.values(config)]);
   usePlugin(
-    "AdvancedRaycaster",
-    () => new AdvancedRaycasterPlugin(config.targetModel, config.handler),
+    new AdvancedRaycasterPlugin(config.targetModel, config.handler),
     deps
   );
   return null;

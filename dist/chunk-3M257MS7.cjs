@@ -4,24 +4,24 @@ var _chunkL3KVNMIIcjs = require('./chunk-L3KVNMII.cjs');
 
 // src/hooks/usePlugin.ts
 var _react = require('react');
-var usePlugin = (name, factory, deps = []) => {
+var usePlugin = (factory, deps = []) => {
   const orch = _chunkL3KVNMIIcjs.useScene.call(void 0, );
   _react.useEffect.call(void 0, () => {
     if (!orch) {
       return;
     }
-    const plugin = orch.plugin(name);
+    const plugin = orch.plugin(factory.name);
     if (!plugin) {
-      orch.use(factory());
+      orch.use(factory);
     }
     return () => {
       if (plugin) {
         _optionalChain([plugin, 'access', _ => _.dispose, 'optionalCall', _2 => _2()]);
-        orch.remove(name);
+        orch.remove(factory.name);
       }
     };
   }, [orch, ...deps]);
-  return orch.plugin(name);
+  return orch.plugin(factory.name);
 };
 
 

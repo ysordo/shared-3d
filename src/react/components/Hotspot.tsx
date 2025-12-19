@@ -28,9 +28,9 @@ export const Hotspot: React.FC<HotspotProps> = ({
     [id, position, target, onClick]
   );
 
-  
 
-  usePlugin('Hotspot',() => new HotspotPlugin([data]), [data]);
+
+  usePlugin(new HotspotPlugin([data]), [data]);
 
   return null;
 };

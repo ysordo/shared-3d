@@ -41,8 +41,7 @@ export const Annotations: React.FC<AnnotationsProps> = ({ annotations }) => {
   }, [annotations, scene]);
 
   usePlugin(
-    'Annotations',
-    () => new AnnotationsPlugin(data as AnnotationData[]),
+    new AnnotationsPlugin(data as AnnotationData[]),
     data
   );
 

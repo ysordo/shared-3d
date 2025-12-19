@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkHWEQELQ6cjs = require('./chunk-HWEQELQ6.cjs');
+var _chunk3M257MS7cjs = require('./chunk-3M257MS7.cjs');
 
 
 var _chunkMCYH2TBQcjs = require('./chunk-MCYH2TBQ.cjs');
@@ -19,9 +19,8 @@ var PostProcessing = ({
     () => [...Object.values(options), enabled],
     [...Object.values(options), enabled]
   );
-  _chunkHWEQELQ6cjs.usePlugin.call(void 0, 
-    "PostProcessing",
-    () => new (0, _chunkMCYH2TBQcjs.PostProcessingPlugin)(options),
+  _chunk3M257MS7cjs.usePlugin.call(void 0, 
+    new (0, _chunkMCYH2TBQcjs.PostProcessingPlugin)(options),
     deps
   );
   if (!enabled) {

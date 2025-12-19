@@ -34,7 +34,7 @@ export const AutoLODSystem: React.FC<AutoLODSystemProps> = ({
     [...Object.values(config), enabled]
   );
 
-  usePlugin('AutoLODSystem', () => new AutoLODSystemPlugin(config), deps);
-  
+  usePlugin(new AutoLODSystemPlugin(config), deps);
+
   return null;
 };

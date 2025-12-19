@@ -61,8 +61,7 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
   );
 
   const plugin = usePlugin(
-    'AdvancedOrbitControls',
-    () => new AdvancedOrbitControlsPlugin(stableOptions),
+    new AdvancedOrbitControlsPlugin(stableOptions),
     deps
   );
 

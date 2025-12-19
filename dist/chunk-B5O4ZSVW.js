@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-IF5HNNFI.js";
+} from "./chunk-UHZBSJS6.js";
 import {
   useScene
 } from "./chunk-Z3ENXIV3.js";
@@ -25,7 +25,7 @@ var Raycaster = ({ onClick, onHover }) => {
   );
   const config = useMemo(() => handle, [handle]);
   const deps = useMemo(() => [handle], [handle]);
-  usePlugin("Raycaster", () => new RaycasterPlugin(config), deps);
+  usePlugin(new RaycasterPlugin(config), deps);
   return null;
 };
 

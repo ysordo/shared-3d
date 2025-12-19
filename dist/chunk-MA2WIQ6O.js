@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-IF5HNNFI.js";
+} from "./chunk-UHZBSJS6.js";
 import {
   AdvancedOrbitControlsPlugin
 } from "./chunk-N3ACJCKO.js";
@@ -31,8 +31,7 @@ var AdvancedOrbitControls = ({
     [...Object.values(stableOptions), enabled]
   );
   const plugin = usePlugin(
-    "AdvancedOrbitControls",
-    () => new AdvancedOrbitControlsPlugin(stableOptions),
+    new AdvancedOrbitControlsPlugin(stableOptions),
     deps
   );
   useEffect(() => {

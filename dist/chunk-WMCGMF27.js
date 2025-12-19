@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-IF5HNNFI.js";
+} from "./chunk-UHZBSJS6.js";
 import {
   AdvancedCameraCollisionPlugin
 } from "./chunk-7UK5WDJQ.js";
@@ -26,8 +26,7 @@ var AdvancedCameraCollision = ({
     [...config, model, enabled]
   );
   usePlugin(
-    "AdvancedCameraCollision",
-    () => new AdvancedCameraCollisionPlugin(...config),
+    new AdvancedCameraCollisionPlugin(...config),
     deps
   );
   return null;

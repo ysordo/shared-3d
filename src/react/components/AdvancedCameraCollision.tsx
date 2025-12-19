@@ -32,8 +32,7 @@ export const AdvancedCameraCollision: React.FC<
   );
 
   usePlugin(
-    'AdvancedCameraCollision',
-    () => new AdvancedCameraCollisionPlugin(...config),
+    new AdvancedCameraCollisionPlugin(...config),
     deps
   );
   

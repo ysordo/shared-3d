@@ -15,20 +15,16 @@ export const MeasurementTool: React.FC<MeasurementToolProps> = ({
   onMeasure,
 }) => {
   const callback = useMemo(() => onMeasure ?? (() => {}), [onMeasure]);
+  const deps = useMemo(() => [callback, enabled], [callback, enabled]);
 
   usePlugin(
-    'MeasurementTool',
-    () =>
       new MeasurementToolPlugin((event) => {
         if (event.distance !== undefined && event.points.length === 2) {
           callback(event.distance, [event.points[0], event.points[1]]);
         }
       }),
-    enabled ? [callback] : []
+    deps
   );
 
-  if (!enabled) {
-    return null;
-  }
   return null;
 };

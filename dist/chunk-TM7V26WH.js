@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-IF5HNNFI.js";
+} from "./chunk-UHZBSJS6.js";
 import {
   PostProcessingPlugin
 } from "./chunk-SRDOYMT5.js";
@@ -20,8 +20,7 @@ var PostProcessing = ({
     [...Object.values(options), enabled]
   );
   usePlugin(
-    "PostProcessing",
-    () => new PostProcessingPlugin(options),
+    new PostProcessingPlugin(options),
     deps
   );
   if (!enabled) {

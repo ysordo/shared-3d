@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } }
 
-var _chunkHWEQELQ6cjs = require('./chunk-HWEQELQ6.cjs');
+var _chunk3M257MS7cjs = require('./chunk-3M257MS7.cjs');
 
 
 var _chunkXTA7BEZGcjs = require('./chunk-XTA7BEZG.cjs');
@@ -20,7 +20,7 @@ var Hotspots = ({ hotspots }) => {
     })),
     [hotspots]
   );
-  _chunkHWEQELQ6cjs.usePlugin.call(void 0, "Hotspot", () => new (0, _chunkXTA7BEZGcjs.HotspotPlugin)(data), data);
+  _chunk3M257MS7cjs.usePlugin.call(void 0, new (0, _chunkXTA7BEZGcjs.HotspotPlugin)(data), data);
   return null;
 };
 

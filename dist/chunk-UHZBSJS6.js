@@ -4,24 +4,24 @@ import {
 
 // src/hooks/usePlugin.ts
 import { useEffect } from "react";
-var usePlugin = (name, factory, deps = []) => {
+var usePlugin = (factory, deps = []) => {
   const orch = useScene();
   useEffect(() => {
     if (!orch) {
       return;
     }
-    const plugin = orch.plugin(name);
+    const plugin = orch.plugin(factory.name);
     if (!plugin) {
-      orch.use(factory());
+      orch.use(factory);
     }
     return () => {
       if (plugin) {
         plugin.dispose?.();
-        orch.remove(name);
+        orch.remove(factory.name);
       }
     };
   }, [orch, ...deps]);
-  return orch.plugin(name);
+  return orch.plugin(factory.name);
 };
 
 export {

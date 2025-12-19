@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-IF5HNNFI.js";
+} from "./chunk-UHZBSJS6.js";
 import {
   AdvancedRaycasterPlugin
 } from "./chunk-OHN5TLPQ.js";
@@ -144,11 +144,7 @@ var AdvancedDragRaycaster = ({
     [...Object.values(config), camera]
   );
   const plugin = usePlugin(
-    "AdvancedRaycaster",
-    () => new AdvancedRaycasterPlugin(
-      config.model,
-      config.handle
-    ),
+    new AdvancedRaycasterPlugin(config.model, config.handle),
     deps
   );
   useEffect(() => {

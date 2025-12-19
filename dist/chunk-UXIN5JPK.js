@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-IF5HNNFI.js";
+} from "./chunk-UHZBSJS6.js";
 import {
   MeasurementToolPlugin
 } from "./chunk-PRNY2PGZ.js";
@@ -13,18 +13,15 @@ var MeasurementTool = ({
 }) => {
   const callback = useMemo(() => onMeasure ?? (() => {
   }), [onMeasure]);
+  const deps = useMemo(() => [callback, enabled], [callback, enabled]);
   usePlugin(
-    "MeasurementTool",
-    () => new MeasurementToolPlugin((event) => {
+    new MeasurementToolPlugin((event) => {
       if (event.distance !== void 0 && event.points.length === 2) {
         callback(event.distance, [event.points[0], event.points[1]]);
       }
     }),
-    enabled ? [callback] : []
+    deps
   );
-  if (!enabled) {
-    return null;
-  }
   return null;
 };
 

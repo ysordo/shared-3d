@@ -1,8 +1,8 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunk66YMFKZDcjs = require('../../chunk-66YMFKZD.cjs');
-require('../../chunk-HWEQELQ6.cjs');
+var _chunkAPMT2VLZcjs = require('../../chunk-APMT2VLZ.cjs');
+require('../../chunk-3M257MS7.cjs');
 require('../../chunk-XTA7BEZG.cjs');
 require('../../chunk-L3KVNMII.cjs');
 require('../../chunk-47Q3GIH6.cjs');
@@ -15,4 +15,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.Hotspot = _chunk66YMFKZDcjs.Hotspot;
+exports.Hotspot = _chunkAPMT2VLZcjs.Hotspot;

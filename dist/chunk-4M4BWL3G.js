@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-IF5HNNFI.js";
+} from "./chunk-UHZBSJS6.js";
 import {
   AutoLODSystemPlugin
 } from "./chunk-3VDQAJY7.js";
@@ -23,7 +23,7 @@ var AutoLODSystem = ({
     () => [...Object.values(config), enabled],
     [...Object.values(config), enabled]
   );
-  usePlugin("AutoLODSystem", () => new AutoLODSystemPlugin(config), deps);
+  usePlugin(new AutoLODSystemPlugin(config), deps);
   return null;
 };
 

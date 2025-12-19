@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-IF5HNNFI.js";
+} from "./chunk-UHZBSJS6.js";
 import {
   LODSystemPlugin
 } from "./chunk-HVXJUMVE.js";
@@ -14,7 +14,7 @@ var LODSystem = ({
 }) => {
   const config = useMemo(() => [{ levels, hysteresis }], [levels, hysteresis]);
   const deps = useMemo(() => [...Object.values(config), enabled], [...Object.values(config), enabled]);
-  usePlugin("LODSystem", () => new LODSystemPlugin(config), deps);
+  usePlugin(new LODSystemPlugin(config), deps);
   if (!enabled) {
     return null;
   }

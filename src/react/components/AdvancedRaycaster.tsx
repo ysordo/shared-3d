@@ -70,8 +70,7 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
   const deps = useMemo(() => [...Object.values(config)], [...Object.values(config)]);
 
   usePlugin(
-    'AdvancedRaycaster',
-    () => new AdvancedRaycasterPlugin(config.targetModel as THREE.Object3D, config.handler),
+    new AdvancedRaycasterPlugin(config.targetModel as THREE.Object3D, config.handler),
     deps
   );
 

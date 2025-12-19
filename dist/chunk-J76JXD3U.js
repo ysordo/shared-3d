@@ -1,13 +1,13 @@
 import {
   usePlugin
-} from "./chunk-IF5HNNFI.js";
+} from "./chunk-UHZBSJS6.js";
 import {
   OrbitControlsPlugin
 } from "./chunk-6ZE3RCVO.js";
 
 // src/react/components/OrbitControls.tsx
 var OrbitControls = () => {
-  usePlugin("OrbitControls", () => new OrbitControlsPlugin(), []);
+  usePlugin(new OrbitControlsPlugin(), []);
   return null;
 };
 

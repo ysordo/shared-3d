@@ -47,7 +47,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   onDrag,
   onDragEnd,
 }) => {
-  const {camera} = useScene();
+  const { camera } = useScene();
   const model = useActiveModel();
   const [isEnabled, setIsEnabled] = useState(defaultEnabled);
   const [isResetting, setIsResetting] = useState(false);
@@ -178,12 +178,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   );
 
   const plugin = usePlugin(
-    'AdvancedRaycaster',
-    () =>
-      new AdvancedRaycasterPlugin(
-        config.model as THREE.Object3D,
-        config.handle
-      ),
+    new AdvancedRaycasterPlugin(config.model as THREE.Object3D, config.handle),
     deps
   );
 

@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkHWEQELQ6cjs = require('./chunk-HWEQELQ6.cjs');
+var _chunk3M257MS7cjs = require('./chunk-3M257MS7.cjs');
 
 
 var _chunkXTA7BEZGcjs = require('./chunk-XTA7BEZG.cjs');
@@ -25,7 +25,7 @@ var Hotspot = ({
     }),
     [id, position, target, onClick]
   );
-  _chunkHWEQELQ6cjs.usePlugin.call(void 0, "Hotspot", () => new (0, _chunkXTA7BEZGcjs.HotspotPlugin)([data]), [data]);
+  _chunk3M257MS7cjs.usePlugin.call(void 0, new (0, _chunkXTA7BEZGcjs.HotspotPlugin)([data]), [data]);
   return null;
 };
 
