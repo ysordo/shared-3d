@@ -79,7 +79,7 @@ export const SceneProvider: React.FC<SceneProviderProps> = ({
       activeModel: activeModelRef.current,
       preload: preloadRef.current,
     };
-  }, []);
+  }, [orchestratorRef]);
 
   return (
     <SceneContext.Provider value={value}>{children}</SceneContext.Provider>
