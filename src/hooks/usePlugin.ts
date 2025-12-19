@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useScene } from './useScene';
 import type { Plugin } from '../core/orchestrator/types';
 
@@ -9,16 +9,16 @@ export const usePlugin = <T extends Plugin>(
   deps: any[] = [],
 ): T | undefined => {
   const orch = useScene();
+  const plugin = useRef<T>(factory);
 
   useEffect(() => {
-    if(!orch){return;}
-    orch.remove(factory.name);
-    orch.use(factory);
-
+    orch.use(plugin.current);
     return () => {
-      orch.plugin<T>(factory.name)?.dispose?.();
-      orch.remove(factory.name);
+      if(plugin.current){
+        plugin.current.dispose?.();
+        orch.remove(factory.name);
+      }
     };
-  }, [orch, ...deps]);
-  return orch.plugin<T>(factory.name);
+  }, deps);
+  return plugin.current;
 };

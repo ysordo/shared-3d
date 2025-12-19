@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkDLJXBVOIcjs = require('./chunk-DLJXBVOI.cjs');
+var _chunkFBZ762XYcjs = require('./chunk-FBZ762XY.cjs');
 
 
 var _chunkXTA7BEZGcjs = require('./chunk-XTA7BEZG.cjs');
@@ -20,7 +20,7 @@ var Hotspot = ({
     () => [id, position, target, onClick],
     [id, position, target, onClick]
   );
-  _chunkDLJXBVOIcjs.usePlugin.call(void 0, new (0, _chunkXTA7BEZGcjs.HotspotPlugin)([
+  _chunkFBZ762XYcjs.usePlugin.call(void 0, new (0, _chunkXTA7BEZGcjs.HotspotPlugin)([
     {
       id,
       position: new _chunkEA3XQ4KJcjs.THREE.Vector3(...position),

@@ -26,7 +26,7 @@ export const HDRI: React.FC<HDRIProps> = ({
   onProgress,
   onError,
 }) => {
-  const orchestrator = useScene();
+  const orch = useScene();
   const isHandle = useRef(false);
   const isloaded = useRef(false);
 
@@ -66,15 +66,15 @@ export const HDRI: React.FC<HDRIProps> = ({
 
   useEffect(() => {
     if (!isHandle.current) {
-      orchestrator.addEventListener(
+      orch.addEventListener(
         'hdri::loaded' as never,
         handleHDRIEvent as EventListener
       );
-      orchestrator.addEventListener(
+      orch.addEventListener(
         'hdri::progress' as never,
         handleHDRIEvent as EventListener
       );
-      orchestrator.addEventListener(
+      orch.addEventListener(
         'hdri::error' as never,
         handleHDRIEvent as EventListener
       );
@@ -83,32 +83,32 @@ export const HDRI: React.FC<HDRIProps> = ({
     }
     if (isHandle.current) {
       if (
-        orchestrator.getActiveHDRI()?.name !== entry.id &&
+        orch.getActiveHDRI()?.name !== entry.id &&
         !isloaded.current
       ) {
         isloaded.current = false;
-        orchestrator.setHDRI(entry, config).catch(console.error);
+        orch.setHDRI(entry, config).catch(console.error);
       }
     }
     return () => {
       isHandle.current = false;
 
-      orchestrator.removeEventListener(
+      orch.removeEventListener(
         'hdri::loaded' as never,
         handleHDRIEvent as EventListener
       );
-      orchestrator.removeEventListener(
+      orch.removeEventListener(
         'hdri::progress' as never,
         handleHDRIEvent as EventListener
       );
-      orchestrator.removeEventListener(
+      orch.removeEventListener(
         'hdri::error' as never,
         handleHDRIEvent as EventListener
       );
-      orchestrator.clearHDRI();
+      orch.clearHDRI();
       isloaded.current = false;
     };
-  }, [config, entry.id, handleHDRIEvent, orchestrator]);
+  }, [config, entry.id, handleHDRIEvent, orch]);
 
   return null;
 };

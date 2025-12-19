@@ -11,7 +11,7 @@ var HDRI = ({
   onProgress,
   onError
 }) => {
-  const orchestrator = _chunkL3KVNMIIcjs.useScene.call(void 0, );
+  const orch = _chunkL3KVNMIIcjs.useScene.call(void 0, );
   const isHandle = _react.useRef.call(void 0, false);
   const isloaded = _react.useRef.call(void 0, false);
   const handleHDRIEvent = _react.useCallback.call(void 0, 
@@ -46,44 +46,44 @@ var HDRI = ({
   );
   _react.useEffect.call(void 0, () => {
     if (!isHandle.current) {
-      orchestrator.addEventListener(
+      orch.addEventListener(
         "hdri::loaded",
         handleHDRIEvent
       );
-      orchestrator.addEventListener(
+      orch.addEventListener(
         "hdri::progress",
         handleHDRIEvent
       );
-      orchestrator.addEventListener(
+      orch.addEventListener(
         "hdri::error",
         handleHDRIEvent
       );
       isHandle.current = true;
     }
     if (isHandle.current) {
-      if (_optionalChain([orchestrator, 'access', _6 => _6.getActiveHDRI, 'call', _7 => _7(), 'optionalAccess', _8 => _8.name]) !== entry.id && !isloaded.current) {
+      if (_optionalChain([orch, 'access', _6 => _6.getActiveHDRI, 'call', _7 => _7(), 'optionalAccess', _8 => _8.name]) !== entry.id && !isloaded.current) {
         isloaded.current = false;
-        orchestrator.setHDRI(entry, config).catch(console.error);
+        orch.setHDRI(entry, config).catch(console.error);
       }
     }
     return () => {
       isHandle.current = false;
-      orchestrator.removeEventListener(
+      orch.removeEventListener(
         "hdri::loaded",
         handleHDRIEvent
       );
-      orchestrator.removeEventListener(
+      orch.removeEventListener(
         "hdri::progress",
         handleHDRIEvent
       );
-      orchestrator.removeEventListener(
+      orch.removeEventListener(
         "hdri::error",
         handleHDRIEvent
       );
-      orchestrator.clearHDRI();
+      orch.clearHDRI();
       isloaded.current = false;
     };
-  }, [config, entry.id, handleHDRIEvent, orchestrator]);
+  }, [config, entry.id, handleHDRIEvent, orch]);
   return null;
 };
 

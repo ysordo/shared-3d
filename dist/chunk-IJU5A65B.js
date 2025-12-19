@@ -11,7 +11,7 @@ var HDRI = ({
   onProgress,
   onError
 }) => {
-  const orchestrator = useScene();
+  const orch = useScene();
   const isHandle = useRef(false);
   const isloaded = useRef(false);
   const handleHDRIEvent = useCallback(
@@ -46,44 +46,44 @@ var HDRI = ({
   );
   useEffect(() => {
     if (!isHandle.current) {
-      orchestrator.addEventListener(
+      orch.addEventListener(
         "hdri::loaded",
         handleHDRIEvent
       );
-      orchestrator.addEventListener(
+      orch.addEventListener(
         "hdri::progress",
         handleHDRIEvent
       );
-      orchestrator.addEventListener(
+      orch.addEventListener(
         "hdri::error",
         handleHDRIEvent
       );
       isHandle.current = true;
     }
     if (isHandle.current) {
-      if (orchestrator.getActiveHDRI()?.name !== entry.id && !isloaded.current) {
+      if (orch.getActiveHDRI()?.name !== entry.id && !isloaded.current) {
         isloaded.current = false;
-        orchestrator.setHDRI(entry, config).catch(console.error);
+        orch.setHDRI(entry, config).catch(console.error);
       }
     }
     return () => {
       isHandle.current = false;
-      orchestrator.removeEventListener(
+      orch.removeEventListener(
         "hdri::loaded",
         handleHDRIEvent
       );
-      orchestrator.removeEventListener(
+      orch.removeEventListener(
         "hdri::progress",
         handleHDRIEvent
       );
-      orchestrator.removeEventListener(
+      orch.removeEventListener(
         "hdri::error",
         handleHDRIEvent
       );
-      orchestrator.clearHDRI();
+      orch.clearHDRI();
       isloaded.current = false;
     };
-  }, [config, entry.id, handleHDRIEvent, orchestrator]);
+  }, [config, entry.id, handleHDRIEvent, orch]);
   return null;
 };
 

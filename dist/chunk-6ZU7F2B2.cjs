@@ -1,12 +1,12 @@
-import {
-  usePlugin
-} from "./chunk-I6W2FHAN.js";
-import {
-  AutoLODSystemPlugin
-} from "./chunk-3VDQAJY7.js";
+"use strict";Object.defineProperty(exports, "__esModule", {value: true});
+
+var _chunkFBZ762XYcjs = require('./chunk-FBZ762XY.cjs');
+
+
+var _chunk2LFFYOLBcjs = require('./chunk-2LFFYOLB.cjs');
 
 // src/react/components/AutoLODSystem.tsx
-import { useMemo } from "react";
+var _react = require('react');
 var AutoLODSystem = ({
   mediumDistance = 20,
   lowDistance = 50,
@@ -14,7 +14,7 @@ var AutoLODSystem = ({
   reductionPercentages,
   enabled = true
 }) => {
-  const deps = useMemo(
+  const deps = _react.useMemo.call(void 0, 
     () => [
       mediumDistance,
       lowDistance,
@@ -24,8 +24,8 @@ var AutoLODSystem = ({
     ],
     [mediumDistance, lowDistance, hideDistance, reductionPercentages, enabled]
   );
-  usePlugin(
-    new AutoLODSystemPlugin({
+  _chunkFBZ762XYcjs.usePlugin.call(void 0, 
+    new (0, _chunk2LFFYOLBcjs.AutoLODSystemPlugin)({
       distances: [mediumDistance, lowDistance, hideDistance],
       reductionPercentages
     }),
@@ -34,6 +34,6 @@ var AutoLODSystem = ({
   return null;
 };
 
-export {
-  AutoLODSystem
-};
+
+
+exports.AutoLODSystem = AutoLODSystem;
