@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-BDCH4C4X.js";
+} from "./chunk-3KH2IUAY.js";
 import {
   AutoLODSystemPlugin
 } from "./chunk-3VDQAJY7.js";
@@ -21,7 +21,12 @@ var AutoLODSystem = ({
     }),
     [mediumDistance, lowDistance, hideDistance, reductionPercentages]
   );
-  usePlugin(factory, [factory], enabled);
+  usePlugin(factory, enabled ? [
+    mediumDistance,
+    lowDistance,
+    hideDistance,
+    reductionPercentages
+  ] : ["disabled"]);
   return null;
 };
 

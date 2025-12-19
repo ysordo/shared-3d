@@ -23,10 +23,10 @@ export const LODSystem: React.FC<LODSystemProps> = ({
 }) => {
   const factory = useCallback(
     () => new LODSystemPlugin([{ levels, hysteresis }]),
-    [levels, hysteresis, enabled]
+    [levels, hysteresis]
   );
 
-  usePlugin(factory, [factory]);
+  usePlugin(factory, enabled ? [levels, hysteresis] : ['disabled']);
 
   if (!enabled) {
     return null;

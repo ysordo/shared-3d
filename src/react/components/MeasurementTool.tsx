@@ -28,7 +28,7 @@ export const MeasurementTool: React.FC<MeasurementToolProps> = ({
     [callback]
   );
 
-  usePlugin(factory, [factory], enabled);
+  usePlugin(factory, enabled ? [callback] : ['disabled']);
 
   return null;
 };

@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
 
-var _chunkNFCEFR2Qcjs = require('./chunk-NFCEFR2Q.cjs');
+var _chunkN4YA2OBNcjs = require('./chunk-N4YA2OBN.cjs');
 
 
 var _chunk44UQAST6cjs = require('./chunk-44UQAST6.cjs');
@@ -23,7 +23,7 @@ var MeasurementTool = ({
     () => new (0, _chunk44UQAST6cjs.MeasurementToolPlugin)(callback),
     [callback]
   );
-  _chunkNFCEFR2Qcjs.usePlugin.call(void 0, factory, [factory], enabled);
+  _chunkN4YA2OBNcjs.usePlugin.call(void 0, factory, enabled ? [callback] : ["disabled"]);
   return null;
 };
 

@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-BDCH4C4X.js";
+} from "./chunk-3KH2IUAY.js";
 import {
   HotspotPlugin
 } from "./chunk-L3G2QMBD.js";
@@ -20,7 +20,7 @@ var Hotspots = ({ hotspots }) => {
     ),
     [hotspots]
   );
-  usePlugin(factory, [factory]);
+  usePlugin(factory, [hotspots]);
   return null;
 };
 

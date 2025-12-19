@@ -8,17 +8,17 @@ declare class AdvancedOrbitControlsPlugin implements Plugin {
     name: string;
     private controls;
     constructor(options?: Partial<{
-        enablePan?: boolean;
-        enableRotate?: boolean;
-        enableZoom?: boolean;
-        dampingFactor?: number;
-        panSpeed?: number;
-        rotateSpeed?: number;
-        zoomSpeed?: number;
-        minDistance?: number;
-        maxDistance?: number;
-        minPolarAngle?: number;
-        maxPolarAngle?: number;
+        enablePan?: boolean | undefined;
+        enableRotate?: boolean | undefined;
+        enableZoom?: boolean | undefined;
+        dampingFactor?: number | undefined;
+        panSpeed?: number | undefined;
+        rotateSpeed?: number | undefined;
+        zoomSpeed?: number | undefined;
+        minDistance?: number | undefined;
+        maxDistance?: number | undefined;
+        minPolarAngle?: number | undefined;
+        maxPolarAngle?: number | undefined;
     }>);
     install({ camera, renderer }: PluginContext): void;
     set enablePan(enabled: boolean);

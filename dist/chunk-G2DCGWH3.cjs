@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkNFCEFR2Qcjs = require('./chunk-NFCEFR2Q.cjs');
+var _chunkN4YA2OBNcjs = require('./chunk-N4YA2OBN.cjs');
 
 
 var _chunkXTA7BEZGcjs = require('./chunk-XTA7BEZG.cjs');
@@ -20,7 +20,7 @@ var Hotspots = ({ hotspots }) => {
     ),
     [hotspots]
   );
-  _chunkNFCEFR2Qcjs.usePlugin.call(void 0, factory, [factory]);
+  _chunkN4YA2OBNcjs.usePlugin.call(void 0, factory, [hotspots]);
   return null;
 };
 

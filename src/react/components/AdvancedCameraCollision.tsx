@@ -3,36 +3,26 @@
 import { useCallback } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedCameraCollisionPlugin } from '../../core/orchestrator/plugins/AdvancedCameraCollisionPlugin';
-import { useActiveModel } from '../../hooks/useActiveModel';
 
-type AdvancedCameraCollisionProps = {
+type Props = {
   distanceThreshold?: number;
   pushBackOffset?: number;
   smooth?: number;
   enabled?: boolean;
 };
 
-export const AdvancedCameraCollision: React.FC<
-  AdvancedCameraCollisionProps
-> = ({
+export const AdvancedCameraCollision: React.FC<Props> = ({
   distanceThreshold = 0.6,
   pushBackOffset = 0.1,
   smooth = 0.1,
   enabled = true,
 }) => {
-  const model = useActiveModel();
-
   const factory = useCallback(
-    () =>
-      new AdvancedCameraCollisionPlugin(
-        distanceThreshold,
-        pushBackOffset,
-        smooth
-      ),
-    [distanceThreshold, pushBackOffset, smooth, model]
+    () => new AdvancedCameraCollisionPlugin(distanceThreshold, pushBackOffset, smooth),
+    [distanceThreshold, pushBackOffset, smooth]
   );
 
-  usePlugin(factory, [factory], enabled);
+  usePlugin(factory, enabled ? [distanceThreshold, pushBackOffset, smooth] : ['disabled']);
 
   return null;
 };

@@ -4,11 +4,11 @@ type StateProps = {
     readonly enableZoom: boolean;
     readonly minDistance: number;
     readonly maxDistance: number;
-    setEnablePan: (enablePan: boolean) => void;
-    setEnableRotate: (enableRotate: boolean) => void;
-    setEnableZoom: (enableZoom: boolean) => void;
-    setMinDistance: (minDistance: number) => void;
-    setMaxDistance: (maxDistance: number) => void;
+    setEnablePan: (value: boolean) => void;
+    setEnableRotate: (value: boolean) => void;
+    setEnableZoom: (value: boolean) => void;
+    setMinDistance: (value: number) => void;
+    setMaxDistance: (value: number) => void;
 };
 type AdvancedOrbitControlsProps = {
     options?: Partial<{

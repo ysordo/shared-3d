@@ -1,56 +1,43 @@
-'use client';
+import {
+  usePlugin
+} from "./chunk-3KH2IUAY.js";
+import {
+  AdvancedRaycasterPlugin
+} from "./chunk-OHN5TLPQ.js";
+import {
+  useScene
+} from "./chunk-DWHU2W2T.js";
+import {
+  useActiveModel
+} from "./chunk-CBC77TWZ.js";
+import {
+  THREE
+} from "./chunk-OVHQQSEK.js";
 
-import React, {
+// src/react/components/AdvancedDragRaycaster.tsx
+import {
   useCallback,
   useEffect,
   useMemo,
   useRef,
-  useState,
-} from 'react';
-import { usePlugin } from '../../hooks/usePlugin';
-import { AdvancedRaycasterPlugin } from '../../core/orchestrator/plugins/AdvancedRaycasterPlugin';
-import { useScene } from '../../hooks/useScene';
-import { useActiveModel } from '../../hooks/useActiveModel';
-import { THREE } from '../../lib';
-
-type AdvancedDragRaycasterProps = {
-  children?: (state: {
-    isEnabled: boolean;
-    toggleEnabled: () => void;
-    setEnabled: (value: boolean) => void;
-    resetAll: () => void;
-    isResetting: boolean;
-  }) => React.ReactNode;
-  defaultEnabled?: boolean;
-  enableRotationCompensation?: boolean;
-  transitionDuration?: number;
-  onDragStart?: (object: THREE.Object3D) => void;
-  onDrag?: (object: THREE.Object3D, delta: THREE.Vector3) => void;
-  onDragEnd?: (object: THREE.Object3D) => void;
-};
-
-export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
+  useState
+} from "react";
+import { Fragment, jsx } from "react/jsx-runtime";
+var AdvancedDragRaycaster = ({
   children,
   defaultEnabled = true,
   enableRotationCompensation = true,
   transitionDuration = 300,
   onDragStart,
   onDrag,
-  onDragEnd,
+  onDragEnd
 }) => {
   const { camera } = useScene();
   const model = useActiveModel();
   const [isEnabled, setIsEnabled] = useState(defaultEnabled);
   const [isResetting, setIsResetting] = useState(false);
-  const rafRef = useRef<number | null>(null);
-  const originalStatesRef = useRef<
-    Map<
-      THREE.Object3D,
-      { position: THREE.Vector3; quaternion: THREE.Quaternion }
-    >
-  >(new Map());
-
-  // Objetos temporales por instancia (evita race conditions)
+  const rafRef = useRef(null);
+  const originalStatesRef = useRef(/* @__PURE__ */ new Map());
   const temp = useMemo(
     () => ({
       v1: new THREE.Vector3(),
@@ -60,118 +47,94 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
       v2d2: new THREE.Vector2(),
       plane: new THREE.Plane(),
       quat: new THREE.Quaternion(),
-      ray: new THREE.Raycaster(),
+      ray: new THREE.Raycaster()
     }),
     []
   );
-
-  // Handlers externos estabilizados
   const handleDragStart = useCallback(
-    (obj: THREE.Object3D) => {
+    (obj) => {
       if (!originalStatesRef.current.has(obj)) {
         originalStatesRef.current.set(obj, {
           position: obj.position.clone(),
-          quaternion: obj.quaternion.clone(),
+          quaternion: obj.quaternion.clone()
         });
       }
       onDragStart?.(obj);
     },
     [onDragStart]
   );
-
   const handleDrag = useCallback(
-    (obj: THREE.Object3D, deltaScreen: THREE.Vector2) => {
+    (obj, deltaScreen) => {
       if (!model || !camera) {
         return;
       }
-
-      // Posición actual del objeto
       obj.getWorldPosition(temp.v1);
       camera.getWorldDirection(temp.v2);
       temp.plane.setFromNormalAndCoplanarPoint(temp.v2, temp.v1);
-
-      // Rayos para posición actual y anterior
       temp.v2d1.set(
-        (deltaScreen.x / window.innerWidth) * 2 - 1,
+        deltaScreen.x / window.innerWidth * 2 - 1,
         -(deltaScreen.y / window.innerHeight) * 2 + 1
       );
       temp.ray.setFromCamera(temp.v2d1, camera);
       temp.ray.ray.intersectPlane(temp.plane, temp.v3);
-
-      // Delta en espacio mundo
       const worldDelta = temp.v3.sub(temp.v1);
-
       if (enableRotationCompensation && model) {
         model.getWorldQuaternion(temp.quat).invert();
         worldDelta.applyQuaternion(temp.quat);
       }
-
       obj.position.add(worldDelta);
       onDrag?.(obj, worldDelta);
     },
     [onDrag, camera, model, enableRotationCompensation, temp]
   );
-
   const handleDragEnd = useCallback(
-    (obj: THREE.Object3D) => {
+    (obj) => {
       onDragEnd?.(obj);
     },
     [onDragEnd]
   );
-
-  // Handler único para el plugin
   const eventHandler = useCallback(
-    (event: any) => {
+    (event) => {
       switch (event.type) {
-        case 'objectdragstart':
+        case "objectdragstart":
           handleDragStart(event.object);
           break;
-        case 'objectdrag':
+        case "objectdrag":
           handleDrag(event.object, event.delta);
           break;
-        case 'objectdragend':
+        case "objectdragend":
           handleDragEnd(event.object);
           break;
       }
     },
     [handleDragStart, handleDrag, handleDragEnd]
   );
-
-  // Factory estable: solo cambia si model o handler cambian
   const factory = useCallback(() => {
     if (!model) {
-      return new AdvancedRaycasterPlugin(new THREE.Object3D(), () => {});
+      return new AdvancedRaycasterPlugin(new THREE.Object3D(), () => {
+      });
     }
     return new AdvancedRaycasterPlugin(model, eventHandler);
   }, [model, eventHandler]);
-
   const plugin = usePlugin(factory, [model, eventHandler]);
-
-  // Sincronizar enabled
   useEffect(() => {
     if (plugin?.manager) {
       plugin.manager.setEnabled(isEnabled);
     }
   }, [plugin, isEnabled]);
-
-  // Reset animado
   const resetAll = useCallback(() => {
     if (isResetting || originalStatesRef.current.size === 0) {
       return;
     }
-
     setIsResetting(true);
     const start = performance.now();
-
     const animate = () => {
       const elapsed = performance.now() - start;
       const t = Math.min(elapsed / transitionDuration, 1);
-
       originalStatesRef.current.forEach((original, obj) => {
         obj.position.lerp(original.position, t);
         obj.quaternion.slerp(original.quaternion, t);
       });
-
       if (t < 1) {
         rafRef.current = requestAnimationFrame(animate);
       } else {
@@ -179,11 +142,8 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
         originalStatesRef.current.clear();
       }
     };
-
     rafRef.current = requestAnimationFrame(animate);
   }, [isResetting, transitionDuration]);
-
-  // Cleanup RAF
   useEffect(() => {
     return () => {
       if (rafRef.current !== null) {
@@ -191,20 +151,21 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
       }
     };
   }, []);
-
   const toggleEnabled = useCallback(() => setIsEnabled((prev) => !prev), []);
-  const setEnabled = useCallback((value: boolean) => setIsEnabled(value), []);
-
+  const setEnabled = useCallback((value) => setIsEnabled(value), []);
   const controlState = useMemo(
     () => ({
       isEnabled,
       toggleEnabled,
       setEnabled,
       resetAll,
-      isResetting,
+      isResetting
     }),
     [isEnabled, toggleEnabled, setEnabled, resetAll, isResetting]
   );
+  return /* @__PURE__ */ jsx(Fragment, { children: children?.(controlState) });
+};
 
-  return <>{children?.(controlState)}</>;
+export {
+  AdvancedDragRaycaster
 };

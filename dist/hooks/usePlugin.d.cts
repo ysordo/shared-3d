@@ -3,15 +3,15 @@ import '../core/loaders/HDRILoader.cjs';
 import '../core/cache/types.cjs';
 import 'three';
 
-type Factory<T extends Plugin> = () => T | null;
 /**
- * Hook definitivo para plugins con configuración reactiva.
+ * Hook estable para plugins.
  *
- * - Una instancia activa a la vez
- * - Configuración siempre fresca (recrea si deps cambian)
- * - Dispose garantizado
- * - Tree-shakeable y Strict Mode seguro
+ * - Instancia única por lifetime del componente
+ * - Instalado solo si no existe
+ * - Dispose solo al desmontar
+ * - Configuración reactiva mediante factory (ejecutada solo al montar o si key cambia)
+ * - Totalmente estable en Strict Mode y Fast Refresh
  */
-declare const usePlugin: <T extends Plugin>(factory: Factory<T>, deps?: React.DependencyList, enabled?: boolean) => T | null;
+declare const usePlugin: <T extends Plugin>(factory: () => T, deps?: React.DependencyList) => T | null;
 
 export { usePlugin };

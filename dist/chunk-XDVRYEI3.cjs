@@ -1,12 +1,15 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
 
-var _chunkNFCEFR2Qcjs = require('./chunk-NFCEFR2Q.cjs');
+var _chunkN4YA2OBNcjs = require('./chunk-N4YA2OBN.cjs');
 
 
 var _chunkHPHYHDPRcjs = require('./chunk-HPHYHDPR.cjs');
 
 
 var _chunkBS6FGAC2cjs = require('./chunk-BS6FGAC2.cjs');
+
+
+var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
 
 // src/react/components/AdvancedRaycaster.tsx
 var _react = require('react');
@@ -21,8 +24,12 @@ var AdvancedRaycaster = ({
   onDragEnd
 }) => {
   const activeModel = _chunkBS6FGAC2cjs.useActiveModel.call(void 0, );
+  const targetModel = _nullishCoalesce(customModel, () => ( activeModel));
   const handler = _react.useCallback.call(void 0, 
     (event) => {
+      if (!targetModel) {
+        return;
+      }
       switch (event.type) {
         case "objectclick":
           _optionalChain([onClick, 'optionalCall', _ => _(event)]);
@@ -48,6 +55,8 @@ var AdvancedRaycaster = ({
       }
     },
     [
+      targetModel,
+      // Incluido para reactividad si cambia
       onClick,
       onHoverIn,
       onHoverOut,
@@ -58,17 +67,16 @@ var AdvancedRaycaster = ({
     ]
   );
   const factory = _react.useCallback.call(void 0, () => {
-    if (customModel) {
-      return new (0, _chunkHPHYHDPRcjs.AdvancedRaycasterPlugin)(customModel, handler);
-    } else if (activeModel) {
-      return new (0, _chunkHPHYHDPRcjs.AdvancedRaycasterPlugin)(activeModel, handler);
+    if (!targetModel) {
+      return new (0, _chunkHPHYHDPRcjs.AdvancedRaycasterPlugin)(new _chunkEA3XQ4KJcjs.THREE.Object3D(), () => {
+      });
     }
+    return new (0, _chunkHPHYHDPRcjs.AdvancedRaycasterPlugin)(targetModel, handler);
+  }, [targetModel, handler]);
+  _chunkN4YA2OBNcjs.usePlugin.call(void 0, factory, [targetModel, handler]);
+  if (!targetModel) {
     return null;
-  }, [customModel, activeModel, handler]);
-  _chunkNFCEFR2Qcjs.usePlugin.call(void 0, 
-    factory,
-    [factory]
-  );
+  }
   return null;
 };
 

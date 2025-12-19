@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-BDCH4C4X.js";
+} from "./chunk-3KH2IUAY.js";
 import {
   AnnotationsPlugin
 } from "./chunk-CPKJTF7R.js";
@@ -30,7 +30,7 @@ var Annotations = ({ annotations }) => {
     ),
     [annotations, scene]
   );
-  usePlugin(factory, [factory]);
+  usePlugin(factory, [annotations]);
   return null;
 };
 

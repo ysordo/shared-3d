@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkNFCEFR2Qcjs = require('./chunk-NFCEFR2Q.cjs');
+var _chunkN4YA2OBNcjs = require('./chunk-N4YA2OBN.cjs');
 
 
 var _chunkDF6YTEMAcjs = require('./chunk-DF6YTEMA.cjs');
@@ -30,7 +30,7 @@ var Annotations = ({ annotations }) => {
     ),
     [annotations, scene]
   );
-  _chunkNFCEFR2Qcjs.usePlugin.call(void 0, factory, [factory]);
+  _chunkN4YA2OBNcjs.usePlugin.call(void 0, factory, [annotations]);
   return null;
 };
 

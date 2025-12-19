@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedOrbitControlsPlugin } from '../../core/orchestrator/plugins/AdvancedOrbitControlsPlugin';
 
@@ -10,11 +10,11 @@ type StateProps = {
   readonly enableZoom: boolean;
   readonly minDistance: number;
   readonly maxDistance: number;
-  setEnablePan: (enablePan: boolean) => void;
-  setEnableRotate: (enableRotate: boolean) => void;
-  setEnableZoom: (enableZoom: boolean) => void;
-  setMinDistance: (minDistance: number) => void;
-  setMaxDistance: (maxDistance: number) => void;
+  setEnablePan: (value: boolean) => void;
+  setEnableRotate: (value: boolean) => void;
+  setEnableZoom: (value: boolean) => void;
+  setMinDistance: (value: number) => void;
+  setMaxDistance: (value: number) => void;
 };
 
 type AdvancedOrbitControlsProps = {
@@ -40,87 +40,106 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
   enabled = true,
   children,
 }) => {
+  // Extraer valores primitivos para deps estables
+  const {
+    enablePan = true,
+    enableRotate = true,
+    enableZoom = true,
+    minDistance = 0.1,
+    maxDistance = 1000,
+    dampingFactor,
+    panSpeed,
+    rotateSpeed,
+    zoomSpeed,
+    minPolarAngle,
+    maxPolarAngle,
+  } = options;
 
-  const [enable, setEnable] = useState({
-    pan: options.enablePan ?? true,
-    rotate: options.enableRotate ?? true,
-    zoom: options.enableZoom ?? true,
-  });
-  const [distance, setDistance] = useState({
-    min: options.minDistance ?? 0.1,
-    max: options.maxDistance ?? 1000,
-  });
-
+  // Factory con deps primitivas → estable
   const factory = useCallback(
-    () => new AdvancedOrbitControlsPlugin(options),
-    [options]
+    () => new AdvancedOrbitControlsPlugin({
+      enablePan,
+      enableRotate,
+      enableZoom,
+      dampingFactor,
+      panSpeed,
+      rotateSpeed,
+      zoomSpeed,
+      minDistance,
+      maxDistance,
+      minPolarAngle,
+      maxPolarAngle,
+    }),
+    [
+      enablePan,
+      enableRotate,
+      enableZoom,
+      dampingFactor,
+      panSpeed,
+      rotateSpeed,
+      zoomSpeed,
+      minDistance,
+      maxDistance,
+      minPolarAngle,
+      maxPolarAngle,
+    ]
   );
 
-  const plugin = usePlugin(
-    factory,
-    [factory],
-    enabled
-  );
+  // Plugin estable (instancia única)
+  const plugin = usePlugin(factory, [
+    enablePan,
+    enableRotate,
+    enableZoom,
+    dampingFactor,
+    panSpeed,
+    rotateSpeed,
+    zoomSpeed,
+    minDistance,
+    maxDistance,
+    minPolarAngle,
+    maxPolarAngle,
+  ]);
 
-  useEffect(() => {
-    if (plugin) {
-      if (plugin.enablePan !== enable.pan) {
-        plugin.enablePan = enable.pan;
-      }
-      if (plugin.enableRotate !== enable.rotate) {
-        plugin.enableRotate = enable.rotate;
-      }
-      if (plugin.enableZoom !== enable.zoom) {
-        plugin.enableZoom = enable.zoom;
-      }
-    }
-  }, [enable.pan, enable.rotate, enable.zoom, plugin]);
+  // Setters que actualizan el plugin directamente (fuente de verdad)
+  const setEnablePan = useCallback((value: boolean) => {
+    if (plugin) {plugin.enablePan = value;}
+  }, [plugin]);
 
-  useEffect(() => {
-    if (plugin) {
-      if (plugin.maxDistance != distance.max) {
-        plugin.maxDistance = distance.max;
-      }
-      if (plugin.minDistance !== distance.min) {
-        plugin.minDistance = distance.min;
-      }
-    }
-  }, [distance.max, distance.min, plugin]);
+  const setEnableRotate = useCallback((value: boolean) => {
+    if (plugin) {plugin.enableRotate = value;}
+  }, [plugin]);
 
-  const setEnablePan = useCallback((enablePan: boolean) => {
-    setEnable((old) => ({ ...old, pan: enablePan }));
-  }, []);
-  const setEnableRotate = useCallback((enableRotate: boolean) => {
-    setEnable((old) => ({ ...old, rotate: enableRotate }));
-  }, []);
-  const setEnableZoom = useCallback((enableZoom: boolean) => {
-    setEnable((old) => ({ ...old, zoom: enableZoom }));
-  }, []);
-  const setMinDistance = useCallback((minDistance: number) => {
-    setDistance((old) => ({ ...old, min: minDistance }));
-  }, []);
-  const setMaxDistance = useCallback((maxDistance: number) => {
-    setDistance((old) => ({ ...old, max: maxDistance }));
-  }, []);
-  const state = useMemo<StateProps | null>(() => {
-    return {
-      enablePan: enable.pan,
-      enableRotate: enable.rotate,
-      enableZoom: enable.zoom,
-      minDistance: distance.min,
-      maxDistance: distance.max,
-      setEnablePan,
-      setEnableRotate,
-      setEnableZoom,
-      setMinDistance,
-      setMaxDistance,
-    };
-  }, [
-    enable.pan,
-    enable.rotate,
-    enable.zoom,
-    distance.min,
-    distance.max,
+  const setEnableZoom = useCallback((value: boolean) => {
+    if (plugin) {plugin.enableZoom = value;}
+  }, [plugin]);
+
+  const setMinDistance = useCallback((value: number) => {
+    if (plugin) {plugin.minDistance = value;}
+  }, [plugin]);
+
+  const setMaxDistance = useCallback((value: number) => {
+    if (plugin) {plugin.maxDistance = value;}
+  }, [plugin]);
+
+  // Estado derivado del plugin (reactivo)
+  const state = useMemo<StateProps>(() => ({
+    enablePan: plugin?.enablePan ?? enablePan,
+    enableRotate: plugin?.enableRotate ?? enableRotate,
+    enableZoom: plugin?.enableZoom ?? enableZoom,
+    minDistance: plugin?.minDistance ?? minDistance,
+    maxDistance: plugin?.maxDistance ?? maxDistance,
+    setEnablePan,
+    setEnableRotate,
+    setEnableZoom,
+    setMinDistance,
+    setMaxDistance,
+  }), [
+    plugin,
+    enablePan,
+    enableRotate,
+    enableZoom,
+    minDistance,
+    maxDistance,
     setEnablePan,
     setEnableRotate,
     setEnableZoom,
@@ -128,5 +147,8 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     setMaxDistance,
   ]);
 
-  return <>{enabled && state && children?.(state)}</>;
+  // Render condicional
+  if (!enabled || !plugin) {return null;}
+
+  return <>{children?.(state)}</>;
 };

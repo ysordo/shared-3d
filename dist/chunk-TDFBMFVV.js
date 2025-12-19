@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-BDCH4C4X.js";
+} from "./chunk-3KH2IUAY.js";
 import {
   LODSystemPlugin
 } from "./chunk-HVXJUMVE.js";
@@ -14,9 +14,9 @@ var LODSystem = ({
 }) => {
   const factory = useCallback(
     () => new LODSystemPlugin([{ levels, hysteresis }]),
-    [levels, hysteresis, enabled]
+    [levels, hysteresis]
   );
-  usePlugin(factory, [factory]);
+  usePlugin(factory, enabled ? [levels, hysteresis] : ["disabled"]);
   if (!enabled) {
     return null;
   }

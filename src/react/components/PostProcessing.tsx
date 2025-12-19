@@ -18,7 +18,7 @@ export const PostProcessing: React.FC<PostProcessingProps> = ({
   enabled = true,
 }) => {
   const factory = useCallback(() => new PostProcessingPlugin(bloom), [bloom]);
-  usePlugin(factory, [factory], enabled);
+  usePlugin(factory, enabled ? [bloom] : ['disabled']);
 
   if (!enabled) {
     return null;

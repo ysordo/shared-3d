@@ -28,7 +28,7 @@ export const Hotspots: React.FC<HotspotsProps> = ({ hotspots }) => {
     [hotspots]
   );
 
-  usePlugin(factory, [factory]);
+  usePlugin(factory, [hotspots]);
 
   return null;
 };

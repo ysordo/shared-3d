@@ -4,36 +4,32 @@ var _chunkPKNMQ6ENcjs = require('./chunk-PKNMQ6EN.cjs');
 
 // src/hooks/usePlugin.ts
 var _react = require('react');
-var usePlugin = (factory, deps = [], enabled = true) => {
+var usePlugin = (factory, deps = []) => {
   const orchestrator = _chunkPKNMQ6ENcjs.useScene.call(void 0, );
   const pluginRef = _react.useRef.call(void 0, null);
   _react.useEffect.call(void 0, () => {
-    if (!enabled) {
-      if (pluginRef.current) {
-        orchestrator.remove(pluginRef.current.name);
-        _optionalChain([pluginRef, 'access', _ => _.current, 'access', _2 => _2.dispose, 'optionalCall', _3 => _3()]);
-        pluginRef.current = null;
-      }
+    if (pluginRef.current && orchestrator.has(pluginRef.current.name)) {
       return;
     }
     if (pluginRef.current) {
       orchestrator.remove(pluginRef.current.name);
-      _optionalChain([pluginRef, 'access', _4 => _4.current, 'access', _5 => _5.dispose, 'optionalCall', _6 => _6()]);
+      _optionalChain([pluginRef, 'access', _ => _.current, 'access', _2 => _2.dispose, 'optionalCall', _3 => _3()]);
     }
     const plugin = factory();
-    if (!plugin) {
-      return;
-    }
     pluginRef.current = plugin;
+    if (orchestrator.has(plugin.name)) {
+      console.warn(`[usePlugin] Plugin "${plugin.name}" ya existe. Sobrescribiendo.`);
+      orchestrator.remove(plugin.name);
+    }
     orchestrator.use(plugin);
     return () => {
       if (pluginRef.current) {
         orchestrator.remove(pluginRef.current.name);
-        _optionalChain([pluginRef, 'access', _7 => _7.current, 'access', _8 => _8.dispose, 'optionalCall', _9 => _9()]);
+        _optionalChain([pluginRef, 'access', _4 => _4.current, 'access', _5 => _5.dispose, 'optionalCall', _6 => _6()]);
         pluginRef.current = null;
       }
     };
-  }, [orchestrator, enabled, factory, ...deps]);
+  }, [orchestrator, ...deps]);
   return pluginRef.current;
 };
 

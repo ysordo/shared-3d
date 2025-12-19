@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkNFCEFR2Qcjs = require('./chunk-NFCEFR2Q.cjs');
+var _chunkN4YA2OBNcjs = require('./chunk-N4YA2OBN.cjs');
 
 
 var _chunkT2JEYSOHcjs = require('./chunk-T2JEYSOH.cjs');
@@ -14,9 +14,9 @@ var LODSystem = ({
 }) => {
   const factory = _react.useCallback.call(void 0, 
     () => new (0, _chunkT2JEYSOHcjs.LODSystemPlugin)([{ levels, hysteresis }]),
-    [levels, hysteresis, enabled]
+    [levels, hysteresis]
   );
-  _chunkNFCEFR2Qcjs.usePlugin.call(void 0, factory, [factory]);
+  _chunkN4YA2OBNcjs.usePlugin.call(void 0, factory, enabled ? [levels, hysteresis] : ["disabled"]);
   if (!enabled) {
     return null;
   }

@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-BDCH4C4X.js";
+} from "./chunk-3KH2IUAY.js";
 import {
   PostProcessingPlugin
 } from "./chunk-SRDOYMT5.js";
@@ -12,7 +12,7 @@ var PostProcessing = ({
   enabled = true
 }) => {
   const factory = useCallback(() => new PostProcessingPlugin(bloom), [bloom]);
-  usePlugin(factory, [factory], enabled);
+  usePlugin(factory, enabled ? [bloom] : ["disabled"]);
   if (!enabled) {
     return null;
   }

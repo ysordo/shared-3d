@@ -1,19 +1,24 @@
 'use client';
-import type React from 'react';
+
 import { useCallback } from 'react';
-import type { RaycasterEvent } from '../../core/orchestrator/plugins';
-import { RaycasterPlugin } from '../../core/orchestrator/plugins';
-import type { THREE } from '../../lib';
+import { RaycasterPlugin } from '../../core/orchestrator/plugins/RaycasterPlugin';
 import { usePlugin } from '../../hooks/usePlugin';
+import type { THREE } from '../../lib';
 
 type RaycasterProps = {
+  /** Callback para clicks sobre objetos */
   onClick?: (obj: THREE.Object3D) => void;
+  /** Callback para hover (enter + move + leave implícito en plugin) */
   onHover?: (obj: THREE.Object3D) => void;
 };
 
-export const Raycaster: React.FC<RaycasterProps> = ({ onClick, onHover }) => {
+export const Raycaster: React.FC<RaycasterProps> = ({
+  onClick,
+  onHover,
+}) => {
+  // Handler estable: solo cambia si callbacks cambian
   const handle = useCallback(
-    (event: RaycasterEvent) => {
+    (event: any) => {
       if (event.type === 'click' && onClick) {
         onClick(event.object);
       }
@@ -24,9 +29,15 @@ export const Raycaster: React.FC<RaycasterProps> = ({ onClick, onHover }) => {
     [onClick, onHover]
   );
 
-  const factory = useCallback(() => new RaycasterPlugin(handle), [handle]);
+  // Factory con dep única y estable
+  const factory = useCallback(
+    () => new RaycasterPlugin(handle),
+    [handle]
+  );
 
-  usePlugin(factory, [factory]);
+  // Instalación solo si hay al menos un callback
+  // Deps: solo handle → plugin se actualiza solo cuando callbacks cambian
+  usePlugin(factory, [handle]);
 
   return null;
 };

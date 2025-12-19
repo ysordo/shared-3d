@@ -3,9 +3,6 @@ import {
   MeasurementToolPlugin
 } from "../../../chunk-PRNY2PGZ.js";
 import {
-  OrbitControlsPlugin
-} from "../../../chunk-6ZE3RCVO.js";
-import {
   PostProcessingPlugin
 } from "../../../chunk-SRDOYMT5.js";
 import {
@@ -17,6 +14,9 @@ import {
 import {
   LODSystemPlugin
 } from "../../../chunk-HVXJUMVE.js";
+import {
+  OrbitControlsPlugin
+} from "../../../chunk-6ZE3RCVO.js";
 import {
   AutoLODSystemPlugin
 } from "../../../chunk-3VDQAJY7.js";

@@ -4,47 +4,46 @@ import { useEffect, useRef } from 'react';
 import { useScene } from './useScene';
 import type { Plugin } from '../core/orchestrator/types';
 
-type Factory<T extends Plugin> = () => T | null;
-
 /**
- * Hook definitivo para plugins con configuración reactiva.
+ * Hook estable para plugins.
  * 
- * - Una instancia activa a la vez
- * - Configuración siempre fresca (recrea si deps cambian)
- * - Dispose garantizado
- * - Tree-shakeable y Strict Mode seguro
+ * - Instancia única por lifetime del componente
+ * - Instalado solo si no existe
+ * - Dispose solo al desmontar
+ * - Configuración reactiva mediante factory (ejecutada solo al montar o si key cambia)
+ * - Totalmente estable en Strict Mode y Fast Refresh
  */
 export const usePlugin = <T extends Plugin>(
-  factory: Factory<T>,
-  deps: React.DependencyList = [],
-  enabled = true
+  factory: () => T,
+  deps: React.DependencyList = []
 ): T | null => {
   const orchestrator = useScene();
   const pluginRef = useRef<T | null>(null);
 
   useEffect(() => {
-    if (!enabled) {
-      // Si disabled, remover si existe
-      if (pluginRef.current) {
-        orchestrator.remove(pluginRef.current.name);
-        pluginRef.current.dispose?.();
-        pluginRef.current = null;
-      }
+    // Si ya existe con misma config, no hacer nada
+    if (pluginRef.current && orchestrator.has(pluginRef.current.name)) {
       return;
     }
 
-    // Remover instancia anterior
+    // Remover si existe versión anterior (por seguridad)
     if (pluginRef.current) {
       orchestrator.remove(pluginRef.current.name);
       pluginRef.current.dispose?.();
     }
-    // Crear e instalar nueva con config actual
+
+    // Crear e instalar
     const plugin = factory();
-    if(!plugin){return;}
     pluginRef.current = plugin;
+
+    if (orchestrator.has(plugin.name)) {
+      console.warn(`[usePlugin] Plugin "${plugin.name}" ya existe. Sobrescribiendo.`);
+      orchestrator.remove(plugin.name);
+    }
+
     orchestrator.use(plugin);
 
-    // Cleanup al cambiar deps o desmontar
+    // Cleanup solo al desmontar
     return () => {
       if (pluginRef.current) {
         orchestrator.remove(pluginRef.current.name);
@@ -52,7 +51,7 @@ export const usePlugin = <T extends Plugin>(
         pluginRef.current = null;
       }
     };
-  }, [orchestrator, enabled, factory, ...deps]);
+  }, [orchestrator, ...deps]); // NO incluir factory en deps
 
   return pluginRef.current;
 };

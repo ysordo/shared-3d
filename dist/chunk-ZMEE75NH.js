@@ -1,12 +1,15 @@
 import {
   usePlugin
-} from "./chunk-BDCH4C4X.js";
+} from "./chunk-3KH2IUAY.js";
 import {
   AdvancedRaycasterPlugin
 } from "./chunk-OHN5TLPQ.js";
 import {
   useActiveModel
 } from "./chunk-CBC77TWZ.js";
+import {
+  THREE
+} from "./chunk-OVHQQSEK.js";
 
 // src/react/components/AdvancedRaycaster.tsx
 import { useCallback } from "react";
@@ -21,8 +24,12 @@ var AdvancedRaycaster = ({
   onDragEnd
 }) => {
   const activeModel = useActiveModel();
+  const targetModel = customModel ?? activeModel;
   const handler = useCallback(
     (event) => {
+      if (!targetModel) {
+        return;
+      }
       switch (event.type) {
         case "objectclick":
           onClick?.(event);
@@ -48,6 +55,8 @@ var AdvancedRaycaster = ({
       }
     },
     [
+      targetModel,
+      // Incluido para reactividad si cambia
       onClick,
       onHoverIn,
       onHoverOut,
@@ -58,17 +67,16 @@ var AdvancedRaycaster = ({
     ]
   );
   const factory = useCallback(() => {
-    if (customModel) {
-      return new AdvancedRaycasterPlugin(customModel, handler);
-    } else if (activeModel) {
-      return new AdvancedRaycasterPlugin(activeModel, handler);
+    if (!targetModel) {
+      return new AdvancedRaycasterPlugin(new THREE.Object3D(), () => {
+      });
     }
+    return new AdvancedRaycasterPlugin(targetModel, handler);
+  }, [targetModel, handler]);
+  usePlugin(factory, [targetModel, handler]);
+  if (!targetModel) {
     return null;
-  }, [customModel, activeModel, handler]);
-  usePlugin(
-    factory,
-    [factory]
-  );
+  }
   return null;
 };
 

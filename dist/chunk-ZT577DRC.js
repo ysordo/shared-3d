@@ -1,13 +1,16 @@
 import {
   usePlugin
-} from "./chunk-BDCH4C4X.js";
+} from "./chunk-3KH2IUAY.js";
 import {
   RaycasterPlugin
 } from "./chunk-D6IH2BXA.js";
 
 // src/react/components/Raycaster.tsx
 import { useCallback } from "react";
-var Raycaster = ({ onClick, onHover }) => {
+var Raycaster = ({
+  onClick,
+  onHover
+}) => {
   const handle = useCallback(
     (event) => {
       if (event.type === "click" && onClick) {
@@ -19,8 +22,11 @@ var Raycaster = ({ onClick, onHover }) => {
     },
     [onClick, onHover]
   );
-  const factory = useCallback(() => new RaycasterPlugin(handle), [handle]);
-  usePlugin(factory, [factory]);
+  const factory = useCallback(
+    () => new RaycasterPlugin(handle),
+    [handle]
+  );
+  usePlugin(factory, [handle]);
   return null;
 };
 

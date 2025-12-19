@@ -45,7 +45,7 @@ export const Annotations: React.FC<AnnotationsProps> = ({ annotations }) => {
     [annotations, scene]
   );
 
-  usePlugin(factory, [factory]);
+  usePlugin(factory, [annotations]);
 
   return null;
 };

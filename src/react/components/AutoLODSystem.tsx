@@ -2,15 +2,16 @@
 
 import { useCallback } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
-import type { AutoLODConfig } from '../../core/orchestrator/plugins/AutoLODSystemPlugin';
 import { AutoLODSystemPlugin } from '../../core/orchestrator/plugins/AutoLODSystemPlugin';
+import type { AutoLODConfig } from '../../core/orchestrator/plugins/AutoLODSystemPlugin';
 
 type AutoLODSystemProps = {
   mediumDistance?: number;
   lowDistance?: number;
   hideDistance?: number;
+  reductionPercentages?: [number, number];
   enabled?: boolean;
-} & Omit<AutoLODConfig, 'distances'>;
+};
 
 export const AutoLODSystem: React.FC<AutoLODSystemProps> = ({
   mediumDistance = 20,
@@ -19,16 +20,24 @@ export const AutoLODSystem: React.FC<AutoLODSystemProps> = ({
   reductionPercentages,
   enabled = true,
 }) => {
+  // Factory con deps primitivas → estable y reactiva
   const factory = useCallback(
     () =>
       new AutoLODSystemPlugin({
-        distances: [mediumDistance, lowDistance, hideDistance],
+        distances: [mediumDistance, lowDistance, hideDistance] as [number, number, number],
         reductionPercentages,
       }),
     [mediumDistance, lowDistance, hideDistance, reductionPercentages]
   );
 
-  usePlugin(factory, [factory], enabled);
+  // usePlugin con deps reales (sin factory)
+  // Solo instala si enabled=true
+  usePlugin(factory, enabled ? [
+    mediumDistance,
+    lowDistance,
+    hideDistance,
+    reductionPercentages,
+  ] : ['disabled']);
 
   return null;
 };

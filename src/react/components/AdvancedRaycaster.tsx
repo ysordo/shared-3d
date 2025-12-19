@@ -4,17 +4,17 @@ import { useCallback } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedRaycasterPlugin } from '../../core/orchestrator/plugins/AdvancedRaycasterPlugin';
 import { useActiveModel } from '../../hooks/useActiveModel';
-import type { THREE } from '../../lib';
+import { THREE } from '../../lib';
 
 type AdvancedRaycasterProps = {
   model?: THREE.Object3D;
-  onClick?: (e: any) => void;
-  onHoverIn?: (e: any) => void;
-  onHoverOut?: (e: any) => void;
-  onHoverMove?: (e: any) => void;
-  onDragStart?: (e: any) => void;
-  onDrag?: (e: any) => void;
-  onDragEnd?: (e: any) => void;
+  onClick?: (event: any) => void;
+  onHoverIn?: (event: any) => void;
+  onHoverOut?: (event: any) => void;
+  onHoverMove?: (event: any) => void;
+  onDragStart?: (event: any) => void;
+  onDrag?: (event: any) => void;
+  onDragEnd?: (event: any) => void;
 };
 
 export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
@@ -29,8 +29,14 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
 }) => {
   const activeModel = useActiveModel();
 
+  // Modelo objetivo: siempre definido aquí (puede ser null)
+  const targetModel = customModel ?? activeModel;
+
+  // Handler siempre creado (incluso si no hay modelo)
   const handler = useCallback(
     (event: any) => {
+      if (!targetModel) {return;} // Guard interno
+
       switch (event.type) {
         case 'objectclick':
           onClick?.(event);
@@ -56,6 +62,7 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
       }
     },
     [
+      targetModel, // Incluido para reactividad si cambia
       onClick,
       onHoverIn,
       onHoverOut,
@@ -66,19 +73,24 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
     ]
   );
 
+  // Factory siempre creada
   const factory = useCallback(() => {
-    if (customModel) {
-      return new AdvancedRaycasterPlugin(customModel, handler);
-    }else if(activeModel){
-      return new AdvancedRaycasterPlugin(activeModel, handler);
+    // Si no hay modelo, crear plugin "dummy" inofensivo
+    // o retornar null → pero usePlugin maneja null
+    if (!targetModel) {
+      // Plugin dummy que no hace nada
+      return new AdvancedRaycasterPlugin(new THREE.Object3D(), () => {});
     }
-    return null;
-  }, [customModel, activeModel, handler]);
+    return new AdvancedRaycasterPlugin(targetModel, handler);
+  }, [targetModel, handler]);
 
-  usePlugin(
-    factory,
-    [factory]
-  );
+  // usePlugin siempre llamado
+  usePlugin(factory, [targetModel, handler]);
+
+  // Render final: null si no hay modelo (pero hooks ya ejecutados)
+  if (!targetModel) {
+    return null;
+  }
 
   return null;
 };

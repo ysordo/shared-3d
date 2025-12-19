@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkNFCEFR2Qcjs = require('./chunk-NFCEFR2Q.cjs');
+var _chunkN4YA2OBNcjs = require('./chunk-N4YA2OBN.cjs');
 
 
 var _chunk2LFFYOLBcjs = require('./chunk-2LFFYOLB.cjs');
@@ -21,7 +21,12 @@ var AutoLODSystem = ({
     }),
     [mediumDistance, lowDistance, hideDistance, reductionPercentages]
   );
-  _chunkNFCEFR2Qcjs.usePlugin.call(void 0, factory, [factory], enabled);
+  _chunkN4YA2OBNcjs.usePlugin.call(void 0, factory, enabled ? [
+    mediumDistance,
+    lowDistance,
+    hideDistance,
+    reductionPercentages
+  ] : ["disabled"]);
   return null;
 };
 

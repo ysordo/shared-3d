@@ -13,7 +13,7 @@ type AdvancedDragRaycasterProps = {
     enableRotationCompensation?: boolean;
     transitionDuration?: number;
     onDragStart?: (object: THREE.Object3D) => void;
-    onDrag?: (object: THREE.Object3D, delta: THREE.Vector2) => void;
+    onDrag?: (object: THREE.Object3D, delta: THREE.Vector3) => void;
     onDragEnd?: (object: THREE.Object3D) => void;
 };
 declare const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps>;

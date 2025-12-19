@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-BDCH4C4X.js";
+} from "./chunk-3KH2IUAY.js";
 import {
   MeasurementToolPlugin
 } from "./chunk-PRNY2PGZ.js";
@@ -23,7 +23,7 @@ var MeasurementTool = ({
     () => new MeasurementToolPlugin(callback),
     [callback]
   );
-  usePlugin(factory, [factory], enabled);
+  usePlugin(factory, enabled ? [callback] : ["disabled"]);
   return null;
 };
 

@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-BDCH4C4X.js";
+} from "./chunk-3KH2IUAY.js";
 import {
   HotspotPlugin
 } from "./chunk-L3G2QMBD.js";
@@ -27,7 +27,7 @@ var Hotspot = ({
     ]),
     [id, position, target, onClick]
   );
-  usePlugin(factory, [factory]);
+  usePlugin(factory, [id, position, target, onClick]);
   return null;
 };
 
