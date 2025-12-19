@@ -28,10 +28,13 @@ export const AutoLODSystem: React.FC<AutoLODSystemProps> = ({
     [mediumDistance, lowDistance, hideDistance]
   );
 
-  usePlugin(() => new AutoLODSystemPlugin(config), enabled ? [config] : []);
+  const deps = useMemo(
+    () => ([...Object.values(config), enabled]
+    ),
+    [...Object.values(config), enabled]
+  );
 
-  if (!enabled) {
-    return null;
-  }
+  usePlugin('AutoLODSystem', () => new AutoLODSystemPlugin(config), deps);
+  
   return null;
 };

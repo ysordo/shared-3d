@@ -65,25 +65,31 @@ export const HDRI: React.FC<HDRIProps> = ({
   );
 
   useEffect(() => {
-    if (!orchestrator || !orchestrator.addEventListener) {
-      return;
+    if (!isHandle.current) {
+      orchestrator.addEventListener(
+        'hdri::loaded' as never,
+        handleHDRIEvent as EventListener
+      );
+      orchestrator.addEventListener(
+        'hdri::progress' as never,
+        handleHDRIEvent as EventListener
+      );
+      orchestrator.addEventListener(
+        'hdri::error' as never,
+        handleHDRIEvent as EventListener
+      );
+
+      isHandle.current = true;
     }
-
-    orchestrator.addEventListener(
-      'hdri::loaded' as never,
-      handleHDRIEvent as EventListener
-    );
-    orchestrator.addEventListener(
-      'hdri::progress' as never,
-      handleHDRIEvent as EventListener
-    );
-    orchestrator.addEventListener(
-      'hdri::error' as never,
-      handleHDRIEvent as EventListener
-    );
-
-    isHandle.current = true;
-
+    if (isHandle.current) {
+      if (
+        orchestrator.getActiveHDRI()?.name !== entry.id &&
+        !isloaded.current
+      ) {
+        isloaded.current = false;
+        orchestrator.setHDRI(entry, config).catch(console.error);
+      }
+    }
     return () => {
       isHandle.current = false;
 
@@ -99,29 +105,10 @@ export const HDRI: React.FC<HDRIProps> = ({
         'hdri::error' as never,
         handleHDRIEvent as EventListener
       );
-    };
-  }, [orchestrator]);
-
-  useEffect(() => {
-    if (!orchestrator) {
-      return;
-    }
-    if (!isHandle.current) {
-      return;
-    }
-
-    if (orchestrator.getActiveHDRI()?.name !== entry.id && !isloaded.current) {
+      orchestrator.clearHDRI();
       isloaded.current = false;
-      orchestrator.setHDRI(entry, config).catch(console.error);
-    }
-
-    return () => {
-      if (orchestrator.clearHDRI) {
-        orchestrator.clearHDRI();
-        isloaded.current = false;
-      }
     };
-  }, [entry.id, config, isHandle.current]);
+  }, [config, entry.id, handleHDRIEvent, orchestrator]);
 
   return null;
 };

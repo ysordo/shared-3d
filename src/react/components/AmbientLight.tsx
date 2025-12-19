@@ -13,18 +13,17 @@ export const AmbientLight: React.FC<AmbientLightProps> = ({
   intensity = 0.5,
   color = 0xffffff,
 }) => {
-  const orchestrator = useScene();
+  const { scene } = useScene();
 
   useEffect(() => {
-    if(!orchestrator){return;}
     const light = new THREE.AmbientLight(color, intensity);
-    orchestrator.scene.add(light);
+    scene.add(light);
 
     return () => {
-      orchestrator.scene.remove(light);
+      scene.remove(light);
       light.dispose();
     };
-  }, [intensity, color,orchestrator]);
+  }, [intensity, color, scene]);
 
   return null;
 };

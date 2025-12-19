@@ -1,7 +1,7 @@
 "use client";
 import {
   PointLight
-} from "../../chunk-DS4YWSLH.js";
+} from "../../chunk-SIC4CFLW.js";
 import "../../chunk-Z3ENXIV3.js";
 import "../../chunk-YYJ6TOBN.js";
 import "../../chunk-YUDBXSSZ.js";

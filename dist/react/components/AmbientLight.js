@@ -1,7 +1,7 @@
 "use client";
 import {
   AmbientLight
-} from "../../chunk-BQU7FAXB.js";
+} from "../../chunk-F53LIPYR.js";
 import "../../chunk-Z3ENXIV3.js";
 import "../../chunk-YYJ6TOBN.js";
 import "../../chunk-YUDBXSSZ.js";

@@ -1,7 +1,7 @@
 "use client";
 import {
   TheaterLighting
-} from "../../chunk-EYEQCRUW.js";
+} from "../../chunk-K6SYJNM3.js";
 import "../../chunk-Z3ENXIV3.js";
 import "../../chunk-YYJ6TOBN.js";
 import "../../chunk-YUDBXSSZ.js";

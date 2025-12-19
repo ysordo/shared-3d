@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
-import type { AnnotationData} from '../../core/orchestrator/plugins';
+import type { AnnotationData } from '../../core/orchestrator/plugins';
 import { AnnotationsPlugin } from '../../core/orchestrator/plugins';
 import { THREE } from '../../lib';
 import { useScene } from '../../hooks/useScene';
@@ -20,14 +20,13 @@ type AnnotationsProps = {
 };
 
 export const Annotations: React.FC<AnnotationsProps> = ({ annotations }) => {
-  const orchestrator = useScene();
+  const {scene} = useScene();
 
   const data = useMemo(() => {
     return annotations.map((ann) => {
-      if(!orchestrator) {return;}
       const target =
         typeof ann.target === 'string'
-          ? orchestrator.scene.getObjectByName(ann.target)
+          ? scene.getObjectByName(ann.target)
           : ann.target;
 
       return {
@@ -39,9 +38,13 @@ export const Annotations: React.FC<AnnotationsProps> = ({ annotations }) => {
         offset: ann.offset ? new THREE.Vector3(...ann.offset) : undefined,
       };
     });
-  }, [annotations, orchestrator, orchestrator?.scene]);
+  }, [annotations, scene]);
 
-  usePlugin(() => new AnnotationsPlugin(data as AnnotationData[]), [data]);
+  usePlugin(
+    'Annotations',
+    () => new AnnotationsPlugin(data as AnnotationData[]),
+    data
+  );
 
   return null;
 };

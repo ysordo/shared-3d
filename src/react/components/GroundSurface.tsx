@@ -80,10 +80,8 @@ export const GroundSurface: React.FC<GroundSurfaceProps> = ({
   const ground = useRef<THREE.Mesh | Reflector>(null);
 
   useEffect(() => {
-    if (!orchestrator) {
-      return;
-    }
-
+    
+    if(ground.current){return;}
     const scene = orchestrator.scene;
     const camera = orchestrator.camera;
     if (!camera) {

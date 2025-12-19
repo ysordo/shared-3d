@@ -1,7 +1,7 @@
 "use client";
 import {
   HDRI
-} from "../../chunk-SJWDN4DJ.js";
+} from "../../chunk-BKTSIRQD.js";
 import "../../chunk-Z3ENXIV3.js";
 import "../../chunk-YYJ6TOBN.js";
 import "../../chunk-YUDBXSSZ.js";

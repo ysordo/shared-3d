@@ -19,29 +19,28 @@ export const PointLight: React.FC<PointLightProps> = ({
   distance = 0,
   decay = 2,
 }) => {
-  const orchestrator = useScene();
+  const {scene} = useScene();
 
   useEffect(() => {
-    if(!orchestrator){return;}
     const light = new THREE.PointLight(color, intensity, distance, decay);
     light.position.set(...position);
-    orchestrator.scene.add(light);
+    scene.add(light);
 
     if (process.env.NODE_ENV === 'development') {
       const helper = new THREE.PointLightHelper(light, 0.5);
-      orchestrator.scene.add(helper);
+      scene.add(helper);
       return () => {
-        orchestrator.scene.remove(light);
-        orchestrator.scene.remove(helper);
+        scene.remove(light);
+        scene.remove(helper);
         light.dispose();
       };
     }
 
     return () => {
-      orchestrator.scene.remove(light);
+      scene.remove(light);
       light.dispose();
     };
-  }, [orchestrator,intensity, color, position, distance, decay]);
+  }, [intensity, color, position, distance, decay, scene]);
 
   return null;
 };

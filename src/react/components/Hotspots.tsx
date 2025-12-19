@@ -25,10 +25,10 @@ export const Hotspots: React.FC<HotspotsProps> = ({ hotspots }) => {
           ...hotspot,
           position: new THREE.Vector3(...hotspot.position)
         })),
-        [...hotspots]
+        [hotspots]
       );
     
-      usePlugin(() => new HotspotPlugin(data), [...data]);
+      usePlugin('Hotspot',() => new HotspotPlugin(data), data);
     
       return null;
 };

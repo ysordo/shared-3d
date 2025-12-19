@@ -1,7 +1,7 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkS774RZ62cjs = require('../../chunk-S774RZ62.cjs');
+var _chunkAF3VI6MOcjs = require('../../chunk-AF3VI6MO.cjs');
 require('../../chunk-L3KVNMII.cjs');
 require('../../chunk-47Q3GIH6.cjs');
 require('../../chunk-B4VGLLGR.cjs');
@@ -13,4 +13,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.TheaterLighting = _chunkS774RZ62cjs.TheaterLighting;
+exports.TheaterLighting = _chunkAF3VI6MOcjs.TheaterLighting;

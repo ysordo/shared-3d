@@ -5,23 +5,23 @@ import { useScene } from '../../hooks/useScene';
 import { VRButton as ThreeVRButton } from 'three/examples/jsm/webxr/VRButton.js';
 
 export const VRButton: React.FC = () => {
-  const orchestrator = useScene();
+  const {renderer} = useScene();
 
   useEffect(() => {
-    if (!orchestrator || !orchestrator.renderer) {
+    if (!renderer) {
       return;
     }
 
-    orchestrator.renderer.xr.enabled = true;
-    const button = ThreeVRButton.createButton(orchestrator.renderer);
-    document.body.appendChild(button);
+    renderer.xr.enabled = true;
+    const button = ThreeVRButton.createButton(renderer);
+    renderer.domElement.appendChild(button);
 
     return () => {
       if (button.parentNode) {
         button.parentNode.removeChild(button);
       }
     };
-  }, [orchestrator, orchestrator?.renderer]);
+  }, [renderer]);
 
   return null;
 };

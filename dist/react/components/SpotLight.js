@@ -1,7 +1,7 @@
 "use client";
 import {
   SpotLight
-} from "../../chunk-TPCBL7UT.js";
+} from "../../chunk-S5SYODPM.js";
 import "../../chunk-Z3ENXIV3.js";
 import "../../chunk-YYJ6TOBN.js";
 import "../../chunk-YUDBXSSZ.js";

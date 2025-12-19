@@ -1,7 +1,7 @@
 "use client";
 import {
   DirectionalLight
-} from "../../chunk-YGGGBTTY.js";
+} from "../../chunk-AETWHKYZ.js";
 import "../../chunk-Z3ENXIV3.js";
 import "../../chunk-YYJ6TOBN.js";
 import "../../chunk-YUDBXSSZ.js";

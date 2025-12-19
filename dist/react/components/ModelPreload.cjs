@@ -1,7 +1,7 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkHZYRF2V3cjs = require('../../chunk-HZYRF2V3.cjs');
+var _chunk22TJ4G74cjs = require('../../chunk-22TJ4G74.cjs');
 require('../../chunk-GBXILCIV.cjs');
 require('../../chunk-KLBGRORF.cjs');
 require('../../chunk-NY5P5I4S.cjs');
@@ -15,4 +15,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.ModelPreload = _chunkHZYRF2V3cjs.ModelPreload;
+exports.ModelPreload = _chunk22TJ4G74cjs.ModelPreload;

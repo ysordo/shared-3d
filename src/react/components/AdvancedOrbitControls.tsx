@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedOrbitControlsPlugin } from '../../core/orchestrator/plugins/AdvancedOrbitControlsPlugin';
 import { useScene } from '../../hooks';
@@ -42,74 +42,95 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
   children,
 }) => {
   const stableOptions = useMemo(
-    () => ({...options}),
-    [
-      ...Object.values(options)
-    ]
+    () => ({ ...options }),
+    [...Object.values(options)]
+  );
+  const [enable, setEnable] = useState({
+    pan: stableOptions.enablePan ?? true,
+    rotate: stableOptions.enableRotate ?? true,
+    zoom: stableOptions.enableZoom ?? true,
+  });
+  const [distance, setDistance] = useState({
+    min: stableOptions.minDistance ?? 0.1,
+    max: stableOptions.maxDistance ?? 1000,
+  });
+
+  const deps = useMemo(
+    () => [...Object.values(stableOptions), enabled],
+    [...Object.values(stableOptions), enabled]
   );
 
   const plugin = usePlugin(
+    'AdvancedOrbitControls',
     () => new AdvancedOrbitControlsPlugin(stableOptions),
-    enabled ? [...Object.values(stableOptions)] : []
+    deps
   );
 
-  const setEnablePan = useCallback(
-    (enablePan: boolean) => {
-      if (plugin) {
-        plugin.enablePan = enablePan;
+  useEffect(() => {
+    if (plugin) {
+      if (plugin.enablePan !== enable.pan) {
+        plugin.enablePan = enable.pan;
       }
-    },
-    [plugin]
-  );
-  const setEnableRotate = useCallback(
-    (enableRotate: boolean) => {
-      if (plugin) {
-        plugin.enableRotate = enableRotate;
+      if (plugin.enableRotate !== enable.rotate) {
+        plugin.enableRotate = enable.rotate;
       }
-    },
-    [plugin]
-  );
-  const setEnableZoom = useCallback(
-    (enableZoom: boolean) => {
-      if (plugin) {
-        plugin.enableZoom = enableZoom;
+      if (plugin.enableZoom !== enable.zoom) {
+        plugin.enableZoom = enable.zoom;
       }
-    },
-    [plugin]
-  );
-  const setMinDistance = useCallback(
-    (minDistance: number) => {
-      if (plugin) {
-        plugin.minDistance = minDistance;
-      }
-    },
-    [plugin]
-  );
-  const setMaxDistance = useCallback(
-    (maxDistance: number) => {
-      if (plugin) {
-        plugin.maxDistance = maxDistance;
-      }
-    },
-    [plugin]
-  );
-  const state = useMemo<StateProps | null>(() => {
-    if (!plugin) {
-      return null;
     }
+  }, [enable.pan, enable.rotate, enable.zoom, plugin]);
+
+  useEffect(() => {
+    if (plugin) {
+      if (plugin.maxDistance != distance.max) {
+        plugin.maxDistance = distance.max;
+      }
+      if (plugin.minDistance !== distance.min) {
+        plugin.minDistance = distance.min;
+      }
+    }
+  }, [distance.max, distance.min, plugin]);
+
+  const setEnablePan = useCallback((enablePan: boolean) => {
+    setEnable((old) => ({ ...old, pan: enablePan }));
+  }, []);
+  const setEnableRotate = useCallback((enableRotate: boolean) => {
+    setEnable((old) => ({ ...old, rotate: enableRotate }));
+  }, []);
+  const setEnableZoom = useCallback((enableZoom: boolean) => {
+    setEnable((old) => ({ ...old, zoom: enableZoom }));
+  }, []);
+  const setMinDistance = useCallback((minDistance: number) => {
+    setDistance((old) => ({ ...old, min: minDistance }));
+  }, []);
+  const setMaxDistance = useCallback((maxDistance: number) => {
+    setDistance((old) => ({ ...old, max: maxDistance }));
+  }, []);
+  const state = useMemo<StateProps | null>(() => {
     return {
-      enablePan: plugin.enablePan,
-      enableRotate: plugin.enableRotate,
-      enableZoom: plugin.enableZoom,
-      minDistance: plugin.minDistance,
-      maxDistance: plugin.maxDistance,
+      enablePan: enable.pan,
+      enableRotate: enable.rotate,
+      enableZoom: enable.zoom,
+      minDistance: distance.min,
+      maxDistance: distance.max,
       setEnablePan,
       setEnableRotate,
       setEnableZoom,
       setMinDistance,
       setMaxDistance,
     };
-  }, [plugin, setEnablePan, setEnableRotate, setEnableZoom, setMinDistance, setMaxDistance]);
+  }, [
+    enable.pan,
+    enable.rotate,
+    enable.zoom,
+    distance.min,
+    distance.max,
+    setEnablePan,
+    setEnableRotate,
+    setEnableZoom,
+    setMinDistance,
+    setMaxDistance,
+  ]);
 
   return <>{enabled && state && children?.(state)}</>;
 };

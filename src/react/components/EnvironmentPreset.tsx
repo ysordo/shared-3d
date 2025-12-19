@@ -47,10 +47,9 @@ export const EnvironmentPreset: React.FC<EnvironmentPresetProps> = ({
   intensity = 1,
   blur = 0,
 }) => {
-  const orchestrator = useScene();
+  const {scene} = useScene();
 
   useEffect(() => {
-    if(!orchestrator){return;}
     const url = PRESETS[name];
     if (!url) {
       console.warn(`EnvironmentPreset: "${name}" no encontrado`);
@@ -63,25 +62,25 @@ export const EnvironmentPreset: React.FC<EnvironmentPresetProps> = ({
     loader.load(url, (texture) => {
       texture.mapping = THREE.EquirectangularReflectionMapping;
 
-      orchestrator.scene.environment = texture;
-      orchestrator.scene.background = texture;
-      orchestrator.scene.backgroundBlurriness = blur;
-      orchestrator.scene.environmentIntensity = intensity;
+      scene.environment = texture;
+      scene.background = texture;
+      scene.backgroundBlurriness = blur;
+      scene.environmentIntensity = intensity;
     });
 
     return () => {
-      if (orchestrator.scene.environment) {
-        orchestrator.scene.environment.dispose();
-        orchestrator.scene.environment = null;
+      if (scene.environment) {
+        scene.environment.dispose();
+        scene.environment = null;
       }
-      if (orchestrator.scene.background) {
-        if (!(orchestrator.scene.background instanceof THREE.Color)) {
-          orchestrator.scene.background.dispose();
+      if (scene.background) {
+        if (!(scene.background instanceof THREE.Color)) {
+          scene.background.dispose();
         }
-        orchestrator.scene.background = null;
+        scene.background = null;
       }
     };
-  }, [orchestrator,name, intensity, blur]);
+  }, [name, intensity, blur, scene]);
 
   return null;
 };

@@ -5,9 +5,9 @@ import { useScene } from './useScene';
 import type { Plugin } from '../core/orchestrator/types';
 
 export const usePlugin = <T extends Plugin>(
+  name: string,
   factory: () => T,
   deps: any[] = [],
-  name: string = factory().name,
 ): T | undefined => {
   const orch = useScene();
 

@@ -13,27 +13,26 @@ export const TheaterLighting: React.FC<TheaterLightingProps> = ({
   intensity = 2,
   count = 8,
 }) => {
-  const orchestrator = useScene();
+  const {scene} = useScene();
 
   useEffect(() => {
-    if(!orchestrator){return;}
     const lights: THREE.Light[] = [];
 
     for (let i = 0; i < count; i++) {
       const angle = (i / count) * Math.PI * 2;
       const light = new THREE.PointLight(0xffffff, intensity);
       light.position.set(Math.cos(angle) * 5, 5, Math.sin(angle) * 5);
-      orchestrator.scene.add(light);
+      scene.add(light);
       lights.push(light);
     }
 
     return () => {
       lights.forEach((l) => {
-        orchestrator.scene.remove(l);
+        scene.remove(l);
         l.dispose();
       });
     };
-  }, [orchestrator, intensity, count]);
+  }, [intensity, count, scene]);
 
   return null;
 };

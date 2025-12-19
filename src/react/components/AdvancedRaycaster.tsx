@@ -28,7 +28,6 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
   onDragEnd,
 }) => {
   const activeModel = useActiveModel();
-  const targetModel = customModel ?? activeModel;
 
   const handler = useCallback(
     (event: any) => {
@@ -67,11 +66,13 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
     ]
   );
 
-  const deps = useMemo(() => [targetModel, handler], [targetModel, handler]);
+  const config = useMemo(() => ({targetModel: customModel ?? activeModel, handler}), [customModel, activeModel, handler]);
+  const deps = useMemo(() => [...Object.values(config)], [...Object.values(config)]);
 
   usePlugin(
-    () => new AdvancedRaycasterPlugin(targetModel as THREE.Object3D, handler),
-    [...deps]
+    'AdvancedRaycaster',
+    () => new AdvancedRaycasterPlugin(config.targetModel as THREE.Object3D, config.handler),
+    deps
   );
 
   return null;

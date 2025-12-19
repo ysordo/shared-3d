@@ -47,7 +47,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   onDrag,
   onDragEnd,
 }) => {
-  const orchestrator = useScene();
+  const {camera} = useScene();
   const model = useActiveModel();
   const [isEnabled, setIsEnabled] = useState(defaultEnabled);
   const [isResetting, setIsResetting] = useState(false);
@@ -92,9 +92,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   );
   const handleDrag = useCallback(
     (current: THREE.Vector2) => {
-      if(!orchestrator){return;}
       const state = dragState.current;
-      const camera = orchestrator.camera;
       if (state.isDragging && state.currentObject) {
         (state.currentObject as any).getWorldPosition(tempVector1);
         camera.getWorldDirection(tempVector2);
@@ -133,7 +131,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
         state.startPosition.copy(current);
       }
     },
-    [onDrag, orchestrator]
+    [onDrag]
   );
   const handleDragEnd = useCallback(() => {
     const state = dragState.current;
@@ -144,62 +142,58 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
     state.isDragging = false;
     state.currentObject = null;
   }, [onDragEnd]);
+  const handle = useCallback(
+    (event: any) => {
+      switch (event.type) {
+        case 'objectdragstart': {
+          handleDragStart(event.object, event.startPosition);
+          break;
+        }
+        case 'objectdrag': {
+          handleDrag(event.current);
+          break;
+        }
+        case 'objectdragend': {
+          handleDragEnd();
+          break;
+        }
+      }
+    },
+    [handleDragStart, handleDrag, handleDragEnd]
+  );
 
   // Configuración memoizada
   const config = useMemo(
     () => ({
       model,
       enableRotationCompensation,
-      onDragStart: handleDragStart,
-      onDrag: handleDrag,
-      onDragEnd: handleDragEnd,
+      handle,
     }),
-    [
-      model,
-      enableRotationCompensation,
-      handleDragStart,
-      handleDrag,
-      handleDragEnd
-    ]
+    [model, enableRotationCompensation, handle]
   );
 
-  // Registro único del plugin con deps estables
-  usePlugin(
+  const deps = useMemo(
+    () => [...Object.values(config), camera],
+    [...Object.values(config), camera]
+  );
+
+  const plugin = usePlugin(
+    'AdvancedRaycaster',
     () =>
       new AdvancedRaycasterPlugin(
         config.model as THREE.Object3D,
-        (event: any) => {
-          switch (event.type) {
-            case 'objectdragstart': {
-              handleDragStart(event.object, event.startPosition);
-              break;
-            }
-            case 'objectdrag': {
-              handleDrag(event.current);
-              break;
-            }
-            case 'objectdragend': {
-              handleDragEnd();
-              break;
-            }
-          }
-        }
+        config.handle
       ),
-    [...Object.values(config), orchestrator]
+    deps
   );
 
-  // Sincronizar enabled con plugin
   useEffect(() => {
-    if(!orchestrator){return;}
-    const plugin =
-      orchestrator.plugin<AdvancedRaycasterPlugin>('AdvancedRaycaster');
     if (!plugin) {
       return;
     }
     plugin.manager.setEnabled(isEnabled);
-  }, [isEnabled, orchestrator]);
+  }, [isEnabled, plugin]);
 
-  // Reset animado seguro
   const resetAll = useCallback(() => {
     if (isResetting) {
       return;
@@ -233,9 +227,8 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
     };
 
     rafRef.current = requestAnimationFrame(animate);
-  }, [isResetting, transitionDuration, orchestrator]);
+  }, [isResetting, transitionDuration]);
 
-  // Cleanup RAF si componente desmonta durante reset
   useEffect(() => {
     return () => {
       if (rafRef.current !== null) {

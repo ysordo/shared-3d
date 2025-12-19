@@ -1,8 +1,8 @@
 type PostProcessingProps = {
     bloom?: {
-        strength?: number;
-        radius?: number;
-        threshold?: number;
+        strength: number;
+        radius: number;
+        threshold: number;
     };
     enabled?: boolean;
 };
