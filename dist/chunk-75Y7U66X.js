@@ -169,7 +169,6 @@ var AdvancedDragRaycaster = ({
       return;
     }
     setIsResetting(true);
-    const plugin = orchestrator.plugin("AdvancedRaycaster");
     const duration = transitionDuration;
     if (originalStates.current.size === 0) {
       setIsResetting(false);

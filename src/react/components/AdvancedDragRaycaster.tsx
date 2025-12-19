@@ -206,8 +206,6 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
     }
     setIsResetting(true);
 
-    const plugin =
-      orchestrator.plugin<AdvancedRaycasterPlugin>('AdvancedRaycaster');
     const duration = transitionDuration;
 
     if (originalStates.current.size === 0) {
