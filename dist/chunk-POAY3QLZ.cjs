@@ -14,7 +14,10 @@ var Canvas = _react.forwardRef.call(void 0,
       {
         ref: canvasRef,
         config,
-        Canvas: _react.forwardRef.call(void 0, (props1, ref2) => /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "canvas", { ref: ref2, ...props1, ...props })),
+        Canvas: _react.forwardRef.call(void 0, (canvasProps, canvasRefFromForward) => {
+          canvasProps = { ...canvasProps, ...props };
+          return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "canvas", { ref: canvasRefFromForward, ...canvasProps });
+        }),
         fallback,
         children
       }

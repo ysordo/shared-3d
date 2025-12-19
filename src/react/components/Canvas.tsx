@@ -23,9 +23,10 @@ export const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
           Canvas={forwardRef<
             HTMLCanvasElement,
             React.CanvasHTMLAttributes<HTMLCanvasElement>
-          >((props1, ref) => (
-            <canvas ref={ref} {...props1} {...props} />
-          ))}
+          >((canvasProps, canvasRefFromForward) => {
+            canvasProps = {...canvasProps, ...props};
+            return <canvas ref={canvasRefFromForward} {...canvasProps} />;
+          })}
           fallback={fallback}>
           {children}
         </SceneProvider>

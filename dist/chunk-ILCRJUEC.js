@@ -14,7 +14,10 @@ var Canvas = forwardRef(
       {
         ref: canvasRef,
         config,
-        Canvas: forwardRef((props1, ref2) => /* @__PURE__ */ jsx("canvas", { ref: ref2, ...props1, ...props })),
+        Canvas: forwardRef((canvasProps, canvasRefFromForward) => {
+          canvasProps = { ...canvasProps, ...props };
+          return /* @__PURE__ */ jsx("canvas", { ref: canvasRefFromForward, ...canvasProps });
+        }),
         fallback,
         children
       }
