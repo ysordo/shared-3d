@@ -6,17 +6,18 @@ import type { SceneConfig } from '../../core/orchestrator/SceneOrchestrator';
 
 type CanvasProps = React.CanvasHTMLAttributes<HTMLCanvasElement> & {
   config?: SceneConfig;
+  fallback?: React.ReactNode;
 };
 
 export const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
-  ({ config, children, ...props }, ref) => {
+  ({ config, children, fallback = null, ...props }, ref) => {
     const internalRef = useRef<HTMLCanvasElement>(null);
     const canvasRef = (ref ??
       internalRef) as React.RefObject<HTMLCanvasElement | null>;
 
     return (
       <>
-        <SceneProvider canvasRef={canvasRef} config={config}>
+        <SceneProvider ref={canvasRef} config={config} fallback={fallback}>
           <canvas ref={canvasRef} {...props} />
           {children}
         </SceneProvider>

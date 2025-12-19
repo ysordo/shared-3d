@@ -6,6 +6,7 @@ import 'three';
 
 declare const Canvas: React.ForwardRefExoticComponent<React.CanvasHTMLAttributes<HTMLCanvasElement> & {
     config?: SceneConfig;
+    fallback?: React.ReactNode;
 } & React.RefAttributes<HTMLCanvasElement>>;
 
 export { Canvas };

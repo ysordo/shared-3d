@@ -12,9 +12,9 @@ type SceneContextValue = {
 type SceneProviderProps = {
     children: ReactNode;
     config?: SceneConfig | undefined;
-    canvasRef: React.RefObject<HTMLCanvasElement | null>;
+    fallback?: ReactNode;
 };
-declare const SceneProvider: React.FC<SceneProviderProps>;
+declare const SceneProvider: React.ForwardRefExoticComponent<SceneProviderProps & React.RefAttributes<HTMLCanvasElement>>;
 declare const useSceneContext: () => SceneContextValue;
 
 export { SceneProvider, useSceneContext };
