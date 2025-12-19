@@ -31,7 +31,8 @@ export const SceneProvider: React.FC<SceneProviderProps> = ({
   config,
   canvasRef,
 }) => {
-  const [orchestratorRef, setOrchestratorRef] = useState<SceneOrchestrator | null>(null);
+  const [orchestratorRef, setOrchestratorRef] =
+    useState<SceneOrchestrator | null>(null);
   const activeModelRef = useRef<THREE.Group | null>(null);
   const preloadRef = useRef<Map<string, THREE.Group>>(new Map());
 
@@ -82,6 +83,10 @@ export const SceneProvider: React.FC<SceneProviderProps> = ({
     };
   }, [orchestratorRef]);
 
+  if (!value) {
+    return null;
+  }
+
   return (
     <SceneContext.Provider value={value}>{children}</SceneContext.Provider>
   );
@@ -89,10 +94,10 @@ export const SceneProvider: React.FC<SceneProviderProps> = ({
 
 export const useSceneContext = (): SceneContextValue => {
   const context = useContext(SceneContext);
-  if(!context){
-     throw new Error(
+  if (!context) {
+    throw new Error(
       'useSceneContext must be used within a <SceneProvider>. ' +
-      'Make sure your component is wrapped by the SceneProvider component.'
+        'Make sure your component is wrapped by the SceneProvider component.'
     );
   }
   return context;

@@ -1,8 +1,8 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkJE2KFCEYcjs = require('../chunk-JE2KFCEY.cjs');
-require('../chunk-2LYQYXCG.cjs');
+var _chunk2SIOH7S5cjs = require('../chunk-2SIOH7S5.cjs');
+require('../chunk-PDDWYAQT.cjs');
 require('../chunk-KD4SYTBB.cjs');
 require('../chunk-YAKUY6M3.cjs');
 require('../chunk-ZJAPFMHD.cjs');
@@ -12,4 +12,4 @@ require('../chunk-T2YGLA3W.cjs');
 require('../chunk-UW5RKAXQ.cjs');
 
 
-exports.usePreload = _chunkJE2KFCEYcjs.usePreload;
+exports.usePreload = _chunk2SIOH7S5cjs.usePreload;

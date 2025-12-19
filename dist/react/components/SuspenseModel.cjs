@@ -1,23 +1,23 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkL4B2GHQScjs = require('../../chunk-L4B2GHQS.cjs');
+var _chunkRWUA6X6Tcjs = require('../../chunk-RWUA6X6T.cjs');
 require('../../chunk-W2T32FMR.cjs');
-require('../../chunk-VKYE6HSK.cjs');
+require('../../chunk-H45L4ZDT.cjs');
 require('../../chunk-NY5P5I4S.cjs');
 require('../../chunk-5HZ6JUMF.cjs');
 require('../../chunk-PRH3KJMW.cjs');
-require('../../chunk-ZDWCEEYM.cjs');
-require('../../chunk-FBO5NM3H.cjs');
-require('../../chunk-RMQFQ4X3.cjs');
+require('../../chunk-C5VMWDPI.cjs');
+require('../../chunk-KTPRZEHT.cjs');
+require('../../chunk-ULL3GOZJ.cjs');
 require('../../chunk-MELGR4PB.cjs');
 require('../../chunk-FH6APZUO.cjs');
 require('../../chunk-U6PBSE4G.cjs');
 require('../../chunk-7YGHNVSE.cjs');
 require('../../chunk-7WPOL7PK.cjs');
-require('../../chunk-AKHM4VMX.cjs');
-require('../../chunk-YYM2O3MB.cjs');
-require('../../chunk-2LYQYXCG.cjs');
+require('../../chunk-QAIVX7CD.cjs');
+require('../../chunk-D6NEY5IP.cjs');
+require('../../chunk-PDDWYAQT.cjs');
 require('../../chunk-KD4SYTBB.cjs');
 require('../../chunk-YAKUY6M3.cjs');
 require('../../chunk-ZJAPFMHD.cjs');
@@ -27,4 +27,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.SuspenseModel = _chunkL4B2GHQScjs.SuspenseModel;
+exports.SuspenseModel = _chunkRWUA6X6Tcjs.SuspenseModel;
