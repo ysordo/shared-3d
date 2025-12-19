@@ -58,22 +58,18 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
       };
     }, [ref, config]);
 
-    const value = useMemo<SceneContextValue | null>(() => {
-      if (!orchestrator) {
-        return null;
-      }
-      return {
-        orchestrator: orchestrator,
-        activeModel: activeModel,
-        preload: preload.current,
-      };
-    }, [orchestrator, activeModel]);
-
-    if (!value) {
+    if (!orchestrator) {
       return <>{fallback}</>;
     }
     return (
-      <SceneContext.Provider value={value}>{children}</SceneContext.Provider>
+      <SceneContext.Provider
+        value={{
+          activeModel,
+          orchestrator,
+          preload: preload.current,
+        }}>
+        {children}
+      </SceneContext.Provider>
     );
   }
 );
