@@ -1,4 +1,4 @@
-export { b as Plugin, P as PluginContext } from '../../SceneOrchestrator-NoU3ML5L.cjs';
+export { b as Plugin, P as PluginContext } from '../../SceneOrchestrator-uEPgybCc.cjs';
 import 'three';
 import '../loaders/HDRILoader.cjs';
 import '../cache/types.cjs';

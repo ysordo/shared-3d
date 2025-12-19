@@ -5,6 +5,7 @@ import { HDRILoader } from '../loaders/HDRILoader';
 import type { ManifestEntry } from '../cache/types';
 import type { Plugin, PluginContext } from './types';
 import { THREE } from '../../lib';
+import type { AdvancedOrbitControlsPlugin, OrbitControlsPlugin } from './plugins';
 
 export type SceneConfig = {
   antialias?: boolean;
@@ -117,26 +118,20 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
 
     return this;
   }
-  plugin<T extends Plugin = Plugin>(name: string): T | undefined {
-    const t = this.plugins.get(name);
-    if (!t) {
-       console.error(`[Orchestrator] Plugin "${name}" is not already installed`);
-    }
-
-    return t as T | undefined;
-  }
+  plugin = <T extends Plugin = Plugin>(name: string): T | undefined => this.plugins.get(name) as T | undefined;
+  
   has(name: string): boolean {return this.plugins.has(name);}
   remove(name: string): void {
     if (this.plugins.delete(name)) {
       console.info(`[Orchestrator] Plugin ${name} is already deleted`);
     } else {
-      console.error(`[Orchestrator] Plugin "${name}" is not already installed`);
+      console.info(`[Orchestrator] Plugin "${name}" is not already installed`);
     }
   }
   /* === MODELS === */
 async setModel(model: THREE.Group) {
     this.removeModel();
-        const o = this.plugins.get('OrbitControls') || this.plugins.get('AdvancedOrbitControls');
+        const o = this.plugin<OrbitControlsPlugin>('OrbitControls') || this.plugin<AdvancedOrbitControlsPlugin>('AdvancedOrbitControls');
         this.camera.position.set(0, 1.6,
           o
           ? ( ( (o as any).maxDistance - (o as any).minDistance ) / 2 )

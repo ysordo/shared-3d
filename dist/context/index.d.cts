@@ -1,7 +1,7 @@
 export { SceneProvider } from './SceneContext.cjs';
 export { CacheProvider } from './CacheContext.cjs';
 import 'react';
-import '../SceneOrchestrator-NoU3ML5L.cjs';
+import '../SceneOrchestrator-uEPgybCc.cjs';
 import '../core/loaders/HDRILoader.cjs';
 import '../core/cache/types.cjs';
 import 'three';
