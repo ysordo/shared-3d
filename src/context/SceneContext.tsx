@@ -58,16 +58,14 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
       };
     }, [ref, config]);
 
-    if (!orchestrator) {
-      return <>{fallback}</>;
-    }
     return (
       <SceneContext.Provider
         value={{
           activeModel,
-          orchestrator,
+          orchestrator: orchestrator!,
           preload: preload.current,
         }}>
+        {!orchestrator && fallback}
         {children}
       </SceneContext.Provider>
     );
