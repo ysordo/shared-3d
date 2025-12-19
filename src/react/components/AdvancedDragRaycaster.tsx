@@ -201,7 +201,6 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
 
   // Reset animado seguro
   const resetAll = useCallback(() => {
-    if(!orchestrator){return;}
     if (isResetting) {
       return;
     }

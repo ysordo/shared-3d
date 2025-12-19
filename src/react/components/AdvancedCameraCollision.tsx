@@ -31,9 +31,6 @@ export const AdvancedCameraCollision: React.FC<
     () => new AdvancedCameraCollisionPlugin(...config),
     enabled && model ? config : []
   );
-
-  if (!enabled || !model) {
-    return null;
-  }
+  
   return null;
 };

@@ -9,13 +9,12 @@ type TR = {
 };
 
 
-export const usePreload = <T extends TX = 'map'>(): TR[T] | null => {
-  const orchestrator = useSceneContext();
-  if(!orchestrator){return null;}
+export const usePreload = <T extends TX = 'map'>(): TR[T] => {
+  const {preload} = useSceneContext();
   if ((undefined as unknown as T) === 'array') {
     const arr: { key: string; model: THREE.Group }[] = [];
-    orchestrator.preload.forEach((model, key) => arr.push({ key, model }));
+    preload.forEach((model, key) => arr.push({ key, model }));
     return arr as TR[T];
   }
-  return orchestrator.preload as TR[T];
+  return preload as TR[T];
 };

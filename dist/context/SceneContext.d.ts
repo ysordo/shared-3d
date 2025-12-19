@@ -9,10 +9,12 @@ type SceneContextValue = {
     activeModel: THREE.Group | null;
     preload: Map<string, THREE.Group>;
 };
-declare const SceneProvider: React.ForwardRefExoticComponent<{
+type SceneProviderProps = {
     children: ReactNode;
     config?: SceneConfig | undefined;
-} & React.CanvasHTMLAttributes<HTMLCanvasElement> & React.RefAttributes<HTMLCanvasElement>>;
-declare const useSceneContext: () => SceneContextValue | null;
+    canvasRef: React.RefObject<HTMLCanvasElement | null>;
+};
+declare const SceneProvider: React.FC<SceneProviderProps>;
+declare const useSceneContext: () => SceneContextValue;
 
 export { SceneProvider, useSceneContext };

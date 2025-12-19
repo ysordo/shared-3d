@@ -1,9 +1,9 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkH3DK6QY2cjs = require('../../chunk-H3DK6QY2.cjs');
-require('../../chunk-R5OSXV4V.cjs');
-require('../../chunk-XRNKCSHR.cjs');
+var _chunkLGJAHRIFcjs = require('../../chunk-LGJAHRIF.cjs');
+require('../../chunk-4PVB6VAW.cjs');
+require('../../chunk-3DUZU4VU.cjs');
 require('../../chunk-KD4SYTBB.cjs');
 require('../../chunk-YAKUY6M3.cjs');
 require('../../chunk-ZJAPFMHD.cjs');
@@ -13,4 +13,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.DirectionalLight = _chunkH3DK6QY2cjs.DirectionalLight;
+exports.DirectionalLight = _chunkLGJAHRIFcjs.DirectionalLight;

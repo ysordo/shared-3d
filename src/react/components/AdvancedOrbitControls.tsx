@@ -64,35 +64,42 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     enabled ? [stableOptions] : []
   );
 
-  if (!enabled || !orchestrator) {
-    return null;
-  }
-  const plugin = orchestrator.plugin('AdvancedOrbitControls');
-  if (!plugin) {
-    return null;
-  }
-  const state = {
-    enablePan: (plugin as AdvancedOrbitControlsPlugin).enablePan,
-    enableRotate: (plugin as AdvancedOrbitControlsPlugin).enableRotate,
-    enableZoom: (plugin as AdvancedOrbitControlsPlugin).enableZoom,
-    minDistance: (plugin as AdvancedOrbitControlsPlugin).minDistance,
-    maxDistance: (plugin as AdvancedOrbitControlsPlugin).maxDistance,
-    setEnablePan: (enablePan: boolean) => {
-      (plugin as AdvancedOrbitControlsPlugin).enablePan = enablePan;
-    },
-    setEnableRotate: (enableRotate: boolean) => {
-      (plugin as AdvancedOrbitControlsPlugin).enableRotate = enableRotate;
-    },
-    setEnableZoom: (enableZoom: boolean) => {
-      (plugin as AdvancedOrbitControlsPlugin).enableZoom = enableZoom;
-    },
-    setMinDistance: (minDistance: number) => {
-      (plugin as AdvancedOrbitControlsPlugin).minDistance = minDistance;
-    },
-    setMaxDistance: (maxDistance: number) => {
-      (plugin as AdvancedOrbitControlsPlugin).maxDistance = maxDistance;
-    },
-  };
+  const plugin = orchestrator.plugin<AdvancedOrbitControlsPlugin>(
+    'AdvancedOrbitControls'
+  );
+  const state = useMemo<StateProps | null>(() => {
+    if (!plugin) {
+      return null;
+    }
+    return {
+      enablePan: plugin.enablePan,
+      enableRotate: plugin.enableRotate,
+      enableZoom: plugin.enableZoom,
+      minDistance: plugin.minDistance,
+      maxDistance: plugin.maxDistance,
+      setEnablePan: (enablePan: boolean) => {
+        plugin.enablePan = enablePan;
+      },
+      setEnableRotate: (enableRotate: boolean) => {
+        plugin.enableRotate = enableRotate;
+      },
+      setEnableZoom: (enableZoom: boolean) => {
+        plugin.enableZoom = enableZoom;
+      },
+      setMinDistance: (minDistance: number) => {
+        plugin.minDistance = minDistance;
+      },
+      setMaxDistance: (maxDistance: number) => {
+        plugin.maxDistance = maxDistance;
+      },
+    };
+  }, [
+    plugin?.enablePan,
+    plugin?.enableRotate,
+    plugin?.enableZoom,
+    plugin?.maxDistance,
+    plugin?.minDistance,
+  ]);
 
-  return <>{children?.(state)}</>;
+  return <>{enabled && state && children?.(state)}</>;
 };

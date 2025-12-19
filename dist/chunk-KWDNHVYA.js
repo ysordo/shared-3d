@@ -1,0 +1,33 @@
+import {
+  usePlugin
+} from "./chunk-NBVZYEKB.js";
+import {
+  AdvancedCameraCollisionPlugin
+} from "./chunk-7UK5WDJQ.js";
+import {
+  useActiveModel
+} from "./chunk-W2UVVV6N.js";
+
+// src/react/components/AdvancedCameraCollision.tsx
+import { useMemo } from "react";
+var AdvancedCameraCollision = ({
+  distanceThreshold = 0.6,
+  pushBackOffset = 0.1,
+  smooth = 0.1,
+  enabled = true
+}) => {
+  const model = useActiveModel();
+  const config = useMemo(
+    () => [distanceThreshold, pushBackOffset, smooth],
+    [distanceThreshold, pushBackOffset, smooth]
+  );
+  usePlugin(
+    () => new AdvancedCameraCollisionPlugin(...config),
+    enabled && model ? config : []
+  );
+  return null;
+};
+
+export {
+  AdvancedCameraCollision
+};

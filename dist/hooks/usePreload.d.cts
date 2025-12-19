@@ -8,6 +8,6 @@ type TR = {
     }[];
     map: Map<string, THREE.Group<THREE.Object3DEventMap>>;
 };
-declare const usePreload: <T extends TX = "map">() => TR[T] | null;
+declare const usePreload: <T extends TX = "map">() => TR[T];
 
 export { usePreload };

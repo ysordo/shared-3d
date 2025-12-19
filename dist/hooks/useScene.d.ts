@@ -3,6 +3,6 @@ import '../core/loaders/HDRILoader.js';
 import '../core/cache/types.js';
 import 'three';
 
-declare const useScene: () => SceneOrchestrator | null;
+declare const useScene: () => SceneOrchestrator;
 
 export { useScene };

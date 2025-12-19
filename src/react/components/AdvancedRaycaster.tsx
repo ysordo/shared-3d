@@ -71,7 +71,7 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
 
   usePlugin(
     () => new AdvancedRaycasterPlugin(targetModel as THREE.Object3D, handler),
-    deps
+    [...deps]
   );
 
   return null;
