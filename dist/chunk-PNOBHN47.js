@@ -45,14 +45,9 @@ var GroundSurface = ({
   visible = true,
   ...custom
 }) => {
-  const orchestrator = useScene();
+  const { scene, camera } = useScene();
   const ground = useRef(null);
   useEffect(() => {
-    if (ground.current) {
-      return;
-    }
-    const scene = orchestrator.scene;
-    const camera = orchestrator.camera;
     if (!camera) {
       return;
     }
@@ -121,7 +116,7 @@ var GroundSurface = ({
         ground.current.geometry.dispose();
       }
     };
-  }, [orchestrator, type, size, height, blur, resolution, ...Object.values(custom)]);
+  }, [type, size, height, blur, resolution, camera, custom.color, custom.roughness, custom.metalness, custom.opacity, custom.transparent, scene]);
   useEffect(() => {
     if (ground.current) {
       ground.current.visible = visible;

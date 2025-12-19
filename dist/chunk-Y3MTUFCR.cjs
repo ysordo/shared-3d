@@ -57,10 +57,9 @@ var AdvancedRaycaster = ({
       onDragEnd
     ]
   );
-  const config = _react.useMemo.call(void 0, () => ({ targetModel: _nullishCoalesce(customModel, () => ( activeModel)), handler }), [customModel, activeModel, handler]);
-  const deps = _react.useMemo.call(void 0, () => [...Object.values(config)], [...Object.values(config)]);
+  const deps = _react.useMemo.call(void 0, () => [_nullishCoalesce(customModel, () => ( activeModel)), handler], [customModel, activeModel, handler]);
   _chunk3M257MS7cjs.usePlugin.call(void 0, 
-    new (0, _chunkHPHYHDPRcjs.AdvancedRaycasterPlugin)(config.targetModel, config.handler),
+    new (0, _chunkHPHYHDPRcjs.AdvancedRaycasterPlugin)(_nullishCoalesce(customModel, () => ( activeModel)), handler),
     deps
   );
   return null;

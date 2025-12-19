@@ -12,7 +12,7 @@ export { AdvancedCameraCollisionPlugin } from './core/orchestrator/plugins/Advan
 export { AdvancedOrbitControlsPlugin } from './core/orchestrator/plugins/AdvancedOrbitControlsPlugin.cjs';
 export { AdvancedRaycasterPlugin } from './core/orchestrator/plugins/AdvancedRaycasterPlugin.cjs';
 export { AnnotationData, AnnotationsPlugin } from './core/orchestrator/plugins/AnnotationsPlugin.cjs';
-export { AutoLODSystemPlugin } from './core/orchestrator/plugins/AutoLODSystemPlugin.cjs';
+export { AutoLODConfig, AutoLODSystemPlugin } from './core/orchestrator/plugins/AutoLODSystemPlugin.cjs';
 export { HotspotPlugin } from './core/orchestrator/plugins/HotspotPlugin.cjs';
 export { LODSystemPlugin } from './core/orchestrator/plugins/LODSystemPlugin.cjs';
 export { MeasurementEvent, MeasurementToolPlugin } from './core/orchestrator/plugins/MeasurementToolPlugin.cjs';

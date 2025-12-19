@@ -1,7 +1,8 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
+import type { MeasurementEvent } from '../../core/orchestrator/plugins';
 import { MeasurementToolPlugin } from '../../core/orchestrator/plugins';
 
 type MeasurementToolProps = {
@@ -14,17 +15,17 @@ export const MeasurementTool: React.FC<MeasurementToolProps> = ({
   enabled = true,
   onMeasure,
 }) => {
-  const callback = useMemo(() => onMeasure ?? (() => {}), [onMeasure]);
+  const callback = useCallback(
+    (event: MeasurementEvent) => {
+      if (event.distance !== undefined && event.points.length === 2) {
+        onMeasure?.(event.distance, [event.points[0], event.points[1]]);
+      }
+    },
+    [onMeasure]
+  );
   const deps = useMemo(() => [callback, enabled], [callback, enabled]);
 
-  usePlugin(
-      new MeasurementToolPlugin((event) => {
-        if (event.distance !== undefined && event.points.length === 2) {
-          callback(event.distance, [event.points[0], event.points[1]]);
-        }
-      }),
-    deps
-  );
+  usePlugin(new MeasurementToolPlugin(callback), deps);
 
   return null;
 };

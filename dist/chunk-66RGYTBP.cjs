@@ -45,14 +45,9 @@ var GroundSurface = ({
   visible = true,
   ...custom
 }) => {
-  const orchestrator = _chunkL3KVNMIIcjs.useScene.call(void 0, );
+  const { scene, camera } = _chunkL3KVNMIIcjs.useScene.call(void 0, );
   const ground = _react.useRef.call(void 0, null);
   _react.useEffect.call(void 0, () => {
-    if (ground.current) {
-      return;
-    }
-    const scene = orchestrator.scene;
-    const camera = orchestrator.camera;
     if (!camera) {
       return;
     }
@@ -121,7 +116,7 @@ var GroundSurface = ({
         ground.current.geometry.dispose();
       }
     };
-  }, [orchestrator, type, size, height, blur, resolution, ...Object.values(custom)]);
+  }, [type, size, height, blur, resolution, camera, custom.color, custom.roughness, custom.metalness, custom.opacity, custom.transparent, scene]);
   _react.useEffect.call(void 0, () => {
     if (ground.current) {
       ground.current.visible = visible;

@@ -22,17 +22,13 @@ export const AdvancedCameraCollision: React.FC<
 }) => {
   const model = useActiveModel();
 
-  const config = useMemo(
-    () => [distanceThreshold, pushBackOffset, smooth],
-    [distanceThreshold, pushBackOffset, smooth]
-  );
   const deps = useMemo(
-    () => [...config, model, enabled],
-    [...config, model, enabled]
+    () => [distanceThreshold, pushBackOffset, smooth, model, enabled],
+    [distanceThreshold, pushBackOffset, smooth, model, enabled]
   );
 
   usePlugin(
-    new AdvancedCameraCollisionPlugin(...config),
+    new AdvancedCameraCollisionPlugin(distanceThreshold, pushBackOffset, smooth),
     deps
   );
   

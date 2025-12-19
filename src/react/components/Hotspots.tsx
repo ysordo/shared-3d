@@ -1,7 +1,6 @@
 'use client';
 import type React from 'react';
-import { useEffect, useMemo } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useMemo } from 'react';
 import { HotspotPlugin } from '../../core/orchestrator/plugins/HotspotPlugin';
 import * as THREE from 'three';
 import { usePlugin } from '../../hooks/usePlugin';
@@ -18,17 +17,17 @@ type HotspotsProps = {
 };
 
 export const Hotspots: React.FC<HotspotsProps> = ({ hotspots }) => {
-  const orchestrator = useScene();
+  const deps = useMemo(() => [hotspots], [hotspots]);
 
-    const data = useMemo(
-        () => hotspots.map(hotspot => ({
-          ...hotspot,
-          position: new THREE.Vector3(...hotspot.position)
-        })),
-        [hotspots]
-      );
-    
-      usePlugin(new HotspotPlugin(data), data);
-    
-      return null;
+  usePlugin(
+    new HotspotPlugin(
+      hotspots.map((hotspot) => ({
+        ...hotspot,
+        position: new THREE.Vector3(...hotspot.position),
+      }))
+    ),
+    deps
+  );
+
+  return null;
 };

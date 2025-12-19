@@ -17,16 +17,12 @@ var AdvancedCameraCollision = ({
   enabled = true
 }) => {
   const model = _chunk2V6BPD4Xcjs.useActiveModel.call(void 0, );
-  const config = _react.useMemo.call(void 0, 
-    () => [distanceThreshold, pushBackOffset, smooth],
-    [distanceThreshold, pushBackOffset, smooth]
-  );
   const deps = _react.useMemo.call(void 0, 
-    () => [...config, model, enabled],
-    [...config, model, enabled]
+    () => [distanceThreshold, pushBackOffset, smooth, model, enabled],
+    [distanceThreshold, pushBackOffset, smooth, model, enabled]
   );
   _chunk3M257MS7cjs.usePlugin.call(void 0, 
-    new (0, _chunkMMMO3SNVcjs.AdvancedCameraCollisionPlugin)(...config),
+    new (0, _chunkMMMO3SNVcjs.AdvancedCameraCollisionPlugin)(distanceThreshold, pushBackOffset, smooth),
     deps
   );
   return null;

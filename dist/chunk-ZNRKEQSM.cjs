@@ -16,16 +16,18 @@ var Hotspot = ({
   target,
   onClick
 }) => {
-  const data = _react.useMemo.call(void 0, 
-    () => ({
+  const deps = _react.useMemo.call(void 0, 
+    () => [id, position, target, onClick],
+    [id, position, target, onClick]
+  );
+  _chunk3M257MS7cjs.usePlugin.call(void 0, new (0, _chunkXTA7BEZGcjs.HotspotPlugin)([
+    {
       id,
       position: new _chunkEA3XQ4KJcjs.THREE.Vector3(...position),
       target,
       onClick
-    }),
-    [id, position, target, onClick]
-  );
-  _chunk3M257MS7cjs.usePlugin.call(void 0, new (0, _chunkXTA7BEZGcjs.HotspotPlugin)([data]), [data]);
+    }
+  ]), deps);
   return null;
 };
 

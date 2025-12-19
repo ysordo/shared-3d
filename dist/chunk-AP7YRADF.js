@@ -16,16 +16,18 @@ var Hotspot = ({
   target,
   onClick
 }) => {
-  const data = useMemo(
-    () => ({
+  const deps = useMemo(
+    () => [id, position, target, onClick],
+    [id, position, target, onClick]
+  );
+  usePlugin(new HotspotPlugin([
+    {
       id,
       position: new THREE.Vector3(...position),
       target,
       onClick
-    }),
-    [id, position, target, onClick]
-  );
-  usePlugin(new HotspotPlugin([data]), [data]);
+    }
+  ]), deps);
   return null;
 };
 

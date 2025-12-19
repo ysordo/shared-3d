@@ -4,9 +4,9 @@ import { THREE } from '../../../lib/three';
 import type { SceneOrchestrator } from '../SceneOrchestrator';
 import type { ManifestEntry } from '../../cache';
 
-type AutoLODConfig = {
+export type AutoLODConfig = {
   distances: [number, number, number];
-  reductionPercentages?: [number, number];
+  reductionPercentages?: [number, number] | undefined;
 };
 
 export class AutoLODSystemPlugin implements Plugin {

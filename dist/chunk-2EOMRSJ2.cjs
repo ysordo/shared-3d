@@ -11,16 +11,12 @@ var PostProcessing = ({
   bloom = { strength: 1.5, radius: 0.4, threshold: 0 },
   enabled = true
 }) => {
-  const options = _react.useMemo.call(void 0, 
-    () => bloom,
-    [bloom.strength, bloom.radius, bloom.threshold]
-  );
   const deps = _react.useMemo.call(void 0, 
-    () => [...Object.values(options), enabled],
-    [...Object.values(options), enabled]
+    () => [bloom.strength, bloom.radius, bloom.threshold, enabled],
+    [bloom.strength, bloom.radius, bloom.threshold, enabled]
   );
   _chunk3M257MS7cjs.usePlugin.call(void 0, 
-    new (0, _chunkMCYH2TBQcjs.PostProcessingPlugin)(options),
+    new (0, _chunkMCYH2TBQcjs.PostProcessingPlugin)(bloom),
     deps
   );
   if (!enabled) {

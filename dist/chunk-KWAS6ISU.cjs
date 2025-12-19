@@ -5,22 +5,20 @@ var _chunk3M257MS7cjs = require('./chunk-3M257MS7.cjs');
 
 var _chunkXTA7BEZGcjs = require('./chunk-XTA7BEZG.cjs');
 
-
-var _chunkL3KVNMIIcjs = require('./chunk-L3KVNMII.cjs');
-
 // src/react/components/Hotspots.tsx
 var _react = require('react');
 var _three = require('three'); var THREE = _interopRequireWildcard(_three);
 var Hotspots = ({ hotspots }) => {
-  const orchestrator = _chunkL3KVNMIIcjs.useScene.call(void 0, );
-  const data = _react.useMemo.call(void 0, 
-    () => hotspots.map((hotspot) => ({
-      ...hotspot,
-      position: new THREE.Vector3(...hotspot.position)
-    })),
-    [hotspots]
+  const deps = _react.useMemo.call(void 0, () => [hotspots], [hotspots]);
+  _chunk3M257MS7cjs.usePlugin.call(void 0, 
+    new (0, _chunkXTA7BEZGcjs.HotspotPlugin)(
+      hotspots.map((hotspot) => ({
+        ...hotspot,
+        position: new THREE.Vector3(...hotspot.position)
+      }))
+    ),
+    deps
   );
-  _chunk3M257MS7cjs.usePlugin.call(void 0, new (0, _chunkXTA7BEZGcjs.HotspotPlugin)(data), data);
   return null;
 };
 

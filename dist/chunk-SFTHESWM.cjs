@@ -11,19 +11,26 @@ var AutoLODSystem = ({
   mediumDistance = 20,
   lowDistance = 50,
   hideDistance = 100,
+  reductionPercentages,
   enabled = true
 }) => {
-  const config = _react.useMemo.call(void 0, 
-    () => ({
-      distances: [mediumDistance, lowDistance, hideDistance]
-    }),
-    [mediumDistance, lowDistance, hideDistance]
-  );
   const deps = _react.useMemo.call(void 0, 
-    () => [...Object.values(config), enabled],
-    [...Object.values(config), enabled]
+    () => [
+      mediumDistance,
+      lowDistance,
+      hideDistance,
+      reductionPercentages,
+      enabled
+    ],
+    [mediumDistance, lowDistance, hideDistance, reductionPercentages, enabled]
   );
-  _chunk3M257MS7cjs.usePlugin.call(void 0, new (0, _chunk2LFFYOLBcjs.AutoLODSystemPlugin)(config), deps);
+  _chunk3M257MS7cjs.usePlugin.call(void 0, 
+    new (0, _chunk2LFFYOLBcjs.AutoLODSystemPlugin)({
+      distances: [mediumDistance, lowDistance, hideDistance],
+      reductionPercentages
+    }),
+    deps
+  );
   return null;
 };
 

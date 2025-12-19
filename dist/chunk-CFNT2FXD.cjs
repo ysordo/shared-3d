@@ -13,25 +13,21 @@ var AdvancedOrbitControls = ({
   enabled = true,
   children
 }) => {
-  const stableOptions = _react.useMemo.call(void 0, 
-    () => ({ ...options }),
-    [...Object.values(options)]
-  );
   const [enable, setEnable] = _react.useState.call(void 0, {
-    pan: _nullishCoalesce(stableOptions.enablePan, () => ( true)),
-    rotate: _nullishCoalesce(stableOptions.enableRotate, () => ( true)),
-    zoom: _nullishCoalesce(stableOptions.enableZoom, () => ( true))
+    pan: _nullishCoalesce(options.enablePan, () => ( true)),
+    rotate: _nullishCoalesce(options.enableRotate, () => ( true)),
+    zoom: _nullishCoalesce(options.enableZoom, () => ( true))
   });
   const [distance, setDistance] = _react.useState.call(void 0, {
-    min: _nullishCoalesce(stableOptions.minDistance, () => ( 0.1)),
-    max: _nullishCoalesce(stableOptions.maxDistance, () => ( 1e3))
+    min: _nullishCoalesce(options.minDistance, () => ( 0.1)),
+    max: _nullishCoalesce(options.maxDistance, () => ( 1e3))
   });
   const deps = _react.useMemo.call(void 0, 
-    () => [...Object.values(stableOptions), enabled],
-    [...Object.values(stableOptions), enabled]
+    () => [...Object.values(options), enabled],
+    [...Object.values(options), enabled]
   );
   const plugin = _chunk3M257MS7cjs.usePlugin.call(void 0, 
-    new (0, _chunk4JD2YM6Jcjs.AdvancedOrbitControlsPlugin)(stableOptions),
+    new (0, _chunk4JD2YM6Jcjs.AdvancedOrbitControlsPlugin)(options),
     deps
   );
   _react.useEffect.call(void 0, () => {

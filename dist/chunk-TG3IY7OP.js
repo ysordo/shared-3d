@@ -13,25 +13,21 @@ var AdvancedOrbitControls = ({
   enabled = true,
   children
 }) => {
-  const stableOptions = useMemo(
-    () => ({ ...options }),
-    [...Object.values(options)]
-  );
   const [enable, setEnable] = useState({
-    pan: stableOptions.enablePan ?? true,
-    rotate: stableOptions.enableRotate ?? true,
-    zoom: stableOptions.enableZoom ?? true
+    pan: options.enablePan ?? true,
+    rotate: options.enableRotate ?? true,
+    zoom: options.enableZoom ?? true
   });
   const [distance, setDistance] = useState({
-    min: stableOptions.minDistance ?? 0.1,
-    max: stableOptions.maxDistance ?? 1e3
+    min: options.minDistance ?? 0.1,
+    max: options.maxDistance ?? 1e3
   });
   const deps = useMemo(
-    () => [...Object.values(stableOptions), enabled],
-    [...Object.values(stableOptions), enabled]
+    () => [...Object.values(options), enabled],
+    [...Object.values(options), enabled]
   );
   const plugin = usePlugin(
-    new AdvancedOrbitControlsPlugin(stableOptions),
+    new AdvancedOrbitControlsPlugin(options),
     deps
   );
   useEffect(() => {

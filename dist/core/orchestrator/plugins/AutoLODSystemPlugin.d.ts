@@ -5,7 +5,7 @@ import 'three';
 
 type AutoLODConfig = {
     distances: [number, number, number];
-    reductionPercentages?: [number, number];
+    reductionPercentages?: [number, number] | undefined;
 };
 declare class AutoLODSystemPlugin implements Plugin {
     private config;
@@ -22,4 +22,4 @@ declare class AutoLODSystemPlugin implements Plugin {
     dispose(): void;
 }
 
-export { AutoLODSystemPlugin };
+export { type AutoLODConfig, AutoLODSystemPlugin };

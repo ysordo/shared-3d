@@ -18,19 +18,21 @@ export const Hotspot: React.FC<HotspotProps> = ({
   target,
   onClick,
 }) => {
-  const data = useMemo(
-    () => ({
-      id,
-      position: new THREE.Vector3(...position),
-      target,
-      onClick,
-    }),
+  const deps = useMemo(
+    () => [id, position, target, onClick],
     [id, position, target, onClick]
   );
 
 
 
-  usePlugin(new HotspotPlugin([data]), [data]);
+  usePlugin(new HotspotPlugin([
+    {
+      id,
+      position: new THREE.Vector3(...position),
+      target,
+      onClick,
+    }
+  ]), deps);
 
   return null;
 };

@@ -1,7 +1,7 @@
 'use client';
 import type React from 'react';
-import { useCallback, useEffect, useMemo } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useCallback, useMemo } from 'react';
+import type { RaycasterEvent} from '../../core/orchestrator/plugins';
 import { RaycasterPlugin } from '../../core/orchestrator/plugins';
 import type { THREE } from '../../lib';
 import { usePlugin } from '../../hooks/usePlugin';
@@ -12,10 +12,9 @@ type RaycasterProps = {
 };
 
 export const Raycaster: React.FC<RaycasterProps> = ({ onClick, onHover }) => {
-  const orchestrator = useScene();
 
   const handle = useCallback(
-    (event: any) => {
+    (event: RaycasterEvent) => {
       if (event.type === 'click' && onClick) {
         onClick(event.object);
       }
@@ -26,10 +25,9 @@ export const Raycaster: React.FC<RaycasterProps> = ({ onClick, onHover }) => {
     [onClick, onHover]
   );
 
-  const config = useMemo(() => handle, [handle]);
   const deps = useMemo(() => [handle], [handle]);
 
-  usePlugin(new RaycasterPlugin(config), deps);
+  usePlugin(new RaycasterPlugin(handle), deps);
 
   return null;
 };

@@ -57,10 +57,9 @@ var AdvancedRaycaster = ({
       onDragEnd
     ]
   );
-  const config = useMemo(() => ({ targetModel: customModel ?? activeModel, handler }), [customModel, activeModel, handler]);
-  const deps = useMemo(() => [...Object.values(config)], [...Object.values(config)]);
+  const deps = useMemo(() => [customModel ?? activeModel, handler], [customModel, activeModel, handler]);
   usePlugin(
-    new AdvancedRaycasterPlugin(config.targetModel, config.handler),
+    new AdvancedRaycasterPlugin(customModel ?? activeModel, handler),
     deps
   );
   return null;

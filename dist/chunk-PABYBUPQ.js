@@ -131,20 +131,12 @@ var AdvancedDragRaycaster = ({
     },
     [handleDragStart, handleDrag, handleDragEnd]
   );
-  const config = useMemo(
-    () => ({
-      model,
-      enableRotationCompensation,
-      handle
-    }),
-    [model, enableRotationCompensation, handle]
-  );
   const deps = useMemo(
-    () => [...Object.values(config), camera],
-    [...Object.values(config), camera]
+    () => [model, enableRotationCompensation, handle, camera],
+    [model, enableRotationCompensation, handle, camera]
   );
   const plugin = usePlugin(
-    new AdvancedRaycasterPlugin(config.model, config.handle),
+    new AdvancedRaycasterPlugin(model, handle),
     deps
   );
   useEffect(() => {

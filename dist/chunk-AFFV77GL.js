@@ -11,16 +11,12 @@ var PostProcessing = ({
   bloom = { strength: 1.5, radius: 0.4, threshold: 0 },
   enabled = true
 }) => {
-  const options = useMemo(
-    () => bloom,
-    [bloom.strength, bloom.radius, bloom.threshold]
-  );
   const deps = useMemo(
-    () => [...Object.values(options), enabled],
-    [...Object.values(options), enabled]
+    () => [bloom.strength, bloom.radius, bloom.threshold, enabled],
+    [bloom.strength, bloom.radius, bloom.threshold, enabled]
   );
   usePlugin(
-    new PostProcessingPlugin(options),
+    new PostProcessingPlugin(bloom),
     deps
   );
   if (!enabled) {

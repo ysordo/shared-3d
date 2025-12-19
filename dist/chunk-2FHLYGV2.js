@@ -6,22 +6,21 @@ import {
 } from "./chunk-PRNY2PGZ.js";
 
 // src/react/components/MeasurementTool.tsx
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 var MeasurementTool = ({
   enabled = true,
   onMeasure
 }) => {
-  const callback = useMemo(() => onMeasure ?? (() => {
-  }), [onMeasure]);
-  const deps = useMemo(() => [callback, enabled], [callback, enabled]);
-  usePlugin(
-    new MeasurementToolPlugin((event) => {
+  const callback = useCallback(
+    (event) => {
       if (event.distance !== void 0 && event.points.length === 2) {
-        callback(event.distance, [event.points[0], event.points[1]]);
+        onMeasure?.(event.distance, [event.points[0], event.points[1]]);
       }
-    }),
-    deps
+    },
+    [onMeasure]
   );
+  const deps = useMemo(() => [callback, enabled], [callback, enabled]);
+  usePlugin(new MeasurementToolPlugin(callback), deps);
   return null;
 };
 

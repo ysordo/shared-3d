@@ -3,7 +3,7 @@ export { AdvancedCameraCollisionPlugin } from './plugins/AdvancedCameraCollision
 export { AdvancedOrbitControlsPlugin } from './plugins/AdvancedOrbitControlsPlugin.js';
 export { AdvancedRaycasterPlugin } from './plugins/AdvancedRaycasterPlugin.js';
 export { AnnotationData, AnnotationsPlugin } from './plugins/AnnotationsPlugin.js';
-export { AutoLODSystemPlugin } from './plugins/AutoLODSystemPlugin.js';
+export { AutoLODConfig, AutoLODSystemPlugin } from './plugins/AutoLODSystemPlugin.js';
 export { HotspotPlugin } from './plugins/HotspotPlugin.js';
 export { LODSystemPlugin } from './plugins/LODSystemPlugin.js';
 export { MeasurementEvent, MeasurementToolPlugin } from './plugins/MeasurementToolPlugin.js';

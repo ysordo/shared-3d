@@ -1,7 +1,7 @@
 "use client";
 import {
   AdvancedOrbitControls
-} from "../../chunk-MA2WIQ6O.js";
+} from "../../chunk-TG3IY7OP.js";
 import "../../chunk-UHZBSJS6.js";
 import "../../chunk-N3ACJCKO.js";
 import "../../chunk-Z3ENXIV3.js";

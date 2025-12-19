@@ -142,6 +142,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
     state.isDragging = false;
     state.currentObject = null;
   }, [onDragEnd]);
+
   const handle = useCallback(
     (event: any) => {
       switch (event.type) {
@@ -162,23 +163,13 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
     [handleDragStart, handleDrag, handleDragEnd]
   );
 
-  // Configuración memoizada
-  const config = useMemo(
-    () => ({
-      model,
-      enableRotationCompensation,
-      handle,
-    }),
-    [model, enableRotationCompensation, handle]
-  );
-
   const deps = useMemo(
-    () => [...Object.values(config), camera],
-    [...Object.values(config), camera]
+    () => [model, enableRotationCompensation, handle, camera],
+    [model, enableRotationCompensation, handle, camera]
   );
 
   const plugin = usePlugin(
-    new AdvancedRaycasterPlugin(config.model as THREE.Object3D, config.handle),
+    new AdvancedRaycasterPlugin(model as THREE.Object3D, handle),
     deps
   );
 

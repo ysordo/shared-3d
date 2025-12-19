@@ -21,10 +21,9 @@ export const LODSystem: React.FC<LODSystemProps> = ({
   hysteresis = 0.1,
   enabled = true,
 }) => {
-  const config = useMemo(() => [{ levels, hysteresis }], [levels, hysteresis]);
-  const deps = useMemo(() => [...Object.values(config), enabled], [...Object.values(config), enabled]);
+  const deps = useMemo(() => [levels, hysteresis, enabled], [levels, hysteresis, enabled]);
 
-  usePlugin(new LODSystemPlugin(config), deps);
+  usePlugin(new LODSystemPlugin([{levels, hysteresis}]), deps);
 
   if (!enabled) {
     return null;

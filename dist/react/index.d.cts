@@ -36,6 +36,7 @@ export { MaterialController } from './controls/MaterialController.cjs';
 export { SceneObject } from './primitives/SceneObject.cjs';
 import 'react';
 import 'three';
+import '../core/orchestrator/plugins/AutoLODSystemPlugin.cjs';
 import '../SceneOrchestrator-uEPgybCc.cjs';
 import '../core/loaders/HDRILoader.cjs';
 import '../core/cache/types.cjs';

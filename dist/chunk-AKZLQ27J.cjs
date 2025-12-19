@@ -131,20 +131,12 @@ var AdvancedDragRaycaster = ({
     },
     [handleDragStart, handleDrag, handleDragEnd]
   );
-  const config = _react.useMemo.call(void 0, 
-    () => ({
-      model,
-      enableRotationCompensation,
-      handle
-    }),
-    [model, enableRotationCompensation, handle]
-  );
   const deps = _react.useMemo.call(void 0, 
-    () => [...Object.values(config), camera],
-    [...Object.values(config), camera]
+    () => [model, enableRotationCompensation, handle, camera],
+    [model, enableRotationCompensation, handle, camera]
   );
   const plugin = _chunk3M257MS7cjs.usePlugin.call(void 0, 
-    new (0, _chunkHPHYHDPRcjs.AdvancedRaycasterPlugin)(config.model, config.handle),
+    new (0, _chunkHPHYHDPRcjs.AdvancedRaycasterPlugin)(model, handle),
     deps
   );
   _react.useEffect.call(void 0, () => {
