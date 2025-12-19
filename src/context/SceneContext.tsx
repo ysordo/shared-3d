@@ -72,20 +72,13 @@ export const SceneProvider: React.FC<SceneProviderProps> = ({
     };
   }, [config, canvasRef]);
 
-  const value = useMemo<SceneContextValue | null>(() => {
-    if (!orchestratorRef) {
-      return null;
-    }
-    return {
-      orchestrator: orchestratorRef,
-      activeModel: activeModelRef.current,
-      preload: preloadRef.current,
-    };
-  }, [orchestratorRef]);
-
-  if (!value) {
-    return null;
-  }
+  const value: SceneContextValue | null = orchestratorRef
+    ? {
+        orchestrator: orchestratorRef,
+        activeModel: activeModelRef.current,
+        preload: preloadRef.current,
+      }
+    : null;
 
   return (
     <SceneContext.Provider value={value}>{children}</SceneContext.Provider>
