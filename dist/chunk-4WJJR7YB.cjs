@@ -24,6 +24,7 @@ var usePlugin = (factory, deps = []) => {
       }
     };
   }, [orchestrator, ...deps]);
+  return pluginRef.current;
 };
 
 

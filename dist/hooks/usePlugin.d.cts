@@ -3,6 +3,6 @@ import '../core/loaders/HDRILoader.cjs';
 import '../core/cache/types.cjs';
 import 'three';
 
-declare const usePlugin: <T extends Plugin>(factory: () => T, deps?: any[]) => void;
+declare const usePlugin: <T extends Plugin>(factory: () => T, deps?: any[]) => T | null;
 
 export { usePlugin };

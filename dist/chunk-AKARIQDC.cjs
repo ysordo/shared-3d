@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunk7F5MUH5Mcjs = require('./chunk-7F5MUH5M.cjs');
+var _chunk4WJJR7YBcjs = require('./chunk-4WJJR7YB.cjs');
 
 
 var _chunkMCYH2TBQcjs = require('./chunk-MCYH2TBQ.cjs');
@@ -15,7 +15,7 @@ var PostProcessing = ({
     () => bloom,
     [bloom.strength, bloom.radius, bloom.threshold]
   );
-  _chunk7F5MUH5Mcjs.usePlugin.call(void 0, 
+  _chunk4WJJR7YBcjs.usePlugin.call(void 0, 
     () => new (0, _chunkMCYH2TBQcjs.PostProcessingPlugin)(options),
     enabled ? [options] : []
   );

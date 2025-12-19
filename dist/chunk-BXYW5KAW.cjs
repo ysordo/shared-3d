@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunk7F5MUH5Mcjs = require('./chunk-7F5MUH5M.cjs');
+var _chunk4WJJR7YBcjs = require('./chunk-4WJJR7YB.cjs');
 
 
 var _chunkMMMO3SNVcjs = require('./chunk-MMMO3SNV.cjs');
@@ -21,7 +21,7 @@ var AdvancedCameraCollision = ({
     () => [distanceThreshold, pushBackOffset, smooth],
     [distanceThreshold, pushBackOffset, smooth]
   );
-  _chunk7F5MUH5Mcjs.usePlugin.call(void 0, 
+  _chunk4WJJR7YBcjs.usePlugin.call(void 0, 
     () => new (0, _chunkMMMO3SNVcjs.AdvancedCameraCollisionPlugin)(...config),
     enabled && model ? config : []
   );

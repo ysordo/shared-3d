@@ -7,7 +7,7 @@ import type { Plugin } from '../core/orchestrator/types';
 export const usePlugin = <T extends Plugin>(
   factory: () => T,
   deps: any[] = []
-) => {
+): T | null => {
   const orchestrator = useScene();
   const pluginRef = useRef<T | null>(null);
 
@@ -27,4 +27,5 @@ export const usePlugin = <T extends Plugin>(
       }
     };
   }, [orchestrator, ...deps]);
+  return pluginRef.current;
 };

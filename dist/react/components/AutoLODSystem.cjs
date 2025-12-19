@@ -1,8 +1,8 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkGS2LAJ7Hcjs = require('../../chunk-GS2LAJ7H.cjs');
-require('../../chunk-7F5MUH5M.cjs');
+var _chunkXWABNUPRcjs = require('../../chunk-XWABNUPR.cjs');
+require('../../chunk-4WJJR7YB.cjs');
 require('../../chunk-2LFFYOLB.cjs');
 require('../../chunk-P3X2SDUW.cjs');
 require('../../chunk-EUGK72HY.cjs');
@@ -15,4 +15,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.AutoLODSystem = _chunkGS2LAJ7Hcjs.AutoLODSystem;
+exports.AutoLODSystem = _chunkXWABNUPRcjs.AutoLODSystem;

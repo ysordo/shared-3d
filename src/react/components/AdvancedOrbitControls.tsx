@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedOrbitControlsPlugin } from '../../core/orchestrator/plugins/AdvancedOrbitControlsPlugin';
 import { useScene } from '../../hooks';
@@ -41,31 +41,57 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
   enabled = true,
   children,
 }) => {
-  const orchestrator = useScene();
   const stableOptions = useMemo(
-    () => options,
+    () => ({...options}),
     [
-      options.enablePan,
-      options.enableRotate,
-      options.enableZoom,
-      options.dampingFactor,
-      options.panSpeed,
-      options.rotateSpeed,
-      options.zoomSpeed,
-      options.minDistance,
-      options.maxDistance,
-      options.minPolarAngle,
-      options.maxPolarAngle,
+      ...Object.values(options)
     ]
   );
 
-  usePlugin(
+  const plugin = usePlugin(
     () => new AdvancedOrbitControlsPlugin(stableOptions),
-    enabled ? [stableOptions] : []
+    enabled ? [...Object.values(stableOptions)] : []
   );
 
-  const plugin = orchestrator.plugin<AdvancedOrbitControlsPlugin>(
-    'AdvancedOrbitControls'
+  const setEnablePan = useCallback(
+    (enablePan: boolean) => {
+      if (plugin) {
+        plugin.enablePan = enablePan;
+      }
+    },
+    [plugin]
+  );
+  const setEnableRotate = useCallback(
+    (enableRotate: boolean) => {
+      if (plugin) {
+        plugin.enableRotate = enableRotate;
+      }
+    },
+    [plugin]
+  );
+  const setEnableZoom = useCallback(
+    (enableZoom: boolean) => {
+      if (plugin) {
+        plugin.enableZoom = enableZoom;
+      }
+    },
+    [plugin]
+  );
+  const setMinDistance = useCallback(
+    (minDistance: number) => {
+      if (plugin) {
+        plugin.minDistance = minDistance;
+      }
+    },
+    [plugin]
+  );
+  const setMaxDistance = useCallback(
+    (maxDistance: number) => {
+      if (plugin) {
+        plugin.maxDistance = maxDistance;
+      }
+    },
+    [plugin]
   );
   const state = useMemo<StateProps | null>(() => {
     if (!plugin) {
@@ -77,29 +103,13 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
       enableZoom: plugin.enableZoom,
       minDistance: plugin.minDistance,
       maxDistance: plugin.maxDistance,
-      setEnablePan: (enablePan: boolean) => {
-        plugin.enablePan = enablePan;
-      },
-      setEnableRotate: (enableRotate: boolean) => {
-        plugin.enableRotate = enableRotate;
-      },
-      setEnableZoom: (enableZoom: boolean) => {
-        plugin.enableZoom = enableZoom;
-      },
-      setMinDistance: (minDistance: number) => {
-        plugin.minDistance = minDistance;
-      },
-      setMaxDistance: (maxDistance: number) => {
-        plugin.maxDistance = maxDistance;
-      },
+      setEnablePan,
+      setEnableRotate,
+      setEnableZoom,
+      setMinDistance,
+      setMaxDistance,
     };
-  }, [
-    plugin?.enablePan,
-    plugin?.enableRotate,
-    plugin?.enableZoom,
-    plugin?.maxDistance,
-    plugin?.minDistance,
-  ]);
+  }, [plugin, setEnablePan, setEnableRotate, setEnableZoom, setMinDistance, setMaxDistance]);
 
   return <>{enabled && state && children?.(state)}</>;
 };
