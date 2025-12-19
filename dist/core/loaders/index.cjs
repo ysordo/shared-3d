@@ -1,10 +1,10 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});require('../../chunk-2JRLTZTT.cjs');
 
 
-var _chunkNY5P5I4Scjs = require('../../chunk-NY5P5I4S.cjs');
+var _chunkS6WVTNYXcjs = require('../../chunk-S6WVTNYX.cjs');
 
 
-var _chunkYAKUY6M3cjs = require('../../chunk-YAKUY6M3.cjs');
+var _chunkDORUFBZFcjs = require('../../chunk-DORUFBZF.cjs');
 
 
 var _chunkZJAPFMHDcjs = require('../../chunk-ZJAPFMHD.cjs');
@@ -16,4 +16,4 @@ require('../../chunk-UW5RKAXQ.cjs');
 
 
 
-exports.GLTFLoader = _chunkNY5P5I4Scjs.GLTFLoader; exports.HDRILoader = _chunkYAKUY6M3cjs.HDRILoader; exports.WebPHDRLoader = _chunkZJAPFMHDcjs.WebPHDRLoader;
+exports.GLTFLoader = _chunkS6WVTNYXcjs.GLTFLoader; exports.HDRILoader = _chunkDORUFBZFcjs.HDRILoader; exports.WebPHDRLoader = _chunkZJAPFMHDcjs.WebPHDRLoader;

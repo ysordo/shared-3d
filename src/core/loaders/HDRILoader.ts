@@ -97,11 +97,9 @@ export class HDRILoader {
 
     const metadata = await ObjectCache.getMetadata(id);
     if (metadata && metadata.hash === hash) {
-      console.info(`[HDRILoader] Cache hit: ${id}`);
       return this.fetchAndLoad(entry, events, customOptions);
     }
 
-    console.info(`[HDRILoader] Loading: ${id}`);
     const texture = await this.fetchAndLoad(entry, events, customOptions);
 
     await ObjectCache.setMetadata(id, hash, entry.updatedAt);
@@ -175,7 +173,7 @@ export class HDRILoader {
             onProgress?.({
               loaded: progress.loaded,
               total: progress.total,
-              percent: (progress.loaded / progress.total) * 100,
+              percent: Number.parseFloat(((progress.loaded / progress.total) * 100).toFixed(1)),
               url,
             });
           }

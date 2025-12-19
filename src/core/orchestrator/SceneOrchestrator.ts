@@ -194,7 +194,6 @@ async setModel(model: THREE.Group) {
             this.dispatchEvent({type: 'hdri::loaded', texture: tex, entry: loadedEntry, config } as never);
           },
           onProgress: (progress) => {
-            console.info(`[Orchestrator] HDRI loading: ${Math.round(progress.percent)}%`);
             this.dispatchEvent({type: 'hdri::progress', progress, entry } as never);
           },
           onError: (error, url) => {
@@ -250,7 +249,7 @@ async setModel(model: THREE.Group) {
     this.canvas.height = 1;
 
     SceneOrchestrator.instance = null;
-    console.info('[Orchestrator] Disposed completamente');
+    console.info('[Orchestrator] Disposed complete');
   }
 
   /* === GETTERS === */

@@ -57,7 +57,6 @@ export class GLTFLoader {
 
         scene.animations= gltf.animations;
 
-        // Centrar modelo
         const box = new THREE.Box3().setFromObject(scene);
         const center = box.getCenter(new THREE.Vector3());
         scene.position.sub(center);
@@ -71,23 +70,20 @@ export class GLTFLoader {
           options.onProgress?.({
             loaded: progress.loaded,
             total: progress.total,
-            percent,
+            percent: Number.parseFloat(percent.toFixed(1)),
             url: entry.url,
           });
-          console.info(`[GLTFLoader] ${entry.id}: ${percent.toFixed(1)}%`);
         }else {
           const percent = (progress.loaded / entry.size) * 100;
           options.onProgress?.({
             loaded: progress.loaded,
             total: entry.size,
-            percent,
+            percent: Number.parseFloat(percent.toFixed(1)),
             url: entry.url,
           });
-          console.info(`[GLTFLoader] ${entry.id}: ${percent.toFixed(1)}%`);
         }
       },
       (error) => {
-        console.error(`[GLTFLoader] Error loading ${entry.id}:`, error);
         options.onError?.(error as Error, entry.url);
         reject(error);
       }

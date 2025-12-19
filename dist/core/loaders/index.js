@@ -1,10 +1,10 @@
 import "../../chunk-EC4WICT5.js";
 import {
   GLTFLoader
-} from "../../chunk-W33WFURU.js";
+} from "../../chunk-SPHPB7FK.js";
 import {
   HDRILoader
-} from "../../chunk-VSTC7ZYY.js";
+} from "../../chunk-QHQFF7D7.js";
 import {
   WebPHDRLoader
 } from "../../chunk-W5OYT3BE.js";
