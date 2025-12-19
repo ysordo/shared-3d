@@ -17,8 +17,8 @@ export const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
 
     return (
       <>
+        <canvas ref={canvasRef} {...props} />
         <SceneProvider ref={canvasRef} config={config} fallback={fallback}>
-          <canvas ref={canvasRef} {...props} />
           {children}
         </SceneProvider>
       </>

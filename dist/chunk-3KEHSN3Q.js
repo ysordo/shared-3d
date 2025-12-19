@@ -9,10 +9,10 @@ var Canvas = forwardRef(
   ({ config, children, fallback = null, ...props }, ref) => {
     const internalRef = useRef(null);
     const canvasRef = ref ?? internalRef;
-    return /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsxs(SceneProvider, { ref: canvasRef, config, fallback, children: [
+    return /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx("canvas", { ref: canvasRef, ...props }),
-      children
-    ] }) });
+      /* @__PURE__ */ jsx(SceneProvider, { ref: canvasRef, config, fallback, children })
+    ] });
   }
 );
 Canvas.displayName = "Canvas";

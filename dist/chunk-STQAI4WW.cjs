@@ -9,10 +9,10 @@ var Canvas = _react.forwardRef.call(void 0,
   ({ config, children, fallback = null, ...props }, ref) => {
     const internalRef = _react.useRef.call(void 0, null);
     const canvasRef = _nullishCoalesce(ref, () => ( internalRef));
-    return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _jsxruntime.Fragment, { children: /* @__PURE__ */ _jsxruntime.jsxs.call(void 0, _chunkL6YAM3ECcjs.SceneProvider, { ref: canvasRef, config, fallback, children: [
+    return /* @__PURE__ */ _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [
       /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "canvas", { ref: canvasRef, ...props }),
-      children
-    ] }) });
+      /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _chunkL6YAM3ECcjs.SceneProvider, { ref: canvasRef, config, fallback, children })
+    ] });
   }
 );
 Canvas.displayName = "Canvas";
