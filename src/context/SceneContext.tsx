@@ -63,6 +63,7 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
     }, [ref, config]);
 
     const value = useMemo<SceneContextValue | null>(() => {
+      console.info(orchestrator);
       if (!orchestrator) {
         return null;
       }
