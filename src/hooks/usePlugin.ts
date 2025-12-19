@@ -4,47 +4,55 @@ import { useEffect, useRef } from 'react';
 import { useScene } from './useScene';
 import type { Plugin } from '../core/orchestrator/types';
 
+type Factory<T extends Plugin> = () => T | null;
 
 /**
- * Hook profesional para registro seguro de plugins con configuración reactiva.
+ * Hook definitivo para plugins con configuración reactiva.
  * 
- * - Una sola instancia activa en el orchestrator
- * - Configuración siempre actualizada
- * - Dispose correcto
- * - Compatible con React Strict Mode
+ * - Una instancia activa a la vez
+ * - Configuración siempre fresca (recrea si deps cambian)
+ * - Dispose garantizado
+ * - Tree-shakeable y Strict Mode seguro
  */
-export const usePlugin = <T extends Plugin | null>(
-  factory: T,
-  deps: React.DependencyList = []
+export const usePlugin = <T extends Plugin>(
+  factory: Factory<T>,
+  deps: React.DependencyList = [],
+  enabled = true
 ): T | null => {
   const orchestrator = useScene();
-  const pluginRef = useRef<T>(null);
-  const prevDepsRef = useRef<React.DependencyList | null>(null);
+  const pluginRef = useRef<T | null>(null);
 
   useEffect(() => {
-    if(!factory){return;}
-    if (pluginRef.current) {
-      const name = pluginRef.current.name;
-      orchestrator.remove(name);
-      pluginRef.current.dispose?.();
-      pluginRef.current = null;
+    if (!enabled) {
+      // Si disabled, remover si existe
+      if (pluginRef.current) {
+        orchestrator.remove(pluginRef.current.name);
+        pluginRef.current.dispose?.();
+        pluginRef.current = null;
+      }
+      return;
     }
 
-    const newPlugin = factory;
-    pluginRef.current = newPlugin;
-    orchestrator.use(newPlugin);
+    // Remover instancia anterior
+    if (pluginRef.current) {
+      orchestrator.remove(pluginRef.current.name);
+      pluginRef.current.dispose?.();
+    }
+    // Crear e instalar nueva con config actual
+    const plugin = factory();
+    if(!plugin){return;}
+    pluginRef.current = plugin;
+    orchestrator.use(plugin);
 
-    prevDepsRef.current = deps;
-
+    // Cleanup al cambiar deps o desmontar
     return () => {
       if (pluginRef.current) {
-        const name = pluginRef.current.name;
-        orchestrator.remove(name);
+        orchestrator.remove(pluginRef.current.name);
         pluginRef.current.dispose?.();
         pluginRef.current = null;
       }
     };
-  }, [orchestrator, factory, ...deps]);
+  }, [orchestrator, enabled, factory, ...deps]);
 
   return pluginRef.current;
 };

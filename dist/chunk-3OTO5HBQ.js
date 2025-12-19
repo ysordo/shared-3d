@@ -1,12 +1,12 @@
 import {
   usePlugin
-} from "./chunk-BKBNIEFK.js";
+} from "./chunk-BDCH4C4X.js";
 import {
   MeasurementToolPlugin
 } from "./chunk-PRNY2PGZ.js";
 
 // src/react/components/MeasurementTool.tsx
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 var MeasurementTool = ({
   enabled = true,
   onMeasure
@@ -19,8 +19,11 @@ var MeasurementTool = ({
     },
     [onMeasure]
   );
-  const deps = useMemo(() => [callback, enabled], [callback, enabled]);
-  usePlugin(new MeasurementToolPlugin(callback), deps);
+  const factory = useCallback(
+    () => new MeasurementToolPlugin(callback),
+    [callback]
+  );
+  usePlugin(factory, [factory], enabled);
   return null;
 };
 

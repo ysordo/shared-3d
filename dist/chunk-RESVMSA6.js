@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-BKBNIEFK.js";
+} from "./chunk-BDCH4C4X.js";
 import {
   HotspotPlugin
 } from "./chunk-L3G2QMBD.js";
@@ -9,25 +9,25 @@ import {
 } from "./chunk-OVHQQSEK.js";
 
 // src/react/components/Hotspot.tsx
-import { useMemo } from "react";
+import { useCallback } from "react";
 var Hotspot = ({
   id,
   position,
   target,
   onClick
 }) => {
-  const deps = useMemo(
-    () => [id, position, target, onClick],
+  const factory = useCallback(
+    () => new HotspotPlugin([
+      {
+        id,
+        position: new THREE.Vector3(...position),
+        target,
+        onClick
+      }
+    ]),
     [id, position, target, onClick]
   );
-  usePlugin(new HotspotPlugin([
-    {
-      id,
-      position: new THREE.Vector3(...position),
-      target,
-      onClick
-    }
-  ]), deps);
+  usePlugin(factory, [factory]);
   return null;
 };
 

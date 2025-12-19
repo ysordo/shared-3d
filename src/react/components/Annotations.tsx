@@ -1,8 +1,7 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useCallback } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
-import type { AnnotationData } from '../../core/orchestrator/plugins';
 import { AnnotationsPlugin } from '../../core/orchestrator/plugins';
 import { THREE } from '../../lib';
 import { useScene } from '../../hooks/useScene';
@@ -20,30 +19,33 @@ type AnnotationsProps = {
 };
 
 export const Annotations: React.FC<AnnotationsProps> = ({ annotations }) => {
-  const {scene} = useScene();
+  const { scene } = useScene();
 
-  const data = useMemo(() => {
-    return annotations.map((ann) => {
-      const target =
-        typeof ann.target === 'string'
-          ? scene.getObjectByName(ann.target)
-          : ann.target;
+  const factory = useCallback(
+    () =>
+      new AnnotationsPlugin(
+        annotations.map((ann) => {
+          const target =
+            typeof ann.target === 'string'
+              ? scene.getObjectByName(ann.target)
+              : ann.target;
 
-      return {
-        id: ann.id,
-        position: new THREE.Vector3(...ann.position),
-        target,
-        content:
-          typeof ann.content === 'string' ? ann.content : String(ann.content),
-        offset: ann.offset ? new THREE.Vector3(...ann.offset) : undefined,
-      };
-    });
-  }, [annotations, scene]);
-
-  usePlugin(
-    new AnnotationsPlugin(data as AnnotationData[]),
-    data
+          return {
+            id: ann.id,
+            position: new THREE.Vector3(...ann.position),
+            target,
+            content:
+              typeof ann.content === 'string'
+                ? ann.content
+                : String(ann.content),
+            offset: ann.offset ? new THREE.Vector3(...ann.offset) : undefined,
+          };
+        })
+      ),
+    [annotations, scene]
   );
+
+  usePlugin(factory, [factory]);
 
   return null;
 };

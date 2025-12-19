@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedOrbitControlsPlugin } from '../../core/orchestrator/plugins/AdvancedOrbitControlsPlugin';
-import { useScene } from '../../hooks';
 
 type StateProps = {
   readonly enablePan: boolean;
@@ -52,14 +51,15 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     max: options.maxDistance ?? 1000,
   });
 
-  const factory = useMemo(
+  const factory = useCallback(
     () => new AdvancedOrbitControlsPlugin(options),
     [options]
   );
 
   const plugin = usePlugin(
     factory,
-    [factory, enabled]
+    [factory],
+    enabled
   );
 
   useEffect(() => {

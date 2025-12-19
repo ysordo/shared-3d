@@ -1,19 +1,22 @@
 import {
   usePlugin
-} from "./chunk-BKBNIEFK.js";
+} from "./chunk-BDCH4C4X.js";
 import {
   LODSystemPlugin
 } from "./chunk-HVXJUMVE.js";
 
 // src/react/components/LODSystem.tsx
-import { useMemo } from "react";
+import { useCallback } from "react";
 var LODSystem = ({
   levels,
   hysteresis = 0.1,
   enabled = true
 }) => {
-  const deps = useMemo(() => [levels, hysteresis, enabled], [levels, hysteresis, enabled]);
-  usePlugin(new LODSystemPlugin([{ levels, hysteresis }]), deps);
+  const factory = useCallback(
+    () => new LODSystemPlugin([{ levels, hysteresis }]),
+    [levels, hysteresis, enabled]
+  );
+  usePlugin(factory, [factory]);
   if (!enabled) {
     return null;
   }

@@ -1,12 +1,12 @@
 import {
   usePlugin
-} from "./chunk-BKBNIEFK.js";
+} from "./chunk-BDCH4C4X.js";
 import {
   AutoLODSystemPlugin
 } from "./chunk-3VDQAJY7.js";
 
 // src/react/components/AutoLODSystem.tsx
-import { useMemo } from "react";
+import { useCallback } from "react";
 var AutoLODSystem = ({
   mediumDistance = 20,
   lowDistance = 50,
@@ -14,23 +14,14 @@ var AutoLODSystem = ({
   reductionPercentages,
   enabled = true
 }) => {
-  const deps = useMemo(
-    () => [
-      mediumDistance,
-      lowDistance,
-      hideDistance,
-      reductionPercentages,
-      enabled
-    ],
-    [mediumDistance, lowDistance, hideDistance, reductionPercentages, enabled]
-  );
-  usePlugin(
-    new AutoLODSystemPlugin({
+  const factory = useCallback(
+    () => new AutoLODSystemPlugin({
       distances: [mediumDistance, lowDistance, hideDistance],
       reductionPercentages
     }),
-    deps
+    [mediumDistance, lowDistance, hideDistance, reductionPercentages]
   );
+  usePlugin(factory, [factory], enabled);
   return null;
 };
 

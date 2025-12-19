@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import type { MeasurementEvent } from '../../core/orchestrator/plugins';
 import { MeasurementToolPlugin } from '../../core/orchestrator/plugins';
@@ -23,9 +23,12 @@ export const MeasurementTool: React.FC<MeasurementToolProps> = ({
     },
     [onMeasure]
   );
-  const deps = useMemo(() => [callback, enabled], [callback, enabled]);
+  const factory = useCallback(
+    () => new MeasurementToolPlugin(callback),
+    [callback]
+  );
 
-  usePlugin(new MeasurementToolPlugin(callback), deps);
+  usePlugin(factory, [factory], enabled);
 
   return null;
 };

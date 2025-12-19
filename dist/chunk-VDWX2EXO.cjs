@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkQQEAL6E5cjs = require('./chunk-QQEAL6E5.cjs');
+var _chunkNFCEFR2Qcjs = require('./chunk-NFCEFR2Q.cjs');
 
 
 var _chunkXTA7BEZGcjs = require('./chunk-XTA7BEZG.cjs');
@@ -16,18 +16,18 @@ var Hotspot = ({
   target,
   onClick
 }) => {
-  const deps = _react.useMemo.call(void 0, 
-    () => [id, position, target, onClick],
+  const factory = _react.useCallback.call(void 0, 
+    () => new (0, _chunkXTA7BEZGcjs.HotspotPlugin)([
+      {
+        id,
+        position: new _chunkEA3XQ4KJcjs.THREE.Vector3(...position),
+        target,
+        onClick
+      }
+    ]),
     [id, position, target, onClick]
   );
-  _chunkQQEAL6E5cjs.usePlugin.call(void 0, new (0, _chunkXTA7BEZGcjs.HotspotPlugin)([
-    {
-      id,
-      position: new _chunkEA3XQ4KJcjs.THREE.Vector3(...position),
-      target,
-      onClick
-    }
-  ]), deps);
+  _chunkNFCEFR2Qcjs.usePlugin.call(void 0, factory, [factory]);
   return null;
 };
 

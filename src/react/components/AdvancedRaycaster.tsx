@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedRaycasterPlugin } from '../../core/orchestrator/plugins/AdvancedRaycasterPlugin';
 import { useActiveModel } from '../../hooks/useActiveModel';
@@ -66,11 +66,18 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
     ]
   );
 
-  const deps = useMemo(() => [customModel ?? activeModel, handler], [customModel, activeModel, handler]);
+  const factory = useCallback(() => {
+    if (customModel) {
+      return new AdvancedRaycasterPlugin(customModel, handler);
+    }else if(activeModel){
+      return new AdvancedRaycasterPlugin(activeModel, handler);
+    }
+    return null;
+  }, [customModel, activeModel, handler]);
 
   usePlugin(
-    new AdvancedRaycasterPlugin(customModel ?? activeModel as THREE.Object3D, handler),
-    deps
+    factory,
+    [factory]
   );
 
   return null;

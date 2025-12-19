@@ -163,7 +163,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
     [handleDragStart, handleDrag, handleDragEnd]
   );
 
-  const factory = useMemo(
+  const factory = useCallback(
     () => model && new AdvancedRaycasterPlugin(model as THREE.Object3D, handle),
     [model, enableRotationCompensation, handle, camera]
   );

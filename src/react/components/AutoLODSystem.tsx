@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useCallback } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import type { AutoLODConfig } from '../../core/orchestrator/plugins/AutoLODSystemPlugin';
 import { AutoLODSystemPlugin } from '../../core/orchestrator/plugins/AutoLODSystemPlugin';
@@ -19,24 +19,16 @@ export const AutoLODSystem: React.FC<AutoLODSystemProps> = ({
   reductionPercentages,
   enabled = true,
 }) => {
-  const deps = useMemo(
-    () => [
-      mediumDistance,
-      lowDistance,
-      hideDistance,
-      reductionPercentages,
-      enabled,
-    ],
-    [mediumDistance, lowDistance, hideDistance, reductionPercentages, enabled]
+  const factory = useCallback(
+    () =>
+      new AutoLODSystemPlugin({
+        distances: [mediumDistance, lowDistance, hideDistance],
+        reductionPercentages,
+      }),
+    [mediumDistance, lowDistance, hideDistance, reductionPercentages]
   );
 
-  usePlugin(
-    new AutoLODSystemPlugin({
-      distances: [mediumDistance, lowDistance, hideDistance],
-      reductionPercentages,
-    }),
-    deps
-  );
+  usePlugin(factory, [factory], enabled);
 
   return null;
 };

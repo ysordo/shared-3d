@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useCallback } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedCameraCollisionPlugin } from '../../core/orchestrator/plugins/AdvancedCameraCollisionPlugin';
 import { useActiveModel } from '../../hooks/useActiveModel';
@@ -22,17 +22,17 @@ export const AdvancedCameraCollision: React.FC<
 }) => {
   const model = useActiveModel();
 
-  const factory = useMemo(
+  const factory = useCallback(
     () =>
       new AdvancedCameraCollisionPlugin(
         distanceThreshold,
         pushBackOffset,
         smooth
       ),
-    [distanceThreshold, pushBackOffset, smooth, model, enabled]
+    [distanceThreshold, pushBackOffset, smooth, model]
   );
 
-  usePlugin(factory, [factory]);
+  usePlugin(factory, [factory], enabled);
 
   return null;
 };

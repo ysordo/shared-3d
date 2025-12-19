@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkQQEAL6E5cjs = require('./chunk-QQEAL6E5.cjs');
+var _chunkNFCEFR2Qcjs = require('./chunk-NFCEFR2Q.cjs');
 
 
 var _chunk2LFFYOLBcjs = require('./chunk-2LFFYOLB.cjs');
@@ -14,23 +14,14 @@ var AutoLODSystem = ({
   reductionPercentages,
   enabled = true
 }) => {
-  const deps = _react.useMemo.call(void 0, 
-    () => [
-      mediumDistance,
-      lowDistance,
-      hideDistance,
-      reductionPercentages,
-      enabled
-    ],
-    [mediumDistance, lowDistance, hideDistance, reductionPercentages, enabled]
-  );
-  _chunkQQEAL6E5cjs.usePlugin.call(void 0, 
-    new (0, _chunk2LFFYOLBcjs.AutoLODSystemPlugin)({
+  const factory = _react.useCallback.call(void 0, 
+    () => new (0, _chunk2LFFYOLBcjs.AutoLODSystemPlugin)({
       distances: [mediumDistance, lowDistance, hideDistance],
       reductionPercentages
     }),
-    deps
+    [mediumDistance, lowDistance, hideDistance, reductionPercentages]
   );
+  _chunkNFCEFR2Qcjs.usePlugin.call(void 0, factory, [factory], enabled);
   return null;
 };
 

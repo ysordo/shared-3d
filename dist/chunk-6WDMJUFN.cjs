@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
 
-var _chunkQQEAL6E5cjs = require('./chunk-QQEAL6E5.cjs');
+var _chunkNFCEFR2Qcjs = require('./chunk-NFCEFR2Q.cjs');
 
 
 var _chunk4JD2YM6Jcjs = require('./chunk-4JD2YM6J.cjs');
@@ -22,13 +22,14 @@ var AdvancedOrbitControls = ({
     min: _nullishCoalesce(options.minDistance, () => ( 0.1)),
     max: _nullishCoalesce(options.maxDistance, () => ( 1e3))
   });
-  const factory = _react.useMemo.call(void 0, 
+  const factory = _react.useCallback.call(void 0, 
     () => new (0, _chunk4JD2YM6Jcjs.AdvancedOrbitControlsPlugin)(options),
     [options]
   );
-  const plugin = _chunkQQEAL6E5cjs.usePlugin.call(void 0, 
+  const plugin = _chunkNFCEFR2Qcjs.usePlugin.call(void 0, 
     factory,
-    [factory, enabled]
+    [factory],
+    enabled
   );
   _react.useEffect.call(void 0, () => {
     if (plugin) {

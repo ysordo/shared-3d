@@ -1,6 +1,6 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
 
-var _chunkQQEAL6E5cjs = require('./chunk-QQEAL6E5.cjs');
+var _chunkNFCEFR2Qcjs = require('./chunk-NFCEFR2Q.cjs');
 
 
 var _chunkHPHYHDPRcjs = require('./chunk-HPHYHDPR.cjs');
@@ -57,10 +57,17 @@ var AdvancedRaycaster = ({
       onDragEnd
     ]
   );
-  const deps = _react.useMemo.call(void 0, () => [_nullishCoalesce(customModel, () => ( activeModel)), handler], [customModel, activeModel, handler]);
-  _chunkQQEAL6E5cjs.usePlugin.call(void 0, 
-    new (0, _chunkHPHYHDPRcjs.AdvancedRaycasterPlugin)(_nullishCoalesce(customModel, () => ( activeModel)), handler),
-    deps
+  const factory = _react.useCallback.call(void 0, () => {
+    if (customModel) {
+      return new (0, _chunkHPHYHDPRcjs.AdvancedRaycasterPlugin)(customModel, handler);
+    } else if (activeModel) {
+      return new (0, _chunkHPHYHDPRcjs.AdvancedRaycasterPlugin)(activeModel, handler);
+    }
+    return null;
+  }, [customModel, activeModel, handler]);
+  _chunkNFCEFR2Qcjs.usePlugin.call(void 0, 
+    factory,
+    [factory]
   );
   return null;
 };

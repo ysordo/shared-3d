@@ -1,12 +1,12 @@
 import {
   usePlugin
-} from "./chunk-BKBNIEFK.js";
+} from "./chunk-BDCH4C4X.js";
 import {
   RaycasterPlugin
 } from "./chunk-D6IH2BXA.js";
 
 // src/react/components/Raycaster.tsx
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 var Raycaster = ({ onClick, onHover }) => {
   const handle = useCallback(
     (event) => {
@@ -19,8 +19,8 @@ var Raycaster = ({ onClick, onHover }) => {
     },
     [onClick, onHover]
   );
-  const deps = useMemo(() => [handle], [handle]);
-  usePlugin(new RaycasterPlugin(handle), deps);
+  const factory = useCallback(() => new RaycasterPlugin(handle), [handle]);
+  usePlugin(factory, [factory]);
   return null;
 };
 

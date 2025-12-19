@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-BKBNIEFK.js";
+} from "./chunk-BDCH4C4X.js";
 import {
   AdvancedRaycasterPlugin
 } from "./chunk-OHN5TLPQ.js";
@@ -9,7 +9,7 @@ import {
 } from "./chunk-CBC77TWZ.js";
 
 // src/react/components/AdvancedRaycaster.tsx
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 var AdvancedRaycaster = ({
   model: customModel,
   onClick,
@@ -57,10 +57,17 @@ var AdvancedRaycaster = ({
       onDragEnd
     ]
   );
-  const deps = useMemo(() => [customModel ?? activeModel, handler], [customModel, activeModel, handler]);
+  const factory = useCallback(() => {
+    if (customModel) {
+      return new AdvancedRaycasterPlugin(customModel, handler);
+    } else if (activeModel) {
+      return new AdvancedRaycasterPlugin(activeModel, handler);
+    }
+    return null;
+  }, [customModel, activeModel, handler]);
   usePlugin(
-    new AdvancedRaycasterPlugin(customModel ?? activeModel, handler),
-    deps
+    factory,
+    [factory]
   );
   return null;
 };

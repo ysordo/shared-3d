@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-BKBNIEFK.js";
+} from "./chunk-BDCH4C4X.js";
 import {
   AdvancedRaycasterPlugin
 } from "./chunk-OHN5TLPQ.js";
@@ -131,7 +131,7 @@ var AdvancedDragRaycaster = ({
     },
     [handleDragStart, handleDrag, handleDragEnd]
   );
-  const factory = useMemo(
+  const factory = useCallback(
     () => model && new AdvancedRaycasterPlugin(model, handle),
     [model, enableRotationCompensation, handle, camera]
   );

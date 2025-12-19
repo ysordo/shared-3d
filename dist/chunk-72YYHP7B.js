@@ -1,13 +1,15 @@
 import {
   usePlugin
-} from "./chunk-BKBNIEFK.js";
+} from "./chunk-BDCH4C4X.js";
 import {
   OrbitControlsPlugin
 } from "./chunk-6ZE3RCVO.js";
 
 // src/react/components/OrbitControls.tsx
+import { useCallback } from "react";
 var OrbitControls = () => {
-  usePlugin(new OrbitControlsPlugin(), []);
+  const factory = useCallback(() => new OrbitControlsPlugin(), []);
+  usePlugin(factory, [factory]);
   return null;
 };
 

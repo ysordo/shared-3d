@@ -4,33 +4,36 @@ var _chunkPKNMQ6ENcjs = require('./chunk-PKNMQ6EN.cjs');
 
 // src/hooks/usePlugin.ts
 var _react = require('react');
-var usePlugin = (factory, deps = []) => {
+var usePlugin = (factory, deps = [], enabled = true) => {
   const orchestrator = _chunkPKNMQ6ENcjs.useScene.call(void 0, );
   const pluginRef = _react.useRef.call(void 0, null);
-  const prevDepsRef = _react.useRef.call(void 0, null);
   _react.useEffect.call(void 0, () => {
-    if (!factory) {
+    if (!enabled) {
+      if (pluginRef.current) {
+        orchestrator.remove(pluginRef.current.name);
+        _optionalChain([pluginRef, 'access', _ => _.current, 'access', _2 => _2.dispose, 'optionalCall', _3 => _3()]);
+        pluginRef.current = null;
+      }
       return;
     }
     if (pluginRef.current) {
-      const name = pluginRef.current.name;
-      orchestrator.remove(name);
-      _optionalChain([pluginRef, 'access', _ => _.current, 'access', _2 => _2.dispose, 'optionalCall', _3 => _3()]);
-      pluginRef.current = null;
+      orchestrator.remove(pluginRef.current.name);
+      _optionalChain([pluginRef, 'access', _4 => _4.current, 'access', _5 => _5.dispose, 'optionalCall', _6 => _6()]);
     }
-    const newPlugin = factory;
-    pluginRef.current = newPlugin;
-    orchestrator.use(newPlugin);
-    prevDepsRef.current = deps;
+    const plugin = factory();
+    if (!plugin) {
+      return;
+    }
+    pluginRef.current = plugin;
+    orchestrator.use(plugin);
     return () => {
       if (pluginRef.current) {
-        const name = pluginRef.current.name;
-        orchestrator.remove(name);
-        _optionalChain([pluginRef, 'access', _4 => _4.current, 'access', _5 => _5.dispose, 'optionalCall', _6 => _6()]);
+        orchestrator.remove(pluginRef.current.name);
+        _optionalChain([pluginRef, 'access', _7 => _7.current, 'access', _8 => _8.dispose, 'optionalCall', _9 => _9()]);
         pluginRef.current = null;
       }
     };
-  }, [orchestrator, factory, ...deps]);
+  }, [orchestrator, enabled, factory, ...deps]);
   return pluginRef.current;
 };
 

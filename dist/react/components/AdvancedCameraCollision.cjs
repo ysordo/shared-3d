@@ -1,8 +1,8 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkVKLG6EQDcjs = require('../../chunk-VKLG6EQD.cjs');
-require('../../chunk-QQEAL6E5.cjs');
+var _chunkICAFOVFXcjs = require('../../chunk-ICAFOVFX.cjs');
+require('../../chunk-NFCEFR2Q.cjs');
 require('../../chunk-MMMO3SNV.cjs');
 require('../../chunk-PKNMQ6EN.cjs');
 require('../../chunk-BS6FGAC2.cjs');
@@ -16,4 +16,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.AdvancedCameraCollision = _chunkVKLG6EQDcjs.AdvancedCameraCollision;
+exports.AdvancedCameraCollision = _chunkICAFOVFXcjs.AdvancedCameraCollision;

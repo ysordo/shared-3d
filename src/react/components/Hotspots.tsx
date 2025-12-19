@@ -1,8 +1,8 @@
 'use client';
 import type React from 'react';
-import { useMemo } from 'react';
+import { useCallback } from 'react';
 import { HotspotPlugin } from '../../core/orchestrator/plugins/HotspotPlugin';
-import * as THREE from 'three';
+import {THREE} from '../../lib';
 import { usePlugin } from '../../hooks/usePlugin';
 
 type HotspotData = {
@@ -17,17 +17,18 @@ type HotspotsProps = {
 };
 
 export const Hotspots: React.FC<HotspotsProps> = ({ hotspots }) => {
-  const deps = useMemo(() => [hotspots], [hotspots]);
-
-  usePlugin(
-    new HotspotPlugin(
-      hotspots.map((hotspot) => ({
-        ...hotspot,
-        position: new THREE.Vector3(...hotspot.position),
-      }))
-    ),
-    deps
+  const factory = useCallback(
+    () =>
+      new HotspotPlugin(
+        hotspots.map((hotspot) => ({
+          ...hotspot,
+          position: new THREE.Vector3(...hotspot.position),
+        }))
+      ),
+    [hotspots]
   );
+
+  usePlugin(factory, [factory]);
 
   return null;
 };
