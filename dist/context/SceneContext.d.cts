@@ -11,6 +11,7 @@ type SceneContextValue = {
 };
 type SceneProviderProps = {
     children: ReactNode;
+    Canvas?: React.ElementType<React.CanvasHTMLAttributes<HTMLCanvasElement>>;
     config?: SceneConfig | undefined;
     fallback?: ReactNode;
 };

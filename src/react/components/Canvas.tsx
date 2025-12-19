@@ -11,11 +11,19 @@ type CanvasProps = React.CanvasHTMLAttributes<HTMLCanvasElement> & {
 
 export const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
   ({ config, children, fallback = null, ...props }, ref) => {
+    const internalRef = useRef<HTMLCanvasElement>(null);
+    const canvasRef = (ref ??
+      internalRef) as React.RefObject<HTMLCanvasElement | null>;
 
     return (
       <>
-        <SceneProvider ref={ref} config={config} fallback={fallback}>
-          <canvas ref={ref} {...props} />
+        <SceneProvider
+          ref={canvasRef}
+          config={config}
+          Canvas={(props: React.CanvasHTMLAttributes<HTMLCanvasElement>) => (
+            <canvas ref={canvasRef} {...props} />
+          )}
+          fallback={fallback}>
           {children}
         </SceneProvider>
       </>

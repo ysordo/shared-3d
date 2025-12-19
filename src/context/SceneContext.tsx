@@ -23,12 +23,17 @@ const SceneContext = createContext<SceneContextValue | null>(null);
 
 type SceneProviderProps = {
   children: ReactNode;
+  Canvas?: React.ElementType<React.CanvasHTMLAttributes<HTMLCanvasElement>>;
   config?: SceneConfig | undefined;
   fallback?: ReactNode;
 };
 
+const DefaultCanvas = forwardRef<HTMLCanvasElement, React.CanvasHTMLAttributes<HTMLCanvasElement>>(
+  (props, ref) => <canvas ref={ref} {...props} />
+);
+
 export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
-  ({ children, config, fallback = null }, ref) => {
+  ({ children, Canvas = DefaultCanvas, config, fallback = null }, ref) => {
     const [orchestrator, setOrchestrator] = useState<SceneOrchestrator | null>(
       null
     );
@@ -54,19 +59,24 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
       return () => {
         orch.removeEventListener('model::loaded' as never, updateActiveModel);
         orch.removeEventListener('model::removed' as never, updateActiveModel);
-        orch.dispose();
       };
     }, [ref, config]);
 
+    const value = useMemo<SceneContextValue | null>(() => {
+      if (!orchestrator) {
+        return null;
+      }
+      return {
+        orchestrator: orchestrator,
+        activeModel: activeModel,
+        preload: preload.current,
+      };
+    }, [orchestrator, activeModel]);
+
     return (
-      <SceneContext.Provider
-        value={{
-          activeModel,
-          orchestrator: orchestrator!,
-          preload: preload.current,
-        }}>
-        {!orchestrator && fallback}
-        {children}
+      <SceneContext.Provider value={value}>
+        <Canvas ref={ref} />
+        {value ? children : fallback}
       </SceneContext.Provider>
     );
   }
