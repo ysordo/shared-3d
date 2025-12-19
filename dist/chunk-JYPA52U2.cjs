@@ -1,13 +1,13 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkHJWWUEURcjs = require('./chunk-HJWWUEUR.cjs');
+var _chunkQEXPEXQRcjs = require('./chunk-QEXPEXQR.cjs');
 
 
 var _chunkSD2EEMFKcjs = require('./chunk-SD2EEMFK.cjs');
 
 // src/react/components/OrbitControls.tsx
 var OrbitControls = () => {
-  _chunkHJWWUEURcjs.usePlugin.call(void 0, () => new (0, _chunkSD2EEMFKcjs.OrbitControlsPlugin)(), []);
+  _chunkQEXPEXQRcjs.usePlugin.call(void 0, () => new (0, _chunkSD2EEMFKcjs.OrbitControlsPlugin)(), []);
   return null;
 };
 

@@ -4,27 +4,24 @@ var _chunkL3KVNMIIcjs = require('./chunk-L3KVNMII.cjs');
 
 // src/hooks/usePlugin.ts
 var _react = require('react');
-var usePlugin = (factory, deps = []) => {
-  const orchestrator = _chunkL3KVNMIIcjs.useScene.call(void 0, );
-  const pluginRef = _react.useRef.call(void 0, null);
+var usePlugin = (factory, deps = [], name = factory().name) => {
+  const orch = _chunkL3KVNMIIcjs.useScene.call(void 0, );
   _react.useEffect.call(void 0, () => {
-    if (!orchestrator) {
+    if (!orch) {
       return;
     }
-    if (!pluginRef.current) {
-      pluginRef.current = factory();
-      orchestrator.use(pluginRef.current);
+    const plugin = orch.plugin(name);
+    if (!plugin) {
+      orch.use(factory());
     }
     return () => {
-      if (pluginRef.current) {
-        const name = pluginRef.current.name;
-        orchestrator.remove(name);
-        _optionalChain([pluginRef, 'access', _ => _.current, 'access', _2 => _2.dispose, 'optionalCall', _3 => _3()]);
-        pluginRef.current = null;
+      if (plugin) {
+        _optionalChain([plugin, 'access', _ => _.dispose, 'optionalCall', _2 => _2()]);
+        orch.remove(name);
       }
     };
-  }, [orchestrator, ...deps]);
-  return pluginRef.current ? orchestrator.plugin(pluginRef.current.name) : void 0;
+  }, [orch, ...deps]);
+  return orch.plugin(name);
 };
 
 

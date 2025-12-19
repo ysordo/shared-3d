@@ -6,26 +6,24 @@ import type { Plugin } from '../core/orchestrator/types';
 
 export const usePlugin = <T extends Plugin>(
   factory: () => T,
-  deps: any[] = []
+  deps: any[] = [],
+  name: string = factory().name,
 ): T | undefined => {
-  const orchestrator = useScene();
-  const pluginRef = useRef<T | null>(null);
+  const orch = useScene();
 
   useEffect(() => {
-    if(!orchestrator){return;}
-    if (!pluginRef.current) {
-      pluginRef.current = factory();
-      orchestrator.use(pluginRef.current);
+    if(!orch){return;}
+    const plugin = orch.plugin<T>(name);
+    if (!plugin) {
+      orch.use(factory());
     }
 
     return () => {
-      if (pluginRef.current) {
-        const name = pluginRef.current.name;
-        orchestrator.remove(name);
-        pluginRef.current.dispose?.();
-        pluginRef.current = null;
+      if (plugin) {
+        plugin.dispose?.();
+        orch.remove(name);
       }
     };
-  }, [orchestrator, ...deps]);
-  return pluginRef.current? orchestrator.plugin<T>(pluginRef.current.name) : undefined;
+  }, [orch, ...deps]);
+  return orch.plugin<T>(name);
 };

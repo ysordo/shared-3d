@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkHJWWUEURcjs = require('./chunk-HJWWUEUR.cjs');
+var _chunkQEXPEXQRcjs = require('./chunk-QEXPEXQR.cjs');
 
 
 var _chunk2LFFYOLBcjs = require('./chunk-2LFFYOLB.cjs');
@@ -19,7 +19,7 @@ var AutoLODSystem = ({
     }),
     [mediumDistance, lowDistance, hideDistance]
   );
-  _chunkHJWWUEURcjs.usePlugin.call(void 0, () => new (0, _chunk2LFFYOLBcjs.AutoLODSystemPlugin)(config), enabled ? [config] : []);
+  _chunkQEXPEXQRcjs.usePlugin.call(void 0, () => new (0, _chunk2LFFYOLBcjs.AutoLODSystemPlugin)(config), enabled ? [config] : []);
   if (!enabled) {
     return null;
   }

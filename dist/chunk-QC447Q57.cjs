@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }
 
-var _chunkHJWWUEURcjs = require('./chunk-HJWWUEUR.cjs');
+var _chunkQEXPEXQRcjs = require('./chunk-QEXPEXQR.cjs');
 
 
 var _chunk44UQAST6cjs = require('./chunk-44UQAST6.cjs');
@@ -13,7 +13,7 @@ var MeasurementTool = ({
 }) => {
   const callback = _react.useMemo.call(void 0, () => _nullishCoalesce(onMeasure, () => ( (() => {
   }))), [onMeasure]);
-  _chunkHJWWUEURcjs.usePlugin.call(void 0, 
+  _chunkQEXPEXQRcjs.usePlugin.call(void 0, 
     () => new (0, _chunk44UQAST6cjs.MeasurementToolPlugin)((event) => {
       if (event.distance !== void 0 && event.points.length === 2) {
         callback(event.distance, [event.points[0], event.points[1]]);
