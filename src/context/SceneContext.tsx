@@ -23,17 +23,11 @@ const SceneContext = createContext<SceneContextValue | null>(null);
 
 type SceneProviderProps = {
   children: ReactNode;
-  Canvas?: React.ElementType<React.CanvasHTMLAttributes<HTMLCanvasElement>>;
   config?: SceneConfig | undefined;
-  fallback?: ReactNode;
 };
 
-const DefaultCanvas = forwardRef<HTMLCanvasElement, React.CanvasHTMLAttributes<HTMLCanvasElement>>(
-  (props, ref) => <canvas ref={ref} {...props} />
-);
-
 export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
-  ({ children, Canvas = DefaultCanvas, config, fallback = null }, ref) => {
+  ({ children, config }, ref) => {
     const [orchestrator, setOrchestrator] = useState<SceneOrchestrator | null>(
       null
     );
@@ -76,8 +70,7 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
 
     return (
       <SceneContext.Provider value={value}>
-        <Canvas ref={ref} />
-        {value ? children : fallback}
+        {children}
       </SceneContext.Provider>
     );
   }

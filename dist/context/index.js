@@ -7,7 +7,7 @@ import "../chunk-777TCJKN.js";
 import "../chunk-SRUKCELR.js";
 import {
   SceneProvider
-} from "../chunk-YE7II2FU.js";
+} from "../chunk-TZ2DKTHO.js";
 import "../chunk-SENENRNP.js";
 import "../chunk-VSTC7ZYY.js";
 import "../chunk-W5OYT3BE.js";
