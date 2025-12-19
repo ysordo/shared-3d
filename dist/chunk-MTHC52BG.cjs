@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkISHYF53Icjs = require('./chunk-ISHYF53I.cjs');
+var _chunkQQEAL6E5cjs = require('./chunk-QQEAL6E5.cjs');
 
 
 var _chunkDF6YTEMAcjs = require('./chunk-DF6YTEMA.cjs');
@@ -27,7 +27,7 @@ var Annotations = ({ annotations }) => {
       };
     });
   }, [annotations, scene]);
-  _chunkISHYF53Icjs.usePlugin.call(void 0, 
+  _chunkQQEAL6E5cjs.usePlugin.call(void 0, 
     new (0, _chunkDF6YTEMAcjs.AnnotationsPlugin)(data),
     data
   );

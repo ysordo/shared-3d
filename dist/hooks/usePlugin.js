@@ -1,7 +1,7 @@
 "use client";
 import {
   usePlugin
-} from "../chunk-HSIROGI3.js";
+} from "../chunk-BKBNIEFK.js";
 import "../chunk-DWHU2W2T.js";
 import "../chunk-AJJJBOOV.js";
 import "../chunk-Q6SVPXYM.js";

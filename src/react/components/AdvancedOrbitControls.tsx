@@ -52,14 +52,14 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     max: options.maxDistance ?? 1000,
   });
 
-  const deps = useMemo(
-    () => [...Object.values(options), enabled],
-    [...Object.values(options), enabled]
+  const factory = useMemo(
+    () => new AdvancedOrbitControlsPlugin(options),
+    [options]
   );
 
   const plugin = usePlugin(
-    new AdvancedOrbitControlsPlugin(options),
-    deps
+    factory,
+    [factory, enabled]
   );
 
   useEffect(() => {

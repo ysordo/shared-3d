@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-HSIROGI3.js";
+} from "./chunk-BKBNIEFK.js";
 import {
   AdvancedRaycasterPlugin
 } from "./chunk-OHN5TLPQ.js";
@@ -131,14 +131,11 @@ var AdvancedDragRaycaster = ({
     },
     [handleDragStart, handleDrag, handleDragEnd]
   );
-  const deps = useMemo(
-    () => [model, enableRotationCompensation, handle, camera],
+  const factory = useMemo(
+    () => model && new AdvancedRaycasterPlugin(model, handle),
     [model, enableRotationCompensation, handle, camera]
   );
-  const plugin = usePlugin(
-    new AdvancedRaycasterPlugin(model, handle),
-    deps
-  );
+  const plugin = usePlugin(factory, [factory]);
   useEffect(() => {
     if (!plugin) {
       return;

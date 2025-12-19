@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-HSIROGI3.js";
+} from "./chunk-BKBNIEFK.js";
 import {
   RaycasterPlugin
 } from "./chunk-D6IH2BXA.js";

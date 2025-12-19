@@ -3,6 +3,14 @@ import '../core/loaders/HDRILoader.cjs';
 import '../core/cache/types.cjs';
 import 'three';
 
-declare const usePlugin: <T extends Plugin>(factory: T, deps?: any[]) => T | undefined;
+/**
+ * Hook profesional para registro seguro de plugins con configuración reactiva.
+ *
+ * - Una sola instancia activa en el orchestrator
+ * - Configuración siempre actualizada
+ * - Dispose correcto
+ * - Compatible con React Strict Mode
+ */
+declare const usePlugin: <T extends Plugin | null>(factory: T, deps?: React.DependencyList) => T | null;
 
 export { usePlugin };

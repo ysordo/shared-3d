@@ -1,8 +1,8 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkOAVX2ZUAcjs = require('../../chunk-OAVX2ZUA.cjs');
-require('../../chunk-ISHYF53I.cjs');
+var _chunkMTHC52BGcjs = require('../../chunk-MTHC52BG.cjs');
+require('../../chunk-QQEAL6E5.cjs');
 require('../../chunk-MLONVM7E.cjs');
 require('../../chunk-44UQAST6.cjs');
 require('../../chunk-SD2EEMFK.cjs');
@@ -26,4 +26,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.Annotations = _chunkOAVX2ZUAcjs.Annotations;
+exports.Annotations = _chunkMTHC52BGcjs.Annotations;

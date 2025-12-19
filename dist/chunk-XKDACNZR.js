@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-HSIROGI3.js";
+} from "./chunk-BKBNIEFK.js";
 import {
   AdvancedOrbitControlsPlugin
 } from "./chunk-N3ACJCKO.js";
@@ -22,13 +22,13 @@ var AdvancedOrbitControls = ({
     min: options.minDistance ?? 0.1,
     max: options.maxDistance ?? 1e3
   });
-  const deps = useMemo(
-    () => [...Object.values(options), enabled],
-    [...Object.values(options), enabled]
+  const factory = useMemo(
+    () => new AdvancedOrbitControlsPlugin(options),
+    [options]
   );
   const plugin = usePlugin(
-    new AdvancedOrbitControlsPlugin(options),
-    deps
+    factory,
+    [factory, enabled]
   );
   useEffect(() => {
     if (plugin) {

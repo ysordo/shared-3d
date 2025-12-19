@@ -163,15 +163,12 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
     [handleDragStart, handleDrag, handleDragEnd]
   );
 
-  const deps = useMemo(
-    () => [model, enableRotationCompensation, handle, camera],
+  const factory = useMemo(
+    () => model && new AdvancedRaycasterPlugin(model as THREE.Object3D, handle),
     [model, enableRotationCompensation, handle, camera]
   );
 
-  const plugin = usePlugin(
-    new AdvancedRaycasterPlugin(model as THREE.Object3D, handle),
-    deps
-  );
+  const plugin = usePlugin(factory, [factory]);
 
   useEffect(() => {
     if (!plugin) {

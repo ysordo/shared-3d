@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-HSIROGI3.js";
+} from "./chunk-BKBNIEFK.js";
 import {
   MeasurementToolPlugin
 } from "./chunk-PRNY2PGZ.js";

@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-HSIROGI3.js";
+} from "./chunk-BKBNIEFK.js";
 import {
   AdvancedCameraCollisionPlugin
 } from "./chunk-7UK5WDJQ.js";
@@ -17,14 +17,15 @@ var AdvancedCameraCollision = ({
   enabled = true
 }) => {
   const model = useActiveModel();
-  const deps = useMemo(
-    () => [distanceThreshold, pushBackOffset, smooth, model, enabled],
+  const factory = useMemo(
+    () => new AdvancedCameraCollisionPlugin(
+      distanceThreshold,
+      pushBackOffset,
+      smooth
+    ),
     [distanceThreshold, pushBackOffset, smooth, model, enabled]
   );
-  usePlugin(
-    new AdvancedCameraCollisionPlugin(distanceThreshold, pushBackOffset, smooth),
-    deps
-  );
+  usePlugin(factory, [factory]);
   return null;
 };
 
