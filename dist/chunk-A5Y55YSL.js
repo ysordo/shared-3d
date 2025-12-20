@@ -6,7 +6,8 @@ import {
 import { useCallback, useEffect, useRef } from "react";
 var HDRI = ({
   entry,
-  config = {},
+  exposure = 1,
+  maxLuminance = 16,
   onLoaded,
   onProgress,
   onError
@@ -63,7 +64,7 @@ var HDRI = ({
     if (isHandle.current) {
       if (orch.getActiveHDRI()?.name !== entry.id && !isloaded.current) {
         isloaded.current = false;
-        orch.setHDRI(entry, config).catch(console.error);
+        orch.setHDRI(entry, { exposure, maxLuminance }).catch(console.error);
       }
     }
     return () => {
@@ -83,7 +84,7 @@ var HDRI = ({
       orch.clearHDRI();
       isloaded.current = false;
     };
-  }, [config, entry.id, handleHDRIEvent, orch]);
+  }, [entry.id, exposure, handleHDRIEvent, maxLuminance, orch]);
   return null;
 };
 

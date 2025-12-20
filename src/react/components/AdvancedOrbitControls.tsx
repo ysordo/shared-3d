@@ -18,43 +18,35 @@ type StateProps = {
 };
 
 type AdvancedOrbitControlsProps = {
-  options?: Partial<{
-    enablePan?: boolean;
-    enableRotate?: boolean;
-    enableZoom?: boolean;
-    dampingFactor?: number;
-    panSpeed?: number;
-    rotateSpeed?: number;
-    zoomSpeed?: number;
-    minDistance?: number;
-    maxDistance?: number;
-    minPolarAngle?: number;
-    maxPolarAngle?: number;
-  }>;
+  enablePan?: boolean;
+  enableRotate?: boolean;
+  enableZoom?: boolean;
+  dampingFactor?: number;
+  panSpeed?: number;
+  rotateSpeed?: number;
+  zoomSpeed?: number;
+  minDistance?: number;
+  maxDistance?: number;
+  minPolarAngle?: number;
+  maxPolarAngle?: number;
   enabled?: boolean;
   children?: (state: StateProps) => React.ReactNode;
 };
 
 export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
-  options = {},
-  enabled = true,
+  enablePan = true,
+  enableRotate = true,
+  enableZoom = true,
+  minDistance = 0.1,
+  maxDistance = 1000,
+  dampingFactor,
+  panSpeed,
+  rotateSpeed,
+  zoomSpeed,
+  minPolarAngle,
+  maxPolarAngle,
   children,
 }) => {
-  // Extraer valores primitivos para deps estables
-  const {
-    enablePan = true,
-    enableRotate = true,
-    enableZoom = true,
-    minDistance = 0.1,
-    maxDistance = 1000,
-    dampingFactor,
-    panSpeed,
-    rotateSpeed,
-    zoomSpeed,
-    minPolarAngle,
-    maxPolarAngle,
-  } = options;
-
   // Factory con deps primitivas → estable
   const factory = useCallback(
     () =>
@@ -194,7 +186,7 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
   );
 
   // Render condicional
-  if (!enabled || !plugin) {
+  if (!plugin) {
     return null;
   }
 

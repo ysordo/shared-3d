@@ -1,15 +1,15 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
-
-var _chunkS6WVTNYXcjs = require('./chunk-S6WVTNYX.cjs');
-
-
-var _chunkPKNMQ6ENcjs = require('./chunk-PKNMQ6EN.cjs');
-
-
-var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
+import {
+  GLTFLoader
+} from "./chunk-6FBDZUDJ.js";
+import {
+  useScene
+} from "./chunk-DWHU2W2T.js";
+import {
+  THREE
+} from "./chunk-OVHQQSEK.js";
 
 // src/react/components/InstancedModel.tsx
-var _react = require('react');
+import { useEffect, useRef } from "react";
 var InstancedModel = ({
   entry,
   instances,
@@ -17,10 +17,10 @@ var InstancedModel = ({
   castShadow = true,
   receiveShadow = true
 }) => {
-  const orchestrator = _chunkPKNMQ6ENcjs.useScene.call(void 0, );
-  const groupRef = _react.useRef.call(void 0, new _chunkEA3XQ4KJcjs.THREE.Group());
-  const instancedMeshes = _react.useRef.call(void 0, /* @__PURE__ */ new Map());
-  _react.useEffect.call(void 0, () => {
+  const orchestrator = useScene();
+  const groupRef = useRef(new THREE.Group());
+  const instancedMeshes = useRef(/* @__PURE__ */ new Map());
+  useEffect(() => {
     if (!orchestrator) {
       return;
     }
@@ -31,7 +31,7 @@ var InstancedModel = ({
         return;
       }
       try {
-        const gltf = await _chunkS6WVTNYXcjs.GLTFLoader.load(entry, { draco });
+        const gltf = await GLTFLoader.load(entry, { draco });
         const model = gltf.clone();
         instancedMeshes.current.forEach((mesh) => {
           scene.remove(mesh);
@@ -39,31 +39,31 @@ var InstancedModel = ({
           if (Array.isArray(mesh.material)) {
             mesh.material.forEach((m) => m.dispose());
           } else {
-            _optionalChain([mesh, 'access', _ => _.material, 'optionalAccess', _2 => _2.dispose, 'call', _3 => _3()]);
+            mesh.material?.dispose();
           }
         });
         instancedMeshes.current.clear();
         model.traverse((child) => {
-          if (!(child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh)) {
+          if (!(child instanceof THREE.Mesh)) {
             return;
           }
           const geometry = child.geometry;
           const material = Array.isArray(child.material) ? child.material[0] : child.material;
           const count = instances.length;
-          const instancedMesh = new _chunkEA3XQ4KJcjs.THREE.InstancedMesh(
+          const instancedMesh = new THREE.InstancedMesh(
             geometry,
             material,
             count
           );
           instancedMesh.castShadow = castShadow;
           instancedMesh.receiveShadow = receiveShadow;
-          const dummy = new _chunkEA3XQ4KJcjs.THREE.Object3D();
-          const color = new _chunkEA3XQ4KJcjs.THREE.Color();
+          const dummy = new THREE.Object3D();
+          const color = new THREE.Color();
           instances.forEach((instance, i) => {
             dummy.position.copy(instance.position);
-            if (instance.rotation instanceof _chunkEA3XQ4KJcjs.THREE.Euler) {
+            if (instance.rotation instanceof THREE.Euler) {
               dummy.rotation.copy(instance.rotation);
-            } else if (instance.rotation instanceof _chunkEA3XQ4KJcjs.THREE.Quaternion) {
+            } else if (instance.rotation instanceof THREE.Quaternion) {
               dummy.quaternion.copy(instance.rotation);
             }
             if (typeof instance.scale === "number") {
@@ -80,11 +80,11 @@ var InstancedModel = ({
               instancedMesh.setColorAt(i, color);
             }
             if (instance.visible === false) {
-              instancedMesh.instanceMatrix.setUsage(_chunkEA3XQ4KJcjs.THREE.DynamicDrawUsage);
+              instancedMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
             }
           });
-          if (material instanceof _chunkEA3XQ4KJcjs.THREE.Material) {
-            instancedMesh.instanceColor = material.vertexColors ? null : new _chunkEA3XQ4KJcjs.THREE.InstancedBufferAttribute(
+          if (material instanceof THREE.Material) {
+            instancedMesh.instanceColor = material.vertexColors ? null : new THREE.InstancedBufferAttribute(
               new Float32Array(count * 3),
               3
             );
@@ -111,7 +111,7 @@ var InstancedModel = ({
         if (Array.isArray(mesh.material)) {
           mesh.material.forEach((m) => m.dispose());
         } else {
-          _optionalChain([mesh, 'access', _4 => _4.material, 'optionalAccess', _5 => _5.dispose, 'call', _6 => _6()]);
+          mesh.material?.dispose();
         }
       });
       instancedMeshes.current.clear();
@@ -123,6 +123,6 @@ var InstancedModel = ({
   return null;
 };
 
-
-
-exports.InstancedModel = InstancedModel;
+export {
+  InstancedModel
+};

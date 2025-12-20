@@ -8,17 +8,22 @@ var _chunkGHGMXPFTcjs = require('./chunk-GHGMXPFT.cjs');
 // src/react/components/PostProcessing.tsx
 var _react = require('react');
 var PostProcessing = ({
-  bloom = { strength: 1.5, radius: 0.4, threshold: 0 },
+  strength = 1.5,
+  radius = 0.4,
+  threshold = 0,
   enabled = true
 }) => {
   const factory = _react.useCallback.call(void 0, 
-    () => new (0, _chunkGHGMXPFTcjs.PostProcessingPlugin)({ enabled, bloom }),
-    [enabled, bloom]
+    () => new (0, _chunkGHGMXPFTcjs.PostProcessingPlugin)({
+      enabled,
+      bloom: { strength, radius, threshold }
+    }),
+    [enabled, strength, radius, threshold]
   );
   const plugin = _chunkN4YA2OBNcjs.usePlugin.call(void 0, factory, []);
   _react.useEffect.call(void 0, () => {
-    _optionalChain([plugin, 'optionalAccess', _ => _.update, 'call', _2 => _2({ enabled, bloom })]);
-  }, [enabled, bloom, plugin]);
+    _optionalChain([plugin, 'optionalAccess', _ => _.update, 'call', _2 => _2({ enabled, bloom: { strength, radius, threshold } })]);
+  }, [enabled, strength, radius, threshold, plugin]);
   if (!enabled) {
     return null;
   }

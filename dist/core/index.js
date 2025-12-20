@@ -3,7 +3,7 @@ import "../chunk-EC4WICT5.js";
 import "../chunk-ZC66QDE5.js";
 import {
   GLTFLoader
-} from "../chunk-SPHPB7FK.js";
+} from "../chunk-6FBDZUDJ.js";
 import "../chunk-DCRMKZQR.js";
 import {
   MeasurementToolPlugin

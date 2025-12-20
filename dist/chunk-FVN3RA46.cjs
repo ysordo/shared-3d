@@ -100,6 +100,7 @@ var GLTFLoader2 = (_class = class {
         (entry) => this.load(entry, {
           ...options,
           onLoaded: (...prev) => _optionalChain([onProgress, 'optionalCall', _9 => _9(...prev, ++completed, total)]),
+          onProgress: ({ percent }) => _optionalChain([onProgress, 'optionalCall', _10 => _10(void 0, entry, completed, total, percent)]),
           onError: (err, url) => console.error(`Preload failed: ${url}`, err)
         })
       )

@@ -8,7 +8,12 @@ import { usePreloadEffect } from '../../hooks/usePreloadEffect';
 type ModelPreloadProps = {
   entries: ModelManifest;
   draco?: boolean;
-  onProgress?: (completed: number, total: number) => void;
+  onProgress?: (
+    model: string,
+    completed: number,
+    total: number,
+    percent?: number
+  ) => void;
 };
 
 export const ModelPreload: React.FC<ModelPreloadProps> = ({
@@ -26,10 +31,16 @@ export const ModelPreload: React.FC<ModelPreloadProps> = ({
   );
 
   usePreloadEffect((preload) => {
-    GLTFLoader.preload(data.entries, { draco: data.draco }, (...prev) => {
-      preload.set(prev[1].id, prev[0]);
-      onProgress?.(prev[2], prev[3]);
-    });
+    GLTFLoader.preload(
+      data.entries,
+      { draco: data.draco },
+      (obj, { id }, completed, total, percent) => {
+        if (obj) {
+          preload.set(id, obj);
+        }
+        onProgress?.(id, completed, total, percent);
+      }
+    );
   }, deps);
 
   return null;

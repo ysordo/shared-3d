@@ -100,6 +100,7 @@ var GLTFLoader2 = class {
         (entry) => this.load(entry, {
           ...options,
           onLoaded: (...prev) => onProgress?.(...prev, ++completed, total),
+          onProgress: ({ percent }) => onProgress?.(void 0, entry, completed, total, percent),
           onError: (err, url) => console.error(`Preload failed: ${url}`, err)
         })
       )

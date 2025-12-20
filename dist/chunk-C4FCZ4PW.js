@@ -9,23 +9,19 @@ import {
 import { useCallback, useEffect, useMemo } from "react";
 import { Fragment, jsx } from "react/jsx-runtime";
 var AdvancedOrbitControls = ({
-  options = {},
-  enabled = true,
+  enablePan = true,
+  enableRotate = true,
+  enableZoom = true,
+  minDistance = 0.1,
+  maxDistance = 1e3,
+  dampingFactor,
+  panSpeed,
+  rotateSpeed,
+  zoomSpeed,
+  minPolarAngle,
+  maxPolarAngle,
   children
 }) => {
-  const {
-    enablePan = true,
-    enableRotate = true,
-    enableZoom = true,
-    minDistance = 0.1,
-    maxDistance = 1e3,
-    dampingFactor,
-    panSpeed,
-    rotateSpeed,
-    zoomSpeed,
-    minPolarAngle,
-    maxPolarAngle
-  } = options;
   const factory = useCallback(
     () => new AdvancedOrbitControlsPlugin({
       enablePan,
@@ -150,7 +146,7 @@ var AdvancedOrbitControls = ({
       setMaxDistance
     ]
   );
-  if (!enabled || !plugin) {
+  if (!plugin) {
     return null;
   }
   return /* @__PURE__ */ jsx(Fragment, { children: children?.(state) });

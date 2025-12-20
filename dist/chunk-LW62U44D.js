@@ -1,60 +1,59 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
-
-var _chunkGICX4QCOcjs = require('./chunk-GICX4QCO.cjs');
-
-
-var _chunkBS6FGAC2cjs = require('./chunk-BS6FGAC2.cjs');
-
-
-var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
+import {
+  createQuadWireframe
+} from "./chunk-AWVHTM2E.js";
+import {
+  useActiveModel
+} from "./chunk-CBC77TWZ.js";
+import {
+  THREE
+} from "./chunk-OVHQQSEK.js";
 
 // src/react/controls/MaterialController.tsx
-
-
-
-
-
-
-var _react = require('react');
-var _jsxruntime = require('react/jsx-runtime');
+import {
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+  useCallback
+} from "react";
+import { jsx } from "react/jsx-runtime";
 var MaterialController = ({
   materials,
-  activeDefault = _optionalChain([materials, 'access', _ => _[0], 'optionalAccess', _2 => _2.name]),
+  activeDefault,
   transitionDuration = 300,
   children,
   className
 }) => {
-  const model = _chunkBS6FGAC2cjs.useActiveModel.call(void 0, );
-  const [activeName, setActiveName] = _react.useState.call(void 0, null);
-  const [oldName, setOldName] = _react.useState.call(void 0, "");
-  const [isTransitioning, setIsTransitioning] = _react.useState.call(void 0, false);
-  const percentageRef = _react.useRef.call(void 0, 0);
-  const timeoutsRef = _react.useRef.call(void 0, []);
-  const meshesRef = _react.useRef.call(void 0, []);
-  _react.useEffect.call(void 0, () => {
+  const model = useActiveModel();
+  const [activeName, setActiveName] = useState(null);
+  const [oldName, setOldName] = useState("");
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const percentageRef = useRef(0);
+  const timeoutsRef = useRef([]);
+  const meshesRef = useRef([]);
+  useEffect(() => {
     if (!model) {
       meshesRef.current = [];
       return;
     }
     meshesRef.current = [];
     model.traverse((child) => {
-      if (!(child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh)) {
+      if (!(child instanceof THREE.Mesh)) {
         return;
       }
       if (!child.userData.originalMaterial) {
         child.userData.originalMaterial = child.material.clone();
       }
       if (!child.getObjectByName(`${child.name}-wireframe`)) {
-        const wireGeo = _chunkGICX4QCOcjs.createQuadWireframe.call(void 0, child.geometry);
-        const lineMat = new _chunkEA3XQ4KJcjs.THREE.LineBasicMaterial({
+        const wireGeo = createQuadWireframe(child.geometry);
+        const lineMat = new THREE.LineBasicMaterial({
           color: 0,
           linewidth: 1,
-          // Ignorado en WebGL, pero para referencia
           polygonOffset: true,
           polygonOffsetFactor: 1,
           polygonOffsetUnits: 1
         });
-        const wireframe = new _chunkEA3XQ4KJcjs.THREE.LineSegments(wireGeo, lineMat);
+        const wireframe = new THREE.LineSegments(wireGeo, lineMat);
         wireframe.name = `${child.name}-wireframe`;
         wireframe.renderOrder = 999;
         wireframe.visible = false;
@@ -63,7 +62,7 @@ var MaterialController = ({
       meshesRef.current.push(child);
     });
   }, [model]);
-  const applyToMesh = _react.useCallback.call(void 0, 
+  const applyToMesh = useCallback(
     (mesh, config) => {
       const wireframe = mesh.getObjectByName(
         `${mesh.name}-wireframe`
@@ -77,27 +76,27 @@ var MaterialController = ({
           }
           break;
         case "solid":
-          newMat = new _chunkEA3XQ4KJcjs.THREE.MeshStandardMaterial({
-            color: _nullishCoalesce(config.color, () => ( 8947848)),
-            metalness: _nullishCoalesce(config.metalness, () => ( 0.5)),
-            roughness: _nullishCoalesce(config.roughness, () => ( 0.7)),
-            side: _chunkEA3XQ4KJcjs.THREE.DoubleSide
+          newMat = new THREE.MeshStandardMaterial({
+            color: config.color ?? 8947848,
+            metalness: config.metalness ?? 0.5,
+            roughness: config.roughness ?? 0.7,
+            side: THREE.DoubleSide
           });
           if (wireframe) {
             wireframe.visible = false;
           }
           break;
         case "wireframe":
-          newMat = new _chunkEA3XQ4KJcjs.THREE.MeshStandardMaterial({
-            color: _nullishCoalesce(config.color, () => ( 8947848)),
+          newMat = new THREE.MeshStandardMaterial({
+            color: config.color ?? 8947848,
             transparent: true,
             opacity: 0.05,
-            side: _chunkEA3XQ4KJcjs.THREE.DoubleSide
+            side: THREE.DoubleSide
           });
           if (wireframe) {
             wireframe.visible = true;
             wireframe.material.color.set(
-              _nullishCoalesce(config.lineColor, () => ( 16777215))
+              config.lineColor ?? 16777215
             );
           }
           break;
@@ -114,12 +113,12 @@ var MaterialController = ({
     },
     []
   );
-  const applyMaterial = _react.useCallback.call(void 0, 
+  const applyMaterial = useCallback(
     (config) => {
       if (!model || isTransitioning || meshesRef.current.length === 0) {
         return;
       }
-      setOldName(_nullishCoalesce(activeName, () => ( "")));
+      setOldName(activeName ?? "");
       timeoutsRef.current.forEach(clearTimeout);
       timeoutsRef.current = [];
       setIsTransitioning(true);
@@ -147,7 +146,7 @@ var MaterialController = ({
     },
     [model, isTransitioning, transitionDuration, applyToMesh]
   );
-  const items = _react.useMemo.call(void 0, 
+  const items = useMemo(
     () => materials.map((config) => ({
       name: config.name,
       oldName,
@@ -157,7 +156,7 @@ var MaterialController = ({
     })),
     [materials, oldName, activeName, applyMaterial]
   );
-  _react.useEffect.call(void 0, () => {
+  useEffect(() => {
     if (activeName || items.length === 0) {
       return;
     }
@@ -166,7 +165,7 @@ var MaterialController = ({
       defaultItem.apply();
     }
   }, [items, activeDefault, activeName]);
-  _react.useEffect.call(void 0, () => {
+  useEffect(() => {
     return () => {
       timeoutsRef.current.forEach(clearTimeout);
     };
@@ -174,9 +173,9 @@ var MaterialController = ({
   if (!model) {
     return null;
   }
-  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: children(items) });
+  return /* @__PURE__ */ jsx("div", { className, children: children(items) });
 };
 
-
-
-exports.MaterialController = MaterialController;
+export {
+  MaterialController
+};

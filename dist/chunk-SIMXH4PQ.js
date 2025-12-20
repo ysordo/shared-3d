@@ -3,7 +3,7 @@ import {
 } from "./chunk-QL3VMQYQ.js";
 import {
   GLTFLoader
-} from "./chunk-SPHPB7FK.js";
+} from "./chunk-6FBDZUDJ.js";
 
 // src/react/components/ModelPreload.tsx
 import { useMemo } from "react";
@@ -21,10 +21,16 @@ var ModelPreload = ({
     [...Object.values(data)]
   );
   usePreloadEffect((preload) => {
-    GLTFLoader.preload(data.entries, { draco: data.draco }, (...prev) => {
-      preload.set(prev[1].id, prev[0]);
-      onProgress?.(prev[2], prev[3]);
-    });
+    GLTFLoader.preload(
+      data.entries,
+      { draco: data.draco },
+      (obj, { id }, completed, total, percent) => {
+        if (obj) {
+          preload.set(id, obj);
+        }
+        onProgress?.(id, completed, total, percent);
+      }
+    );
   }, deps);
   return null;
 };

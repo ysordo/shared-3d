@@ -3,7 +3,7 @@
 var _chunkRDXBFNF7cjs = require('./chunk-RDXBFNF7.cjs');
 
 
-var _chunkS6WVTNYXcjs = require('./chunk-S6WVTNYX.cjs');
+var _chunkFVN3RA46cjs = require('./chunk-FVN3RA46.cjs');
 
 // src/react/components/ModelPreload.tsx
 var _react = require('react');
@@ -21,10 +21,16 @@ var ModelPreload = ({
     [...Object.values(data)]
   );
   _chunkRDXBFNF7cjs.usePreloadEffect.call(void 0, (preload) => {
-    _chunkS6WVTNYXcjs.GLTFLoader.preload(data.entries, { draco: data.draco }, (...prev) => {
-      preload.set(prev[1].id, prev[0]);
-      _optionalChain([onProgress, 'optionalCall', _ => _(prev[2], prev[3])]);
-    });
+    _chunkFVN3RA46cjs.GLTFLoader.preload(
+      data.entries,
+      { draco: data.draco },
+      (obj, { id }, completed, total, percent) => {
+        if (obj) {
+          preload.set(id, obj);
+        }
+        _optionalChain([onProgress, 'optionalCall', _ => _(id, completed, total, percent)]);
+      }
+    );
   }, deps);
   return null;
 };

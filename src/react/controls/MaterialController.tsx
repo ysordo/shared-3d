@@ -51,7 +51,7 @@ type MaterialControllerProps = {
 
 export const MaterialController: React.FC<MaterialControllerProps> = ({
   materials,
-  activeDefault = materials[0]?.name,
+  activeDefault,
   transitionDuration = 300,
   children,
   className,
@@ -64,7 +64,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   const timeoutsRef = useRef<number[]>([]);
   const meshesRef = useRef<THREE.Mesh[]>([]);
 
-  // Inicialización de meshes y wireframes (solo cuando cambia model)
   useEffect(() => {
     if (!model) {
       meshesRef.current = [];
@@ -78,17 +77,15 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         return;
       }
 
-      // Guardar material original
       if (!child.userData.originalMaterial) {
         child.userData.originalMaterial = child.material.clone();
       }
 
-      // Crear wireframe solo si no existe
       if (!child.getObjectByName(`${child.name}-wireframe`)) {
         const wireGeo = createQuadWireframe(child.geometry);
         const lineMat = new THREE.LineBasicMaterial({
           color: 0x000000,
-          linewidth: 1, // Ignorado en WebGL, pero para referencia
+          linewidth: 1,
           polygonOffset: true,
           polygonOffsetFactor: 1,
           polygonOffsetUnits: 1,
@@ -104,7 +101,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     });
   }, [model]);
 
-  // Aplicar material a un mesh individual
   const applyToMesh = useCallback(
     (mesh: THREE.Mesh, config: MaterialConfig) => {
       const wireframe = mesh.getObjectByName(
@@ -164,7 +160,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     []
   );
 
-  // Aplicar material con transición opcional
   const applyMaterial = useCallback(
     (config: MaterialConfig) => {
       if (!model || isTransitioning || meshesRef.current.length === 0) {
@@ -172,7 +167,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       }
       setOldName(activeName??'');
 
-      // Limpiar timeouts previos
       timeoutsRef.current.forEach(clearTimeout);
       timeoutsRef.current = [];
 
@@ -207,7 +201,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     [model, isTransitioning, transitionDuration, applyToMesh]
   );
 
-  // Items estables para children
   const items = useMemo<MaterialItem[]>(
     () =>
       materials.map((config) => ({
@@ -220,7 +213,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     [materials, oldName, activeName, applyMaterial]
   );
 
-  // Aplicar default al montar o cambiar materials
   useEffect(() => {
     if (activeName || items.length === 0) {
       return;
@@ -231,7 +223,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     }
   }, [items, activeDefault, activeName]);
 
-  // Cleanup timeouts en desmontaje
   useEffect(() => {
     return () => {
       timeoutsRef.current.forEach(clearTimeout);

@@ -9,23 +9,19 @@ var _chunkTRBGA7LYcjs = require('./chunk-TRBGA7LY.cjs');
 var _react = require('react');
 var _jsxruntime = require('react/jsx-runtime');
 var AdvancedOrbitControls = ({
-  options = {},
-  enabled = true,
+  enablePan = true,
+  enableRotate = true,
+  enableZoom = true,
+  minDistance = 0.1,
+  maxDistance = 1e3,
+  dampingFactor,
+  panSpeed,
+  rotateSpeed,
+  zoomSpeed,
+  minPolarAngle,
+  maxPolarAngle,
   children
 }) => {
-  const {
-    enablePan = true,
-    enableRotate = true,
-    enableZoom = true,
-    minDistance = 0.1,
-    maxDistance = 1e3,
-    dampingFactor,
-    panSpeed,
-    rotateSpeed,
-    zoomSpeed,
-    minPolarAngle,
-    maxPolarAngle
-  } = options;
   const factory = _react.useCallback.call(void 0, 
     () => new (0, _chunkTRBGA7LYcjs.AdvancedOrbitControlsPlugin)({
       enablePan,
@@ -150,7 +146,7 @@ var AdvancedOrbitControls = ({
       setMaxDistance
     ]
   );
-  if (!enabled || !plugin) {
+  if (!plugin) {
     return null;
   }
   return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _jsxruntime.Fragment, { children: _optionalChain([children, 'optionalCall', _8 => _8(state)]) });

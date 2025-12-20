@@ -8,9 +8,7 @@ import type { THREE } from '../../lib';
 type RaycasterProps = {
   enabled?: boolean;
   objects?: THREE.Object3D[];
-  /** Callback para clicks sobre objetos */
   onClick?: (obj: THREE.Object3D) => void;
-  /** Callback para hover (enter + move + leave implícito en plugin) */
   onHover?: (obj: THREE.Object3D) => void;
 };
 
@@ -20,7 +18,6 @@ export const Raycaster: React.FC<RaycasterProps> = ({
   onClick,
   onHover,
 }) => {
-  // Handler estable: solo cambia si callbacks cambian
   const handle = useCallback(
     (event: any) => {
       if (event.type === 'click' && onClick) {
@@ -33,14 +30,11 @@ export const Raycaster: React.FC<RaycasterProps> = ({
     [onClick, onHover]
   );
 
-  // Factory con dep única y estable
   const factory = useCallback(
     () => new RaycasterPlugin({ enabled, objects, onEvent: handle }),
     [enabled, objects, handle]
   );
 
-  // Instalación solo si hay al menos un callback
-  // Deps: solo handle → plugin se actualiza solo cuando callbacks cambian
   const plugin = usePlugin(factory, []);
   useEffect(() => {
     plugin?.update({ enabled, objects, onEvent: handle });

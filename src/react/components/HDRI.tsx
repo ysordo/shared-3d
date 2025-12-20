@@ -7,9 +7,6 @@ import type { HDRILoaderOptions, THREE } from '../../lib';
 
 type HDRIProps = {
   entry: ManifestEntry;
-  config?: Partial<
-    Omit<HDRILoaderOptions, 'dataType' | 'preserveHDR' | 'rgbeLoaderOptions'>
-  >;
   onLoaded?: (event: {
     texture: THREE.Texture;
     entry: ManifestEntry;
@@ -17,11 +14,14 @@ type HDRIProps = {
   }) => void;
   onProgress?: (event: { progress: any; entry: ManifestEntry }) => void;
   onError?: (event: { error: Error; entry: ManifestEntry }) => void;
-};
+} & Partial<
+  Omit<HDRILoaderOptions, 'dataType' | 'preserveHDR' | 'rgbeLoaderOptions'>
+>;
 
 export const HDRI: React.FC<HDRIProps> = ({
   entry,
-  config = {},
+  exposure=1.0,
+  maxLuminance=16.0,
   onLoaded,
   onProgress,
   onError,
@@ -82,12 +82,9 @@ export const HDRI: React.FC<HDRIProps> = ({
       isHandle.current = true;
     }
     if (isHandle.current) {
-      if (
-        orch.getActiveHDRI()?.name !== entry.id &&
-        !isloaded.current
-      ) {
+      if (orch.getActiveHDRI()?.name !== entry.id && !isloaded.current) {
         isloaded.current = false;
-        orch.setHDRI(entry, config).catch(console.error);
+        orch.setHDRI(entry, {exposure, maxLuminance}).catch(console.error);
       }
     }
     return () => {
@@ -108,7 +105,7 @@ export const HDRI: React.FC<HDRIProps> = ({
       orch.clearHDRI();
       isloaded.current = false;
     };
-  }, [config, entry.id, handleHDRIEvent, orch]);
+  }, [entry.id, exposure, handleHDRIEvent, maxLuminance, orch]);
 
   return null;
 };

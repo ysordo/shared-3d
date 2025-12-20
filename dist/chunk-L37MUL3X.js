@@ -3,7 +3,7 @@ import {
 } from "./chunk-RUDNMJTZ.js";
 import {
   Model
-} from "./chunk-KLHTXHGV.js";
+} from "./chunk-VATEBZX2.js";
 
 // src/react/components/SuspenseModel.tsx
 import { jsx, jsxs } from "react/jsx-runtime";

@@ -3,7 +3,7 @@
 var _chunkW2T32FMRcjs = require('./chunk-W2T32FMR.cjs');
 
 
-var _chunkMIRRJQOKcjs = require('./chunk-MIRRJQOK.cjs');
+var _chunk6CCTXIMZcjs = require('./chunk-6CCTXIMZ.cjs');
 
 // src/react/components/SuspenseModel.tsx
 var _jsxruntime = require('react/jsx-runtime');
@@ -17,7 +17,7 @@ var SuspenseModel = ({
   ] }),
   children
 }) => {
-  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _chunkW2T32FMRcjs.Suspense, { fallback, children: /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _chunkMIRRJQOKcjs.Model, { entry, draco, children: (model) => _optionalChain([children, 'optionalCall', _ => _(model)]) }) });
+  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _chunkW2T32FMRcjs.Suspense, { fallback, children: /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _chunk6CCTXIMZcjs.Model, { entry, draco, children: (model) => _optionalChain([children, 'optionalCall', _ => _(model)]) }) });
 };
 
 

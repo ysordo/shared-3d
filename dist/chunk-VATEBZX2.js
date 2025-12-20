@@ -3,7 +3,7 @@ import {
 } from "./chunk-QL3VMQYQ.js";
 import {
   GLTFLoader
-} from "./chunk-SPHPB7FK.js";
+} from "./chunk-6FBDZUDJ.js";
 import {
   useScene
 } from "./chunk-DWHU2W2T.js";

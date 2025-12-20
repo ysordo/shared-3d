@@ -3,7 +3,7 @@
 var _chunkRDXBFNF7cjs = require('./chunk-RDXBFNF7.cjs');
 
 
-var _chunkS6WVTNYXcjs = require('./chunk-S6WVTNYX.cjs');
+var _chunkFVN3RA46cjs = require('./chunk-FVN3RA46.cjs');
 
 
 var _chunkPKNMQ6ENcjs = require('./chunk-PKNMQ6EN.cjs');
@@ -37,7 +37,7 @@ var Model = ({
           _optionalChain([onLoaded, 'optionalCall', _ => _(t, entry)]);
           return;
         }
-        _chunkS6WVTNYXcjs.GLTFLoader.load(entry, {
+        _chunkFVN3RA46cjs.GLTFLoader.load(entry, {
           draco,
           onLoaded: (obj, manifestEntry) => {
             if (cancelledRef.current) {
