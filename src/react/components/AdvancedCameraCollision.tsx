@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedCameraCollisionPlugin } from '../../core/orchestrator/plugins/AdvancedCameraCollisionPlugin';
 
@@ -18,11 +18,23 @@ export const AdvancedCameraCollision: React.FC<Props> = ({
   enabled = true,
 }) => {
   const factory = useCallback(
-    () => new AdvancedCameraCollisionPlugin(distanceThreshold, pushBackOffset, smooth),
+    () =>
+      new AdvancedCameraCollisionPlugin(
+        distanceThreshold,
+        pushBackOffset,
+        smooth
+      ),
     [distanceThreshold, pushBackOffset, smooth]
   );
 
-  usePlugin(factory, enabled ? [distanceThreshold, pushBackOffset, smooth] : ['disabled']);
+  const plugin = usePlugin(
+    factory,
+    []
+  );
+
+  useEffect(() => {
+    plugin?.update(distanceThreshold, pushBackOffset, smooth);
+  }, [distanceThreshold, pushBackOffset, smooth, plugin]);
 
   return null;
 };

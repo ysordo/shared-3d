@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { LODSystemPlugin } from '../../core/orchestrator/plugins/LODSystemPlugin';
 import type { THREE } from '../../lib';
@@ -22,11 +22,18 @@ export const LODSystem: React.FC<LODSystemProps> = ({
   enabled = true,
 }) => {
   const factory = useCallback(
-    () => new LODSystemPlugin([{ levels, hysteresis }]),
+    () => new LODSystemPlugin({ levels, hysteresis }),
     [levels, hysteresis]
   );
 
-  usePlugin(factory, enabled ? [levels, hysteresis] : ['disabled']);
+  const plugin = usePlugin(
+    factory,
+    []
+  );
+
+  useEffect(() => {
+    plugin?.update({ levels, hysteresis });
+  }, [levels, hysteresis, plugin]);
 
   if (!enabled) {
     return null;

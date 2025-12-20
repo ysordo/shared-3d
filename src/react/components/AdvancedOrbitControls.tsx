@@ -57,19 +57,20 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
 
   // Factory con deps primitivas → estable
   const factory = useCallback(
-    () => new AdvancedOrbitControlsPlugin({
-      enablePan,
-      enableRotate,
-      enableZoom,
-      dampingFactor,
-      panSpeed,
-      rotateSpeed,
-      zoomSpeed,
-      minDistance,
-      maxDistance,
-      minPolarAngle,
-      maxPolarAngle,
-    }),
+    () =>
+      new AdvancedOrbitControlsPlugin({
+        enablePan,
+        enableRotate,
+        enableZoom,
+        dampingFactor,
+        panSpeed,
+        rotateSpeed,
+        zoomSpeed,
+        minDistance,
+        maxDistance,
+        minPolarAngle,
+        maxPolarAngle,
+      }),
     [
       enablePan,
       enableRotate,
@@ -86,7 +87,23 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
   );
 
   // Plugin estable (instancia única)
-  const plugin = usePlugin(factory, [
+  const plugin = usePlugin(factory, []);
+
+  useEffect(() => {
+    plugin?.update({
+      enablePan,
+      enableRotate,
+      enableZoom,
+      dampingFactor,
+      panSpeed,
+      rotateSpeed,
+      zoomSpeed,
+      minDistance,
+      maxDistance,
+      minPolarAngle,
+      maxPolarAngle,
+    });
+  }, [
     enablePan,
     enableRotate,
     enableZoom,
@@ -98,57 +115,88 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     maxDistance,
     minPolarAngle,
     maxPolarAngle,
+    plugin,
   ]);
 
   // Setters que actualizan el plugin directamente (fuente de verdad)
-  const setEnablePan = useCallback((value: boolean) => {
-    if (plugin) {plugin.enablePan = value;}
-  }, [plugin]);
+  const setEnablePan = useCallback(
+    (value: boolean) => {
+      if (plugin) {
+        plugin.enablePan = value;
+      }
+    },
+    [plugin]
+  );
 
-  const setEnableRotate = useCallback((value: boolean) => {
-    if (plugin) {plugin.enableRotate = value;}
-  }, [plugin]);
+  const setEnableRotate = useCallback(
+    (value: boolean) => {
+      if (plugin) {
+        plugin.enableRotate = value;
+      }
+    },
+    [plugin]
+  );
 
-  const setEnableZoom = useCallback((value: boolean) => {
-    if (plugin) {plugin.enableZoom = value;}
-  }, [plugin]);
+  const setEnableZoom = useCallback(
+    (value: boolean) => {
+      if (plugin) {
+        plugin.enableZoom = value;
+      }
+    },
+    [plugin]
+  );
 
-  const setMinDistance = useCallback((value: number) => {
-    if (plugin) {plugin.minDistance = value;}
-  }, [plugin]);
+  const setMinDistance = useCallback(
+    (value: number) => {
+      if (plugin) {
+        plugin.minDistance = value;
+      }
+    },
+    [plugin]
+  );
 
-  const setMaxDistance = useCallback((value: number) => {
-    if (plugin) {plugin.maxDistance = value;}
-  }, [plugin]);
+  const setMaxDistance = useCallback(
+    (value: number) => {
+      if (plugin) {
+        plugin.maxDistance = value;
+      }
+    },
+    [plugin]
+  );
 
   // Estado derivado del plugin (reactivo)
-  const state = useMemo<StateProps>(() => ({
-    enablePan: plugin?.enablePan ?? enablePan,
-    enableRotate: plugin?.enableRotate ?? enableRotate,
-    enableZoom: plugin?.enableZoom ?? enableZoom,
-    minDistance: plugin?.minDistance ?? minDistance,
-    maxDistance: plugin?.maxDistance ?? maxDistance,
-    setEnablePan,
-    setEnableRotate,
-    setEnableZoom,
-    setMinDistance,
-    setMaxDistance,
-  }), [
-    plugin,
-    enablePan,
-    enableRotate,
-    enableZoom,
-    minDistance,
-    maxDistance,
-    setEnablePan,
-    setEnableRotate,
-    setEnableZoom,
-    setMinDistance,
-    setMaxDistance,
-  ]);
+  const state = useMemo<StateProps>(
+    () => ({
+      enablePan: plugin?.enablePan ?? enablePan,
+      enableRotate: plugin?.enableRotate ?? enableRotate,
+      enableZoom: plugin?.enableZoom ?? enableZoom,
+      minDistance: plugin?.minDistance ?? minDistance,
+      maxDistance: plugin?.maxDistance ?? maxDistance,
+      setEnablePan,
+      setEnableRotate,
+      setEnableZoom,
+      setMinDistance,
+      setMaxDistance,
+    }),
+    [
+      plugin,
+      enablePan,
+      enableRotate,
+      enableZoom,
+      minDistance,
+      maxDistance,
+      setEnablePan,
+      setEnableRotate,
+      setEnableZoom,
+      setMinDistance,
+      setMaxDistance,
+    ]
+  );
 
   // Render condicional
-  if (!enabled || !plugin) {return null;}
+  if (!enabled || !plugin) {
+    return null;
+  }
 
   return <>{children?.(state)}</>;
 };

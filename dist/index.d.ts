@@ -13,12 +13,12 @@ export { AdvancedOrbitControlsPlugin } from './core/orchestrator/plugins/Advance
 export { AdvancedRaycasterPlugin } from './core/orchestrator/plugins/AdvancedRaycasterPlugin.js';
 export { AnnotationData, AnnotationsPlugin } from './core/orchestrator/plugins/AnnotationsPlugin.js';
 export { AutoLODConfig, AutoLODSystemPlugin } from './core/orchestrator/plugins/AutoLODSystemPlugin.js';
-export { HotspotPlugin } from './core/orchestrator/plugins/HotspotPlugin.js';
-export { LODSystemPlugin } from './core/orchestrator/plugins/LODSystemPlugin.js';
-export { MeasurementEvent, MeasurementToolPlugin } from './core/orchestrator/plugins/MeasurementToolPlugin.js';
+export { HotspotData, HotspotPlugin } from './core/orchestrator/plugins/HotspotPlugin.js';
+export { LODConfig, LODSystemPlugin } from './core/orchestrator/plugins/LODSystemPlugin.js';
+export { MeasurementConfig, MeasurementEvent, MeasurementToolPlugin } from './core/orchestrator/plugins/MeasurementToolPlugin.js';
 export { OrbitControlsPlugin } from './core/orchestrator/plugins/OrbitControlsPlugin.js';
 export { RaycasterEvent, RaycasterPlugin } from './core/orchestrator/plugins/RaycasterPlugin.js';
-export { PostProcessingPlugin } from './core/orchestrator/plugins/PostProcessingPlugin.js';
+export { PostProcessingConfig, PostProcessingPlugin } from './core/orchestrator/plugins/PostProcessingPlugin.js';
 export { useScene } from './hooks/useScene.js';
 export { useActiveModel } from './hooks/useActiveModel.js';
 export { useHDRI } from './hooks/useHDRI.js';

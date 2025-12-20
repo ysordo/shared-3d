@@ -1,6 +1,7 @@
 type MeasurementToolProps = {
     enabled?: boolean;
-    color?: string;
+    pointRadius?: number;
+    color?: number;
     onMeasure?: (distance: number, points: [any, any]) => void;
 };
 declare const MeasurementTool: React.FC<MeasurementToolProps>;

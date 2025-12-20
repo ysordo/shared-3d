@@ -17,10 +17,18 @@ declare class AnnotationsPlugin implements Plugin {
     private annotations;
     private camera;
     private scene;
+    private _rafId;
+    private _observers;
     constructor(data: AnnotationData[]);
     install({ camera, scene }: PluginContext): void;
+    private addAnnotation;
+    private updateAnnotation;
+    private removeAnnotation;
+    private startLoop;
+    private syncAnnotations;
     private createLabel;
     dispose(): void;
+    update(data: AnnotationData[]): void;
 }
 
 export { type AnnotationData, AnnotationsPlugin };

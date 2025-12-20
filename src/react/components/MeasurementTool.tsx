@@ -1,18 +1,21 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import type { MeasurementEvent } from '../../core/orchestrator/plugins';
 import { MeasurementToolPlugin } from '../../core/orchestrator/plugins';
 
 type MeasurementToolProps = {
   enabled?: boolean;
-  color?: string;
+  pointRadius?: number;
+  color?: number;
   onMeasure?: (distance: number, points: [any, any]) => void;
 };
 
 export const MeasurementTool: React.FC<MeasurementToolProps> = ({
   enabled = true,
+  pointRadius = 0.05,
+  color = 0x00ff00,
   onMeasure,
 }) => {
   const callback = useCallback(
@@ -24,11 +27,19 @@ export const MeasurementTool: React.FC<MeasurementToolProps> = ({
     [onMeasure]
   );
   const factory = useCallback(
-    () => new MeasurementToolPlugin(callback),
-    [callback]
+    () =>
+      new MeasurementToolPlugin({
+        color,
+        enabled,
+        pointRadius,
+        onMeasure: callback,
+      }),
+    [color, enabled, pointRadius, callback]
   );
 
-  usePlugin(factory, enabled ? [callback] : ['disabled']);
-
+  const plugin = usePlugin(factory, []);
+  useEffect(() => {
+    plugin?.update({ color, enabled, pointRadius, onMeasure: callback });
+  }, [color, enabled, pointRadius, callback, plugin]);
   return null;
 };

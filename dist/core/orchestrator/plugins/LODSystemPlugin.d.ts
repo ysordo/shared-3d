@@ -12,13 +12,21 @@ type LODConfig = {
     hysteresis?: number;
 };
 declare class LODSystemPlugin implements Plugin {
-    private config;
     name: string;
-    private lodObjects;
     private camera;
-    constructor(config: LODConfig[]);
+    private orchestrator;
+    private config;
+    private lods;
+    private rafId;
+    private originalSetModel?;
+    constructor(config: LODConfig);
+    update(config: Partial<LODConfig>): void;
     install({ camera, orchestrator }: PluginContext): void;
+    private applyLOD;
+    private buildLODLevels;
+    private rebuildLOD;
+    private startLoop;
     dispose(): void;
 }
 
-export { LODSystemPlugin };
+export { type LODConfig, LODSystemPlugin };

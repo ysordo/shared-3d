@@ -229,4 +229,13 @@ export class AdvancedRaycasterPlugin implements Plugin {
   dispose(): void { this._manager.setEnabled(false); }
 
   get manager(): RaycasterManager { return this._manager; }
+
+  update(model: THREE.Object3D, onEvent?: (event: unknown) => void) {
+    this.model = model;
+
+    if (this._manager && model) {
+      this._manager.setModel(model);
+    }
+    this.onEvent = onEvent;
+  }
 }

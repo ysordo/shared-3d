@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { AnnotationsPlugin } from '../../core/orchestrator/plugins';
 import { THREE } from '../../lib';
@@ -42,10 +42,29 @@ export const Annotations: React.FC<AnnotationsProps> = ({ annotations }) => {
           };
         })
       ),
-    [annotations, scene]
+    []
   );
 
-  usePlugin(factory, [annotations]);
+  const plugin = usePlugin(factory, [annotations]);
+  useEffect(() => {
+    plugin?.update(
+      annotations.map((ann) => {
+        const target =
+          typeof ann.target === 'string'
+            ? scene.getObjectByName(ann.target)
+            : ann.target;
+
+        return {
+          id: ann.id,
+          position: new THREE.Vector3(...ann.position),
+          target,
+          content:
+            typeof ann.content === 'string' ? ann.content : String(ann.content),
+          offset: ann.offset ? new THREE.Vector3(...ann.offset) : undefined,
+        };
+      })
+    );
+  }, [annotations, plugin]);
 
   return null;
 };

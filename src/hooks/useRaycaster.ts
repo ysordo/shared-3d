@@ -15,11 +15,11 @@ export const useRaycaster = (
     if(!orchestrator) {return;}
     if (pluginRef.current) {
       // Actualizar callback si cambia
-      pluginRef.current.updateCallback(onEvent);
+      pluginRef.current.update({onEvent});
       return;
     }
 
-    const plugin = new RaycasterPlugin(onEvent);
+    const plugin = new RaycasterPlugin({onEvent});
     pluginRef.current = plugin;
     orchestrator.use(plugin);
 

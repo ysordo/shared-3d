@@ -32,6 +32,19 @@ declare class AdvancedOrbitControlsPlugin implements Plugin {
     get enableZoom(): boolean;
     get enablePan(): boolean;
     dispose(): void;
+    update(options: Partial<{
+        enablePan?: boolean | undefined;
+        enableRotate?: boolean | undefined;
+        enableZoom?: boolean | undefined;
+        dampingFactor?: number | undefined;
+        panSpeed?: number | undefined;
+        rotateSpeed?: number | undefined;
+        zoomSpeed?: number | undefined;
+        minDistance?: number | undefined;
+        maxDistance?: number | undefined;
+        minPolarAngle?: number | undefined;
+        maxPolarAngle?: number | undefined;
+    }>): void;
 }
 
 export { AdvancedOrbitControlsPlugin };

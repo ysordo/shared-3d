@@ -3,19 +3,26 @@ import '../../loaders/HDRILoader.js';
 import '../../cache/types.js';
 import 'three';
 
+type PostProcessingConfig = {
+    enabled?: boolean;
+    bloom?: {
+        strength?: number;
+        radius?: number;
+        threshold?: number;
+    };
+};
 declare class PostProcessingPlugin implements Plugin {
-    private options;
     name: string;
     private composer;
     private bloomPass;
-    constructor(options?: {
-        strength: number;
-        radius: number;
-        threshold: number;
-    });
+    private enabled;
+    private config;
+    constructor(config?: PostProcessingConfig);
     install({ scene, camera, renderer }: PluginContext): void;
-    setBloom(strength: number): void;
+    render(): void;
+    resize(width: number, height: number): void;
+    update(config: Partial<PostProcessingConfig>): void;
     dispose(): void;
 }
 
-export { PostProcessingPlugin };
+export { type PostProcessingConfig, PostProcessingPlugin };

@@ -2,7 +2,6 @@ import { SimplifyModifier } from 'three/examples/jsm/modifiers/SimplifyModifier.
 import type { Plugin, PluginContext } from '../types';
 import { THREE } from '../../../lib/three';
 import type { SceneOrchestrator } from '../SceneOrchestrator';
-import type { ManifestEntry } from '../../cache';
 
 export type AutoLODConfig = {
   distances: [number, number, number];
@@ -16,9 +15,25 @@ export class AutoLODSystemPlugin implements Plugin {
   private rafId: number | null = null;
   private orchestrator!: SceneOrchestrator;
   private originalSetModel?: SceneOrchestrator['setModel'];
+  private config: AutoLODConfig;
 
-  constructor(private config: AutoLODConfig) {
-    this.config.reductionPercentages = this.config.reductionPercentages || [0.5, 0.2];
+  constructor(config: AutoLODConfig) {
+    this.config = {
+      ...config,
+      reductionPercentages: config.reductionPercentages ?? [0.5, 0.2],
+    };
+  }
+
+  /** Permite actualizar la configuración en caliente */
+  update(newConfig: Partial<AutoLODConfig>) {
+    this.config = {
+      ...this.config,
+      ...newConfig,
+      reductionPercentages: newConfig.reductionPercentages ?? this.config.reductionPercentages!,
+    };
+
+    // Recalcular LODs existentes
+    this.lods.forEach((lod, model) => this.updateLODForModel(model, lod));
   }
 
   private simplifyGeometry(geometry: THREE.BufferGeometry, percentage: number): THREE.BufferGeometry {
@@ -27,15 +42,26 @@ export class AutoLODSystemPlugin implements Plugin {
     return modifier.modify(geometry, count);
   }
 
+  /** Reconstruye los niveles LOD para un modelo existente */
+  private updateLODForModel(model: THREE.Object3D, lod: THREE.LOD) {
+    lod.levels.forEach((level, idx) => {
+      if (level.object instanceof THREE.Mesh && idx > 0 && idx < 3) { // niveles simplificados
+        level.object.geometry?.dispose();
+        level.object.geometry = this.simplifyGeometry(
+          (model.children[idx - 1] as THREE.Mesh)?.geometry.clone() ?? level.object.geometry.clone(),
+          this.config.reductionPercentages![idx - 1]!
+        );
+      }
+    });
+  }
+
   private createLODLevels(model: THREE.Object3D): THREE.LOD {
     const lod = new THREE.LOD();
 
-    /* === Level 0: original (high quality) === */
     const high = model.clone();
     high.visible = true;
     lod.addLevel(high, 0);
 
-    /* === Level 1: 50% polygons === */
     const medium = model.clone();
     medium.traverse((child) => {
       if (child instanceof THREE.Mesh && child.geometry) {
@@ -44,7 +70,6 @@ export class AutoLODSystemPlugin implements Plugin {
     });
     lod.addLevel(medium, this.config.distances[0]);
 
-    /* === Level 2: 20% polygons === */
     const low = model.clone();
     low.traverse((child) => {
       if (child instanceof THREE.Mesh && child.geometry) {
@@ -53,7 +78,6 @@ export class AutoLODSystemPlugin implements Plugin {
     });
     lod.addLevel(low, this.config.distances[1]);
 
-    /* === Level 3: hide === */
     const empty = new THREE.Object3D();
     empty.visible = false;
     lod.addLevel(empty, this.config.distances[2]);
@@ -61,50 +85,54 @@ export class AutoLODSystemPlugin implements Plugin {
     return lod;
   }
 
+  /** Aplica LOD a un modelo específico, reutilizando si ya existe */
+  private applyLODToModel(model: THREE.Object3D) {
+    if (this.lods.has(model)) {
+      this.updateLODForModel(model, this.lods.get(model)!);
+      return;
+    }
+
+    const lod = this.createLODLevels(model);
+
+    if (model.parent) {
+      model.parent.add(lod);
+      model.parent.remove(model);
+    }
+
+    lod.position.copy(model.position);
+    lod.quaternion.copy(model.quaternion);
+    lod.scale.copy(model.scale);
+
+    this.lods.set(model, lod);
+  }
+
   install({ camera, orchestrator }: PluginContext): void {
     this.camera = camera;
     this.orchestrator = orchestrator;
 
-    const applyLODToModel = (model: THREE.Object3D) => {
-      const lod = this.createLODLevels(model);
-      
-      if (model.parent) {
-        model.parent.add(lod);
-        model.parent.remove(model);
-      }
-
-      lod.position.copy(model.position);
-      lod.quaternion.copy(model.quaternion);
-      lod.scale.copy(model.scale);
-
-      this.lods.set(model, lod);
-    };
-
     const activeModel = orchestrator.getActiveModel();
-    if (activeModel) {applyLODToModel(activeModel);}
+    if (activeModel) {this.applyLODToModel(activeModel);}
 
     this.originalSetModel = orchestrator.setModel.bind(orchestrator);
-
     orchestrator.setModel = async (...args) => {
-        await this.originalSetModel!(...args);
-        const model = orchestrator.getActiveModel()!;
-        this.lods.forEach(lod => lod.parent?.remove(lod));
-        this.lods.clear();
-        applyLODToModel(model);
+      await this.originalSetModel!(...args);
+      const model = orchestrator.getActiveModel()!;
+      this.applyLODToModel(model);
     };
 
-    const update = () => {
+    const updateLoop = () => {
       this.lods.forEach(lod => lod.update(this.camera));
-      this.rafId = requestAnimationFrame(update);
+      this.rafId = requestAnimationFrame(updateLoop);
     };
-    if (!this.rafId) {update();}
+    if (!this.rafId) {updateLoop();}
   }
-  
+
   dispose(): void {
-    if (this.originalSetModel) {
-        this.orchestrator.setModel = this.originalSetModel;
+    if (this.originalSetModel) {this.orchestrator.setModel = this.originalSetModel;}
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
     }
-    if(this.rafId){cancelAnimationFrame(this.rafId);}
     this.lods.forEach(lod => {
       if (lod.parent) {lod.parent.remove(lod);}
       lod.traverse(child => {

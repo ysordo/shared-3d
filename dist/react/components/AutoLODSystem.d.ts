@@ -3,7 +3,6 @@ type AutoLODSystemProps = {
     lowDistance?: number;
     hideDistance?: number;
     reductionPercentages?: [number, number];
-    enabled?: boolean;
 };
 declare const AutoLODSystem: React.FC<AutoLODSystemProps>;
 

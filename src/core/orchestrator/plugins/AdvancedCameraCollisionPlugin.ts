@@ -6,9 +6,9 @@ export class AdvancedCameraCollisionPlugin implements Plugin {
   private handle: number | null = null;
 
   constructor(
-    public readonly distanceThreshold: number = 0.6,
-    public readonly pushBackOffset: number = 0.1,
-    public readonly smooth: number = 0.1
+    public distanceThreshold: number = 0.6,
+    public pushBackOffset: number = 0.1,
+    public smooth: number = 0.1
   ) {}
 
   install({ camera, orchestrator }: PluginContext): void {
@@ -79,6 +79,16 @@ export class AdvancedCameraCollisionPlugin implements Plugin {
     };
 
     check();
+  }
+
+  update(
+    distanceThreshold: number = 0.6,
+    pushBackOffset: number = 0.1,
+    smooth: number = 0.1
+  ){
+    this.distanceThreshold = distanceThreshold;
+    this.pushBackOffset = pushBackOffset;
+    this.smooth = smooth;
   }
 
   dispose(): void {

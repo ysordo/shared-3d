@@ -12,9 +12,12 @@ export type AnnotationData = {
 
 export class AnnotationsPlugin implements Plugin {
   name = 'Annotations';
-  private annotations = new Map<string, THREE.Object3D>();
+  private annotations = new Map<string, THREE.Sprite>();
   private camera!: THREE.Camera;
   private scene!: THREE.Scene;
+
+  private _rafId: number | null = null;
+  private _observers = new Map<string, ResizeObserver>();
 
   constructor(private data: AnnotationData[]) {}
 
@@ -22,38 +25,85 @@ export class AnnotationsPlugin implements Plugin {
     this.camera = camera;
     this.scene = scene;
 
-    this.data.forEach((ann) => {
-      const label = this.createLabel(ann.content, ann.offset || new THREE.Vector3(0, 1, 0));
-      label.position.copy(ann.position);
-      label.userData.annotationId = ann.id;
-      label.visible = ann.visible ?? true;
-
-      // Seguir al objeto objetivo
-      if (ann.target) {
-        label.userData.followTarget = ann.target;
-      }
-
-      this.annotations.set(ann.id, label);
-      this.scene.add(label);
-    });
-
-    // Update loop
-    const update = () => {
-      this.annotations.forEach((label) => {
-        if (label.userData.followTarget) {
-          label.userData.followTarget.getWorldPosition(label.position);
-          label.position.add(label.userData.offset || new THREE.Vector3(0, 1, 0));
-        }
-
-        // Siempre mirar a cámara
-        label.lookAt(this.camera.position);
-      });
-      requestAnimationFrame(update);
-    };
-    update();
+    this.syncAnnotations();
+    this.startLoop();
   }
 
-  private createLabel(content: string | HTMLElement, offset: THREE.Vector3): THREE.Object3D {
+  private addAnnotation(ann: AnnotationData) {
+    const sprite = this.createLabel(
+      ann.content,
+      ann.offset ?? new THREE.Vector3(0, 1, 0)
+    );
+
+    sprite.position.copy(ann.position);
+    sprite.visible = ann.visible ?? true;
+    sprite.userData.followTarget = ann.target;
+
+    this.annotations.set(ann.id, sprite);
+    this.scene.add(sprite);
+  }
+
+  private updateAnnotation(ann: AnnotationData) {
+    const sprite = this.annotations.get(ann.id)!;
+    sprite.visible = ann.visible ?? true;
+    sprite.userData.followTarget = ann.target;
+  }
+
+  private removeAnnotation(id: string) {
+    const sprite = this.annotations.get(id)!;
+    sprite.parent?.remove(sprite);
+
+    const observer = this._observers.get(id);
+    observer?.disconnect();
+
+    if (sprite.material instanceof THREE.SpriteMaterial) {
+      sprite.material.map?.dispose();
+      sprite.material.dispose();
+    }
+
+    this.annotations.delete(id);
+    this._observers.delete(id);
+  }
+  private startLoop() {
+    const loop = () => {
+      this.annotations.forEach(sprite => {
+        if (sprite.userData.followTarget) {
+          sprite.userData.followTarget.getWorldPosition(sprite.position);
+          sprite.position.add(sprite.userData.offset);
+        }
+        sprite.lookAt(this.camera.position);
+      });
+
+      this._rafId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  }
+
+
+
+  private syncAnnotations() {
+    const nextIds = new Set(this.data.map(a => a.id));
+
+    // Remove
+    this.annotations.forEach((sprite, id) => {
+      if (!nextIds.has(id)) {
+        this.removeAnnotation(id);
+      }
+    });
+
+    // Add / Update
+    this.data.forEach(ann => {
+      if (!this.annotations.has(ann.id)) {
+        this.addAnnotation(ann);
+      } else {
+        this.updateAnnotation(ann);
+      }
+    });
+  }
+
+
+  private createLabel(content: string | HTMLElement, offset: THREE.Vector3): THREE.Sprite {
     const div = document.createElement('div');
     div.className = 'annotation-label';
     div.style.cssText = `
@@ -110,13 +160,18 @@ export class AnnotationsPlugin implements Plugin {
   }
 
   dispose(): void {
-    this.annotations.forEach((sprite) => {
-      if (sprite.parent) {sprite.parent.remove(sprite);}
-      if(sprite instanceof THREE.Sprite) {
-        sprite.material.map?.dispose();
-        sprite.material.dispose();
+    if (this._rafId) {
+      cancelAnimationFrame(this._rafId);
+      this._rafId = null;
     }
-    });
+
+    this.annotations.forEach((_, id) => this.removeAnnotation(id));
     this.annotations.clear();
   }
+
+  update(data: AnnotationData[]) {
+    this.data = data;
+    this.syncAnnotations();
+  }
+
 }

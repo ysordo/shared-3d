@@ -45,36 +45,63 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
   }
 
   set enablePan(enabled: boolean) {
-      this.options.enablePan = enabled;
-      this.controls.enablePan = enabled;
-    };
+    this.options.enablePan = enabled;
+    this.controls.enablePan = enabled;
+  };
 
-    set enableRotate(enabled: boolean) {
-      this.options.enableRotate = enabled;
-      this.controls.enableRotate = enabled;
-    };
+  set enableRotate(enabled: boolean) {
+    this.options.enableRotate = enabled;
+    this.controls.enableRotate = enabled;
+  };
 
-    set enableZoom(enabled: boolean) {
-      this.options.enableZoom = enabled;
-      this.controls.enableZoom = enabled;
-    };
-    set maxDistance(distance: number) {
-      this.options.maxDistance = distance;
-      this.controls.maxDistance = distance;
-    };
-    set minDistance(distance: number) {
-      this.options.minDistance = distance;
-      this.controls.minDistance = distance;
-    };
-    get maxDistance(): number { return this.controls.maxDistance; }
-    get minDistance(): number { return this.controls.minDistance; }
-    get enableRotate(): boolean { return this.controls.enableRotate; }
-    get enableZoom(): boolean { return this.controls.enableZoom; }
-    get enablePan(): boolean { return this.controls.enablePan; }
+  set enableZoom(enabled: boolean) {
+    this.options.enableZoom = enabled;
+    this.controls.enableZoom = enabled;
+  };
+  set maxDistance(distance: number) {
+    this.options.maxDistance = distance;
+    this.controls.maxDistance = distance;
+  };
+  set minDistance(distance: number) {
+    this.options.minDistance = distance;
+    this.controls.minDistance = distance;
+  };
+  get maxDistance(): number { return this.controls.maxDistance; }
+  get minDistance(): number { return this.controls.minDistance; }
+  get enableRotate(): boolean { return this.controls.enableRotate; }
+  get enableZoom(): boolean { return this.controls.enableZoom; }
+  get enablePan(): boolean { return this.controls.enablePan; }
 
-    dispose(): void {
-      this.controls.disconnect();
-      this.controls.dispose();
-    }
+  dispose(): void {
+    this.controls.disconnect();
+    this.controls.dispose();
+  }
 
+  update(
+    options: Partial<{
+      enablePan?: boolean | undefined;
+      enableRotate?: boolean | undefined;
+      enableZoom?: boolean | undefined;
+      dampingFactor?: number | undefined;
+      panSpeed?: number | undefined;
+      rotateSpeed?: number | undefined;
+      zoomSpeed?: number | undefined;
+      minDistance?: number | undefined;
+      maxDistance?: number | undefined;
+      minPolarAngle?: number | undefined;
+      maxPolarAngle?: number | undefined;
+    }>
+  ){
+    this.controls.dampingFactor = options.dampingFactor ?? 0.05;
+    this.controls.panSpeed = options.panSpeed ?? 1;
+    this.controls.rotateSpeed = options.rotateSpeed ?? 1;
+    this.controls.zoomSpeed = options.zoomSpeed ?? 1;
+    this.controls.minDistance = options.minDistance ?? 0.1;
+    this.controls.maxDistance = options.maxDistance ?? 1000;
+    this.controls.minPolarAngle = options.minPolarAngle ?? 0;
+    this.controls.maxPolarAngle = options.maxPolarAngle ?? Math.PI;
+    this.controls.enablePan = options.enablePan ?? true;
+    this.controls.enableRotate = options.enableRotate ?? true;
+    this.controls.enableZoom = options.enableZoom ?? true;
+  }
 }

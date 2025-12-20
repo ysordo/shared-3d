@@ -11,10 +11,10 @@ export { AdvancedOrbitControlsPlugin } from './orchestrator/plugins/AdvancedOrbi
 export { AdvancedRaycasterPlugin } from './orchestrator/plugins/AdvancedRaycasterPlugin.cjs';
 export { AnnotationData, AnnotationsPlugin } from './orchestrator/plugins/AnnotationsPlugin.cjs';
 export { AutoLODConfig, AutoLODSystemPlugin } from './orchestrator/plugins/AutoLODSystemPlugin.cjs';
-export { HotspotPlugin } from './orchestrator/plugins/HotspotPlugin.cjs';
-export { LODSystemPlugin } from './orchestrator/plugins/LODSystemPlugin.cjs';
-export { MeasurementEvent, MeasurementToolPlugin } from './orchestrator/plugins/MeasurementToolPlugin.cjs';
+export { HotspotData, HotspotPlugin } from './orchestrator/plugins/HotspotPlugin.cjs';
+export { LODConfig, LODSystemPlugin } from './orchestrator/plugins/LODSystemPlugin.cjs';
+export { MeasurementConfig, MeasurementEvent, MeasurementToolPlugin } from './orchestrator/plugins/MeasurementToolPlugin.cjs';
 export { OrbitControlsPlugin } from './orchestrator/plugins/OrbitControlsPlugin.cjs';
 export { RaycasterEvent, RaycasterPlugin } from './orchestrator/plugins/RaycasterPlugin.cjs';
-export { PostProcessingPlugin } from './orchestrator/plugins/PostProcessingPlugin.cjs';
+export { PostProcessingConfig, PostProcessingPlugin } from './orchestrator/plugins/PostProcessingPlugin.cjs';
 import 'three';

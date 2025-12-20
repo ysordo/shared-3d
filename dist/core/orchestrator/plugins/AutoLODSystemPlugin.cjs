@@ -1,7 +1,7 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunk2LFFYOLBcjs = require('../../../chunk-2LFFYOLB.cjs');
+var _chunkVZWQRVWDcjs = require('../../../chunk-VZWQRVWD.cjs');
 require('../../../chunk-EA3XQ4KJ.cjs');
 
 
-exports.AutoLODSystemPlugin = _chunk2LFFYOLBcjs.AutoLODSystemPlugin;
+exports.AutoLODSystemPlugin = _chunkVZWQRVWDcjs.AutoLODSystemPlugin;

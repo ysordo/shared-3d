@@ -145,7 +145,13 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
     return new AdvancedRaycasterPlugin(model, eventHandler);
   }, [model, eventHandler]);
 
-  const plugin = usePlugin(factory, [model, eventHandler]);
+  const plugin = usePlugin(factory, []);
+
+  useEffect(() => {
+    if(model){
+      plugin?.update(model, eventHandler);
+    }
+  }, [model, eventHandler, plugin]);
 
   // Sincronizar enabled
   useEffect(() => {

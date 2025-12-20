@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedRaycasterPlugin } from '../../core/orchestrator/plugins/AdvancedRaycasterPlugin';
 import { useActiveModel } from '../../hooks/useActiveModel';
@@ -35,7 +35,9 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
   // Handler siempre creado (incluso si no hay modelo)
   const handler = useCallback(
     (event: any) => {
-      if (!targetModel) {return;} // Guard interno
+      if (!targetModel) {
+        return;
+      } // Guard interno
 
       switch (event.type) {
         case 'objectclick':
@@ -82,10 +84,15 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
       return new AdvancedRaycasterPlugin(new THREE.Object3D(), () => {});
     }
     return new AdvancedRaycasterPlugin(targetModel, handler);
-  }, [targetModel, handler]);
+  }, []);
 
   // usePlugin siempre llamado
-  usePlugin(factory, [targetModel, handler]);
+  const plugin = usePlugin(factory, [targetModel, handler]);
+  useEffect(() => {
+    if (targetModel) {
+      plugin?.update(targetModel, handler);
+    }
+  }, [targetModel, handler, plugin]);
 
   // Render final: null si no hay modelo (pero hooks ya ejecutados)
   if (!targetModel) {

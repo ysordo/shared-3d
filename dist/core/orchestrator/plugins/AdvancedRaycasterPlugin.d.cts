@@ -49,6 +49,7 @@ declare class AdvancedRaycasterPlugin implements Plugin {
     setEnabled(enable: boolean): void;
     dispose(): void;
     get manager(): RaycasterManager;
+    update(model: THREE.Object3D, onEvent?: (event: unknown) => void): void;
 }
 
 export { AdvancedRaycasterPlugin };
