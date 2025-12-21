@@ -1,68 +1,124 @@
 'use client';
 
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedOrbitControlsPlugin } from '../../core/orchestrator/plugins/AdvancedOrbitControlsPlugin';
 
 type StateProps = {
+  /** Estado actual de pan */
   readonly enablePan: boolean;
+  /** Estado actual de rotación */
   readonly enableRotate: boolean;
+  /** Estado actual de zoom */
   readonly enableZoom: boolean;
+  /** Distancia mínima actual */
   readonly minDistance: number;
+  /** Distancia máxima actual */
   readonly maxDistance: number;
+
+  /** Actualizar pan (imperativo) */
   setEnablePan: (value: boolean) => void;
+  /** Actualizar rotación (imperativo) */
   setEnableRotate: (value: boolean) => void;
+  /** Actualizar zoom (imperativo) */
   setEnableZoom: (value: boolean) => void;
+  /** Actualizar distancia mínima (imperativo) */
   setMinDistance: (value: number) => void;
+  /** Actualizar distancia máxima (imperativo) */
   setMaxDistance: (value: number) => void;
 };
 
 type AdvancedOrbitControlsProps = {
+  /** Habilitar/deshabilitar pan */
   enablePan?: boolean;
+  /** Habilitar/deshabilitar rotación */
   enableRotate?: boolean;
+  /** Habilitar/deshabilitar zoom */
   enableZoom?: boolean;
+  /** Factor de damping (inercia) */
   dampingFactor?: number;
+  /** Velocidad de pan */
   panSpeed?: number;
+  /** Velocidad de rotación */
   rotateSpeed?: number;
+  /** Velocidad de zoom */
   zoomSpeed?: number;
+  /** Distancia mínima de cámara */
   minDistance?: number;
+  /** Distancia máxima de cámara */
   maxDistance?: number;
+  /** Ángulo polar mínimo (radianes) */
   minPolarAngle?: number;
+  /** Ángulo polar máximo (radianes) */
   maxPolarAngle?: number;
-  enabled?: boolean;
+
+  /** Render prop para exponer estado y controles imperativos */
   children?: (state: StateProps) => React.ReactNode;
 };
 
+/**
+ * AdvancedOrbitControls
+ *
+ * Componente declarativo avanzado para controles orbitales altamente configurables.
+ *
+ * Características:
+ * - Configuración totalmente reactiva (props → hot-update automático vía plugin.update()).
+ * - Exposición de estado actual + setters imperativos mediante render prop.
+ * - Integración óptima con usePlugin inteligente: instancia única + update() en caliente.
+ * - Setters directos sobre la instancia del plugin → fuente de verdad única.
+ * - Fallback seguro a props iniciales mientras el plugin se inicializa.
+ * - Componente headless puro (sin UI propia).
+ *
+ * Ideal para viewers complejos donde se necesite control dinámico de navegación
+ * (ej. UI para togglear modos, sliders de distancia, presets).
+ *
+ * @example
+ * <AdvancedOrbitControls enablePan={false} minDistance={2} maxDistance={10}>
+ *   {({ enableRotate, setEnableRotate, minDistance, setMinDistance }) => (
+ *     <div className="fixed top-4 left-4 space-y-4">
+ *       <button onClick={() => setEnableRotate(!enableRotate)}>
+ *         Rotate {enableRotate ? 'ON' : 'OFF'}
+ *       </button>
+ *       <input
+ *         type="range"
+ *         min="1"
+ *         max="20"
+ *         value={minDistance}
+ *         onChange={(e) => setMinDistance(Number(e.target.value))}
+ *       />
+ *     </div>
+ *   )}
+ * </AdvancedOrbitControls>
+ */
 export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
   enablePan = true,
   enableRotate = true,
   enableZoom = true,
-  minDistance = 0.1,
-  maxDistance = 1000,
   dampingFactor,
   panSpeed,
   rotateSpeed,
   zoomSpeed,
+  minDistance = 0.1,
+  maxDistance = 1000,
   minPolarAngle,
   maxPolarAngle,
   children,
 }) => {
-  // Factory con deps primitivas → estable
-  const factory = useCallback(
-    () =>
-      new AdvancedOrbitControlsPlugin({
-        enablePan,
-        enableRotate,
-        enableZoom,
-        dampingFactor,
-        panSpeed,
-        rotateSpeed,
-        zoomSpeed,
-        minDistance,
-        maxDistance,
-        minPolarAngle,
-        maxPolarAngle,
-      }),
+  // Configuración completa → fuente de verdad para deep equality en usePlugin
+  const config = useMemo(
+    () => ({
+      enablePan,
+      enableRotate,
+      enableZoom,
+      dampingFactor,
+      panSpeed,
+      rotateSpeed,
+      zoomSpeed,
+      minDistance,
+      maxDistance,
+      minPolarAngle,
+      maxPolarAngle,
+    }),
     [
       enablePan,
       enableRotate,
@@ -78,39 +134,13 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     ]
   );
 
-  // Plugin estable (instancia única)
-  const plugin = usePlugin(factory, []);
+  // Factory estable (sin dependencias externas)
+  const factory = useCallback(() => new AdvancedOrbitControlsPlugin(), []);
 
-  useEffect(() => {
-    plugin?.update({
-      enablePan,
-      enableRotate,
-      enableZoom,
-      dampingFactor,
-      panSpeed,
-      rotateSpeed,
-      zoomSpeed,
-      minDistance,
-      maxDistance,
-      minPolarAngle,
-      maxPolarAngle,
-    });
-  }, [
-    enablePan,
-    enableRotate,
-    enableZoom,
-    dampingFactor,
-    panSpeed,
-    rotateSpeed,
-    zoomSpeed,
-    minDistance,
-    maxDistance,
-    minPolarAngle,
-    maxPolarAngle,
-    plugin,
-  ]);
+  // usePlugin maneja creación, hot-update y dispose automáticamente
+  const plugin = usePlugin(factory, config);
 
-  // Setters que actualizan el plugin directamente (fuente de verdad)
+  // Setters imperativos que actúan directamente sobre la instancia (fuente de verdad)
   const setEnablePan = useCallback(
     (value: boolean) => {
       if (plugin) {
@@ -156,7 +186,7 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     [plugin]
   );
 
-  // Estado derivado del plugin (reactivo)
+  // Estado derivado: prioriza valores del plugin (actuales) sobre props iniciales
   const state = useMemo<StateProps>(
     () => ({
       enablePan: plugin?.enablePan ?? enablePan,
@@ -185,7 +215,7 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
     ]
   );
 
-  // Render condicional
+  // Si aún no está inicializado el plugin → no renderizar children (evita estado inconsistente)
   if (!plugin) {
     return null;
   }

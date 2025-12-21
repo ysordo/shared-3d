@@ -1,6 +1,95 @@
 import type { Plugin, PluginContext } from '../types';
 import { THREE } from '../../../lib';
 
+/**
+ * AdvancedRaycasterPlugin
+ * 
+ * Plugin avanzado de raycasting interactivo para detección precisa de eventos en objetos 3D.
+ * 
+ * Características principales:
+ * - Soporte completo para click, hover (in/out/move) y drag (start/drag/end) sobre meshes interactivos.
+ * - Filtrado inteligente: ignora objetos no visibles, con userData.isNotRaycaster o no meshes.
+ * - Throttling configurable en hover para optimizar rendimiento en escenas densas.
+ * - Detección de drag con delta normalizado y posiciones absolutas.
+ * - Integración total con eventos nativos del DOM (no requiere loop centralizado).
+ * - API reactiva: actualización en caliente de modelo y callback de eventos sin recrear la instancia.
+ * - Gestión automática de listeners (attach/detach) según estado enabled.
+ * - Limpieza segura en dispose() y prevención de context menu en drag.
+ * 
+ * Ideal para selección de partes, UI 3D interactiva, arrastrar objetos o feedback visual avanzado.
+ * 
+ * @example
+ * new AdvancedRaycasterPlugin(model, (event) => {
+ *   if (event.type === 'objectclick') console.log('Clicked:', event.object);
+ * })
+ */
+export class AdvancedRaycasterPlugin implements Plugin {
+  public readonly name = 'AdvancedRaycaster';
+
+  private _manager!: RaycasterManager;
+
+  private model: THREE.Object3D | null = null;
+  private onEvent?: (event: unknown) => void;
+
+  constructor(initialModel: THREE.Object3D | null = null, initialOnEvent?: (event: unknown) => void) {
+    this.model = initialModel;
+    this.onEvent = initialOnEvent ?? (()=>{});
+  }
+
+  install({ scene, camera, renderer }: PluginContext): void {
+    this._manager = new RaycasterManager(renderer.domElement);
+    this._manager.initialize(scene, camera);
+
+    if (this.model) {
+      this._manager.setModel(this.model);
+    }
+
+    const events = [
+      'objectclick',
+      'objecthoverin',
+      'objecthoverout',
+      'objecthovermove',
+      'objectdragstart',
+      'objectdrag',
+      'objectdragend',
+    ] as const;
+
+    events.forEach((event) => {
+      this._manager.addEventListener(event as never, (e: unknown) => this.onEvent?.(e));
+    });
+  }
+
+  setEnabled(enabled: boolean): void {
+    this._manager.setEnabled(enabled);
+  }
+
+  update(newModel: THREE.Object3D | null, newOnEvent?: (event: unknown) => void): void {
+    if (newModel !== this.model) {
+      this.model = newModel;
+      if (newModel && this._manager) {
+        this._manager.setModel(newModel);
+      }
+    }
+
+    if (newOnEvent !== undefined) {
+      this.onEvent = newOnEvent;
+    }
+  }
+
+  dispose(): void {
+    if (this._manager) {
+      this._manager.setEnabled(false);
+    }
+  }
+
+  get manager(): RaycasterManager {
+    return this._manager;
+  }
+}
+
+/* ===================================================================
+ * RaycasterManager – clase interna privada (encapsulada)
+ * =================================================================== */
 class RaycasterManager extends THREE.EventDispatcher {
   private raycaster = new THREE.Raycaster();
   private pointer = new THREE.Vector2();
@@ -14,7 +103,10 @@ class RaycasterManager extends THREE.EventDispatcher {
   private currentDragObject: THREE.Object3D | null = null;
   private dragStartPosition = new THREE.Vector2();
   private lastRaycastTime = 0;
-  private raycastThrottleMs = 16;
+  private raycastThrottleMs = 16; // ~60fps máximo para hover
+  private onTouchStart: ((e: PointerEvent)=> void);
+  private onTouchMove: ((e: PointerEvent)=> void);
+  private onTouchEnd: ((e: PointerEvent)=> void);
 
   constructor(domElement: HTMLElement) {
     super();
@@ -24,10 +116,10 @@ class RaycasterManager extends THREE.EventDispatcher {
     this.onPointerDown = this.onPointerDown.bind(this);
     this.onPointerUp = this.onPointerUp.bind(this);
     this.onClick = this.onClick.bind(this);
-    this.onTouchStart = this.onTouchStart.bind(this);
-    this.onTouchEnd = this.onTouchEnd.bind(this);
-    this.onTouchMove = this.onTouchMove.bind(this);
     this.onContextMenu = this.onContextMenu.bind(this);
+    this.onTouchStart = this.onPointerDown.bind(this);
+    this.onTouchMove = this.onPointerMove.bind(this);
+    this.onTouchEnd = this.onPointerUp.bind(this);
   }
 
   setModel(model: THREE.Object3D) {
@@ -92,7 +184,11 @@ class RaycasterManager extends THREE.EventDispatcher {
       this.isDragging = true;
       this.currentDragObject = hit.object;
       this.dragStartPosition.set(e.clientX, e.clientY);
-      this.dispatchEvent({ type: 'objectdragstart', object: hit.object, startPosition: this.dragStartPosition.clone() } as never);
+      this.dispatchEvent({
+        type: 'objectdragstart',
+        object: hit.object,
+        startPosition: this.dragStartPosition.clone(),
+      } as never);
     }
   }
 
@@ -115,7 +211,12 @@ class RaycasterManager extends THREE.EventDispatcher {
     this.updatePointer(e as PointerEvent);
     const hit = this.performRaycast()[0];
     if (hit) {
-      this.dispatchEvent({ type: 'objectclick', object: hit.object, point: hit.point, distance: hit.distance } as never);
+      this.dispatchEvent({
+        type: 'objectclick',
+        object: hit.object,
+        point: hit.point,
+        distance: hit.distance,
+      } as never);
     }
   }
 
@@ -127,7 +228,10 @@ class RaycasterManager extends THREE.EventDispatcher {
       object: this.currentDragObject!,
       current,
       delta,
-      normalizedDelta: new THREE.Vector2(delta.x / this.domElement.clientWidth, delta.y / this.domElement.clientHeight),
+      normalizedDelta: new THREE.Vector2(
+        delta.x / this.domElement.clientWidth,
+        delta.y / this.domElement.clientHeight
+      ),
     } as never);
     this.dragStartPosition.copy(current);
   }
@@ -143,21 +247,30 @@ class RaycasterManager extends THREE.EventDispatcher {
     if (!this.scene || !this.camera) {return;}
     const hits = this.performRaycast();
     const hit = hits?.[0] || null;
-    if(hit){
-      const current = hit.object || null;
+
+    if (hit) {
+      const current = hit.object;
       if (current !== this.lastHoverObject) {
         if (this.lastHoverObject) {
           this.dispatchEvent({ type: 'objecthoverout', object: this.lastHoverObject } as never);
         }
-        if (current) {
-          this.dispatchEvent({ type: 'objecthoverin', object: current, point: hit.point, distance: hit.distance } as never);
-        }
+        this.dispatchEvent({
+          type: 'objecthoverin',
+          object: current,
+          point: hit.point,
+          distance: hit.distance,
+        } as never);
         this.lastHoverObject = current;
       }
-  
-      if (current) {
-        this.dispatchEvent({ type: 'objecthovermove', object: current, point: hit.point, distance: hit.distance } as never);
-      }
+      this.dispatchEvent({
+        type: 'objecthovermove',
+        object: current,
+        point: hit.point,
+        distance: hit.distance,
+      } as never);
+    } else if (this.lastHoverObject) {
+      this.dispatchEvent({ type: 'objecthoverout', object: this.lastHoverObject } as never);
+      this.lastHoverObject = null;
     }
   }
 
@@ -166,9 +279,9 @@ class RaycasterManager extends THREE.EventDispatcher {
     this.raycaster.setFromCamera(this.pointer, this.camera);
     const intersects = this.raycaster.intersectObjects(this.interactableObjects, true);
     return intersects
-      .filter(i => !i.object.name.endsWith('-wireframe'))
+      .filter((i) => !i.object.name.endsWith('-wireframe'))
       .slice(0, 1)
-      .map(i => ({ object: i.object, point: i.point, distance: i.distance }));
+      .map((i) => ({ object: i.object, point: i.point, distance: i.distance }));
   }
 
   private updatePointer(e: PointerEvent) {
@@ -185,57 +298,4 @@ class RaycasterManager extends THREE.EventDispatcher {
   }
 
   private onContextMenu = (e: Event) => e.preventDefault();
-  private onTouchStart = this.onPointerDown as ((e: PointerEvent)=> void);
-  private onTouchMove = this.onPointerMove as ((e: PointerEvent)=> void);
-  private onTouchEnd = this.onPointerUp as ((e: PointerEvent)=> void);
-}
-
-export class AdvancedRaycasterPlugin implements Plugin {
-  name = 'AdvancedRaycaster';
-  private _manager!: RaycasterManager;
-
-  constructor(
-    private model: THREE.Object3D,
-    private onEvent?: (event: unknown) => void
-  ) {}
-
-  install({ scene, camera, renderer }: PluginContext): void {
-    this._manager = new RaycasterManager(renderer.domElement);
-    this._manager.initialize(scene, camera);
-
-    if (this.model) {
-      this._manager.setModel(this.model);
-    }
-
-    const events: string[] = [
-      'objectclick',
-      'objecthoverin',
-      'objecthoverout',
-      'objecthovermove',
-      'objectdragstart',
-      'objectdrag',
-      'objectdragend',
-    ] as const;
-
-    events.forEach((event) => {
-      this._manager.addEventListener(event as never, (e: unknown) => this.onEvent?.(e));
-    });
-
-  }
-
-  setEnabled(enable: boolean) {
-    this._manager.setEnabled(enable);
-  }
-  dispose(): void { this._manager.setEnabled(false); }
-
-  get manager(): RaycasterManager { return this._manager; }
-
-  update(model: THREE.Object3D, onEvent?: (event: unknown) => void) {
-    this.model = model;
-
-    if (this._manager && model) {
-      this._manager.setModel(model);
-    }
-    this.onEvent = onEvent;
-  }
 }

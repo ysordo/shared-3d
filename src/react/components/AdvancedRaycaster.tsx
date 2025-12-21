@@ -1,22 +1,69 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useMemo } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedRaycasterPlugin } from '../../core/orchestrator/plugins/AdvancedRaycasterPlugin';
 import { useActiveModel } from '../../hooks/useActiveModel';
-import { THREE } from '../../lib';
+import type { THREE } from '../../lib';
 
 type AdvancedRaycasterProps = {
-  model?: THREE.Object3D;
-  onClick?: (event: any) => void;
-  onHoverIn?: (event: any) => void;
-  onHoverOut?: (event: any) => void;
-  onHoverMove?: (event: any) => void;
-  onDragStart?: (event: any) => void;
-  onDrag?: (event: any) => void;
-  onDragEnd?: (event: any) => void;
+  /** Modelo específico para raycasting (si no se proporciona, usa el modelo activo global) */
+  model?: THREE.Object3D | null;
+
+  /** Callback para click sobre objeto */
+  onClick?: (event: {
+    object: THREE.Object3D;
+    point: THREE.Vector3;
+    distance: number;
+  }) => void;
+  /** Callback para hover enter */
+  onHoverIn?: (event: {
+    object: THREE.Object3D;
+    point: THREE.Vector3;
+    distance: number;
+  }) => void;
+  /** Callback para hover leave */
+  onHoverOut?: (event: { object: THREE.Object3D }) => void;
+  /** Callback para hover move */
+  onHoverMove?: (event: {
+    object: THREE.Object3D;
+    point: THREE.Vector3;
+    distance: number;
+  }) => void;
+  /** Callback para inicio de drag */
+  onDragStart?: (event: { object: THREE.Object3D }) => void;
+  /** Callback durante drag */
+  onDrag?: (event: {
+    object: THREE.Object3D;
+    delta: THREE.Vector2;
+    normalizedDelta: THREE.Vector2;
+  }) => void;
+  /** Callback para fin de drag */
+  onDragEnd?: (event: { object: THREE.Object3D }) => void;
 };
 
+/**
+ * AdvancedRaycaster
+ *
+ * Componente declarativo para interacción avanzada con raycasting (click, hover, drag).
+ *
+ * Características:
+ * - Soporte completo para todos los eventos del AdvancedRaycasterPlugin.
+ * - Modelo objetivo flexible: custom o fallback al modelo activo global.
+ * - Configuración totalmente reactiva mediante usePlugin inteligente (deep equality + hot-update).
+ * - Handler único estabilizado → actualizaciones en caliente sin recrear plugin innecesariamente.
+ * - Instancia dummy segura cuando no hay modelo → evita errores y mantiene ciclo de vida.
+ * - Componente headless puro (sin renderizado visual).
+ *
+ * Ideal para selección avanzada, tooltips dinámicos, drag de partes o feedback visual rico.
+ *
+ * @example
+ * <AdvancedRaycaster
+ *   onClick={(e) => console.log('Clicked:', e.object.name)}
+ *   onHoverIn={(e) => setHovered(e.object)}
+ *   onHoverOut={() => setHovered(null)}
+ * />
+ */
 export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
   model: customModel,
   onClick,
@@ -28,17 +75,11 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
   onDragEnd,
 }) => {
   const activeModel = useActiveModel();
-
-  // Modelo objetivo: siempre definido aquí (puede ser null)
   const targetModel = customModel ?? activeModel;
 
-  // Handler siempre creado (incluso si no hay modelo)
+  // Handler único y estabilizado
   const handler = useCallback(
     (event: any) => {
-      if (!targetModel) {
-        return;
-      } // Guard interno
-
       switch (event.type) {
         case 'objectclick':
           onClick?.(event);
@@ -64,7 +105,6 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
       }
     },
     [
-      targetModel, // Incluido para reactividad si cambia
       onClick,
       onHoverIn,
       onHoverOut,
@@ -75,29 +115,25 @@ export const AdvancedRaycaster: React.FC<AdvancedRaycasterProps> = ({
     ]
   );
 
-  // Factory siempre creada
-  const factory = useCallback(() => {
-    // Si no hay modelo, crear plugin "dummy" inofensivo
-    // o retornar null → pero usePlugin maneja null
-    if (!targetModel) {
-      // Plugin dummy que no hace nada
-      return new AdvancedRaycasterPlugin(new THREE.Object3D(), () => {});
-    }
-    return new AdvancedRaycasterPlugin(targetModel, handler);
-  }, []);
+  // Configuración completa → deep equality en usePlugin
+  const config = useMemo(
+    () => ({
+      model: targetModel ?? null,
+      onEvent: handler,
+    }),
+    [targetModel, handler]
+  );
 
-  // usePlugin siempre llamado
-  const plugin = usePlugin(factory, [targetModel, handler]);
-  useEffect(() => {
-    if (targetModel) {
-      plugin?.update(targetModel, handler);
-    }
-  }, [targetModel, handler, plugin]);
+  // Factory estable (sin dependencias)
+  const factory = useCallback(
+    () => new AdvancedRaycasterPlugin(null, undefined),
+    []
+  );
 
-  // Render final: null si no hay modelo (pero hooks ya ejecutados)
-  if (!targetModel) {
-    return null;
-  }
+  // usePlugin maneja creación, hot-update (model + handler) y dispose automáticamente
+  usePlugin(factory, config);
 
+  // Si no hay modelo → no renderizamos nada (headless)
+  // El plugin dummy ya está instalado y no hace daño
   return null;
 };

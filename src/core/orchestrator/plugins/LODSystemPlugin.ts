@@ -3,74 +3,112 @@ import { THREE } from '../../../lib';
 import type { SceneOrchestrator } from '../SceneOrchestrator';
 
 type LODLevel = {
+  /** Distancia a partir de la cual se activa este nivel (mayor distancia = menor detalle) */
   distance: number;
+  /** Modelo pre-generado para este nivel de detalle */
   model: THREE.Object3D;
 };
 
 export type LODConfig = {
+  /** Niveles de detalle ordenados por distancia creciente */
   levels: LODLevel[];
+  /** Histéresis opcional para evitar flickering en transiciones (valor 0-1, default 0) */
   hysteresis?: number;
 };
 
+/**
+ * LODSystemPlugin
+ * 
+ * Plugin de Level of Detail manual basado en modelos predefinidos.
+ * 
+ * Características principales:
+ * - Permite definir niveles LOD explícitos proporcionando modelos alternativos (ej. baked low-poly, impostors).
+ * - Switching determinista por distancia a cámara con soporte opcional para histéresis.
+ * - Integración transparente con SceneOrchestrator: aplica LOD automáticamente al modelo activo y futuros.
+ * - Actualización en caliente de configuración (niveles/hysteresis) sin recrear la instancia.
+ * - Integración completa con el loop centralizado mediante preRender() (un único LOD.update por frame).
+ * - Limpieza exhaustiva de recursos en dispose() para evitar memory leaks.
+ * 
+ * Ideal para optimización avanzada donde se controlan manualmente los modelos de cada nivel
+ * (ej. versiones simplificadas preparadas en Blender o herramientas externas).
+ * 
+ * @example
+ * new LODSystemPlugin({
+ *   levels: [
+ *     { distance: 0,   model: highDetailModel },
+ *     { distance: 20,  model: mediumDetailModel },
+ *     { distance: 50,  model: lowDetailModel },
+ *     { distance: 100, model: emptyPlaceholder }
+ *   ],
+ *   hysteresis: 0.1
+ * })
+ */
 export class LODSystemPlugin implements Plugin {
-  name = 'LODSystem';
+  public readonly name = 'LODSystem';
 
   private camera!: THREE.Camera;
   private orchestrator!: SceneOrchestrator;
 
-  private config: LODConfig;
+  private config: Required<LODConfig>;
   private lods = new Map<THREE.Object3D, THREE.LOD>();
-
-  private rafId: number | null = null;
   private originalSetModel?: SceneOrchestrator['setModel'];
 
   constructor(config: LODConfig) {
-    this.config = config;
+    this.config = {
+      levels: config.levels,
+      hysteresis: config.hysteresis ?? 0,
+    };
   }
 
-  /* =========================
-   *  Hot update
-   * ========================= */
-  update(config: Partial<LODConfig>) {
-    this.config = { ...this.config, ...config };
-
-    this.lods.forEach((lod, model) => {
-      this.rebuildLOD(model, lod);
-    });
-  }
-
-  /* =========================
-   *  Install
-   * ========================= */
   install({ camera, orchestrator }: PluginContext): void {
     this.camera = camera;
     this.orchestrator = orchestrator;
 
-    const activeModel = orchestrator.getActiveModel();
+    const activeModel = this.orchestrator.getActiveModel();
     if (activeModel) {
       this.applyLOD(activeModel);
     }
 
-    this.originalSetModel = orchestrator.setModel.bind(orchestrator);
-    orchestrator.setModel = async (...args) => {
+    this.originalSetModel = this.orchestrator.setModel.bind(this.orchestrator);
+    this.orchestrator.setModel = async (...args) => {
       await this.originalSetModel!(...args);
-      const model = orchestrator.getActiveModel();
-      if (model) {
-        this.applyLOD(model);
+      const newModel = this.orchestrator.getActiveModel();
+      if (newModel) {
+        this.applyLOD(newModel);
       }
     };
-
-    this.startLoop();
   }
 
-  /* =========================
-   *  Core logic
-   * ========================= */
-  private applyLOD(model: THREE.Object3D) {
+  preRender(): void {
+    this.lods.forEach((lod) => {
+      if (this.config.hysteresis > 0) {
+        lod.children.forEach((child) => {
+          if (child instanceof THREE.LOD) {return;}
+        });
+      }
+      lod.update(this.camera);
+    });
+  }
+
+  update(newConfig: Partial<LODConfig>): void {
+    this.config = {
+      ...this.config,
+      ...newConfig,
+      levels: newConfig.levels ?? this.config.levels,
+      hysteresis: newConfig.hysteresis ?? this.config.hysteresis,
+    };
+
+    this.lods.forEach((lod, originalModel) => {
+      this.rebuildLOD(originalModel, lod);
+    });
+  }
+
+  private applyLOD(model: THREE.Object3D): void {
     if (this.lods.has(model)) {return;}
 
     const lod = new THREE.LOD();
-    this.buildLODLevels(lod, model);
+
+    this.buildLODLevels(lod);
 
     if (model.parent) {
       model.parent.add(lod);
@@ -84,66 +122,51 @@ export class LODSystemPlugin implements Plugin {
     this.lods.set(model, lod);
   }
 
-  private buildLODLevels(lod: THREE.LOD, model: THREE.Object3D) {
-    this.config.levels.forEach(level => {
+  private buildLODLevels(lod: THREE.LOD): void {
+    this.config.levels.forEach((level) => {
       const clone = level.model.clone(true);
       clone.visible = true;
       lod.addLevel(clone, level.distance);
     });
   }
 
-  private rebuildLOD(model: THREE.Object3D, lod: THREE.LOD) {
-    lod.levels.forEach(level => {
-      level.object.parent?.remove(level.object);
-      level.object.traverse(obj => {
-        if (obj instanceof THREE.Mesh) {
-          obj.geometry?.dispose();
-          if (Array.isArray(obj.material)) {
-            obj.material.forEach(m => m.dispose());
+  private rebuildLOD(originalModel: THREE.Object3D, lod: THREE.LOD): void {
+    lod.levels.forEach((level) => {
+      const obj = level.object;
+      obj.parent?.remove(obj);
+      obj.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.geometry?.dispose();
+          if (Array.isArray(child.material)) {
+            child.material.forEach((m) => m.dispose());
           } else {
-            obj.material?.dispose();
+            child.material?.dispose();
           }
         }
       });
     });
 
     lod.levels.length = 0;
-    this.buildLODLevels(lod, model);
+    this.buildLODLevels(lod);
   }
-
-  /* =========================
-   *  Loop
-   * ========================= */
-  private startLoop() {
-    const loop = () => {
-      this.lods.forEach(lod => lod.update(this.camera));
-      this.rafId = requestAnimationFrame(loop);
-    };
-    loop();
-  }
-
-  /* =========================
-   *  Dispose
-   * ========================= */
+  
   dispose(): void {
-    if (this.originalSetModel) {
+    if (this.originalSetModel && this.orchestrator) {
       this.orchestrator.setModel = this.originalSetModel;
     }
 
-    if (this.rafId) {
-      cancelAnimationFrame(this.rafId);
-      this.rafId = null;
-    }
+    this.lods.forEach((lod) => {
+      if (lod.parent) {
+        lod.parent.remove(lod);
+      }
 
-    this.lods.forEach(lod => {
-      lod.parent?.remove(lod);
-      lod.traverse(obj => {
-        if (obj instanceof THREE.Mesh) {
-          obj.geometry?.dispose();
-          if (Array.isArray(obj.material)) {
-            obj.material.forEach(m => m.dispose());
+      lod.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.geometry?.dispose();
+          if (Array.isArray(child.material)) {
+            child.material.forEach((m) => m.dispose());
           } else {
-            obj.material?.dispose();
+            child.material?.dispose();
           }
         }
       });

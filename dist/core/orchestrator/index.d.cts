@@ -1,4 +1,4 @@
-export { S as SceneConfig, a as SceneOrchestrator } from '../../SceneOrchestrator-uEPgybCc.cjs';
+export { S as SceneConfig, a as SceneOrchestrator } from '../../SceneOrchestrator-DPFoyHCW.cjs';
 export { AdvancedCameraCollisionPlugin } from './plugins/AdvancedCameraCollisionPlugin.cjs';
 export { AdvancedOrbitControlsPlugin } from './plugins/AdvancedOrbitControlsPlugin.cjs';
 export { AdvancedRaycasterPlugin } from './plugins/AdvancedRaycasterPlugin.cjs';
@@ -8,7 +8,7 @@ export { HotspotData, HotspotPlugin } from './plugins/HotspotPlugin.cjs';
 export { LODConfig, LODSystemPlugin } from './plugins/LODSystemPlugin.cjs';
 export { MeasurementConfig, MeasurementEvent, MeasurementToolPlugin } from './plugins/MeasurementToolPlugin.cjs';
 export { OrbitControlsPlugin } from './plugins/OrbitControlsPlugin.cjs';
-export { RaycasterEvent, RaycasterPlugin } from './plugins/RaycasterPlugin.cjs';
+export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './plugins/RaycasterPlugin.cjs';
 export { PostProcessingConfig, PostProcessingPlugin } from './plugins/PostProcessingPlugin.cjs';
 import '../loaders/HDRILoader.cjs';
 import '../cache/types.cjs';

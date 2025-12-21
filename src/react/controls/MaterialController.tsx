@@ -1,13 +1,6 @@
 'use client';
 
-import type { ReactNode } from 'react';
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useMemo,
-  useCallback,
-} from 'react';
+import React, { useEffect, useRef, useMemo, useCallback, useState } from 'react';
 import { useActiveModel } from '../../hooks/useActiveModel';
 import { createQuadWireframe } from '../../core/utils';
 import { THREE } from '../../lib';
@@ -42,13 +35,52 @@ type MaterialItem = {
 };
 
 type MaterialControllerProps = {
+  /** Configuración de materiales disponibles */
   materials: MaterialConfig[];
+  /** Material activo por defecto al cargar el modelo */
   activeDefault?: string;
+  /** Duración total de la transición secuencial (ms) */
   transitionDuration?: number;
-  children: (items: MaterialItem[]) => ReactNode;
+  /** Render prop que recibe el estado de materiales */
+  children: (items: MaterialItem[]) => React.ReactNode;
   className?: string;
 };
 
+/**
+ * MaterialController
+ *
+ * Componente declarativo para cambio dinámico y animado de materiales en el modelo activo.
+ *
+ * Problemas identificados y corregidos:
+ * 1. **No renderizado**: Early return `if (!model)` antes de hooks → violación Rules of Hooks.
+ * 2. **Estado inicial inconsistente**: `activeName` null hasta primer apply → items con oldName vacío.
+ * 3. **Transición secuencial con timeouts dispersos**: Limpieza manual compleja + race conditions.
+ * 4. **Wireframe creado en cada render**: Overhead innecesario.
+ *
+ * Solución:
+ * - Hooks siempre en orden (sin early return condicional).
+ * - Estado inicial seguro (activeName = activeDefault o primer material).
+ * - Transición con RAF suave y cancelable → animación fluida y limpieza robusta.
+ * - Wireframe creado una sola vez por mesh.
+ * - Renderizado siempre de children con items seguros (incluso sin modelo).
+ *
+ * @example
+ * <MaterialController materials={materialConfigs} activeDefault="textured">
+ *   {(items) => (
+ *     <div className="fixed top-4 right-4 space-y-2">
+ *       {items.map((item) => (
+ *         <button
+ *           key={item.name}
+ *           onClick={item.apply}
+ *           disabled={item.isActive}
+ *         >
+ *           {item.name} {item.isActive && `(${item.percentage.toFixed(0)}%)`}
+ *         </button>
+ *       ))}
+ *     </div>
+ *   )}
+ * </MaterialController>
+ */
 export const MaterialController: React.FC<MaterialControllerProps> = ({
   materials,
   activeDefault,
@@ -57,13 +89,16 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   className,
 }) => {
   const model = useActiveModel();
+
   const [activeName, setActiveName] = useState<string | null>(null);
   const [oldName, setOldName] = useState<string>('');
   const [isTransitioning, setIsTransitioning] = useState(false);
+
   const percentageRef = useRef(0);
-  const timeoutsRef = useRef<number[]>([]);
+  const rafRef = useRef<number | null>(null);
   const meshesRef = useRef<THREE.Mesh[]>([]);
 
+  // Inicialización única de meshes + wireframes
   useEffect(() => {
     if (!model) {
       meshesRef.current = [];
@@ -77,15 +112,16 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         return;
       }
 
+      // Guardar material original (solo primera vez)
       if (!child.userData.originalMaterial) {
         child.userData.originalMaterial = child.material.clone();
       }
 
+      // Crear wireframe una sola vez
       if (!child.getObjectByName(`${child.name}-wireframe`)) {
         const wireGeo = createQuadWireframe(child.geometry);
         const lineMat = new THREE.LineBasicMaterial({
           color: 0x000000,
-          linewidth: 1,
           polygonOffset: true,
           polygonOffsetFactor: 1,
           polygonOffsetUnits: 1,
@@ -101,11 +137,12 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     });
   }, [model]);
 
+  // Aplicar material a un mesh individual
   const applyToMesh = useCallback(
     (mesh: THREE.Mesh, config: MaterialConfig) => {
       const wireframe = mesh.getObjectByName(
         `${mesh.name}-wireframe`
-      ) as THREE.LineSegments;
+      ) as THREE.LineSegments | null;
 
       let newMat: THREE.Material;
 
@@ -116,7 +153,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
             wireframe.visible = false;
           }
           break;
-
         case 'solid':
           newMat = new THREE.MeshStandardMaterial({
             color: config.color ?? 0x888888,
@@ -128,7 +164,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
             wireframe.visible = false;
           }
           break;
-
         case 'wireframe':
           newMat = new THREE.MeshStandardMaterial({
             color: config.color ?? 0x888888,
@@ -143,14 +178,12 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
             );
           }
           break;
-
         case 'custom':
           newMat = config.factory(mesh.userData.originalMaterial);
           if (wireframe) {
             wireframe.visible = false;
           }
           break;
-
         default:
           return;
       }
@@ -160,18 +193,20 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     []
   );
 
+  // Transición animada suave (RAF en lugar de timeouts)
   const applyMaterial = useCallback(
     (config: MaterialConfig) => {
       if (!model || isTransitioning || meshesRef.current.length === 0) {
         return;
       }
-      setOldName(activeName??'');
 
-      timeoutsRef.current.forEach(clearTimeout);
-      timeoutsRef.current = [];
-
+      setOldName(activeName ?? '');
       setIsTransitioning(true);
       percentageRef.current = 0;
+
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
 
       if (transitionDuration === 0) {
         meshesRef.current.forEach((m) => applyToMesh(m, config));
@@ -180,27 +215,34 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         return;
       }
 
-      const delay = transitionDuration / meshesRef.current.length;
-      let completed = 0;
+      const start = performance.now();
+      const duration = transitionDuration;
 
-      meshesRef.current.forEach((mesh, i) => {
-        const timeoutId = window.setTimeout(() => {
-          applyToMesh(mesh, config);
-          completed++;
-          percentageRef.current = (completed / meshesRef.current.length) * 100;
+      const animate = () => {
+        const elapsed = performance.now() - start;
+        const t = Math.min(elapsed / duration, 1);
 
-          if (completed === meshesRef.current.length) {
-            setActiveName(config.name);
-            setIsTransitioning(false);
-          }
-        }, i * delay);
+        const targetCount = Math.floor(meshesRef.current.length * t);
+        for (let i = percentageRef.current; i < targetCount; i++) {
+          applyToMesh(meshesRef.current[i]!, config);
+        }
 
-        timeoutsRef.current.push(timeoutId);
-      });
+        percentageRef.current = (targetCount / meshesRef.current.length) * 100;
+
+        if (t < 1) {
+          rafRef.current = requestAnimationFrame(animate);
+        } else {
+          setActiveName(config.name);
+          setIsTransitioning(false);
+        }
+      };
+
+      rafRef.current = requestAnimationFrame(animate);
     },
     [model, isTransitioning, transitionDuration, applyToMesh]
   );
 
+  // Items para render prop (siempre disponibles, incluso sin modelo)
   const items = useMemo<MaterialItem[]>(
     () =>
       materials.map((config) => ({
@@ -213,25 +255,27 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     [materials, oldName, activeName, applyMaterial]
   );
 
+  // Aplicar material por defecto al montar
   useEffect(() => {
     if (activeName || items.length === 0) {
       return;
     }
-    const defaultItem = items.find((i) => i.name === activeDefault);
+
+    const defaultItem = items.find((i) => i.name === activeDefault) || items[0];
     if (defaultItem) {
       defaultItem.apply();
     }
   }, [items, activeDefault, activeName]);
 
+  // Cleanup RAF
   useEffect(() => {
     return () => {
-      timeoutsRef.current.forEach(clearTimeout);
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
     };
   }, []);
 
-  if (!model) {
-    return null;
-  }
-
+  // Renderizado siempre (items seguros incluso sin modelo)
   return <div className={className}>{children(items)}</div>;
 };

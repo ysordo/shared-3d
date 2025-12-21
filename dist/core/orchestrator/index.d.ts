@@ -1,4 +1,4 @@
-export { S as SceneConfig, a as SceneOrchestrator } from '../../SceneOrchestrator-BNc555Bu.js';
+export { S as SceneConfig, a as SceneOrchestrator } from '../../SceneOrchestrator-BwV_edbe.js';
 export { AdvancedCameraCollisionPlugin } from './plugins/AdvancedCameraCollisionPlugin.js';
 export { AdvancedOrbitControlsPlugin } from './plugins/AdvancedOrbitControlsPlugin.js';
 export { AdvancedRaycasterPlugin } from './plugins/AdvancedRaycasterPlugin.js';
@@ -8,7 +8,7 @@ export { HotspotData, HotspotPlugin } from './plugins/HotspotPlugin.js';
 export { LODConfig, LODSystemPlugin } from './plugins/LODSystemPlugin.js';
 export { MeasurementConfig, MeasurementEvent, MeasurementToolPlugin } from './plugins/MeasurementToolPlugin.js';
 export { OrbitControlsPlugin } from './plugins/OrbitControlsPlugin.js';
-export { RaycasterEvent, RaycasterPlugin } from './plugins/RaycasterPlugin.js';
+export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './plugins/RaycasterPlugin.js';
 export { PostProcessingConfig, PostProcessingPlugin } from './plugins/PostProcessingPlugin.js';
 import '../loaders/HDRILoader.js';
 import '../cache/types.js';

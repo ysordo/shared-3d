@@ -1,107 +1,166 @@
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import type { Plugin, PluginContext } from '../types';
 
+/**
+ * AdvancedOrbitControlsPlugin
+ * 
+ * Plugin avanzado de controles de órbita para navegación intuitiva en escenas 3D.
+ * 
+ * Características principales:
+ * - Wrapper configurable y reactivo sobre Three.js OrbitControls.
+ * - Soporte completo para damping, límites de distancia/ángulo, velocidades y habilitación individual de pan/rotate/zoom.
+ * - Integración con el loop centralizado del SceneOrchestrator mediante preRender() (un único update() por frame).
+ * - API de actualización en caliente vía update() y setters/getters públicos para control imperativo desde React.
+ * - Configuración inicial flexible mediante opciones parciales (valores por defecto sensatos).
+ * - Limpieza completa de eventos y recursos en dispose().
+ * 
+ * Perfecto para viewers de productos, visualizadores arquitectónicos o cualquier experiencia donde se requiera
+ * navegación orbital fluida y altamente configurable sin exponer directamente OrbitControls al consumidor.
+ * 
+ * @example
+ * new AdvancedOrbitControlsPlugin({
+ *   enablePan: false,
+ *   minDistance: 2,
+ *   maxDistance: 10,
+ *   dampingFactor: 0.08
+ * })
+ */
 export class AdvancedOrbitControlsPlugin implements Plugin {
-  name = 'AdvancedOrbitControls';
+  public readonly name = 'AdvancedOrbitControls';
+
   private controls!: OrbitControls;
 
-  constructor(private options: Partial<{
-    enablePan?: boolean | undefined;
-    enableRotate?: boolean | undefined;
-    enableZoom?: boolean | undefined;
-    dampingFactor?: number | undefined;
-    panSpeed?: number | undefined;
-    rotateSpeed?: number | undefined;
-    zoomSpeed?: number | undefined;
-    minDistance?: number | undefined;
-    maxDistance?: number | undefined;
-    minPolarAngle?: number | undefined;
-    maxPolarAngle?: number | undefined;
-  }> = {}) {}
+  private options: {
+    enablePan: boolean;
+    enableRotate: boolean;
+    enableZoom: boolean;
+    dampingFactor: number;
+    panSpeed: number;
+    rotateSpeed: number;
+    zoomSpeed: number;
+    minDistance: number;
+    maxDistance: number;
+    minPolarAngle: number;
+    maxPolarAngle: number;
+  };
+
+  constructor(
+    partialOptions: Partial<{
+      enablePan?: boolean;
+      enableRotate?: boolean;
+      enableZoom?: boolean;
+      dampingFactor?: number;
+      panSpeed?: number;
+      rotateSpeed?: number;
+      zoomSpeed?: number;
+      minDistance?: number;
+      maxDistance?: number;
+      minPolarAngle?: number;
+      maxPolarAngle?: number;
+    }> = {}
+  ) {
+    this.options = {
+      enablePan: true,
+      enableRotate: true,
+      enableZoom: true,
+      dampingFactor: 0.05,
+      panSpeed: 1,
+      rotateSpeed: 1,
+      zoomSpeed: 1,
+      minDistance: 0.1,
+      maxDistance: 1000,
+      minPolarAngle: 0,
+      maxPolarAngle: Math.PI,
+      ...partialOptions,
+    };
+  }
 
   install({ camera, renderer }: PluginContext): void {
     this.controls = new OrbitControls(camera, renderer.domElement);
-
+    this.applyOptionsToControls();
     this.controls.enableDamping = true;
-    this.controls.dampingFactor = this.options.dampingFactor ?? 0.05;
-    this.controls.panSpeed = this.options.panSpeed ?? 1;
-    this.controls.rotateSpeed = this.options.rotateSpeed ?? 1;
-    this.controls.zoomSpeed = this.options.zoomSpeed ?? 1;
-    this.controls.minDistance = this.options.minDistance ?? 0.1;
-    this.controls.maxDistance = this.options.maxDistance ?? 1000;
-    this.controls.minPolarAngle = this.options.minPolarAngle ?? 0;
-    this.controls.maxPolarAngle = this.options.maxPolarAngle ?? Math.PI;
-    this.controls.enablePan = this.options.enablePan ?? true;
-    this.controls.enableRotate = this.options.enableRotate ?? true;
-    this.controls.enableZoom = this.options.enableZoom ?? true;
-    
-    this.controls.connect?.(renderer.domElement);
-    
-    const animate = () => {
-      this.controls.update();
-      requestAnimationFrame(animate);
-    };
-    animate();
+  }
+
+  preRender(): void {
+    this.controls.update();
+  }
+
+  private applyOptionsToControls(): void {
+    const o = this.options;
+    this.controls.enablePan = o.enablePan;
+    this.controls.enableRotate = o.enableRotate;
+    this.controls.enableZoom = o.enableZoom;
+    this.controls.dampingFactor = o.dampingFactor;
+    this.controls.panSpeed = o.panSpeed;
+    this.controls.rotateSpeed = o.rotateSpeed;
+    this.controls.zoomSpeed = o.zoomSpeed;
+    this.controls.minDistance = o.minDistance;
+    this.controls.maxDistance = o.maxDistance;
+    this.controls.minPolarAngle = o.minPolarAngle;
+    this.controls.maxPolarAngle = o.maxPolarAngle;
   }
 
   set enablePan(enabled: boolean) {
     this.options.enablePan = enabled;
     this.controls.enablePan = enabled;
-  };
+  }
+  get enablePan(): boolean {
+    return this.controls.enablePan;
+  }
 
   set enableRotate(enabled: boolean) {
     this.options.enableRotate = enabled;
     this.controls.enableRotate = enabled;
-  };
+  }
+  get enableRotate(): boolean {
+    return this.controls.enableRotate;
+  }
 
   set enableZoom(enabled: boolean) {
     this.options.enableZoom = enabled;
     this.controls.enableZoom = enabled;
-  };
-  set maxDistance(distance: number) {
-    this.options.maxDistance = distance;
-    this.controls.maxDistance = distance;
-  };
+  }
+  get enableZoom(): boolean {
+    return this.controls.enableZoom;
+  }
+
   set minDistance(distance: number) {
     this.options.minDistance = distance;
     this.controls.minDistance = distance;
-  };
-  get maxDistance(): number { return this.controls.maxDistance; }
-  get minDistance(): number { return this.controls.minDistance; }
-  get enableRotate(): boolean { return this.controls.enableRotate; }
-  get enableZoom(): boolean { return this.controls.enableZoom; }
-  get enablePan(): boolean { return this.controls.enablePan; }
+  }
+  get minDistance(): number {
+    return this.controls.minDistance;
+  }
+
+  set maxDistance(distance: number) {
+    this.options.maxDistance = distance;
+    this.controls.maxDistance = distance;
+  }
+  get maxDistance(): number {
+    return this.controls.maxDistance;
+  }
+
+  update(
+    newOptions: Partial<{
+      enablePan?: boolean;
+      enableRotate?: boolean;
+      enableZoom?: boolean;
+      dampingFactor?: number;
+      panSpeed?: number;
+      rotateSpeed?: number;
+      zoomSpeed?: number;
+      minDistance?: number;
+      maxDistance?: number;
+      minPolarAngle?: number;
+      maxPolarAngle?: number;
+    }>
+  ): void {
+    this.options = { ...this.options, ...newOptions };
+    this.applyOptionsToControls();
+  }
 
   dispose(): void {
     this.controls.disconnect();
     this.controls.dispose();
-  }
-
-  update(
-    options: Partial<{
-      enablePan?: boolean | undefined;
-      enableRotate?: boolean | undefined;
-      enableZoom?: boolean | undefined;
-      dampingFactor?: number | undefined;
-      panSpeed?: number | undefined;
-      rotateSpeed?: number | undefined;
-      zoomSpeed?: number | undefined;
-      minDistance?: number | undefined;
-      maxDistance?: number | undefined;
-      minPolarAngle?: number | undefined;
-      maxPolarAngle?: number | undefined;
-    }>
-  ){
-    this.controls.dampingFactor = options.dampingFactor ?? 0.05;
-    this.controls.panSpeed = options.panSpeed ?? 1;
-    this.controls.rotateSpeed = options.rotateSpeed ?? 1;
-    this.controls.zoomSpeed = options.zoomSpeed ?? 1;
-    this.controls.minDistance = options.minDistance ?? 0.1;
-    this.controls.maxDistance = options.maxDistance ?? 1000;
-    this.controls.minPolarAngle = options.minPolarAngle ?? 0;
-    this.controls.maxPolarAngle = options.maxPolarAngle ?? Math.PI;
-    this.controls.enablePan = options.enablePan ?? true;
-    this.controls.enableRotate = options.enableRotate ?? true;
-    this.controls.enableZoom = options.enableZoom ?? true;
   }
 }

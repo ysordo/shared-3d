@@ -12,6 +12,6 @@ export { RenderPass as ThreeRenderPass } from 'three/examples/jsm/postprocessing
 export { UnrealBloomPass as ThreeUnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 export { ManifestEntry, ModelManifest } from '../core/cache/types.js';
 export { HDRILoaderOptions } from '../core/loaders/HDRILoader.js';
-export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-BNc555Bu.js';
+export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-BwV_edbe.js';
 export { CustomMaterialFactory, MaterialConfig } from '../react/controls/MaterialController.js';
 import 'react';

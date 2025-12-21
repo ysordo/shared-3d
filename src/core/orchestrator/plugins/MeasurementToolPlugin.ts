@@ -3,20 +3,55 @@ import { THREE } from '../../../lib';
 import type { SceneOrchestrator } from '../SceneOrchestrator';
 
 export type MeasurementEvent = {
+  /** Punto seleccionado en este click */
   point: THREE.Vector3;
+  /** Distancia calculada (solo cuando se completa la medición de 2 puntos) */
   distance?: number;
+  /** Array acumulativo de puntos seleccionados */
   points: THREE.Vector3[];
 };
 
 export type MeasurementConfig = {
+  /** Habilitar/deshabilitar la herramienta */
   enabled?: boolean;
+  /** Radio de las esferas que marcan los puntos */
   pointRadius?: number;
+  /** Color de puntos y línea (formato hexadecimal Three.js) */
   color?: number;
+  /** Callback invocado en cada punto y al completar la medición */
   onMeasure?: (event: MeasurementEvent) => void;
 };
 
+/**
+ * MeasurementToolPlugin
+ * 
+ * Plugin de herramienta de medición interactiva punto a punto sobre el modelo activo.
+ * 
+ * Características principales:
+ * - Selección de hasta 2 puntos mediante click izquierdo sobre el modelo.
+ * - Visualización inmediata con esferas en los puntos y línea al completar.
+ * - Callback reactivo onMeasure con información progresiva y final (distancia).
+ * - Configuración en caliente (enabled, color, radius) sin recrear la instancia.
+ * - Limpieza automática de geometrías/materiales tras 3 segundos o al deshabilitar.
+ * - Integración limpia con eventos DOM (pointerdown en capture) y dispose completo.
+ * - Sin requestAnimationFrame propio → compatible con loop centralizado.
+ * 
+ * Ideal para visualizadores técnicos, CAD-like, arquitectura o e-commerce de productos
+ * donde el usuario necesite medir dimensiones reales.
+ * 
+ * @example
+ * new MeasurementToolPlugin({
+ *   color: 0xff0000,
+ *   pointRadius: 0.08,
+ *   onMeasure: (event) => {
+ *     if (event.distance !== undefined) {
+ *       console.log(`Distancia: ${event.distance.toFixed(2)} unidades`);
+ *     }
+ *   }
+ * })
+ */
 export class MeasurementToolPlugin implements Plugin {
-  name = 'MeasurementTool';
+  public readonly name = 'MeasurementTool';
 
   private camera!: THREE.Camera;
   private scene!: THREE.Scene;
@@ -30,7 +65,11 @@ export class MeasurementToolPlugin implements Plugin {
   private line?: THREE.Line | undefined;
 
   private config: Required<MeasurementConfig>;
+
   private pointerHandler!: (e: PointerEvent) => void;
+
+  private readonly raycaster = new THREE.Raycaster();
+  private readonly pointer = new THREE.Vector2();
 
   constructor(config?: MeasurementConfig) {
     this.config = {
@@ -42,65 +81,70 @@ export class MeasurementToolPlugin implements Plugin {
     };
   }
 
-  /* =========================
-   *  Public API
-   * ========================= */
-  enable() {
+  enable(): void {
     this.enabled = true;
   }
 
-  disable() {
+  disable(): void {
     this.enabled = false;
     this.reset();
   }
 
-  update(config: Partial<MeasurementConfig>) {
-    this.config = { ...this.config, ...config };
+  update(newConfig: Partial<MeasurementConfig>): void {
+    this.config = { ...this.config, ...newConfig };
 
-    if (config.enabled !== undefined) {
-      this.enabled = config.enabled;
+    if (newConfig.enabled !== undefined) {
+      this.enabled = newConfig.enabled;
       if (!this.enabled) {
         this.reset();
       }
     }
+
+    if ((newConfig.color !== undefined || newConfig.pointRadius !== undefined) && this.spheres.length > 0) {
+      this.spheres.forEach((sphere) => {
+        if (newConfig.color !== undefined) {
+          (sphere.material as THREE.MeshBasicMaterial).color.setHex(newConfig.color);
+        }
+        if (newConfig.pointRadius !== undefined) {
+          sphere.scale.setScalar(newConfig.pointRadius / this.config.pointRadius);
+        }
+      });
+      if (this.line && newConfig.color !== undefined) {
+        (this.line.material as THREE.LineBasicMaterial).color.setHex(newConfig.color);
+      }
+    }
   }
 
-  /* =========================
-   *  Install
-   * ========================= */
-  install(ctx: PluginContext): void {
-    this.scene = ctx.scene;
-    this.camera = ctx.camera;
-    this.renderer = ctx.renderer;
-    this.orchestrator = ctx.orchestrator;
+  install({ scene, camera, renderer, orchestrator }: PluginContext): void {
+    this.scene = scene;
+    this.camera = camera;
+    this.renderer = renderer;
+    this.orchestrator = orchestrator;
 
     this.pointerHandler = this.handlePointerDown.bind(this);
     this.renderer.domElement.addEventListener('pointerdown', this.pointerHandler, { capture: true });
   }
 
-  /* =========================
-   *  Pointer logic
-   * ========================= */
-  private handlePointerDown(e: PointerEvent) {
+  private handlePointerDown(e: PointerEvent): void {
     if (!this.enabled || e.button !== 0) {return;}
 
     const rect = this.renderer.domElement.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    this.pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    this.pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
-    const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(new THREE.Vector2(x, y), this.camera);
+    this.raycaster.setFromCamera(this.pointer, this.camera);
 
     const model = this.orchestrator.getActiveModel();
     if (!model) {return;}
 
-    const intersects = raycaster.intersectObject(model, true);
-    if (!intersects.length) {return;}
+    const intersects = this.raycaster.intersectObject(model, true);
+    if (intersects.length === 0) {return;}
 
     const point = intersects[0]!.point.clone();
-    this.points.push(point);
 
+    this.points.push(point);
     this.spawnPoint(point);
+
     this.config.onMeasure({ point, points: [...this.points] });
 
     if (this.points.length === 2) {
@@ -108,20 +152,18 @@ export class MeasurementToolPlugin implements Plugin {
     }
   }
 
-  /* =========================
-   *  Drawing
-   * ========================= */
-  private spawnPoint(point: THREE.Vector3) {
-    const mesh = new THREE.Mesh(
-      new THREE.SphereGeometry(this.config.pointRadius),
-      new THREE.MeshBasicMaterial({ color: this.config.color })
-    );
+  private spawnPoint(point: THREE.Vector3): void {
+    const geometry = new THREE.SphereGeometry(this.config.pointRadius, 16, 16);
+    const material = new THREE.MeshBasicMaterial({ color: this.config.color });
+
+    const mesh = new THREE.Mesh(geometry, material);
     mesh.position.copy(point);
+
     this.scene.add(mesh);
     this.spheres.push(mesh);
   }
 
-  private finishMeasurement() {
+  private finishMeasurement(): void {
     const distance = this.points[0]!.distanceTo(this.points[1]!);
 
     const geometry = new THREE.BufferGeometry().setFromPoints(this.points);
@@ -139,10 +181,7 @@ export class MeasurementToolPlugin implements Plugin {
     setTimeout(() => this.reset(), 3000);
   }
 
-  /* =========================
-   *  Cleanup
-   * ========================= */
-  private reset() {
+  private reset(): void {
     this.points = [];
 
     if (this.line) {
@@ -152,17 +191,14 @@ export class MeasurementToolPlugin implements Plugin {
       this.line = undefined;
     }
 
-    this.spheres.forEach(s => {
-      this.scene.remove(s);
-      s.geometry.dispose();
-      (s.material as THREE.Material).dispose();
+    this.spheres.forEach((sphere) => {
+      this.scene.remove(sphere);
+      sphere.geometry.dispose();
+      (sphere.material as THREE.Material).dispose();
     });
     this.spheres = [];
   }
 
-  /* =========================
-   *  Dispose
-   * ========================= */
   dispose(): void {
     this.renderer.domElement.removeEventListener('pointerdown', this.pointerHandler, { capture: true });
     this.reset();

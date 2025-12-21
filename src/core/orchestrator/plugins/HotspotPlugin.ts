@@ -4,23 +4,50 @@ import { THREE } from '../../../lib';
 export type HotspotData = {
   id: string;
   position: THREE.Vector3;
-  target?: THREE.Object3D;
+  target?: THREE.Object3D | undefined;
   onClick: () => void;
   visible?: boolean;
 };
 
+/**
+ * HotspotPlugin
+ * 
+ * Plugin responsable de gestionar hotspots interactivos en la escena 3D.
+ * 
+ * Características principales:
+ * - Creación, actualización y eliminación dinámica de hotspots mediante diff inteligente.
+ * - Soporte para posición fija o seguimiento automático de un target (Object3D).
+ * - Billboard automático (siempre orientado hacia la cámara).
+ * - Reutilización de geometría y material estáticos para optimizar memoria y draw calls.
+ * - Integración completa con el loop centralizado del SceneOrchestrator (preRender).
+ * - API reactiva vía update() para cambios en caliente desde componentes React.
+ * - Limpieza segura de recursos en dispose() sin afectar instancias compartidas.
+ * 
+ * Ideal para anotaciones interactivas, puntos de interés o UI 3D superpuesta.
+ * 
+ * @example
+ * new HotspotPlugin([
+ *   { id: '1', position: new THREE.Vector3(0, 1, 0), onClick: () => console.log('click') }
+ * ])
+ */
 export class HotspotPlugin implements Plugin {
-  name = 'Hotspot';
+  public readonly name = 'Hotspot';
 
   private scene!: THREE.Scene;
-  private camera?: THREE.Camera;
+  private camera!: THREE.Camera; // Ahora obligatorio (siempre disponible tras install)
   private hotspots = new Map<string, THREE.Mesh>();
-  private data: HotspotData[];
+  private data: HotspotData[] = [];
 
-  private _rafId: number | null = null;
+  private static readonly geometry = new THREE.SphereGeometry(0.3, 16, 16);
+  private static readonly material = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    transparent: true,
+    opacity: 0.5,
+    depthTest: false,
+  });
 
-  constructor(data: HotspotData[]) {
-    this.data = data;
+  constructor(initialData: HotspotData[] = []) {
+    this.data = initialData;
   }
 
   install({ scene, camera }: PluginContext): void {
@@ -28,50 +55,52 @@ export class HotspotPlugin implements Plugin {
     this.camera = camera;
 
     this.syncHotspots();
-    this.startLoop();
   }
 
-  /* ============================
-   *  Hot update API
-   * ============================ */
-  update(data: HotspotData[]) {
-    this.data = data;
+  preRender(): void {
+    if (this.hotspots.size === 0) {return;}
+
+    const cameraPosition = this.camera.position;
+
+    this.hotspots.forEach((mesh) => {
+      const target = mesh.userData.target as THREE.Object3D | undefined;
+
+      if (target) {
+        target.getWorldPosition(mesh.position);
+      }
+
+      mesh.lookAt(cameraPosition);
+    });
+  }
+
+  update(newData: HotspotData[]): void {
+    this.data = newData;
     this.syncHotspots();
   }
 
-  /* ============================
-   *  Sync logic
-   * ============================ */
-  private syncHotspots() {
-    const nextIds = new Set(this.data.map(h => h.id));
+  private syncHotspots(): void {
+    const nextIds = new Set(this.data.map((h) => h.id));
 
-    // Remove
     this.hotspots.forEach((_, id) => {
       if (!nextIds.has(id)) {
         this.removeHotspot(id);
       }
     });
 
-    // Add / Update
-    this.data.forEach(hotspot => {
-      if (!this.hotspots.has(hotspot.id)) {
+    this.data.forEach((hotspot) => {
+      const existing = this.hotspots.get(hotspot.id);
+
+      if (!existing) {
         this.addHotspot(hotspot);
       } else {
-        this.updateHotspot(hotspot);
+        this.updateHotspot(existing, hotspot);
       }
     });
   }
 
-  private addHotspot(hotspot: HotspotData) {
-    const geometry = new THREE.SphereGeometry(0.3, 16, 16);
-    const material = new THREE.MeshBasicMaterial({
-      color: 0x00ff00,
-      transparent: true,
-      opacity: 0.5,
-      depthTest: false,
-    });
+  private addHotspot(hotspot: HotspotData): void {
+    const mesh = new THREE.Mesh(HotspotPlugin.geometry, HotspotPlugin.material);
 
-    const mesh = new THREE.Mesh(geometry, material);
     mesh.position.copy(hotspot.position);
 
     mesh.userData.hotspotId = hotspot.id;
@@ -84,9 +113,7 @@ export class HotspotPlugin implements Plugin {
     this.hotspots.set(hotspot.id, mesh);
   }
 
-  private updateHotspot(hotspot: HotspotData) {
-    const mesh = this.hotspots.get(hotspot.id)!;
-
+  private updateHotspot(mesh: THREE.Mesh, hotspot: HotspotData): void {
     mesh.visible = hotspot.visible ?? true;
     mesh.userData.onClick = hotspot.onClick;
     mesh.userData.target = hotspot.target;
@@ -96,50 +123,15 @@ export class HotspotPlugin implements Plugin {
     }
   }
 
-  private removeHotspot(id: string) {
-    const mesh = this.hotspots.get(id)!;
+  private removeHotspot(id: string): void {
+    const mesh = this.hotspots.get(id);
+    if (!mesh) {return;}
 
     mesh.parent?.remove(mesh);
-    mesh.geometry.dispose();
-
-    if (Array.isArray(mesh.material)) {
-      mesh.material.forEach(m => m.dispose());
-    } else {
-      mesh.material.dispose();
-    }
-
     this.hotspots.delete(id);
   }
 
-  /* ============================
-   *  Loop (vida infinita)
-   * ============================ */
-  private startLoop() {
-    const loop = () => {
-      this.hotspots.forEach(mesh => {
-        const target = mesh.userData.target as THREE.Object3D | undefined;
-        if (target) {
-          target.getWorldPosition(mesh.position);
-        }
-
-        // Opcional: siempre mirar a cámara
-        if (this.camera) {
-          mesh.lookAt(this.camera.position);
-        }
-      });
-
-      this._rafId = requestAnimationFrame(loop);
-    };
-
-    loop();
-  }
-
   dispose(): void {
-    if (this._rafId) {
-      cancelAnimationFrame(this._rafId);
-      this._rafId = null;
-    }
-
     this.hotspots.forEach((_, id) => this.removeHotspot(id));
     this.hotspots.clear();
   }

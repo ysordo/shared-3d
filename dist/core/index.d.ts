@@ -5,7 +5,7 @@ export { CacheEntry, CacheReport, ManifestEntry, ModelManifest } from './cache/t
 export { GLTFLoader, GLTFLoaderEvents, GLTFLoaderOptions } from './loaders/GLTFLoader.js';
 export { HDRIEvents, HDRILoader, HDRILoaderOptions, HDRIProgress } from './loaders/HDRILoader.js';
 export { WebPHDRLoader } from './loaders/WebPHDRLoader.js';
-export { S as SceneConfig, a as SceneOrchestrator } from '../SceneOrchestrator-BNc555Bu.js';
+export { S as SceneConfig, a as SceneOrchestrator } from '../SceneOrchestrator-BwV_edbe.js';
 export { AdvancedCameraCollisionPlugin } from './orchestrator/plugins/AdvancedCameraCollisionPlugin.js';
 export { AdvancedOrbitControlsPlugin } from './orchestrator/plugins/AdvancedOrbitControlsPlugin.js';
 export { AdvancedRaycasterPlugin } from './orchestrator/plugins/AdvancedRaycasterPlugin.js';
@@ -15,6 +15,6 @@ export { HotspotData, HotspotPlugin } from './orchestrator/plugins/HotspotPlugin
 export { LODConfig, LODSystemPlugin } from './orchestrator/plugins/LODSystemPlugin.js';
 export { MeasurementConfig, MeasurementEvent, MeasurementToolPlugin } from './orchestrator/plugins/MeasurementToolPlugin.js';
 export { OrbitControlsPlugin } from './orchestrator/plugins/OrbitControlsPlugin.js';
-export { RaycasterEvent, RaycasterPlugin } from './orchestrator/plugins/RaycasterPlugin.js';
+export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './orchestrator/plugins/RaycasterPlugin.js';
 export { PostProcessingConfig, PostProcessingPlugin } from './orchestrator/plugins/PostProcessingPlugin.js';
 import 'three';

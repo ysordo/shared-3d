@@ -1,17 +1,25 @@
-import { b as Plugin } from '../SceneOrchestrator-uEPgybCc.cjs';
+import { b as Plugin } from '../SceneOrchestrator-DPFoyHCW.cjs';
 import '../core/loaders/HDRILoader.cjs';
 import '../core/cache/types.cjs';
 import 'three';
 
 /**
- * Hook estable para plugins.
+ * usePlugin
  *
- * - Instancia única por lifetime del componente
- * - Instalado solo si no existe
- * - Dispose solo al desmontar
- * - Configuración reactiva mediante factory (ejecutada solo al montar o si key cambia)
- * - Totalmente estable en Strict Mode y Fast Refresh
+ * Hook avanzado y production-ready para registrar plugins en SceneOrchestrator.
+ *
+ * Características clave:
+ * - Instancia única mientras la configuración sea semánticamente igual (deep equality ligera).
+ * - Recreación automática solo cuando cambia algo relevante.
+ * - Hot-update mediante plugin.update() cuando está disponible (ideal para plugins costosos).
+ * - Zero dependencias externas → tree-shakeable y sin errores de tipos.
+ * - Totalmente compatible con StrictMode, Fast Refresh y navegación SPA.
+ * - Limpieza segura en unmount.
+ *
+ * @example
+ * const config = useMemo(() => ({ enabled, bloom: { strength } }), [enabled, strength]);
+ * usePlugin(() => new PostProcessingPlugin(), config);
  */
-declare const usePlugin: <T extends Plugin>(factory: () => T, deps?: React.DependencyList) => T | null;
+declare const usePlugin: <T extends Plugin>(factory: () => T, config: unknown, deps?: React.DependencyList) => T | null;
 
 export { usePlugin };
