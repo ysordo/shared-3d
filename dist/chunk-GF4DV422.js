@@ -16,7 +16,6 @@ import { useEffect, useRef } from "react";
 var Model = ({
   entry,
   draco = false,
-  children,
   onLoaded,
   onProgress,
   onError
@@ -69,10 +68,7 @@ var Model = ({
     },
     [entry.id, draco, orchestrator, onLoaded, onProgress, onError, model]
   );
-  if (!model) {
-    return null;
-  }
-  return children?.(model);
+  return null;
 };
 
 export {

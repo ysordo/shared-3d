@@ -174,7 +174,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   const factory = useCallback(() => new AdvancedRaycasterPlugin(null, undefined), []);
 
   // usePlugin maneja creación, update y dispose automáticamente
-  usePlugin(factory, config);
+  const plugin = usePlugin(factory, config);
 
   // Reset animado
   const resetAll = useCallback(() => {
@@ -225,6 +225,10 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
     }),
     [isEnabled, toggleEnabled, setEnabledCallback, resetAll, isResetting]
   );
+
+  useEffect(() => {
+    plugin?.setEnabled(isEnabled);
+  }, [isEnabled, plugin]);
 
   return <>{children?.(controlState)}</>;
 };

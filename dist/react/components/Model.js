@@ -1,7 +1,7 @@
 "use client";
 import {
   Model
-} from "../../chunk-4ARYEYAK.js";
+} from "../../chunk-GF4DV422.js";
 import "../../chunk-4LIJI5FW.js";
 import "../../chunk-6FBDZUDJ.js";
 import "../../chunk-UBVYEZI3.js";

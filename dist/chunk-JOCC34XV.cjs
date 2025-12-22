@@ -16,7 +16,6 @@ var _react = require('react');
 var Model = ({
   entry,
   draco = false,
-  children,
   onLoaded,
   onProgress,
   onError
@@ -69,10 +68,7 @@ var Model = ({
     },
     [entry.id, draco, orchestrator, onLoaded, onProgress, onError, model]
   );
-  if (!model) {
-    return null;
-  }
-  return _optionalChain([children, 'optionalCall', _5 => _5(model)]);
+  return null;
 };
 
 

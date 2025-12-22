@@ -3,7 +3,7 @@ import {
 } from "./chunk-RUDNMJTZ.js";
 import {
   Model
-} from "./chunk-4ARYEYAK.js";
+} from "./chunk-GF4DV422.js";
 
 // src/react/components/SuspenseModel.tsx
 import { jsx, jsxs } from "react/jsx-runtime";
@@ -14,10 +14,9 @@ var SuspenseModel = ({
     "Loading model ",
     entry.id,
     "..."
-  ] }),
-  children
+  ] })
 }) => {
-  return /* @__PURE__ */ jsx(Suspense, { fallback, children: /* @__PURE__ */ jsx(Model, { entry, draco, children: (model) => children?.(model) }) });
+  return /* @__PURE__ */ jsx(Suspense, { fallback, children: /* @__PURE__ */ jsx(Model, { entry, draco }) });
 };
 
 export {

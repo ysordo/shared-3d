@@ -112,7 +112,7 @@ var AdvancedDragRaycaster = ({
     [model, eventHandler, isEnabled]
   );
   const factory = useCallback(() => new AdvancedRaycasterPlugin(null, void 0), []);
-  usePlugin(factory, config);
+  const plugin = usePlugin(factory, config);
   const resetAll = useCallback(() => {
     if (isResetting || originalStatesRef.current.size === 0) {
       return;
@@ -154,6 +154,9 @@ var AdvancedDragRaycaster = ({
     }),
     [isEnabled, toggleEnabled, setEnabledCallback, resetAll, isResetting]
   );
+  useEffect(() => {
+    plugin?.setEnabled(isEnabled);
+  }, [isEnabled, plugin]);
   return /* @__PURE__ */ jsx(Fragment, { children: children?.(controlState) });
 };
 

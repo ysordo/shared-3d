@@ -6,7 +6,7 @@ import {
 } from "./chunk-U7W5KKD5.js";
 
 // src/react/components/AdvancedOrbitControls.tsx
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Fragment, jsx } from "react/jsx-runtime";
 var AdvancedOrbitControls = ({
   enablePan = true,
@@ -50,55 +50,29 @@ var AdvancedOrbitControls = ({
       maxPolarAngle
     ]
   );
+  const [_enablePan, setEnablePan] = useState(enablePan);
+  const [_enableRotate, setEnableRotate] = useState(enableRotate);
+  const [_enableZoom, setEnableZoom] = useState(enableZoom);
+  const [_minDistance, setMinDistance] = useState(minDistance);
+  const [_maxDistance, setMaxDistance] = useState(maxDistance);
   const factory = useCallback(() => new AdvancedOrbitControlsPlugin(), []);
   const plugin = usePlugin(factory, config);
-  const setEnablePan = useCallback(
-    (value) => {
-      if (plugin) {
-        plugin.enablePan = value;
-      }
-    },
-    [plugin]
-  );
-  const setEnableRotate = useCallback(
-    (value) => {
-      if (plugin) {
-        plugin.enableRotate = value;
-      }
-    },
-    [plugin]
-  );
-  const setEnableZoom = useCallback(
-    (value) => {
-      if (plugin) {
-        plugin.enableZoom = value;
-      }
-    },
-    [plugin]
-  );
-  const setMinDistance = useCallback(
-    (value) => {
-      if (plugin) {
-        plugin.minDistance = value;
-      }
-    },
-    [plugin]
-  );
-  const setMaxDistance = useCallback(
-    (value) => {
-      if (plugin) {
-        plugin.maxDistance = value;
-      }
-    },
-    [plugin]
-  );
+  useEffect(() => {
+    if (plugin) {
+      plugin.enablePan = _enablePan;
+      plugin.enableRotate = _enableRotate;
+      plugin.enableZoom = _enableZoom;
+      plugin.minDistance = _minDistance;
+      plugin.maxDistance = _maxDistance;
+    }
+  }, [plugin, _enablePan, _enableRotate, _enableZoom, _minDistance, _maxDistance]);
   const state = useMemo(
     () => ({
-      enablePan: plugin?.enablePan ?? enablePan,
-      enableRotate: plugin?.enableRotate ?? enableRotate,
-      enableZoom: plugin?.enableZoom ?? enableZoom,
-      minDistance: plugin?.minDistance ?? minDistance,
-      maxDistance: plugin?.maxDistance ?? maxDistance,
+      enablePan: _enablePan,
+      enableRotate: _enableRotate,
+      enableZoom: _enableZoom,
+      minDistance: _minDistance,
+      maxDistance: _maxDistance,
       setEnablePan,
       setEnableRotate,
       setEnableZoom,
@@ -106,12 +80,11 @@ var AdvancedOrbitControls = ({
       setMaxDistance
     }),
     [
-      plugin,
-      enablePan,
-      enableRotate,
-      enableZoom,
-      minDistance,
-      maxDistance,
+      _enablePan,
+      _enableRotate,
+      _enableZoom,
+      _minDistance,
+      _maxDistance,
       setEnablePan,
       setEnableRotate,
       setEnableZoom,
@@ -119,9 +92,6 @@ var AdvancedOrbitControls = ({
       setMaxDistance
     ]
   );
-  if (!plugin) {
-    return null;
-  }
   return /* @__PURE__ */ jsx(Fragment, { children: children?.(state) });
 };
 

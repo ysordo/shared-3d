@@ -6,19 +6,16 @@ import type { ManifestEntry } from '../../core/cache/types';
 import type { GLTFLoaderEvents } from '../../core/loaders/GLTFLoader';
 import { GLTFLoader } from '../../core/loaders/GLTFLoader';
 import { useActiveModel } from '../../hooks';
-import type { THREE } from '../../lib';
 import { usePreload } from '../../hooks/usePreload';
 
 type ModelProps = {
   entry: ManifestEntry;
   draco?: boolean | undefined;
-  children?: (model: THREE.Group) => React.ReactNode | undefined;
 } & Partial<GLTFLoaderEvents>;
 
 export const Model: React.FC<ModelProps> = ({
   entry,
   draco = false,
-  children,
   onLoaded,
   onProgress,
   onError,
@@ -75,8 +72,6 @@ export const Model: React.FC<ModelProps> = ({
     },
     [entry.id, draco, orchestrator, onLoaded, onProgress, onError, model]
   );
-  if (!model) {
-    return null;
-  }
-  return children?.(model);
+  
+  return null;
 };

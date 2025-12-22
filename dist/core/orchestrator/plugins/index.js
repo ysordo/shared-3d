@@ -1,5 +1,8 @@
 import "../../../chunk-DCRMKZQR.js";
 import {
+  LODSystemPlugin
+} from "../../../chunk-VZOLVXKC.js";
+import {
   MeasurementToolPlugin
 } from "../../../chunk-3R7JMNWE.js";
 import {
@@ -12,8 +15,8 @@ import {
   HotspotPlugin
 } from "../../../chunk-7L6JPLGD.js";
 import {
-  LODSystemPlugin
-} from "../../../chunk-VZOLVXKC.js";
+  AdvancedOrbitControlsPlugin
+} from "../../../chunk-U7W5KKD5.js";
 import {
   AnnotationsPlugin
 } from "../../../chunk-K5ZHNR6J.js";
@@ -26,9 +29,6 @@ import {
 import {
   AdvancedRaycasterPlugin
 } from "../../../chunk-QGUYSH32.js";
-import {
-  AdvancedOrbitControlsPlugin
-} from "../../../chunk-U7W5KKD5.js";
 import {
   RaycasterPlugin
 } from "../../../chunk-U3LDU6I7.js";

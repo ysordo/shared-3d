@@ -112,7 +112,7 @@ var AdvancedDragRaycaster = ({
     [model, eventHandler, isEnabled]
   );
   const factory = _react.useCallback.call(void 0, () => new (0, _chunkSOHWGVSRcjs.AdvancedRaycasterPlugin)(null, void 0), []);
-  _chunkYHVVAPCFcjs.usePlugin.call(void 0, factory, config);
+  const plugin = _chunkYHVVAPCFcjs.usePlugin.call(void 0, factory, config);
   const resetAll = _react.useCallback.call(void 0, () => {
     if (isResetting || originalStatesRef.current.size === 0) {
       return;
@@ -154,7 +154,10 @@ var AdvancedDragRaycaster = ({
     }),
     [isEnabled, toggleEnabled, setEnabledCallback, resetAll, isResetting]
   );
-  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _jsxruntime.Fragment, { children: _optionalChain([children, 'optionalCall', _7 => _7(controlState)]) });
+  _react.useEffect.call(void 0, () => {
+    _optionalChain([plugin, 'optionalAccess', _7 => _7.setEnabled, 'call', _8 => _8(isEnabled)]);
+  }, [isEnabled, plugin]);
+  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _jsxruntime.Fragment, { children: _optionalChain([children, 'optionalCall', _9 => _9(controlState)]) });
 };
 
 
