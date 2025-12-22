@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }
 
-var _chunkLLV3V7KXcjs = require('./chunk-LLV3V7KX.cjs');
+var _chunkRPBPPUIHcjs = require('./chunk-RPBPPUIH.cjs');
 
 
 var _chunkZHLNOXCWcjs = require('./chunk-ZHLNOXCW.cjs');
@@ -33,7 +33,7 @@ var Raycaster = ({
     [enabled, objects, handleEvent]
   );
   const factory = _react.useCallback.call(void 0, () => new (0, _chunkZHLNOXCWcjs.RaycasterPlugin)(), []);
-  _chunkLLV3V7KXcjs.usePlugin.call(void 0, factory, config);
+  _chunkRPBPPUIHcjs.usePlugin.call(void 0, factory, config);
   return null;
 };
 

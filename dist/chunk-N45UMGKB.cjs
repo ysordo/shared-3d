@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkLLV3V7KXcjs = require('./chunk-LLV3V7KX.cjs');
+var _chunkRPBPPUIHcjs = require('./chunk-RPBPPUIH.cjs');
 
 
 var _chunkXGVWG5RUcjs = require('./chunk-XGVWG5RU.cjs');
@@ -31,7 +31,7 @@ var Annotations = ({ annotations }) => {
     [annotations, scene]
   );
   const factory = _react.useCallback.call(void 0, () => new (0, _chunkXGVWG5RUcjs.AnnotationsPlugin)([]), []);
-  _chunkLLV3V7KXcjs.usePlugin.call(void 0, factory, pluginData);
+  _chunkRPBPPUIHcjs.usePlugin.call(void 0, factory, pluginData);
   return null;
 };
 

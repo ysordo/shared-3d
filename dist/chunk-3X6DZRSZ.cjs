@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkLLV3V7KXcjs = require('./chunk-LLV3V7KX.cjs');
+var _chunkRPBPPUIHcjs = require('./chunk-RPBPPUIH.cjs');
 
 
 var _chunkC4ITTLVVcjs = require('./chunk-C4ITTLVV.cjs');
@@ -9,7 +9,7 @@ var _chunkC4ITTLVVcjs = require('./chunk-C4ITTLVV.cjs');
 var OrbitControls = () => {
   const config = {};
   const factory = () => new (0, _chunkC4ITTLVVcjs.OrbitControlsPlugin)();
-  _chunkLLV3V7KXcjs.usePlugin.call(void 0, factory, config);
+  _chunkRPBPPUIHcjs.usePlugin.call(void 0, factory, config);
   return null;
 };
 

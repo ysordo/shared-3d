@@ -7,21 +7,22 @@ var _react = require('react');
 var usePlugin = (factory, config, deps = []) => {
   const orchestrator = _chunkJEORJOC4cjs.useScene.call(void 0, );
   _react.useEffect.call(void 0, () => {
-    const temp = orchestrator.plugin((void 0).name);
+    const temp = orchestrator.plugin(void 0);
     if (temp) {
       orchestrator.remove(_optionalChain([temp, 'optionalAccess', _ => _.name]));
       _optionalChain([temp, 'optionalAccess', _2 => _2.dispose, 'optionalCall', _3 => _3()]);
     }
     orchestrator.use(factory());
     return () => {
-      if (temp) {
-        orchestrator.remove(temp.name);
-        _optionalChain([temp, 'access', _4 => _4.dispose, 'optionalCall', _5 => _5()]);
+      const plugin = orchestrator.plugin(void 0);
+      if (plugin) {
+        orchestrator.remove(plugin.name);
+        _optionalChain([plugin, 'access', _4 => _4.dispose, 'optionalCall', _5 => _5()]);
       }
     };
   }, [orchestrator, factory]);
   _react.useEffect.call(void 0, () => {
-    const temp = orchestrator.plugin((void 0).name);
+    const temp = orchestrator.plugin(void 0);
     if (!temp) {
       return;
     }
@@ -29,7 +30,7 @@ var usePlugin = (factory, config, deps = []) => {
       _optionalChain([temp, 'access', _6 => _6.update, 'optionalCall', _7 => _7(config)]);
     }
   }, [config, ...deps]);
-  return _nullishCoalesce(orchestrator.plugin((void 0).name), () => ( null));
+  return _nullishCoalesce(orchestrator.plugin(void 0), () => ( null));
 };
 
 

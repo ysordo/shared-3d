@@ -61,7 +61,7 @@ function shallowDeepEqual(a: unknown, b: unknown): boolean {
  * // Navegar a Página B
  * <PostProcessing strength={2.5} /> → nueva instancia con strength=2.5
  */
-export const usePlugin = <T extends Plugin>(
+export const usePlugin = <T extends Plugin, K extends T['name'] = T['name']>(
   factory: () => T,
   config: unknown,
   deps: React.DependencyList = []
@@ -71,7 +71,7 @@ export const usePlugin = <T extends Plugin>(
   // === EFFECT 1: Creación única + instalación + cleanup en unmount ===
   useEffect(() => {
     // Cleanup previo (seguridad si orchestrator cambia o hot-reload)
-    const temp = orchestrator.plugin((undefined as unknown as T).name);
+    const temp = orchestrator.plugin((undefined as unknown as K));
     if (temp) {
       orchestrator.remove(temp?.name);
       temp?.dispose?.();
@@ -82,16 +82,18 @@ export const usePlugin = <T extends Plugin>(
 
     // Cleanup garantizado en unmount (cambio de página)
     return () => {
-      if (temp) {
-        orchestrator.remove(temp.name);
-        temp.dispose?.();
+      const plugin = orchestrator.plugin((undefined as unknown as K));
+
+      if (plugin) {
+        orchestrator.remove(plugin.name);
+        plugin.dispose?.();
       }
     };
   }, [orchestrator, factory]); // factory incluido para recrear si cambia (raro, pero seguro)
 
   // === EFFECT 2: Hot-update de configuración ===
   useEffect(() => {
-    const temp = orchestrator.plugin((undefined as unknown as T).name);
+    const temp = orchestrator.plugin((undefined as unknown as K));
     if (!temp) {return;}
 
     // Aplicar config inicial o cambios
@@ -100,5 +102,5 @@ export const usePlugin = <T extends Plugin>(
     }
   }, [config, ...deps]);
 
-  return orchestrator.plugin<T>((undefined as unknown as T).name) ?? null;
+  return orchestrator.plugin<T>((undefined as unknown as K)) ?? null;
 };

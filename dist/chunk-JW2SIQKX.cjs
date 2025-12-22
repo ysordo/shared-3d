@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
 
-var _chunkLLV3V7KXcjs = require('./chunk-LLV3V7KX.cjs');
+var _chunkRPBPPUIHcjs = require('./chunk-RPBPPUIH.cjs');
 
 
 var _chunkCDQTKEN4cjs = require('./chunk-CDQTKEN4.cjs');
@@ -56,7 +56,7 @@ var AdvancedOrbitControls = ({
   const [_minDistance, setMinDistance] = _react.useState.call(void 0, minDistance);
   const [_maxDistance, setMaxDistance] = _react.useState.call(void 0, maxDistance);
   const factory = _react.useCallback.call(void 0, () => new (0, _chunkCDQTKEN4cjs.AdvancedOrbitControlsPlugin)(), []);
-  const plugin = _chunkLLV3V7KXcjs.usePlugin.call(void 0, factory, config);
+  const plugin = _chunkRPBPPUIHcjs.usePlugin.call(void 0, factory, config);
   console.log(plugin);
   _react.useEffect.call(void 0, () => {
     if (plugin) {

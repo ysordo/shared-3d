@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkLLV3V7KXcjs = require('./chunk-LLV3V7KX.cjs');
+var _chunkRPBPPUIHcjs = require('./chunk-RPBPPUIH.cjs');
 
 
 var _chunkF6IFBPPEcjs = require('./chunk-F6IFBPPE.cjs');
@@ -24,7 +24,7 @@ var LODSystem = ({
     () => new (0, _chunkF6IFBPPEcjs.LODSystemPlugin)({ levels: [], hysteresis: 0 }),
     []
   );
-  _chunkLLV3V7KXcjs.usePlugin.call(void 0, factory, config);
+  _chunkRPBPPUIHcjs.usePlugin.call(void 0, factory, config);
   return null;
 };
 

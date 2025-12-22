@@ -7,21 +7,22 @@ import { useEffect } from "react";
 var usePlugin = (factory, config, deps = []) => {
   const orchestrator = useScene();
   useEffect(() => {
-    const temp = orchestrator.plugin((void 0).name);
+    const temp = orchestrator.plugin(void 0);
     if (temp) {
       orchestrator.remove(temp?.name);
       temp?.dispose?.();
     }
     orchestrator.use(factory());
     return () => {
-      if (temp) {
-        orchestrator.remove(temp.name);
-        temp.dispose?.();
+      const plugin = orchestrator.plugin(void 0);
+      if (plugin) {
+        orchestrator.remove(plugin.name);
+        plugin.dispose?.();
       }
     };
   }, [orchestrator, factory]);
   useEffect(() => {
-    const temp = orchestrator.plugin((void 0).name);
+    const temp = orchestrator.plugin(void 0);
     if (!temp) {
       return;
     }
@@ -29,7 +30,7 @@ var usePlugin = (factory, config, deps = []) => {
       temp.update?.(config);
     }
   }, [config, ...deps]);
-  return orchestrator.plugin((void 0).name) ?? null;
+  return orchestrator.plugin(void 0) ?? null;
 };
 
 export {

@@ -6,12 +6,6 @@ import {
   GLTFLoader
 } from "../chunk-6FBDZUDJ.js";
 import {
-  LODSystemPlugin
-} from "../chunk-VZOLVXKC.js";
-import {
-  MeasurementToolPlugin
-} from "../chunk-3R7JMNWE.js";
-import {
   OrbitControlsPlugin
 } from "../chunk-WQS6CQ5N.js";
 import {
@@ -21,8 +15,11 @@ import {
   HotspotPlugin
 } from "../chunk-7L6JPLGD.js";
 import {
-  AdvancedOrbitControlsPlugin
-} from "../chunk-U7W5KKD5.js";
+  LODSystemPlugin
+} from "../chunk-VZOLVXKC.js";
+import {
+  MeasurementToolPlugin
+} from "../chunk-3R7JMNWE.js";
 import {
   AnnotationsPlugin
 } from "../chunk-K5ZHNR6J.js";
@@ -32,6 +29,9 @@ import {
 import {
   AdvancedCameraCollisionPlugin
 } from "../chunk-W2MCMH32.js";
+import {
+  AdvancedOrbitControlsPlugin
+} from "../chunk-U7W5KKD5.js";
 import {
   AdvancedRaycasterPlugin
 } from "../chunk-QGUYSH32.js";
