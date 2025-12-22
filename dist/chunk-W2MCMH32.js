@@ -1,21 +1,25 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); var _class;
-
-var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
+import {
+  THREE
+} from "./chunk-OVHQQSEK.js";
 
 // src/core/orchestrator/plugins/AdvancedCameraCollisionPlugin.ts
-var AdvancedCameraCollisionPlugin = (_class = class {
-  __init() {this.name = "AdvancedCameraCollision"}
-  
-  
-  
-  
-  
-  __init2() {this.dir = new _chunkEA3XQ4KJcjs.THREE.Vector3()}
-  __init3() {this.raycaster = new _chunkEA3XQ4KJcjs.THREE.Raycaster()}
-  __init4() {this.targetPos = new _chunkEA3XQ4KJcjs.THREE.Vector3()}
-  __init5() {this.forward = new _chunkEA3XQ4KJcjs.THREE.Vector3()}
-  __init6() {this.candidate = new _chunkEA3XQ4KJcjs.THREE.Vector3()}
-  constructor(distanceThreshold = 0.6, pushBackOffset = 0.1, smooth = 0.1) {;_class.prototype.__init.call(this);_class.prototype.__init2.call(this);_class.prototype.__init3.call(this);_class.prototype.__init4.call(this);_class.prototype.__init5.call(this);_class.prototype.__init6.call(this);
+var AdvancedCameraCollisionPlugin = class {
+  name = "AdvancedCameraCollision";
+  distanceThreshold;
+  pushBackOffset;
+  smooth;
+  camera;
+  orchestrator;
+  dir = new THREE.Vector3();
+  raycaster = new THREE.Raycaster();
+  targetPos = new THREE.Vector3();
+  forward = new THREE.Vector3();
+  candidate = new THREE.Vector3();
+  constructor(...[
+    distanceThreshold = 0.6,
+    pushBackOffset = 0.1,
+    smooth = 0.1
+  ]) {
     this.distanceThreshold = distanceThreshold;
     this.pushBackOffset = pushBackOffset;
     this.smooth = smooth;
@@ -35,12 +39,12 @@ var AdvancedCameraCollisionPlugin = (_class = class {
     this.forward.copy(this.targetPos).add(this.dir.clone().multiplyScalar(-this.distanceThreshold));
     this.checkAndPush(this.targetPos, this.forward, model);
     const offsets = [
-      new _chunkEA3XQ4KJcjs.THREE.Vector3(this.distanceThreshold, 0, 0),
-      new _chunkEA3XQ4KJcjs.THREE.Vector3(-this.distanceThreshold, 0, 0),
-      new _chunkEA3XQ4KJcjs.THREE.Vector3(0, this.distanceThreshold, 0),
-      new _chunkEA3XQ4KJcjs.THREE.Vector3(0, -this.distanceThreshold, 0),
-      new _chunkEA3XQ4KJcjs.THREE.Vector3(0, 0, this.distanceThreshold),
-      new _chunkEA3XQ4KJcjs.THREE.Vector3(0, 0, -this.distanceThreshold)
+      new THREE.Vector3(this.distanceThreshold, 0, 0),
+      new THREE.Vector3(-this.distanceThreshold, 0, 0),
+      new THREE.Vector3(0, this.distanceThreshold, 0),
+      new THREE.Vector3(0, -this.distanceThreshold, 0),
+      new THREE.Vector3(0, 0, this.distanceThreshold),
+      new THREE.Vector3(0, 0, -this.distanceThreshold)
     ];
     offsets.forEach((offset) => {
       this.candidate.copy(this.targetPos).add(offset);
@@ -81,8 +85,8 @@ var AdvancedCameraCollisionPlugin = (_class = class {
   }
   dispose() {
   }
-}, _class);
+};
 
-
-
-exports.AdvancedCameraCollisionPlugin = AdvancedCameraCollisionPlugin;
+export {
+  AdvancedCameraCollisionPlugin
+};

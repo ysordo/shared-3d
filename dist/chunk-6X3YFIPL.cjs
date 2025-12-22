@@ -3,7 +3,7 @@
 var _chunkZKG3D4LTcjs = require('./chunk-ZKG3D4LT.cjs');
 
 
-var _chunkB7F57ZYRcjs = require('./chunk-B7F57ZYR.cjs');
+var _chunkIG4KQTIZcjs = require('./chunk-IG4KQTIZ.cjs');
 
 // src/react/components/AdvancedCameraCollision.tsx
 var _react = require('react');
@@ -22,7 +22,7 @@ var AdvancedCameraCollision = ({
     }),
     [distanceThreshold, pushBackOffset, smooth, enabled]
   );
-  const factory = _react.useCallback.call(void 0, () => new (0, _chunkB7F57ZYRcjs.AdvancedCameraCollisionPlugin)(), []);
+  const factory = _react.useCallback.call(void 0, () => new (0, _chunkIG4KQTIZcjs.AdvancedCameraCollisionPlugin)(), []);
   _chunkZKG3D4LTcjs.usePlugin.call(void 0, factory, config);
   return null;
 };

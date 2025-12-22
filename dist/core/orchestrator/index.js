@@ -20,13 +20,13 @@ import {
 } from "../../chunk-PYT2UBW2.js";
 import {
   AdvancedCameraCollisionPlugin
-} from "../../chunk-75WXWGNL.js";
+} from "../../chunk-W2MCMH32.js";
 import {
   AdvancedOrbitControlsPlugin
 } from "../../chunk-U7W5KKD5.js";
 import {
   AdvancedRaycasterPlugin
-} from "../../chunk-SMB54RR5.js";
+} from "../../chunk-QGUYSH32.js";
 import {
   AnnotationsPlugin
 } from "../../chunk-K5ZHNR6J.js";

@@ -1,5 +1,10 @@
-import type { Plugin, PluginContext } from '../types';
+import type { ConfigToTuple, Plugin, PluginContext } from '../types';
 import { THREE } from '../../../lib';
+
+interface PluginConfig {
+  model: THREE.Object3D | null;
+  onEvent?: (event: unknown) => void;
+}
 
 /**
  * AdvancedRaycasterPlugin
@@ -31,7 +36,12 @@ export class AdvancedRaycasterPlugin implements Plugin {
   private model: THREE.Object3D | null = null;
   private onEvent?: (event: unknown) => void;
 
-  constructor(initialModel: THREE.Object3D | null = null, initialOnEvent?: (event: unknown) => void) {
+  constructor(
+    ...[
+      initialModel,
+      initialOnEvent
+    ]: ConfigToTuple<PluginConfig, ['model', 'onEvent']>
+  ) {
     this.model = initialModel;
     this.onEvent = initialOnEvent ?? (()=>{});
   }
@@ -63,8 +73,9 @@ export class AdvancedRaycasterPlugin implements Plugin {
     this._manager.setEnabled(enabled);
   }
 
-  update(newModel: THREE.Object3D | null, newOnEvent?: (event: unknown) => void): void {
-    if (newModel !== this.model) {
+  update(config: Partial<PluginConfig>): void {
+    const {model: newModel, onEvent: newOnEvent} = config;
+    if (newModel !== undefined && newModel !== this.model) {
       this.model = newModel;
       if (newModel && this._manager) {
         this._manager.setModel(newModel);
@@ -124,11 +135,13 @@ class RaycasterManager extends THREE.EventDispatcher {
 
   setModel(model: THREE.Object3D) {
     this.interactableObjects = [];
-    model.traverse((obj) => {
-      if (this.isInteractable(obj)) {
-        this.interactableObjects.push(obj);
-      }
-    });
+    if(model && typeof model.traverse === 'function'){
+      model.traverse((obj) => {
+        if (this.isInteractable(obj)) {
+          this.interactableObjects.push(obj);
+        }
+      });
+    }
   }
 
   private isInteractable(obj: THREE.Object3D): boolean {

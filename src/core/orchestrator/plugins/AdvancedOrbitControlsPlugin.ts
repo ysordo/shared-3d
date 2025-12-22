@@ -1,6 +1,20 @@
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import type { Plugin, PluginContext } from '../types';
 
+  interface PluginConfig {
+    enablePan: boolean;
+    enableRotate: boolean;
+    enableZoom: boolean;
+    dampingFactor: number;
+    panSpeed: number;
+    rotateSpeed: number;
+    zoomSpeed: number;
+    minDistance: number;
+    maxDistance: number;
+    minPolarAngle: number;
+    maxPolarAngle: number;
+  }
+
 /**
  * AdvancedOrbitControlsPlugin
  * 
@@ -30,34 +44,10 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
 
   private controls!: OrbitControls;
 
-  private options: {
-    enablePan: boolean;
-    enableRotate: boolean;
-    enableZoom: boolean;
-    dampingFactor: number;
-    panSpeed: number;
-    rotateSpeed: number;
-    zoomSpeed: number;
-    minDistance: number;
-    maxDistance: number;
-    minPolarAngle: number;
-    maxPolarAngle: number;
-  };
+  private options: PluginConfig;
 
   constructor(
-    partialOptions: Partial<{
-      enablePan?: boolean;
-      enableRotate?: boolean;
-      enableZoom?: boolean;
-      dampingFactor?: number;
-      panSpeed?: number;
-      rotateSpeed?: number;
-      zoomSpeed?: number;
-      minDistance?: number;
-      maxDistance?: number;
-      minPolarAngle?: number;
-      maxPolarAngle?: number;
-    }> = {}
+    partialOptions: Partial<PluginConfig> = {}
   ) {
     this.options = {
       enablePan: true,
@@ -141,19 +131,7 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
   }
 
   update(
-    newOptions: Partial<{
-      enablePan?: boolean;
-      enableRotate?: boolean;
-      enableZoom?: boolean;
-      dampingFactor?: number;
-      panSpeed?: number;
-      rotateSpeed?: number;
-      zoomSpeed?: number;
-      minDistance?: number;
-      maxDistance?: number;
-      minPolarAngle?: number;
-      maxPolarAngle?: number;
-    }>
+    newOptions: Partial<PluginConfig>
   ): void {
     this.options = { ...this.options, ...newOptions };
     this.applyOptionsToControls();

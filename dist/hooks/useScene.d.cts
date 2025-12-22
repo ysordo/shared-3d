@@ -1,4 +1,4 @@
-import { a as SceneOrchestrator } from '../SceneOrchestrator-DPFoyHCW.cjs';
+import { a as SceneOrchestrator } from '../SceneOrchestrator-CSrTns7D.cjs';
 import '../core/loaders/HDRILoader.cjs';
 import '../core/cache/types.cjs';
 import 'three';

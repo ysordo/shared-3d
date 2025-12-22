@@ -1,9 +1,9 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkB7F57ZYRcjs = require('../../../chunk-B7F57ZYR.cjs');
+var _chunkIG4KQTIZcjs = require('../../../chunk-IG4KQTIZ.cjs');
 require('../../../chunk-7W7IF4LU.cjs');
 require('../../../chunk-EA3XQ4KJ.cjs');
 require('../../../chunk-T2YGLA3W.cjs');
 
 
-exports.AdvancedCameraCollisionPlugin = _chunkB7F57ZYRcjs.AdvancedCameraCollisionPlugin;
+exports.AdvancedCameraCollisionPlugin = _chunkIG4KQTIZcjs.AdvancedCameraCollisionPlugin;

@@ -1,4 +1,4 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-DPFoyHCW.cjs';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-CSrTns7D.cjs';
 import '../../loaders/HDRILoader.cjs';
 import '../../cache/types.cjs';
 import 'three';

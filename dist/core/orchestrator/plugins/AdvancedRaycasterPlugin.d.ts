@@ -1,8 +1,12 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-BwV_edbe.js';
+import { b as Plugin, C as ConfigToTuple, P as PluginContext } from '../../../SceneOrchestrator-kcTSMjxi.js';
 import * as THREE from 'three';
 import '../../loaders/HDRILoader.js';
 import '../../cache/types.js';
 
+interface PluginConfig {
+    model: THREE.Object3D | null;
+    onEvent?: (event: unknown) => void;
+}
 /**
  * AdvancedRaycasterPlugin
  *
@@ -30,10 +34,10 @@ declare class AdvancedRaycasterPlugin implements Plugin {
     private _manager;
     private model;
     private onEvent?;
-    constructor(initialModel?: THREE.Object3D | null, initialOnEvent?: (event: unknown) => void);
+    constructor(...[initialModel, initialOnEvent]: ConfigToTuple<PluginConfig, ['model', 'onEvent']>);
     install({ scene, camera, renderer }: PluginContext): void;
     setEnabled(enabled: boolean): void;
-    update(newModel: THREE.Object3D | null, newOnEvent?: (event: unknown) => void): void;
+    update(config: Partial<PluginConfig>): void;
     dispose(): void;
     get manager(): RaycasterManager;
 }

@@ -23,6 +23,7 @@ interface Plugin {
     /** Cleanup resources */
     dispose?(): void;
 }
+type ConfigToTuple<T extends object, OrderedKeys extends readonly (keyof T)[]> = OrderedKeys extends readonly [infer First, ...infer Rest] ? First extends keyof T ? Rest extends readonly (keyof T)[] ? [T[First], ...ConfigToTuple<T, Rest>] : [T[First]] : never : [];
 
 type SceneConfig = {
     antialias?: boolean;
@@ -79,4 +80,4 @@ declare class SceneOrchestrator extends THREE.EventDispatcher {
     getActiveHDRI(): THREE.Texture | null;
 }
 
-export { type PluginContext as P, type SceneConfig as S, SceneOrchestrator as a, type Plugin as b };
+export { type ConfigToTuple as C, type PluginContext as P, type SceneConfig as S, SceneOrchestrator as a, type Plugin as b };

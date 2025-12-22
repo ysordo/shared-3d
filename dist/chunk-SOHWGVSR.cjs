@@ -8,7 +8,10 @@ var AdvancedRaycasterPlugin = (_class = class {
   
   __init2() {this.model = null}
   
-  constructor(initialModel = null, initialOnEvent) {;_class.prototype.__init.call(this);_class.prototype.__init2.call(this);
+  constructor(...[
+    initialModel,
+    initialOnEvent
+  ]) {;_class.prototype.__init.call(this);_class.prototype.__init2.call(this);
     this.model = initialModel;
     this.onEvent = _nullishCoalesce(initialOnEvent, () => ( (() => {
     })));
@@ -35,8 +38,9 @@ var AdvancedRaycasterPlugin = (_class = class {
   setEnabled(enabled) {
     this._manager.setEnabled(enabled);
   }
-  update(newModel, newOnEvent) {
-    if (newModel !== this.model) {
+  update(config) {
+    const { model: newModel, onEvent: newOnEvent } = config;
+    if (newModel !== void 0 && newModel !== this.model) {
       this.model = newModel;
       if (newModel && this._manager) {
         this._manager.setModel(newModel);
@@ -87,11 +91,13 @@ var RaycasterManager = (_class2 = class extends _chunkEA3XQ4KJcjs.THREE.EventDis
   }
   setModel(model) {
     this.interactableObjects = [];
-    model.traverse((obj) => {
-      if (this.isInteractable(obj)) {
-        this.interactableObjects.push(obj);
-      }
-    });
+    if (model && typeof model.traverse === "function") {
+      model.traverse((obj) => {
+        if (this.isInteractable(obj)) {
+          this.interactableObjects.push(obj);
+        }
+      });
+    }
   }
   isInteractable(obj) {
     if (!obj.visible) {

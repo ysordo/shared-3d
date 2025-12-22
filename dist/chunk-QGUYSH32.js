@@ -8,7 +8,10 @@ var AdvancedRaycasterPlugin = class {
   _manager;
   model = null;
   onEvent;
-  constructor(initialModel = null, initialOnEvent) {
+  constructor(...[
+    initialModel,
+    initialOnEvent
+  ]) {
     this.model = initialModel;
     this.onEvent = initialOnEvent ?? (() => {
     });
@@ -35,8 +38,9 @@ var AdvancedRaycasterPlugin = class {
   setEnabled(enabled) {
     this._manager.setEnabled(enabled);
   }
-  update(newModel, newOnEvent) {
-    if (newModel !== this.model) {
+  update(config) {
+    const { model: newModel, onEvent: newOnEvent } = config;
+    if (newModel !== void 0 && newModel !== this.model) {
       this.model = newModel;
       if (newModel && this._manager) {
         this._manager.setModel(newModel);
@@ -87,11 +91,13 @@ var RaycasterManager = class extends THREE.EventDispatcher {
   }
   setModel(model) {
     this.interactableObjects = [];
-    model.traverse((obj) => {
-      if (this.isInteractable(obj)) {
-        this.interactableObjects.push(obj);
-      }
-    });
+    if (model && typeof model.traverse === "function") {
+      model.traverse((obj) => {
+        if (this.isInteractable(obj)) {
+          this.interactableObjects.push(obj);
+        }
+      });
+    }
   }
   isInteractable(obj) {
     if (!obj.visible) {

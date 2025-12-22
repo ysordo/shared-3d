@@ -3,7 +3,7 @@ import {
 } from "./chunk-YCJXIBX5.js";
 import {
   AdvancedCameraCollisionPlugin
-} from "./chunk-75WXWGNL.js";
+} from "./chunk-W2MCMH32.js";
 
 // src/react/components/AdvancedCameraCollision.tsx
 import { useCallback, useMemo } from "react";

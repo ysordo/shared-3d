@@ -1,8 +1,21 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-BwV_edbe.js';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-kcTSMjxi.js';
 import '../../loaders/HDRILoader.js';
 import '../../cache/types.js';
 import 'three';
 
+interface PluginConfig {
+    enablePan: boolean;
+    enableRotate: boolean;
+    enableZoom: boolean;
+    dampingFactor: number;
+    panSpeed: number;
+    rotateSpeed: number;
+    zoomSpeed: number;
+    minDistance: number;
+    maxDistance: number;
+    minPolarAngle: number;
+    maxPolarAngle: number;
+}
 /**
  * AdvancedOrbitControlsPlugin
  *
@@ -31,19 +44,7 @@ declare class AdvancedOrbitControlsPlugin implements Plugin {
     readonly name = "AdvancedOrbitControls";
     private controls;
     private options;
-    constructor(partialOptions?: Partial<{
-        enablePan?: boolean;
-        enableRotate?: boolean;
-        enableZoom?: boolean;
-        dampingFactor?: number;
-        panSpeed?: number;
-        rotateSpeed?: number;
-        zoomSpeed?: number;
-        minDistance?: number;
-        maxDistance?: number;
-        minPolarAngle?: number;
-        maxPolarAngle?: number;
-    }>);
+    constructor(partialOptions?: Partial<PluginConfig>);
     install({ camera, renderer }: PluginContext): void;
     preRender(): void;
     private applyOptionsToControls;
@@ -57,19 +58,7 @@ declare class AdvancedOrbitControlsPlugin implements Plugin {
     get minDistance(): number;
     set maxDistance(distance: number);
     get maxDistance(): number;
-    update(newOptions: Partial<{
-        enablePan?: boolean;
-        enableRotate?: boolean;
-        enableZoom?: boolean;
-        dampingFactor?: number;
-        panSpeed?: number;
-        rotateSpeed?: number;
-        zoomSpeed?: number;
-        minDistance?: number;
-        maxDistance?: number;
-        minPolarAngle?: number;
-        maxPolarAngle?: number;
-    }>): void;
+    update(newOptions: Partial<PluginConfig>): void;
     dispose(): void;
 }
 

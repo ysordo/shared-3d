@@ -3,7 +3,7 @@
 var _chunkZKG3D4LTcjs = require('./chunk-ZKG3D4LT.cjs');
 
 
-var _chunkE6YRKYQ2cjs = require('./chunk-E6YRKYQ2.cjs');
+var _chunkSOHWGVSRcjs = require('./chunk-SOHWGVSR.cjs');
 
 
 var _chunkWASGUTQDcjs = require('./chunk-WASGUTQD.cjs');
@@ -66,7 +66,7 @@ var AdvancedRaycaster = ({
     [targetModel, handler]
   );
   const factory = _react.useCallback.call(void 0, 
-    () => new (0, _chunkE6YRKYQ2cjs.AdvancedRaycasterPlugin)(null, void 0),
+    () => new (0, _chunkSOHWGVSRcjs.AdvancedRaycasterPlugin)(null, void 0),
     []
   );
   _chunkZKG3D4LTcjs.usePlugin.call(void 0, factory, config);

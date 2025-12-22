@@ -30,3 +30,14 @@ export interface Plugin {
   /** Cleanup resources */
   dispose?(): void;
 }
+
+export type ConfigToTuple<
+  T extends object,
+  OrderedKeys extends readonly (keyof T)[]
+> = OrderedKeys extends readonly [infer First, ...infer Rest]
+  ? First extends keyof T
+    ? Rest extends readonly (keyof T)[]
+      ? [T[First], ...ConfigToTuple<T, Rest>]
+      : [T[First]]
+    : never
+  : [];

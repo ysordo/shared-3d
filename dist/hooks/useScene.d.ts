@@ -1,4 +1,4 @@
-import { a as SceneOrchestrator } from '../SceneOrchestrator-BwV_edbe.js';
+import { a as SceneOrchestrator } from '../SceneOrchestrator-kcTSMjxi.js';
 import '../core/loaders/HDRILoader.js';
 import '../core/cache/types.js';
 import 'three';

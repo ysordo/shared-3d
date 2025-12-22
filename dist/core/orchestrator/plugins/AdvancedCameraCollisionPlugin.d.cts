@@ -1,8 +1,13 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-DPFoyHCW.cjs';
+import { b as Plugin, C as ConfigToTuple, P as PluginContext } from '../../../SceneOrchestrator-CSrTns7D.cjs';
 import '../../loaders/HDRILoader.cjs';
 import '../../cache/types.cjs';
 import 'three';
 
+interface PluginConfig {
+    distanceThreshold?: number;
+    pushBackOffset?: number;
+    smooth?: number;
+}
 /**
  * AdvancedCameraCollisionPlugin
  *
@@ -38,7 +43,7 @@ declare class AdvancedCameraCollisionPlugin implements Plugin {
     private readonly targetPos;
     private readonly forward;
     private readonly candidate;
-    constructor(distanceThreshold?: number, pushBackOffset?: number, smooth?: number);
+    constructor(...[distanceThreshold, pushBackOffset, smooth]: Partial<ConfigToTuple<PluginConfig, ['distanceThreshold', 'pushBackOffset', 'smooth']>>);
     install({ camera, orchestrator }: PluginContext): void;
     preRender(): void;
     private checkAndPush;

@@ -1,6 +1,12 @@
-import type { Plugin, PluginContext } from '../types';
+import type { ConfigToTuple, Plugin, PluginContext } from '../types';
 import { THREE } from '../../../lib';
 import type { SceneOrchestrator } from '../SceneOrchestrator';
+
+interface PluginConfig {
+  distanceThreshold?: number;
+  pushBackOffset?: number;
+  smooth?: number;
+}
 
 /**
  * AdvancedCameraCollisionPlugin
@@ -42,9 +48,11 @@ export class AdvancedCameraCollisionPlugin implements Plugin {
   private readonly candidate = new THREE.Vector3();
 
   constructor(
-    distanceThreshold = 0.6,
-    pushBackOffset = 0.1,
-    smooth = 0.1
+    ...[
+      distanceThreshold = 0.6,
+      pushBackOffset = 0.1,
+      smooth = 0.1
+    ]: Partial<ConfigToTuple<PluginConfig, ['distanceThreshold', 'pushBackOffset', 'smooth']>>
   ) {
     this.distanceThreshold = distanceThreshold;
     this.pushBackOffset = pushBackOffset;

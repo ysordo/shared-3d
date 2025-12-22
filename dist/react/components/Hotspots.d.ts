@@ -1,5 +1,5 @@
 import { HotspotData } from '../../core/orchestrator/plugins/HotspotPlugin.js';
-import '../../SceneOrchestrator-BwV_edbe.js';
+import '../../SceneOrchestrator-kcTSMjxi.js';
 import '../../core/loaders/HDRILoader.js';
 import '../../core/cache/types.js';
 import 'three';
