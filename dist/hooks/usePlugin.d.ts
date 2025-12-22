@@ -26,6 +26,6 @@ import 'three';
  * // Navegar a Página B
  * <PostProcessing strength={2.5} /> → nueva instancia con strength=2.5
  */
-declare const usePlugin: <T extends Plugin, K extends T["name"] = T["name"]>(factory: () => T, config: unknown, deps?: React.DependencyList) => T | null;
+declare const usePlugin: <T extends Plugin>(factory: () => T, config: unknown, deps?: React.DependencyList) => T | undefined;
 
 export { usePlugin };

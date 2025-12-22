@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useScene } from './useScene';
 import type { Plugin } from '../core/orchestrator/types';
 
@@ -61,46 +61,47 @@ function shallowDeepEqual(a: unknown, b: unknown): boolean {
  * // Navegar a Página B
  * <PostProcessing strength={2.5} /> → nueva instancia con strength=2.5
  */
-export const usePlugin = <T extends Plugin, K extends T['name'] = T['name']>(
+export const usePlugin = <T extends Plugin>(
   factory: () => T,
   config: unknown,
   deps: React.DependencyList = []
-): T | null => {
+): T | undefined => {
   const orchestrator = useScene();
+  const [name, setName] = useState<string>('');
 
   // === EFFECT 1: Creación única + instalación + cleanup en unmount ===
   useEffect(() => {
     // Cleanup previo (seguridad si orchestrator cambia o hot-reload)
-    const temp = orchestrator.plugin((undefined as unknown as K));
-    if (temp) {
-      orchestrator.remove(temp?.name);
-      temp?.dispose?.();
+    if (orchestrator.has(name)) {
+      orchestrator.plugin<T>(name)?.dispose?.();
+      orchestrator.remove(name);
     }
 
     // Crear e instalar instancia única
-    orchestrator.use(factory());
+    const plugin = factory();
+    setName(plugin.name);
+    orchestrator.use(plugin);
 
     // Cleanup garantizado en unmount (cambio de página)
     return () => {
-      const plugin = orchestrator.plugin((undefined as unknown as K));
 
-      if (plugin) {
-        orchestrator.remove(plugin.name);
-        plugin.dispose?.();
+      if (orchestrator.has(name)) {
+        orchestrator.plugin(name)?.dispose?.();
+        orchestrator.remove(name);
       }
+      setName('');
     };
   }, [orchestrator, factory]); // factory incluido para recrear si cambia (raro, pero seguro)
 
   // === EFFECT 2: Hot-update de configuración ===
   useEffect(() => {
-    const temp = orchestrator.plugin((undefined as unknown as K));
-    if (!temp) {return;}
-
+    if (!orchestrator.has(name)) {return;}
+    const temp = orchestrator.plugin<T>(name) as T;
     // Aplicar config inicial o cambios
     if ('update' in temp) {
-      (temp as any).update?.(config);
+      temp.update?.(config);
     }
   }, [config, ...deps]);
 
-  return orchestrator.plugin<T>((undefined as unknown as K)) ?? null;
+  return orchestrator.plugin<T>(name);
 };
