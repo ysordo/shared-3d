@@ -163,11 +163,11 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
       enableZoom: _enableZoom,
       minDistance: _minDistance,
       maxDistance: _maxDistance,
-      setEnablePan,
-      setEnableRotate,
-      setEnableZoom,
-      setMinDistance,
-      setMaxDistance,
+      setEnablePan: (value: boolean)=>setEnablePan(value),
+      setEnableRotate: (value: boolean)=>setEnableRotate(value),
+      setEnableZoom: (value: boolean)=>setEnableZoom(value),
+      setMinDistance: (value: number)=>setMinDistance(value),
+      setMaxDistance: (value: number)=>setMaxDistance(value),
     }),
     [
       _enablePan,
@@ -175,11 +175,6 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
       _enableZoom,
       _minDistance,
       _maxDistance,
-      setEnablePan,
-      setEnableRotate,
-      setEnableZoom,
-      setMinDistance,
-      setMaxDistance,
     ]
   );
 

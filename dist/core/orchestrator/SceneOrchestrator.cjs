@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunk4JGLI6CRcjs = require('../../chunk-4JGLI6CR.cjs');
+var _chunkVIFEXLQ3cjs = require('../../chunk-VIFEXLQ3.cjs');
 require('../../chunk-DORUFBZF.cjs');
 require('../../chunk-ZJAPFMHD.cjs');
 require('../../chunk-7W7IF4LU.cjs');
@@ -9,4 +9,4 @@ require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.SceneOrchestrator = _chunk4JGLI6CRcjs.SceneOrchestrator;
+exports.SceneOrchestrator = _chunkVIFEXLQ3cjs.SceneOrchestrator;

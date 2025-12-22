@@ -84,6 +84,14 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
       this.scene.background = new THREE.Color(config.background);
     }
 
+    this.addEventListener('plugin::test' as never, ()=>{
+      const plugins: {[kes: string]: any} = {};
+      this.plugins.forEach((plugin, name) => {plugins[name] = plugin;});
+      console.log(
+      '[Orchestrator] Evento de prueba recibido desde plugin::test',
+      plugins
+    );});
+
     // Global resize handling
     this.resizeObserver = new ResizeObserver(() => {
       const { clientWidth, clientHeight } = this.canvas;
@@ -125,7 +133,6 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
       this.plugins.forEach((plugin) => plugin?.preRender?.());
 
       // Main render: delegate to PostProcessing if active
-      const postProcessing = this.plugins.get('PostProcessing');
       if (!this.plugins.has('PostProcessing')) {
         this.renderer.render(this.scene, this.camera);
       }
@@ -155,6 +162,7 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
     try {
       plugin.install(context);
       this.plugins.set(plugin.name, plugin);
+      this.dispatchEvent({ type: 'plugin::test' } as never);
       console.info(`[Orchestrator] Plugin instalado: ${plugin.name}`);
     } catch (err) {
       console.error(`[Orchestrator] Error instalando plugin ${plugin.name}:`, err);
