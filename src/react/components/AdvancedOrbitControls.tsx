@@ -144,6 +144,7 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
 
   // usePlugin maneja creación, hot-update y dispose automáticamente
   const plugin = usePlugin(factory, config);
+  console.log(plugin);
 
   useEffect(() => {
     if (plugin) {

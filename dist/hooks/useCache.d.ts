@@ -1,7 +1,7 @@
 import { CacheReport, ManifestEntries } from '../core/cache/types.js';
 
 declare const useCache: () => {
-    status: "idle" | "validating" | "ready" | "error";
+    status: "error" | "idle" | "validating" | "ready";
     progress: number;
     report: CacheReport | null;
     validate: (manifest: ManifestEntries) => Promise<CacheReport>;

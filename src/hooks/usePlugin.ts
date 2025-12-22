@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useScene } from './useScene';
 import type { Plugin } from '../core/orchestrator/types';
 
@@ -67,40 +67,38 @@ export const usePlugin = <T extends Plugin>(
   deps: React.DependencyList = []
 ): T | null => {
   const orchestrator = useScene();
-  const pluginRef = useRef<T | null>(null);
 
   // === EFFECT 1: Creación única + instalación + cleanup en unmount ===
   useEffect(() => {
     // Cleanup previo (seguridad si orchestrator cambia o hot-reload)
-    if (pluginRef.current) {
-      orchestrator.remove(pluginRef.current.name);
-      pluginRef.current.dispose?.();
+    const temp = orchestrator.plugin((undefined as unknown as T).name);
+    if (temp) {
+      orchestrator.remove(temp?.name);
+      temp?.dispose?.();
     }
 
     // Crear e instalar instancia única
-    const plugin = factory();
-    pluginRef.current = plugin;
-    orchestrator.use(plugin);
+    orchestrator.use(factory());
 
     // Cleanup garantizado en unmount (cambio de página)
     return () => {
-      if (pluginRef.current) {
-        orchestrator.remove(pluginRef.current.name);
-        pluginRef.current.dispose?.();
-        pluginRef.current = null;
+      if (temp) {
+        orchestrator.remove(temp.name);
+        temp.dispose?.();
       }
     };
   }, [orchestrator, factory]); // factory incluido para recrear si cambia (raro, pero seguro)
 
   // === EFFECT 2: Hot-update de configuración ===
   useEffect(() => {
-    if (!pluginRef.current) {return;}
+    const temp = orchestrator.plugin((undefined as unknown as T).name);
+    if (!temp) {return;}
 
     // Aplicar config inicial o cambios
-    if ('update' in pluginRef.current) {
-      (pluginRef.current as any).update?.(config);
+    if ('update' in temp) {
+      (temp as any).update?.(config);
     }
   }, [config, ...deps]);
 
-  return pluginRef.current;
+  return orchestrator.plugin<T>((undefined as unknown as T).name) ?? null;
 };
