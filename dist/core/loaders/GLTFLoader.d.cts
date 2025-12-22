@@ -1,4 +1,4 @@
-import { ManifestEntry, ModelManifest } from '../cache/types.cjs';
+import { ManifestEntry, ManifestEntries } from '../cache/types.cjs';
 import * as THREE from 'three';
 
 type GLTFLoaderOptions = {
@@ -23,7 +23,7 @@ declare class GLTFLoader {
     private static getLoader;
     private static fetchAndLoad;
     static load(entry: ManifestEntry, options?: GLTFLoaderOptions & GLTFLoaderEvents): Promise<THREE.Group>;
-    static preload(entries: ModelManifest, options?: GLTFLoaderOptions, onProgress?: (obj: THREE.Group | undefined, entry: ManifestEntry, completed: number, total: number, percent?: number) => void): Promise<void>;
+    static preload(entries: ManifestEntries, options?: GLTFLoaderOptions, onProgress?: (obj: THREE.Group | undefined, entry: ManifestEntry, completed: number, total: number, percent?: number) => void): Promise<void>;
     static invalidate(id: string): Promise<void>;
     static clearCache(): Promise<void>;
 }

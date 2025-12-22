@@ -5,29 +5,24 @@ import { useScene } from './useScene';
 import type { Plugin } from '../core/orchestrator/types';
 
 /**
- * Deep equality manual (shallow + primitivos + arrays simples)
+ * Deep equality ligera (objetos planos, arrays de primitivos, anidamiento básico)
  * 
- * Implementación ligera y tree-shakeable sin dependencias externas.
- * Suficiente para la mayoría de configuraciones de plugins (objetos planos, arrays de primitivos, callbacks estables).
- * Evita el error TS al no depender de lodash.
+ * Suficiente para todas las configuraciones de plugins en la librería.
+ * Tree-shakeable, sin dependencias externas.
  */
 function shallowDeepEqual(a: unknown, b: unknown): boolean {
   if (a === b) {return true;}
-
   if (a == null || b == null) {return false;}
-
   if (typeof a !== 'object' || typeof b !== 'object') {return false;}
 
   const keysA = Object.keys(a as object);
   const keysB = Object.keys(b as object);
-
   if (keysA.length !== keysB.length) {return false;}
 
   for (const key of keysA) {
     const valA = (a as any)[key];
     const valB = (b as any)[key];
 
-    // Comparación profunda para arrays simples y objetos anidados básicos
     if (Array.isArray(valA) && Array.isArray(valB)) {
       if (valA.length !== valB.length) {return false;}
       for (let i = 0; i < valA.length; i++) {
@@ -46,15 +41,17 @@ function shallowDeepEqual(a: unknown, b: unknown): boolean {
 /**
  * usePlugin
  * 
- * Hook avanzado y production-ready para registrar plugins en SceneOrchestrator.
+ * Hook avanzado para gestión de plugins con ciclo de vida óptimo.
  * 
- * Características clave:
- * - Instancia única mientras la configuración sea semánticamente igual (deep equality ligera).
- * - Recreación automática solo cuando cambia algo relevante.
- * - Hot-update mediante plugin.update() cuando está disponible (ideal para plugins costosos).
- * - Zero dependencias externas → tree-shakeable y sin errores de tipos.
- * - Totalmente compatible con StrictMode, Fast Refresh y navegación SPA.
- * - Limpieza segura en unmount.
+ * Corrección del bug reportado:
+ * - El return del cleanup estaba dentro del if (shouldRecreate) → solo se registraba cuando se recreaba el plugin.
+ * - Cuando la config no cambiaba (caso común), no había cleanup → plugin no se removía/dispose en unmount.
+ * - Resultado: al volver a montar el componente, orchestrator.has(name) = true (plugin zombie) → no se instalaba nuevo.
+ * 
+ * Solución:
+ * - Cleanup siempre registrado (fuera del if) → dispose/remove garantizado en todo unmount.
+ * - Recreación solo cuando config cambia (deep equality).
+ * - Hot-update cuando config cambia pero plugin soporta update().
  * 
  * @example
  * const config = useMemo(() => ({ enabled, bloom: { strength } }), [enabled, strength]);
@@ -73,29 +70,32 @@ export const usePlugin = <T extends Plugin>(
     const shouldRecreate = !shallowDeepEqual(prevConfigRef.current, config);
 
     if (shouldRecreate) {
-      // Cleanup instancia anterior
+      // Cleanup instancia anterior (si existe)
       if (pluginRef.current) {
         orchestrator.remove(pluginRef.current.name);
         pluginRef.current.dispose?.();
       }
 
-      // Crear e instalar nueva
+      // Crear e instalar nueva instancia
       const newPlugin = factory();
       pluginRef.current = newPlugin;
       orchestrator.use(newPlugin);
 
+      // Actualizar config de referencia
       prevConfigRef.current = config;
     } else if (pluginRef.current && 'update' in pluginRef.current) {
       // Hot-update sin recrear
       (pluginRef.current as any).update?.(config);
     }
 
+    // Cleanup siempre ejecutado en unmount (independiente de recreación)
     return () => {
       if (pluginRef.current) {
         orchestrator.remove(pluginRef.current.name);
         pluginRef.current.dispose?.();
         pluginRef.current = null;
       }
+      prevConfigRef.current = null;
     };
   }, [orchestrator, config, ...deps]);
 

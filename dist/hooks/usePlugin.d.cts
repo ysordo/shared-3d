@@ -6,15 +6,17 @@ import 'three';
 /**
  * usePlugin
  *
- * Hook avanzado y production-ready para registrar plugins en SceneOrchestrator.
+ * Hook avanzado para gestión de plugins con ciclo de vida óptimo.
  *
- * Características clave:
- * - Instancia única mientras la configuración sea semánticamente igual (deep equality ligera).
- * - Recreación automática solo cuando cambia algo relevante.
- * - Hot-update mediante plugin.update() cuando está disponible (ideal para plugins costosos).
- * - Zero dependencias externas → tree-shakeable y sin errores de tipos.
- * - Totalmente compatible con StrictMode, Fast Refresh y navegación SPA.
- * - Limpieza segura en unmount.
+ * Corrección del bug reportado:
+ * - El return del cleanup estaba dentro del if (shouldRecreate) → solo se registraba cuando se recreaba el plugin.
+ * - Cuando la config no cambiaba (caso común), no había cleanup → plugin no se removía/dispose en unmount.
+ * - Resultado: al volver a montar el componente, orchestrator.has(name) = true (plugin zombie) → no se instalaba nuevo.
+ *
+ * Solución:
+ * - Cleanup siempre registrado (fuera del if) → dispose/remove garantizado en todo unmount.
+ * - Recreación solo cuando config cambia (deep equality).
+ * - Hot-update cuando config cambia pero plugin soporta update().
  *
  * @example
  * const config = useMemo(() => ({ enabled, bloom: { strength } }), [enabled, strength]);

@@ -1,10 +1,10 @@
-import { CacheReport, ModelManifest } from '../core/cache/types.cjs';
+import { CacheReport, ManifestEntries } from '../core/cache/types.cjs';
 
 declare const useCache: () => {
     status: "error" | "idle" | "validating" | "ready";
     progress: number;
     report: CacheReport | null;
-    validate: (manifest: ModelManifest) => Promise<CacheReport>;
+    validate: (manifest: ManifestEntries) => Promise<CacheReport>;
 };
 
 export { useCache };

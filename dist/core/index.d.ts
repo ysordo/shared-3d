@@ -1,7 +1,7 @@
 export { CacheValidator, ValidationOptions } from './cache/CacheValidator.js';
 export { FileWatcher } from './cache/FileWatcher.js';
 export { ObjectCache } from './cache/ObjectCache.js';
-export { CacheEntry, CacheReport, ManifestEntry, ModelManifest } from './cache/types.js';
+export { CacheEntry, CacheReport, ManifestEntries, ManifestEntry } from './cache/types.js';
 export { GLTFLoader, GLTFLoaderEvents, GLTFLoaderOptions } from './loaders/GLTFLoader.js';
 export { HDRIEvents, HDRILoader, HDRILoaderOptions, HDRIProgress } from './loaders/HDRILoader.js';
 export { WebPHDRLoader } from './loaders/WebPHDRLoader.js';

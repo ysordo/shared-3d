@@ -10,7 +10,7 @@ export { EXRLoader as ThreeEXRLoader } from 'three/examples/jsm/loaders/EXRLoade
 export { EffectComposer as ThreeEffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 export { RenderPass as ThreeRenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 export { UnrealBloomPass as ThreeUnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-export { ManifestEntry, ModelManifest } from '../core/cache/types.js';
+export { ManifestEntries, ManifestEntry } from '../core/cache/types.js';
 export { HDRILoaderOptions } from '../core/loaders/HDRILoader.js';
 export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-BwV_edbe.js';
 export { CustomMaterialFactory, MaterialConfig } from '../react/controls/MaterialController.js';

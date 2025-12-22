@@ -1,13 +1,13 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import { ReactNode } from 'react';
-import { CacheReport, ModelManifest } from '../core/cache/types.cjs';
+import { CacheReport, ManifestEntries } from '../core/cache/types.cjs';
 
 type CacheStatus = 'idle' | 'validating' | 'ready' | 'error';
 type CacheContextValue = {
     status: CacheStatus;
     progress: number;
     report: CacheReport | null;
-    validate: (manifest: ModelManifest) => Promise<CacheReport>;
+    validate: (manifest: ManifestEntries) => Promise<CacheReport>;
 };
 declare const CacheProvider: ({ children }: {
     children: ReactNode;

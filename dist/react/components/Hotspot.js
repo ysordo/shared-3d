@@ -1,8 +1,8 @@
 "use client";
 import {
   Hotspot
-} from "../../chunk-3IRWRJSX.js";
-import "../../chunk-I3ICZD4F.js";
+} from "../../chunk-2VJV6N4T.js";
+import "../../chunk-GNQOPDVH.js";
 import "../../chunk-7L6JPLGD.js";
 import "../../chunk-J565G7BY.js";
 import "../../chunk-AF5SVKHS.js";

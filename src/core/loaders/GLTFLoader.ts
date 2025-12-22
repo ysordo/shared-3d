@@ -1,5 +1,5 @@
 import { ObjectCache } from '../cache/ObjectCache';
-import type { ModelManifest, ManifestEntry } from '../cache/types';
+import type { ManifestEntries, ManifestEntry } from '../cache/types';
 import { THREE, ThreeGLTFLoader, ThreeDRACOLoader } from '../../lib';
 
 export type GLTFLoaderOptions = {
@@ -117,7 +117,7 @@ export class GLTFLoader {
   }
 
   static async preload(
-    entries: ModelManifest,
+    entries: ManifestEntries,
     options: GLTFLoaderOptions = {},
     onProgress?: (obj: THREE.Group | undefined, entry: ManifestEntry, completed: number, total: number, percent?: number ) => void
   ) {

@@ -20,6 +20,6 @@ type CacheReport = {
     errors: string[];
     durationMs: number;
 };
-type ModelManifest = ManifestEntry[];
+type ManifestEntries = ManifestEntry[];
 
-export type { CacheEntry, CacheReport, ManifestEntry, ModelManifest };
+export type { CacheEntry, CacheReport, ManifestEntries, ManifestEntry };

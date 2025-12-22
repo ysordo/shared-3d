@@ -1,7 +1,7 @@
 export { CacheValidator, ValidationOptions } from './cache/CacheValidator.cjs';
 export { FileWatcher } from './cache/FileWatcher.cjs';
 export { ObjectCache } from './cache/ObjectCache.cjs';
-export { CacheEntry, CacheReport, ManifestEntry, ModelManifest } from './cache/types.cjs';
+export { CacheEntry, CacheReport, ManifestEntries, ManifestEntry } from './cache/types.cjs';
 export { GLTFLoader, GLTFLoaderEvents, GLTFLoaderOptions } from './loaders/GLTFLoader.cjs';
 export { HDRIEvents, HDRILoader, HDRILoaderOptions, HDRIProgress } from './loaders/HDRILoader.cjs';
 export { WebPHDRLoader } from './loaders/WebPHDRLoader.cjs';

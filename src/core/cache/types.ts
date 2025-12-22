@@ -23,4 +23,4 @@ export type CacheReport = {
   durationMs: number;
 };
 
-export type ModelManifest = ManifestEntry[];
+export type ManifestEntries = ManifestEntry[];

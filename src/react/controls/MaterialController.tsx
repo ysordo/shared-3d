@@ -174,7 +174,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
           if (wireframe) {
             wireframe.visible = true;
             (wireframe.material as THREE.LineBasicMaterial).color.set(
-              config.lineColor ?? 0xffffff
+              config.lineColor ?? 0x000000
             );
           }
           break;
