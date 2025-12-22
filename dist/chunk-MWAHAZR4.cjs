@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
 
-var _chunk2W64Q5XJcjs = require('./chunk-2W64Q5XJ.cjs');
+var _chunkM6PXJ3KScjs = require('./chunk-M6PXJ3KS.cjs');
 
 
 var _chunkNTCOPW47cjs = require('./chunk-NTCOPW47.cjs');
@@ -34,7 +34,7 @@ var MeasurementTool = ({
     [enabled, pointRadius, color, handleMeasure]
   );
   const factory = _react.useCallback.call(void 0, () => new (0, _chunkNTCOPW47cjs.MeasurementToolPlugin)(), []);
-  _chunk2W64Q5XJcjs.usePlugin.call(void 0, factory, config);
+  _chunkM6PXJ3KScjs.usePlugin.call(void 0, factory, config);
   return null;
 };
 

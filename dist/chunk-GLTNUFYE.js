@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-GNQOPDVH.js";
+} from "./chunk-ZNUGEEPB.js";
 import {
   HotspotPlugin
 } from "./chunk-7L6JPLGD.js";

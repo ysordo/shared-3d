@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
 
-var _chunk2W64Q5XJcjs = require('./chunk-2W64Q5XJ.cjs');
+var _chunkM6PXJ3KScjs = require('./chunk-M6PXJ3KS.cjs');
 
 
 var _chunkE6YRKYQ2cjs = require('./chunk-E6YRKYQ2.cjs');
@@ -112,7 +112,7 @@ var AdvancedDragRaycaster = ({
     [model, eventHandler, isEnabled]
   );
   const factory = _react.useCallback.call(void 0, () => new (0, _chunkE6YRKYQ2cjs.AdvancedRaycasterPlugin)(null, void 0), []);
-  _chunk2W64Q5XJcjs.usePlugin.call(void 0, factory, config);
+  _chunkM6PXJ3KScjs.usePlugin.call(void 0, factory, config);
   const resetAll = _react.useCallback.call(void 0, () => {
     if (isResetting || originalStatesRef.current.size === 0) {
       return;

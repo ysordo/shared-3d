@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunk2W64Q5XJcjs = require('./chunk-2W64Q5XJ.cjs');
+var _chunkM6PXJ3KScjs = require('./chunk-M6PXJ3KS.cjs');
 
 
 var _chunk7XTWFKZPcjs = require('./chunk-7XTWFKZP.cjs');
@@ -21,7 +21,7 @@ var PostProcessing = ({
     [enabled, strength, radius, threshold]
   );
   const factory = _react.useCallback.call(void 0, () => new (0, _chunk7XTWFKZPcjs.PostProcessingPlugin)(), []);
-  _chunk2W64Q5XJcjs.usePlugin.call(void 0, factory, config);
+  _chunkM6PXJ3KScjs.usePlugin.call(void 0, factory, config);
   return null;
 };
 

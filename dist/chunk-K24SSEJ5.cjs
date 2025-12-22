@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }
 
-var _chunk2W64Q5XJcjs = require('./chunk-2W64Q5XJ.cjs');
+var _chunkM6PXJ3KScjs = require('./chunk-M6PXJ3KS.cjs');
 
 
 var _chunkQVBX2IUFcjs = require('./chunk-QVBX2IUF.cjs');
@@ -30,7 +30,7 @@ var Hotspot = ({
     [id, position, target, onClick, visible]
   );
   const factory = _react.useCallback.call(void 0, () => new (0, _chunkQVBX2IUFcjs.HotspotPlugin)([]), []);
-  _chunk2W64Q5XJcjs.usePlugin.call(void 0, factory, pluginData);
+  _chunkM6PXJ3KScjs.usePlugin.call(void 0, factory, pluginData);
   return null;
 };
 

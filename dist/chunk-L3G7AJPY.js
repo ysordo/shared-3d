@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-GNQOPDVH.js";
+} from "./chunk-ZNUGEEPB.js";
 import {
   AutoLODSystemPlugin
 } from "./chunk-PYT2UBW2.js";

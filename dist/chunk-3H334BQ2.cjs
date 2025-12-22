@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunk2W64Q5XJcjs = require('./chunk-2W64Q5XJ.cjs');
+var _chunkM6PXJ3KScjs = require('./chunk-M6PXJ3KS.cjs');
 
 
 var _chunkB7F57ZYRcjs = require('./chunk-B7F57ZYR.cjs');
@@ -23,7 +23,7 @@ var AdvancedCameraCollision = ({
     [distanceThreshold, pushBackOffset, smooth, enabled]
   );
   const factory = _react.useCallback.call(void 0, () => new (0, _chunkB7F57ZYRcjs.AdvancedCameraCollisionPlugin)(), []);
-  _chunk2W64Q5XJcjs.usePlugin.call(void 0, factory, config);
+  _chunkM6PXJ3KScjs.usePlugin.call(void 0, factory, config);
   return null;
 };
 

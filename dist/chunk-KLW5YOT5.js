@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-GNQOPDVH.js";
+} from "./chunk-ZNUGEEPB.js";
 import {
   AdvancedOrbitControlsPlugin
 } from "./chunk-U7W5KKD5.js";

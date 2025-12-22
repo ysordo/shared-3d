@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunk2W64Q5XJcjs = require('./chunk-2W64Q5XJ.cjs');
+var _chunkM6PXJ3KScjs = require('./chunk-M6PXJ3KS.cjs');
 
 
 var _chunkLW56STZBcjs = require('./chunk-LW56STZB.cjs');
@@ -21,7 +21,7 @@ var AutoLODSystem = ({
     [mediumDistance, lowDistance, hideDistance, reductionPercentages]
   );
   const factory = _react.useCallback.call(void 0, () => new (0, _chunkLW56STZBcjs.AutoLODSystemPlugin)(config), []);
-  _chunk2W64Q5XJcjs.usePlugin.call(void 0, factory, config);
+  _chunkM6PXJ3KScjs.usePlugin.call(void 0, factory, config);
   return null;
 };
 

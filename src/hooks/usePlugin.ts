@@ -83,6 +83,10 @@ export const usePlugin = <T extends Plugin>(
 
       // Actualizar config de referencia
       prevConfigRef.current = config;
+      if (pluginRef.current && 'update' in pluginRef.current) {
+        // Hot-update sin recrear
+        (pluginRef.current as any).update?.(config);
+      }
     } else if (pluginRef.current && 'update' in pluginRef.current) {
       // Hot-update sin recrear
       (pluginRef.current as any).update?.(config);

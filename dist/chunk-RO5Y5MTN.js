@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-GNQOPDVH.js";
+} from "./chunk-ZNUGEEPB.js";
 import {
   AdvancedCameraCollisionPlugin
 } from "./chunk-75WXWGNL.js";
