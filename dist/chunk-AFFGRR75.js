@@ -1,6 +1,6 @@
 import {
   usePlugin
-} from "./chunk-ZNUGEEPB.js";
+} from "./chunk-YCJXIBX5.js";
 import {
   AdvancedRaycasterPlugin
 } from "./chunk-SMB54RR5.js";

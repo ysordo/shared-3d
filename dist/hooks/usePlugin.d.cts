@@ -6,21 +6,25 @@ import 'three';
 /**
  * usePlugin
  *
- * Hook avanzado para gestión de plugins con ciclo de vida óptimo.
+ * Hook avanzado para gestión de plugins con ciclo de vida óptimo y separación clara.
  *
- * Corrección del bug reportado:
- * - El return del cleanup estaba dentro del if (shouldRecreate) → solo se registraba cuando se recreaba el plugin.
- * - Cuando la config no cambiaba (caso común), no había cleanup → plugin no se removía/dispose en unmount.
- * - Resultado: al volver a montar el componente, orchestrator.has(name) = true (plugin zombie) → no se instalaba nuevo.
- *
- * Solución:
- * - Cleanup siempre registrado (fuera del if) → dispose/remove garantizado en todo unmount.
- * - Recreación solo cuando config cambia (deep equality).
- * - Hot-update cuando config cambia pero plugin soporta update().
+ * Comportamiento en cambio de página (Next.js App Router o SPA):
+ * - El SceneOrchestrator es singleton global (provider persistente).
+ * - Al navegar a otra página:
+ *   • Componente se desmonta → cleanup ejecutado → plugin.dispose() + orchestrator.remove(name).
+ *   • Plugin eliminado del orchestrator → zero zombies.
+ * - Al volver o ir a nueva página con mismo plugin:
+ *   • Nuevo mount → effect 1 crea e instala instancia fresca.
+ *   • Config inicial aplicada (factory recibe valores actuales).
+ *   • effect 2 aplica hot-updates si config cambia después.
+ * - Resultado: plugin siempre instalado con valores de la página actual.
  *
  * @example
- * const config = useMemo(() => ({ enabled, bloom: { strength } }), [enabled, strength]);
- * usePlugin(() => new PostProcessingPlugin(), config);
+ * // En Página A
+ * <PostProcessing strength={1.0} />
+ *
+ * // Navegar a Página B
+ * <PostProcessing strength={2.5} /> → nueva instancia con strength=2.5
  */
 declare const usePlugin: <T extends Plugin>(factory: () => T, config: unknown, deps?: React.DependencyList) => T | null;
 
