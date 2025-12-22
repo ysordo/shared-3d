@@ -1,17 +1,18 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useScene } from '../../hooks/useScene';
 import type { ManifestEntry } from '../../core/cache/types';
 import type { GLTFLoaderEvents } from '../../core/loaders/GLTFLoader';
 import { GLTFLoader } from '../../core/loaders/GLTFLoader';
 import { useActiveModel } from '../../hooks';
-import { usePreloadEffect } from '../../hooks/usePreloadEffect';
+import type { THREE } from '../../lib';
+import { usePreload } from '../../hooks/usePreload';
 
 type ModelProps = {
   entry: ManifestEntry;
   draco?: boolean | undefined;
-  children?: (model: any) => React.ReactNode | undefined;
+  children?: (model: THREE.Group) => React.ReactNode | undefined;
 } & Partial<GLTFLoaderEvents>;
 
 export const Model: React.FC<ModelProps> = ({
@@ -24,10 +25,11 @@ export const Model: React.FC<ModelProps> = ({
 }) => {
   const orchestrator = useScene();
   const model = useActiveModel();
+  const preload = usePreload();
   const cancelledRef = useRef(false);
 
-  usePreloadEffect(
-    (preload) => {
+  useEffect(
+    () => {
       if (!model || entry.id !== model.name) {
         cancelledRef.current = false;
 
@@ -47,6 +49,7 @@ export const Model: React.FC<ModelProps> = ({
             if (cancelledRef.current) {
               return;
             }
+            preload.set(manifestEntry.id, obj);
             orchestrator.setModel(obj);
             onLoaded?.(obj, manifestEntry);
           },
@@ -72,10 +75,8 @@ export const Model: React.FC<ModelProps> = ({
     },
     [entry.id, draco, orchestrator, onLoaded, onProgress, onError, model]
   );
-
-  if (!model || !children) {
+  if (!model) {
     return null;
   }
-
-  return children(model);
+  return children?.(model);
 };

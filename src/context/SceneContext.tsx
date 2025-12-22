@@ -46,7 +46,7 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
       const orch = SceneOrchestrator.getInstance(canvas, config);
       setOrchestrator(orch);
 
-      const updateActiveModel = () => setActiveModel(orch.getActiveModel());
+      const updateActiveModel = (e:any) => setActiveModel(e?.model ?? null);
       orch.addEventListener('model::loaded' as never, updateActiveModel);
       orch.addEventListener('model::removed' as never, updateActiveModel);
 
