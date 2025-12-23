@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
+import type { AOCPluginConfig } from '../../core/orchestrator/plugins/AdvancedOrbitControlsPlugin';
 import { AdvancedOrbitControlsPlugin } from '../../core/orchestrator/plugins/AdvancedOrbitControlsPlugin';
 
 type StateProps = {
@@ -28,31 +29,7 @@ type StateProps = {
   setMaxDistance: (value: number) => void;
 };
 
-type AdvancedOrbitControlsProps = {
-  /** Habilitar/deshabilitar pan */
-  enablePan?: boolean;
-  /** Habilitar/deshabilitar rotación */
-  enableRotate?: boolean;
-  /** Habilitar/deshabilitar zoom */
-  enableZoom?: boolean;
-  /** Factor de damping (inercia) */
-  dampingFactor?: number;
-  /** Velocidad de pan */
-  panSpeed?: number;
-  /** Velocidad de rotación */
-  rotateSpeed?: number;
-  /** Velocidad de zoom */
-  zoomSpeed?: number;
-  /** Distancia mínima de cámara */
-  minDistance?: number;
-  /** Distancia máxima de cámara */
-  maxDistance?: number;
-  /** Ángulo polar mínimo (radianes) */
-  minPolarAngle?: number;
-  /** Ángulo polar máximo (radianes) */
-  maxPolarAngle?: number;
-
-  /** Render prop para exponer estado y controles imperativos */
+type AdvancedOrbitControlsProps = Partial<AOCPluginConfig> & {
   children?: (state: StateProps) => React.ReactNode;
 };
 
@@ -144,7 +121,6 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
 
   // usePlugin maneja creación, hot-update y dispose automáticamente
   const plugin = usePlugin(factory, config);
-  console.log(plugin);
 
   useEffect(() => {
     if (plugin) {
@@ -154,7 +130,14 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
       plugin.minDistance = _minDistance;
       plugin.maxDistance = _maxDistance;
     }
-  }, [plugin, _enablePan, _enableRotate, _enableZoom, _minDistance, _maxDistance]);
+  }, [
+    plugin,
+    _enablePan,
+    _enableRotate,
+    _enableZoom,
+    _minDistance,
+    _maxDistance,
+  ]);
 
   // Estado derivado: prioriza valores del plugin (actuales) sobre props iniciales
   const state = useMemo<StateProps>(
@@ -164,19 +147,13 @@ export const AdvancedOrbitControls: React.FC<AdvancedOrbitControlsProps> = ({
       enableZoom: _enableZoom,
       minDistance: _minDistance,
       maxDistance: _maxDistance,
-      setEnablePan: (value: boolean)=>setEnablePan(value),
-      setEnableRotate: (value: boolean)=>setEnableRotate(value),
-      setEnableZoom: (value: boolean)=>setEnableZoom(value),
-      setMinDistance: (value: number)=>setMinDistance(value),
-      setMaxDistance: (value: number)=>setMaxDistance(value),
+      setEnablePan: (value: boolean) => setEnablePan(value),
+      setEnableRotate: (value: boolean) => setEnableRotate(value),
+      setEnableZoom: (value: boolean) => setEnableZoom(value),
+      setMinDistance: (value: number) => setMinDistance(value),
+      setMaxDistance: (value: number) => setMaxDistance(value),
     }),
-    [
-      _enablePan,
-      _enableRotate,
-      _enableZoom,
-      _minDistance,
-      _maxDistance,
-    ]
+    [_enablePan, _enableRotate, _enableZoom, _minDistance, _maxDistance]
   );
 
   return <>{children?.(state)}</>;

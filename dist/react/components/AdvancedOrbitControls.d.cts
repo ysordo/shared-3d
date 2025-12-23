@@ -1,3 +1,9 @@
+import { AOCPluginConfig } from '../../core/orchestrator/plugins/AdvancedOrbitControlsPlugin.cjs';
+import '../../SceneOrchestrator-CSrTns7D.cjs';
+import '../../core/loaders/HDRILoader.cjs';
+import '../../core/cache/types.cjs';
+import 'three';
+
 type StateProps = {
     /** Estado actual de pan */
     readonly enablePan: boolean;
@@ -20,30 +26,7 @@ type StateProps = {
     /** Actualizar distancia máxima (imperativo) */
     setMaxDistance: (value: number) => void;
 };
-type AdvancedOrbitControlsProps = {
-    /** Habilitar/deshabilitar pan */
-    enablePan?: boolean;
-    /** Habilitar/deshabilitar rotación */
-    enableRotate?: boolean;
-    /** Habilitar/deshabilitar zoom */
-    enableZoom?: boolean;
-    /** Factor de damping (inercia) */
-    dampingFactor?: number;
-    /** Velocidad de pan */
-    panSpeed?: number;
-    /** Velocidad de rotación */
-    rotateSpeed?: number;
-    /** Velocidad de zoom */
-    zoomSpeed?: number;
-    /** Distancia mínima de cámara */
-    minDistance?: number;
-    /** Distancia máxima de cámara */
-    maxDistance?: number;
-    /** Ángulo polar mínimo (radianes) */
-    minPolarAngle?: number;
-    /** Ángulo polar máximo (radianes) */
-    maxPolarAngle?: number;
-    /** Render prop para exponer estado y controles imperativos */
+type AdvancedOrbitControlsProps = Partial<AOCPluginConfig> & {
     children?: (state: StateProps) => React.ReactNode;
 };
 /**

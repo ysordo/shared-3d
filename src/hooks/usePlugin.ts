@@ -101,7 +101,7 @@ export const usePlugin = <T extends Plugin>(
     if ('update' in temp) {
       temp.update?.(config);
     }
-  }, [config, ...deps]);
+  }, [name, config, ...deps]);
 
   return orchestrator.plugin<T>(name);
 };

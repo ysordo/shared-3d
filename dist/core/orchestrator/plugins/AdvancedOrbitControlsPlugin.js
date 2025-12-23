@@ -1,6 +1,6 @@
 import {
   AdvancedOrbitControlsPlugin
-} from "../../../chunk-U7W5KKD5.js";
+} from "../../../chunk-WHXQI4YI.js";
 export {
   AdvancedOrbitControlsPlugin
 };

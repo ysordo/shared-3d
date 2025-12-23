@@ -1,7 +1,7 @@
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import type { Plugin, PluginContext } from '../types';
 
-  interface PluginConfig {
+  export interface AOCPluginConfig {
     enablePan: boolean;
     enableRotate: boolean;
     enableZoom: boolean;
@@ -44,10 +44,10 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
 
   private controls!: OrbitControls;
 
-  private options: PluginConfig;
+  private options: AOCPluginConfig;
 
   constructor(
-    partialOptions: Partial<PluginConfig> = {}
+    partialOptions: Partial<AOCPluginConfig> = {}
   ) {
     this.options = {
       enablePan: true,
@@ -76,18 +76,17 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
   }
 
   private applyOptionsToControls(): void {
-    const o = this.options;
-    this.controls.enablePan = o.enablePan;
-    this.controls.enableRotate = o.enableRotate;
-    this.controls.enableZoom = o.enableZoom;
-    this.controls.dampingFactor = o.dampingFactor;
-    this.controls.panSpeed = o.panSpeed;
-    this.controls.rotateSpeed = o.rotateSpeed;
-    this.controls.zoomSpeed = o.zoomSpeed;
-    this.controls.minDistance = o.minDistance;
-    this.controls.maxDistance = o.maxDistance;
-    this.controls.minPolarAngle = o.minPolarAngle;
-    this.controls.maxPolarAngle = o.maxPolarAngle;
+    this.controls.enablePan = this.controls.enablePan;
+    this.controls.enableRotate = this.controls.enableRotate;
+    this.controls.enableZoom = this.controls.enableZoom;
+    this.controls.dampingFactor = this.controls.dampingFactor;
+    this.controls.panSpeed = this.controls.panSpeed;
+    this.controls.rotateSpeed = this.controls.rotateSpeed;
+    this.controls.zoomSpeed = this.controls.zoomSpeed;
+    this.controls.minDistance = this.controls.minDistance;
+    this.controls.maxDistance = this.controls.maxDistance;
+    this.controls.minPolarAngle = this.controls.minPolarAngle;
+    this.controls.maxPolarAngle = this.controls.maxPolarAngle;
   }
 
   set enablePan(enabled: boolean) {
@@ -131,9 +130,13 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
   }
 
   update(
-    newOptions: Partial<PluginConfig>
+    newOptions: Partial<AOCPluginConfig>
   ): void {
-    this.options = { ...this.options, ...newOptions };
+    Object.keys(newOptions).forEach((key) => {
+      if(newOptions[key as keyof AOCPluginConfig]!==undefined && this.options[key as keyof AOCPluginConfig] !== newOptions[key as keyof AOCPluginConfig])  {
+        this.options[key as keyof AOCPluginConfig] = newOptions[key as keyof AOCPluginConfig] as never;
+      }
+    });
     this.applyOptionsToControls();
   }
 

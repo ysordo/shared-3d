@@ -1,6 +1,6 @@
 export { S as SceneConfig, a as SceneOrchestrator } from '../../SceneOrchestrator-kcTSMjxi.js';
 export { AdvancedCameraCollisionPlugin } from './plugins/AdvancedCameraCollisionPlugin.js';
-export { AdvancedOrbitControlsPlugin } from './plugins/AdvancedOrbitControlsPlugin.js';
+export { AOCPluginConfig, AdvancedOrbitControlsPlugin } from './plugins/AdvancedOrbitControlsPlugin.js';
 export { AdvancedRaycasterPlugin } from './plugins/AdvancedRaycasterPlugin.js';
 export { AnnotationData, AnnotationsPlugin } from './plugins/AnnotationsPlugin.js';
 export { AutoLODConfig, AutoLODSystemPlugin } from './plugins/AutoLODSystemPlugin.js';

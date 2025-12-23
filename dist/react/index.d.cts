@@ -36,6 +36,7 @@ export { MaterialController } from './controls/MaterialController.cjs';
 export { SceneObject } from './primitives/SceneObject.cjs';
 import 'react';
 import 'three';
+import '../core/orchestrator/plugins/AdvancedOrbitControlsPlugin.cjs';
 import '../SceneOrchestrator-CSrTns7D.cjs';
 import '../core/loaders/HDRILoader.cjs';
 import '../core/cache/types.cjs';

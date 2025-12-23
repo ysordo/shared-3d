@@ -7,7 +7,7 @@ export { HDRIEvents, HDRILoader, HDRILoaderOptions, HDRIProgress } from './loade
 export { WebPHDRLoader } from './loaders/WebPHDRLoader.js';
 export { S as SceneConfig, a as SceneOrchestrator } from '../SceneOrchestrator-kcTSMjxi.js';
 export { AdvancedCameraCollisionPlugin } from './orchestrator/plugins/AdvancedCameraCollisionPlugin.js';
-export { AdvancedOrbitControlsPlugin } from './orchestrator/plugins/AdvancedOrbitControlsPlugin.js';
+export { AOCPluginConfig, AdvancedOrbitControlsPlugin } from './orchestrator/plugins/AdvancedOrbitControlsPlugin.js';
 export { AdvancedRaycasterPlugin } from './orchestrator/plugins/AdvancedRaycasterPlugin.js';
 export { AnnotationData, AnnotationsPlugin } from './orchestrator/plugins/AnnotationsPlugin.js';
 export { AutoLODConfig, AutoLODSystemPlugin } from './orchestrator/plugins/AutoLODSystemPlugin.js';

@@ -32,6 +32,7 @@ export { TheaterLighting } from './TheaterLighting.cjs';
 export { VRButton } from './VRButton.cjs';
 import 'react';
 import 'three';
+import '../../core/orchestrator/plugins/AdvancedOrbitControlsPlugin.cjs';
 import '../../SceneOrchestrator-CSrTns7D.cjs';
 import '../../core/loaders/HDRILoader.cjs';
 import '../../core/cache/types.cjs';

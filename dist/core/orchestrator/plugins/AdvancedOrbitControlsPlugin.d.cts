@@ -3,7 +3,7 @@ import '../../loaders/HDRILoader.cjs';
 import '../../cache/types.cjs';
 import 'three';
 
-interface PluginConfig {
+interface AOCPluginConfig {
     enablePan: boolean;
     enableRotate: boolean;
     enableZoom: boolean;
@@ -44,7 +44,7 @@ declare class AdvancedOrbitControlsPlugin implements Plugin {
     readonly name = "AdvancedOrbitControls";
     private controls;
     private options;
-    constructor(partialOptions?: Partial<PluginConfig>);
+    constructor(partialOptions?: Partial<AOCPluginConfig>);
     install({ camera, renderer }: PluginContext): void;
     preRender(): void;
     private applyOptionsToControls;
@@ -58,8 +58,8 @@ declare class AdvancedOrbitControlsPlugin implements Plugin {
     get minDistance(): number;
     set maxDistance(distance: number);
     get maxDistance(): number;
-    update(newOptions: Partial<PluginConfig>): void;
+    update(newOptions: Partial<AOCPluginConfig>): void;
     dispose(): void;
 }
 
-export { AdvancedOrbitControlsPlugin };
+export { type AOCPluginConfig, AdvancedOrbitControlsPlugin };
