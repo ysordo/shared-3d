@@ -1,6 +1,7 @@
 // components/ModelPreload.tsx
 'use client';
 
+import type { Dispatch, SetStateAction } from 'react';
 import { useEffect, useState } from 'react';
 import { GLTFLoader } from '../../core/loaders/GLTFLoader';
 import type { ManifestEntries } from '../../core/cache/types';
@@ -11,13 +12,16 @@ type ModelPreloadProps = {
   entries: ManifestEntries;
   /** Habilitar decodificación DRACO */
   draco?: boolean;
+  onStatus?: Dispatch<SetStateAction<boolean>>;
   /** Render prop para mostrar lista de descargas en progreso */
   children: (
     progressList: {
       id: string;
       percent: number;
       status: 'loading' | 'completed' | 'error';
-    }[]
+    }[],
+    completed: number,
+    total: number
   ) => React.ReactNode;
 };
 
@@ -59,6 +63,7 @@ type ModelPreloadProps = {
 export const ModelPreload: React.FC<ModelPreloadProps> = ({
   entries,
   draco = false,
+  onStatus,
   children,
 }) => {
   const preload = usePreload();
@@ -73,6 +78,14 @@ export const ModelPreload: React.FC<ModelPreloadProps> = ({
       status: 'loading' as const,
     }))
   );
+  const [progress, setProgress] = useState<{
+    completed: number;
+    total: number;
+  }>({ completed: 0, total: 0 });
+
+  useEffect(() => {
+    onStatus?.(false);
+  }, [entries, onStatus]);
 
   useEffect(() => {
     if (entries.length === 0) {
@@ -89,6 +102,7 @@ export const ModelPreload: React.FC<ModelPreloadProps> = ({
         status: 'loading' as const,
       }))
     );
+    setProgress({ completed: 0, total: entries.length });
 
     Promise.all(
       entries.map((entry) =>
@@ -99,6 +113,7 @@ export const ModelPreload: React.FC<ModelPreloadProps> = ({
               return;
             }
             preload.set(entry.id, obj);
+            setProgress((prev) => ({ ...prev, completed: prev.completed + 1 }));
             setProgressList((prev) =>
               prev.map((item) =>
                 item.id === entry.id
@@ -142,5 +157,18 @@ export const ModelPreload: React.FC<ModelPreloadProps> = ({
     };
   }, [entries, draco, preload]);
 
-  return <>{children(progressList)}</>;
+  useEffect(() => {
+    if (progressList.length === 0) {
+      return;
+    }
+
+    if (progressList.every((item) => item.status === 'completed')) {
+      onStatus?.(true);
+    }
+  }, [progressList, onStatus]);
+
+  if (progressList.every((item) => item.status === 'completed')) {
+    return null;
+  }
+  return <>{children(progressList, progress.completed, progress.total)}</>;
 };

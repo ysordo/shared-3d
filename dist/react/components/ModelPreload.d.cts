@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { ManifestEntries } from '../../core/cache/types.cjs';
 
 type ModelPreloadProps = {
@@ -5,12 +6,13 @@ type ModelPreloadProps = {
     entries: ManifestEntries;
     /** Habilitar decodificación DRACO */
     draco?: boolean;
+    onStatus?: Dispatch<SetStateAction<boolean>>;
     /** Render prop para mostrar lista de descargas en progreso */
     children: (progressList: {
         id: string;
         percent: number;
         status: 'loading' | 'completed' | 'error';
-    }[]) => React.ReactNode;
+    }[], completed: number, total: number) => React.ReactNode;
 };
 /**
  * ModelPreload
