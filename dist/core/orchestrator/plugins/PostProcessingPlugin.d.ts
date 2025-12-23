@@ -1,4 +1,4 @@
-import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-kcTSMjxi.js';
+import { b as Plugin, P as PluginContext } from '../../../SceneOrchestrator-DxWUNuG8.js';
 import '../../loaders/HDRILoader.js';
 import '../../cache/types.js';
 import 'three';

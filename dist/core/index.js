@@ -22,7 +22,7 @@ import {
 } from "../chunk-7L6JPLGD.js";
 import {
   AdvancedOrbitControlsPlugin
-} from "../chunk-WHXQI4YI.js";
+} from "../chunk-5ZCTV7NA.js";
 import {
   AnnotationsPlugin
 } from "../chunk-K5ZHNR6J.js";
@@ -49,7 +49,7 @@ import {
 import "../chunk-SRUKCELR.js";
 import {
   SceneOrchestrator
-} from "../chunk-36EDE47P.js";
+} from "../chunk-BYV5WTUD.js";
 import {
   HDRILoader
 } from "../chunk-QHQFF7D7.js";

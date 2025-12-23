@@ -17,7 +17,7 @@ import {
 } from "../../chunk-7L6JPLGD.js";
 import {
   AdvancedOrbitControlsPlugin
-} from "../../chunk-WHXQI4YI.js";
+} from "../../chunk-5ZCTV7NA.js";
 import {
   AnnotationsPlugin
 } from "../../chunk-K5ZHNR6J.js";
@@ -35,7 +35,7 @@ import {
 } from "../../chunk-U3LDU6I7.js";
 import {
   SceneOrchestrator
-} from "../../chunk-36EDE47P.js";
+} from "../../chunk-BYV5WTUD.js";
 import "../../chunk-QHQFF7D7.js";
 import "../../chunk-W5OYT3BE.js";
 import "../../chunk-OK2NCVM7.js";

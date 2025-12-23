@@ -1,4 +1,4 @@
-import { b as Plugin } from '../SceneOrchestrator-CSrTns7D.cjs';
+import { b as Plugin } from '../SceneOrchestrator-HtKaYZ3E.cjs';
 import '../core/loaders/HDRILoader.cjs';
 import '../core/cache/types.cjs';
 import 'three';

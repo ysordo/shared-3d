@@ -1,4 +1,4 @@
-import { b as Plugin, C as ConfigToTuple, P as PluginContext } from '../../../SceneOrchestrator-kcTSMjxi.js';
+import { b as Plugin, C as ConfigToTuple, P as PluginContext } from '../../../SceneOrchestrator-DxWUNuG8.js';
 import * as THREE from 'three';
 import '../../loaders/HDRILoader.js';
 import '../../cache/types.js';

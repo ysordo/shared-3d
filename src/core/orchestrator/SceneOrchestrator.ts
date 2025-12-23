@@ -138,7 +138,7 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
   /* ============================
    * Plugin System
    * ============================ */
-  use(plugin: Plugin): this {
+  use<T extends Plugin>(plugin: T): T {
     if (this.plugins.has(plugin.name)) {
       console.info(`[Orchestrator] Plugin "${plugin.name}" ya instalado. Sobrescribiendo.`);
       this.remove(plugin.name);
@@ -159,7 +159,7 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
       console.error(`[Orchestrator] Error instalando plugin ${plugin.name}:`, err);
     }
 
-    return this;
+    return plugin as T;
   }
 
   plugin<T extends Plugin = Plugin>(name: string): T | undefined {

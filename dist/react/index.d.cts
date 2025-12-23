@@ -37,7 +37,7 @@ export { SceneObject } from './primitives/SceneObject.cjs';
 import 'react';
 import 'three';
 import '../core/orchestrator/plugins/AdvancedOrbitControlsPlugin.cjs';
-import '../SceneOrchestrator-CSrTns7D.cjs';
+import '../SceneOrchestrator-HtKaYZ3E.cjs';
 import '../core/loaders/HDRILoader.cjs';
 import '../core/cache/types.cjs';
 import 'react/jsx-runtime';

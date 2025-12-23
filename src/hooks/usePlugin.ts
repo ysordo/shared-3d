@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useScene } from './useScene';
 import type { Plugin } from '../core/orchestrator/types';
 
@@ -67,41 +67,41 @@ export const usePlugin = <T extends Plugin>(
   deps: React.DependencyList = []
 ): T | undefined => {
   const orchestrator = useScene();
-  const [name, setName] = useState<string>('');
+  const ref = useRef<T|undefined>(undefined);
 
   // === EFFECT 1: Creación única + instalación + cleanup en unmount ===
   useEffect(() => {
     // Cleanup previo (seguridad si orchestrator cambia o hot-reload)
-    if (orchestrator.has(name)) {
-      orchestrator.plugin<T>(name)?.dispose?.();
-      orchestrator.remove(name);
+    if (ref.current) {
+      ref.current?.dispose?.();
+      orchestrator.remove(ref.current.name);
+      ref.current = undefined;
     }
 
     // Crear e instalar instancia única
     const plugin = factory();
-    setName(plugin.name);
-    orchestrator.use(plugin);
+    ref.current = orchestrator.use(plugin);
+    ref.current.update?.(config);
 
     // Cleanup garantizado en unmount (cambio de página)
     return () => {
 
-      if (orchestrator.has(name)) {
-        orchestrator.plugin(name)?.dispose?.();
-        orchestrator.remove(name);
+      if (ref.current) {
+        ref.current?.dispose?.();
+        orchestrator.remove(ref.current.name);
       }
-      setName('');
+      ref.current = undefined;
     };
   }, [orchestrator, factory]); // factory incluido para recrear si cambia (raro, pero seguro)
 
   // === EFFECT 2: Hot-update de configuración ===
   useEffect(() => {
-    if (!orchestrator.has(name)) {return;}
-    const temp = orchestrator.plugin<T>(name) as T;
+    if (!ref.current) {return;}
     // Aplicar config inicial o cambios
-    if ('update' in temp) {
-      temp.update?.(config);
+    if ('update' in ref.current) {
+      ref.current.update?.(config);
     }
-  }, [name, config, ...deps]);
+  }, [config, ...deps]);
 
-  return orchestrator.plugin<T>(name);
+  return ref.current;
 };

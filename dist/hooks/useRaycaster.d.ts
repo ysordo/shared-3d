@@ -1,5 +1,5 @@
 import { RaycasterEvent } from '../core/orchestrator/plugins/RaycasterPlugin.js';
-import '../SceneOrchestrator-kcTSMjxi.js';
+import '../SceneOrchestrator-DxWUNuG8.js';
 import '../core/loaders/HDRILoader.js';
 import '../core/cache/types.js';
 import 'three';

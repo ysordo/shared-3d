@@ -76,17 +76,17 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
   }
 
   private applyOptionsToControls(): void {
-    this.controls.enablePan = this.controls.enablePan;
-    this.controls.enableRotate = this.controls.enableRotate;
-    this.controls.enableZoom = this.controls.enableZoom;
-    this.controls.dampingFactor = this.controls.dampingFactor;
-    this.controls.panSpeed = this.controls.panSpeed;
-    this.controls.rotateSpeed = this.controls.rotateSpeed;
-    this.controls.zoomSpeed = this.controls.zoomSpeed;
-    this.controls.minDistance = this.controls.minDistance;
-    this.controls.maxDistance = this.controls.maxDistance;
-    this.controls.minPolarAngle = this.controls.minPolarAngle;
-    this.controls.maxPolarAngle = this.controls.maxPolarAngle;
+    this.controls.enablePan = this.options.enablePan;
+    this.controls.enableRotate = this.options.enableRotate;
+    this.controls.enableZoom = this.options.enableZoom;
+    this.controls.dampingFactor = this.options.dampingFactor;
+    this.controls.panSpeed = this.options.panSpeed;
+    this.controls.rotateSpeed = this.options.rotateSpeed;
+    this.controls.zoomSpeed = this.options.zoomSpeed;
+    this.controls.minDistance = this.options.minDistance;
+    this.controls.maxDistance = this.options.maxDistance;
+    this.controls.minPolarAngle = this.options.minPolarAngle;
+    this.controls.maxPolarAngle = this.options.maxPolarAngle;
   }
 
   set enablePan(enabled: boolean) {
@@ -133,7 +133,7 @@ export class AdvancedOrbitControlsPlugin implements Plugin {
     newOptions: Partial<AOCPluginConfig>
   ): void {
     Object.keys(newOptions).forEach((key) => {
-      if(newOptions[key as keyof AOCPluginConfig]!==undefined && this.options[key as keyof AOCPluginConfig] !== newOptions[key as keyof AOCPluginConfig])  {
+      if(newOptions[key as keyof AOCPluginConfig]!==undefined) {
         this.options[key as keyof AOCPluginConfig] = newOptions[key as keyof AOCPluginConfig] as never;
       }
     });

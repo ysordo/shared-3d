@@ -1,5 +1,5 @@
 import React from 'react';
-import { S as SceneConfig } from '../../SceneOrchestrator-kcTSMjxi.js';
+import { S as SceneConfig } from '../../SceneOrchestrator-DxWUNuG8.js';
 import '../../core/loaders/HDRILoader.js';
 import '../../core/cache/types.js';
 import 'three';

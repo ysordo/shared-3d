@@ -16,7 +16,7 @@ import {
 } from "../../../chunk-7L6JPLGD.js";
 import {
   AdvancedOrbitControlsPlugin
-} from "../../../chunk-WHXQI4YI.js";
+} from "../../../chunk-5ZCTV7NA.js";
 import {
   AnnotationsPlugin
 } from "../../../chunk-K5ZHNR6J.js";
