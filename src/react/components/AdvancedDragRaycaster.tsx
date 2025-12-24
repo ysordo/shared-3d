@@ -145,6 +145,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   // Handler único para el plugin (estabilizado)
   const eventHandler = useCallback(
     (event: any) => {
+      console.log('[AdvancedDragRaycaster] Test verify events actions, capture de content: ',event);
       switch (event.type) {
         case 'objectdragstart':
           handleDragStart(event.object);

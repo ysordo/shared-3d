@@ -89,6 +89,7 @@ var AdvancedDragRaycaster = ({
   );
   const eventHandler = useCallback(
     (event) => {
+      console.log("[AdvancedDragRaycaster] Test verify events actions, capture de content: ", event);
       switch (event.type) {
         case "objectdragstart":
           handleDragStart(event.object);
