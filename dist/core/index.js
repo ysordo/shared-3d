@@ -2,8 +2,6 @@ import "../chunk-PFUSRKMN.js";
 import "../chunk-EC4WICT5.js";
 import "../chunk-ZC66QDE5.js";
 import "../chunk-DCRMKZQR.js";
-import "../chunk-E64RDZHI.js";
-import "../chunk-G5YWPRA4.js";
 import {
   GLTFLoader
 } from "../chunk-6FBDZUDJ.js";
@@ -37,6 +35,8 @@ import {
 import {
   AutoLODSystemPlugin
 } from "../chunk-PYT2UBW2.js";
+import "../chunk-E64RDZHI.js";
+import "../chunk-G5YWPRA4.js";
 import {
   RaycasterPlugin
 } from "../chunk-U3LDU6I7.js";
@@ -49,7 +49,7 @@ import {
 import "../chunk-SRUKCELR.js";
 import {
   SceneOrchestrator
-} from "../chunk-BYV5WTUD.js";
+} from "../chunk-SDC57GRH.js";
 import {
   HDRILoader
 } from "../chunk-QHQFF7D7.js";

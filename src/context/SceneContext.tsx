@@ -45,8 +45,9 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
       const canvas = (ref as React.RefObject<HTMLCanvasElement>).current!;
       const orch = SceneOrchestrator.getInstance(canvas, config);
       setOrchestrator(orch);
+  
+      const updateActiveModel = (e: never) => setActiveModel((e as any).model);
 
-      const updateActiveModel = (e:any) => setActiveModel(e?.model ?? null);
       orch.addEventListener('model::loaded' as never, updateActiveModel);
       orch.addEventListener('model::removed' as never, updateActiveModel);
 
@@ -54,7 +55,7 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
         orch.removeEventListener('model::loaded' as never, updateActiveModel);
         orch.removeEventListener('model::removed' as never, updateActiveModel);
       };
-    }, [ref, config]);
+    }, [ref, config, orchestrator]);
 
     const value = useMemo<SceneContextValue | null>(() => {
       if (!orchestrator) {

@@ -207,7 +207,7 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
     if (this.activeModel) {
       this.scene.remove(this.activeModel);
       this.activeModel = null;
-      this.dispatchEvent({ type: 'model::removed' } as never);
+      this.dispatchEvent({ type: 'model::removed', model: null } as never);
     }
   }
 

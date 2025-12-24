@@ -255,10 +255,10 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   );
 
   useEffect(() => {
-    console.log(
-      '[AdvancedDragRaycaster] Test config: ',
-      config
-    );
+  console.log('[AdvancedDragRaycaster] model changed:', model);
+}, [model]);
+
+  useEffect(() => {
 
     plugin?.setEnabled(isEnabled);
   }, [isEnabled, plugin]);
