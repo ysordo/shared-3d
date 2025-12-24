@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
 import { AdvancedRaycasterPlugin } from '../../core/orchestrator/plugins/AdvancedRaycasterPlugin';
 import { useScene } from '../../hooks/useScene';
@@ -34,9 +40,9 @@ type AdvancedDragRaycasterProps = {
 
 /**
  * AdvancedDragRaycaster
- * 
+ *
  * Componente declarativo avanzado para arrastrar objetos 3D individuales con raycasting.
- * 
+ *
  * Características:
  * - Drag preciso en espacio mundo con compensación opcional de rotación del modelo raíz.
  * - Estado exponible vía render prop (enabled, toggle, reset animado).
@@ -44,10 +50,10 @@ type AdvancedDragRaycasterProps = {
  * - Reset suave animado de objetos arrastrados a su posición/quaternion original.
  * - Sin RAF propio para drag (event-driven) + cleanup seguro del reset.
  * - Totalmente reactivo y headless.
- * 
+ *
  * Ideal para editores 3D, configuradores de productos o experiencias interactivas donde
  * el usuario pueda reposicionar partes individuales.
- * 
+ *
  * @example
  * <AdvancedDragRaycaster defaultEnabled={true}>
  *   {({ isEnabled, toggleEnabled, resetAll }) => (
@@ -73,9 +79,12 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   const [isResetting, setIsResetting] = useState(false);
 
   const rafRef = useRef<number | null>(null);
-  const originalStatesRef = useRef<Map<THREE.Object3D, { position: THREE.Vector3; quaternion: THREE.Quaternion }>>(
-    new Map()
-  );
+  const originalStatesRef = useRef<
+    Map<
+      THREE.Object3D,
+      { position: THREE.Vector3; quaternion: THREE.Quaternion }
+    >
+  >(new Map());
 
   // Objetos temporales reutilizados → cero allocations durante drag
   const temp = useMemo(
@@ -105,7 +114,9 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
 
   const handleDrag = useCallback(
     (obj: THREE.Object3D, deltaScreen: THREE.Vector2) => {
-      if (!model || !camera) {return;}
+      if (!model || !camera) {
+        return;
+      }
 
       // Posición actual del objeto
       obj.getWorldPosition(temp.v1);
@@ -145,13 +156,21 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   // Handler único para el plugin (estabilizado)
   const eventHandler = useCallback(
     (event: any) => {
-      console.log('[AdvancedDragRaycaster] Test verify events actions, capture de content: ',event);
+      console.log(
+        '[AdvancedDragRaycaster] Test verify events actions, capture de content: ',
+        event
+      );
       switch (event.type) {
         case 'objectdragstart':
           handleDragStart(event.object);
           break;
         case 'objectdrag':
-          handleDrag(event.object, event.normalizedDelta?.multiplyScalar(Math.max(window.innerWidth, window.innerHeight)) || event.delta);
+          handleDrag(
+            event.object,
+            event.normalizedDelta?.multiplyScalar(
+              Math.max(window.innerWidth, window.innerHeight)
+            ) || event.delta
+          );
           break;
         case 'objectdragend':
           handleDragEnd(event.object);
@@ -166,20 +185,25 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
     () => ({
       model: model ?? null,
       onEvent: eventHandler,
-      enabled: isEnabled,
+      //enabled: isEnabled,
     }),
-    [model, eventHandler, isEnabled]
+    [model, eventHandler]
   );
 
   // Factory estable (sin dependencias)
-  const factory = useCallback(() => new AdvancedRaycasterPlugin(null, undefined), []);
+  const factory = useCallback(
+    () => new AdvancedRaycasterPlugin(null, undefined),
+    []
+  );
 
   // usePlugin maneja creación, update y dispose automáticamente
   const plugin = usePlugin(factory, config);
 
   // Reset animado
   const resetAll = useCallback(() => {
-    if (isResetting || originalStatesRef.current.size === 0) {return;}
+    if (isResetting || originalStatesRef.current.size === 0) {
+      return;
+    }
 
     setIsResetting(true);
     const start = performance.now();
@@ -214,7 +238,10 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   }, []);
 
   const toggleEnabled = useCallback(() => setIsEnabled((prev) => !prev), []);
-  const setEnabledCallback = useCallback((value: boolean) => setIsEnabled(value), []);
+  const setEnabledCallback = useCallback(
+    (value: boolean) => setIsEnabled(value),
+    []
+  );
 
   const controlState = useMemo(
     () => ({
@@ -228,6 +255,11 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   );
 
   useEffect(() => {
+    console.log(
+      '[AdvancedDragRaycaster] Test config: ',
+      config
+    );
+
     plugin?.setEnabled(isEnabled);
   }, [isEnabled, plugin]);
 

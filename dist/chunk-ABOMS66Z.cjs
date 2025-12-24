@@ -15,6 +15,12 @@ var _chunkAI7UKVFZcjs = require('./chunk-AI7UKVFZ.cjs');
 var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
 
 // src/react/components/AdvancedDragRaycaster.tsx
+
+
+
+
+
+
 var _react = require('react');
 var _jsxruntime = require('react/jsx-runtime');
 var AdvancedDragRaycaster = ({
@@ -31,9 +37,7 @@ var AdvancedDragRaycaster = ({
   const [isEnabled, setIsEnabled] = _react.useState.call(void 0, defaultEnabled);
   const [isResetting, setIsResetting] = _react.useState.call(void 0, false);
   const rafRef = _react.useRef.call(void 0, null);
-  const originalStatesRef = _react.useRef.call(void 0, 
-    /* @__PURE__ */ new Map()
-  );
+  const originalStatesRef = _react.useRef.call(void 0, /* @__PURE__ */ new Map());
   const temp = _react.useMemo.call(void 0, 
     () => ({
       v1: new _chunkEA3XQ4KJcjs.THREE.Vector3(),
@@ -89,13 +93,21 @@ var AdvancedDragRaycaster = ({
   );
   const eventHandler = _react.useCallback.call(void 0, 
     (event) => {
-      console.log("[AdvancedDragRaycaster] Test verify events actions, capture de content: ", event);
+      console.log(
+        "[AdvancedDragRaycaster] Test verify events actions, capture de content: ",
+        event
+      );
       switch (event.type) {
         case "objectdragstart":
           handleDragStart(event.object);
           break;
         case "objectdrag":
-          handleDrag(event.object, _optionalChain([event, 'access', _4 => _4.normalizedDelta, 'optionalAccess', _5 => _5.multiplyScalar, 'call', _6 => _6(Math.max(window.innerWidth, window.innerHeight))]) || event.delta);
+          handleDrag(
+            event.object,
+            _optionalChain([event, 'access', _4 => _4.normalizedDelta, 'optionalAccess', _5 => _5.multiplyScalar, 'call', _6 => _6(
+              Math.max(window.innerWidth, window.innerHeight)
+            )]) || event.delta
+          );
           break;
         case "objectdragend":
           handleDragEnd(event.object);
@@ -107,12 +119,15 @@ var AdvancedDragRaycaster = ({
   const config = _react.useMemo.call(void 0, 
     () => ({
       model: _nullishCoalesce(model, () => ( null)),
-      onEvent: eventHandler,
-      enabled: isEnabled
+      onEvent: eventHandler
+      //enabled: isEnabled,
     }),
-    [model, eventHandler, isEnabled]
+    [model, eventHandler]
   );
-  const factory = _react.useCallback.call(void 0, () => new (0, _chunkSOHWGVSRcjs.AdvancedRaycasterPlugin)(null, void 0), []);
+  const factory = _react.useCallback.call(void 0, 
+    () => new (0, _chunkSOHWGVSRcjs.AdvancedRaycasterPlugin)(null, void 0),
+    []
+  );
   const plugin = _chunkO2CXAZQHcjs.usePlugin.call(void 0, factory, config);
   const resetAll = _react.useCallback.call(void 0, () => {
     if (isResetting || originalStatesRef.current.size === 0) {
@@ -144,7 +159,10 @@ var AdvancedDragRaycaster = ({
     };
   }, []);
   const toggleEnabled = _react.useCallback.call(void 0, () => setIsEnabled((prev) => !prev), []);
-  const setEnabledCallback = _react.useCallback.call(void 0, (value) => setIsEnabled(value), []);
+  const setEnabledCallback = _react.useCallback.call(void 0, 
+    (value) => setIsEnabled(value),
+    []
+  );
   const controlState = _react.useMemo.call(void 0, 
     () => ({
       isEnabled,
@@ -156,6 +174,10 @@ var AdvancedDragRaycaster = ({
     [isEnabled, toggleEnabled, setEnabledCallback, resetAll, isResetting]
   );
   _react.useEffect.call(void 0, () => {
+    console.log(
+      "[AdvancedDragRaycaster] Test config: ",
+      config
+    );
     _optionalChain([plugin, 'optionalAccess', _7 => _7.setEnabled, 'call', _8 => _8(isEnabled)]);
   }, [isEnabled, plugin]);
   return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _jsxruntime.Fragment, { children: _optionalChain([children, 'optionalCall', _9 => _9(controlState)]) });

@@ -15,7 +15,13 @@ import {
 } from "./chunk-OVHQQSEK.js";
 
 // src/react/components/AdvancedDragRaycaster.tsx
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 import { Fragment, jsx } from "react/jsx-runtime";
 var AdvancedDragRaycaster = ({
   children,
@@ -31,9 +37,7 @@ var AdvancedDragRaycaster = ({
   const [isEnabled, setIsEnabled] = useState(defaultEnabled);
   const [isResetting, setIsResetting] = useState(false);
   const rafRef = useRef(null);
-  const originalStatesRef = useRef(
-    /* @__PURE__ */ new Map()
-  );
+  const originalStatesRef = useRef(/* @__PURE__ */ new Map());
   const temp = useMemo(
     () => ({
       v1: new THREE.Vector3(),
@@ -89,13 +93,21 @@ var AdvancedDragRaycaster = ({
   );
   const eventHandler = useCallback(
     (event) => {
-      console.log("[AdvancedDragRaycaster] Test verify events actions, capture de content: ", event);
+      console.log(
+        "[AdvancedDragRaycaster] Test verify events actions, capture de content: ",
+        event
+      );
       switch (event.type) {
         case "objectdragstart":
           handleDragStart(event.object);
           break;
         case "objectdrag":
-          handleDrag(event.object, event.normalizedDelta?.multiplyScalar(Math.max(window.innerWidth, window.innerHeight)) || event.delta);
+          handleDrag(
+            event.object,
+            event.normalizedDelta?.multiplyScalar(
+              Math.max(window.innerWidth, window.innerHeight)
+            ) || event.delta
+          );
           break;
         case "objectdragend":
           handleDragEnd(event.object);
@@ -107,12 +119,15 @@ var AdvancedDragRaycaster = ({
   const config = useMemo(
     () => ({
       model: model ?? null,
-      onEvent: eventHandler,
-      enabled: isEnabled
+      onEvent: eventHandler
+      //enabled: isEnabled,
     }),
-    [model, eventHandler, isEnabled]
+    [model, eventHandler]
   );
-  const factory = useCallback(() => new AdvancedRaycasterPlugin(null, void 0), []);
+  const factory = useCallback(
+    () => new AdvancedRaycasterPlugin(null, void 0),
+    []
+  );
   const plugin = usePlugin(factory, config);
   const resetAll = useCallback(() => {
     if (isResetting || originalStatesRef.current.size === 0) {
@@ -144,7 +159,10 @@ var AdvancedDragRaycaster = ({
     };
   }, []);
   const toggleEnabled = useCallback(() => setIsEnabled((prev) => !prev), []);
-  const setEnabledCallback = useCallback((value) => setIsEnabled(value), []);
+  const setEnabledCallback = useCallback(
+    (value) => setIsEnabled(value),
+    []
+  );
   const controlState = useMemo(
     () => ({
       isEnabled,
@@ -156,6 +174,10 @@ var AdvancedDragRaycaster = ({
     [isEnabled, toggleEnabled, setEnabledCallback, resetAll, isResetting]
   );
   useEffect(() => {
+    console.log(
+      "[AdvancedDragRaycaster] Test config: ",
+      config
+    );
     plugin?.setEnabled(isEnabled);
   }, [isEnabled, plugin]);
   return /* @__PURE__ */ jsx(Fragment, { children: children?.(controlState) });
