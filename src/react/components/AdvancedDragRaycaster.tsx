@@ -167,7 +167,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
         case 'objectdrag':
           handleDrag(
             event.object,
-            event.normalizedDelta
+            event.current
           );
           break;
         case 'objectdragend':

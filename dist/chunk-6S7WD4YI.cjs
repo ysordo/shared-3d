@@ -104,7 +104,7 @@ var AdvancedDragRaycaster = ({
         case "objectdrag":
           handleDrag(
             event.object,
-            event.normalizedDelta
+            event.current
           );
           break;
         case "objectdragend":
