@@ -182,7 +182,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
           newMat = new THREE.MeshStandardMaterial({
             color: config.color ?? 0x888888,
             transparent: true,
-            opacity: 0.05,
+            opacity: 0.95,
             side: THREE.DoubleSide,
           });
           if (wireframe) {
