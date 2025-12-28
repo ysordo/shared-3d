@@ -101,9 +101,9 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const percentageRef = useRef(0);
-  const rafRef = useRef<number | null>(null);
   const meshesRef = useRef<THREE.Mesh[]>([]);
   const processedModelRef = useRef<THREE.Group | null>(null);
+  const timeoutsRef = useRef<number[]>([]);
 
   // Inicialización única de meshes + wireframes
   useEffect(() => {
@@ -213,17 +213,14 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       if (!model || isTransitioning || meshesRef.current.length === 0) {
         return;
       }
-      if (meshesRef.current.length === 0) {
-        return;
-      }
+      setOldName(activeName??'');
 
-      setOldName(activeName ?? '');
+      // Limpiar timeouts previos
+      timeoutsRef.current.forEach(clearTimeout);
+      timeoutsRef.current = [];
+
       setIsTransitioning(true);
       percentageRef.current = 0;
-
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
 
       if (transitionDuration === 0) {
         meshesRef.current.forEach((m) => applyToMesh(m, config));
@@ -232,32 +229,23 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         return;
       }
 
-      const start = performance.now();
-      const duration = transitionDuration;
+      const delay = transitionDuration / meshesRef.current.length;
+      let completed = 0;
 
-      const animate = () => {
-        const elapsed = performance.now() - start;
-        const t = Math.min(elapsed / duration, 1);
+      meshesRef.current.forEach((mesh, i) => {
+        const timeoutId = window.setTimeout(() => {
+          applyToMesh(mesh, config);
+          completed++;
+          percentageRef.current = (completed / meshesRef.current.length) * 100;
 
-        const targetCount = Math.floor(meshesRef.current.length * t);
-        for (let i = percentageRef.current; i < targetCount; i++) {
-          const mesh = meshesRef.current[i];
-          if (mesh) {
-            applyToMesh(mesh, config);
+          if (completed === meshesRef.current.length) {
+            setActiveName(config.name);
+            setIsTransitioning(false);
           }
-        }
+        }, i * delay);
 
-        percentageRef.current = (targetCount / meshesRef.current.length) * 100;
-
-        if (t < 1) {
-          rafRef.current = requestAnimationFrame(animate);
-        } else {
-          setActiveName(config.name);
-          setIsTransitioning(false);
-        }
-      };
-
-      rafRef.current = requestAnimationFrame(animate);
+        timeoutsRef.current.push(timeoutId);
+      });
     },
     [model, isTransitioning, transitionDuration, applyToMesh]
   );
@@ -290,9 +278,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   // Cleanup RAF
   useEffect(() => {
     return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
+      timeoutsRef.current.forEach(clearTimeout);
     };
   }, []);
 

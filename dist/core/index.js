@@ -1,10 +1,8 @@
 import "../chunk-PFUSRKMN.js";
-import "../chunk-EC4WICT5.js";
 import "../chunk-ZC66QDE5.js";
 import "../chunk-DCRMKZQR.js";
-import {
-  GLTFLoader
-} from "../chunk-6FBDZUDJ.js";
+import "../chunk-E64RDZHI.js";
+import "../chunk-G5YWPRA4.js";
 import {
   OrbitControlsPlugin
 } from "../chunk-WQS6CQ5N.js";
@@ -35,8 +33,10 @@ import {
 import {
   AdvancedRaycasterPlugin
 } from "../chunk-QGUYSH32.js";
-import "../chunk-E64RDZHI.js";
-import "../chunk-G5YWPRA4.js";
+import "../chunk-EC4WICT5.js";
+import {
+  GLTFLoader
+} from "../chunk-6FBDZUDJ.js";
 import {
   RaycasterPlugin
 } from "../chunk-U3LDU6I7.js";

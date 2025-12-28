@@ -12,7 +12,7 @@ import {
 } from "./chunk-RBJZW4CK.js";
 import {
   MaterialController
-} from "./chunk-DJ7TK7IU.js";
+} from "./chunk-LUW7YAC5.js";
 import "./chunk-5RGQXC4Q.js";
 import {
   SceneObject
@@ -89,7 +89,6 @@ import {
 import {
   GroundSurface
 } from "./chunk-7ESWYBAU.js";
-import "./chunk-52BWUKU3.js";
 import {
   ARButton
 } from "./chunk-4DE4NC2C.js";
@@ -111,17 +110,16 @@ import {
 import {
   AnimationTimeline
 } from "./chunk-RMNHVZPV.js";
+import "./chunk-52BWUKU3.js";
 import "./chunk-AWVHTM2E.js";
 import "./chunk-TKOCD4HC.js";
 import "./chunk-XZDEPNIW.js";
 import "./chunk-SCNS52XI.js";
 import "./chunk-PFUSRKMN.js";
-import "./chunk-EC4WICT5.js";
 import "./chunk-ZC66QDE5.js";
 import "./chunk-DCRMKZQR.js";
-import {
-  GLTFLoader as GLTFLoader2
-} from "./chunk-6FBDZUDJ.js";
+import "./chunk-E64RDZHI.js";
+import "./chunk-G5YWPRA4.js";
 import {
   OrbitControlsPlugin
 } from "./chunk-WQS6CQ5N.js";
@@ -152,8 +150,10 @@ import {
 import {
   AdvancedRaycasterPlugin
 } from "./chunk-QGUYSH32.js";
-import "./chunk-E64RDZHI.js";
-import "./chunk-G5YWPRA4.js";
+import "./chunk-EC4WICT5.js";
+import {
+  GLTFLoader as GLTFLoader2
+} from "./chunk-6FBDZUDJ.js";
 import "./chunk-UBVYEZI3.js";
 import {
   useCache
