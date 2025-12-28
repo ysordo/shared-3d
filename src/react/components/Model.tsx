@@ -22,7 +22,7 @@ export const Model: React.FC<ModelProps> = ({
 }) => {
   const orchestrator = useScene();
   const model = useActiveModel();
-  const preload = usePreload();
+  const { preloadModel, getPreloaded } = usePreload();
   const cancelledRef = useRef(false);
 
   useEffect(
@@ -30,7 +30,7 @@ export const Model: React.FC<ModelProps> = ({
       if (!model || entry.id !== model.name) {
         cancelledRef.current = false;
 
-        const t = preload.get(entry.id);
+        const t = getPreloaded(entry.id);
         if (t) {
           if (cancelledRef.current) {
             return;
@@ -46,7 +46,7 @@ export const Model: React.FC<ModelProps> = ({
             if (cancelledRef.current) {
               return;
             }
-            preload.set(manifestEntry.id, obj);
+            preloadModel(manifestEntry.id, obj);
             orchestrator.setModel(obj);
             onLoaded?.(obj, manifestEntry);
           },

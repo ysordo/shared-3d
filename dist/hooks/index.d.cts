@@ -1,9 +1,10 @@
-export { useScene } from './useScene.cjs';
+export { useScene } from '../context/SceneContext.cjs';
 export { useActiveModel } from './useActiveModel.cjs';
 export { useHDRI } from './useHDRI.cjs';
 export { useRaycaster } from './useRaycaster.cjs';
 export { useCache } from './useCache.cjs';
 export { useAnimation } from './useAnimation.cjs';
+import 'react';
 import '../SceneOrchestrator-HtKaYZ3E.cjs';
 import '../core/loaders/HDRILoader.cjs';
 import '../core/cache/types.cjs';

@@ -1,10 +1,10 @@
 export const isDev = (): boolean => {
-  if (typeof import.meta !== 'undefined' && (import.meta as any).env?.MODE === 'development') {
-    return true;
+  if (import.meta.env?.MODE) {
+    return import.meta.env?.MODE === 'development';
   }
 
-  if (typeof process !== 'undefined' && process.env?.NODE_ENV === 'development') {
-    return true;
+  if (process?.env?.NODE_ENV) {
+    return process.env?.NODE_ENV === 'development';
   }
 
   return false;

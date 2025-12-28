@@ -8,7 +8,7 @@ interface WebPHDRData {
     exposure: number;
     maxLuminance: number;
     averageLuminance: number;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, never>;
 }
 /**
  * Loader para WebP HDR (RGBM encoding)

@@ -18,21 +18,16 @@ export type HDRIEvents = {
 };
 
 export type HDRILoaderOptions = {
-  // Opciones para WebPHDRLoader
   dataType?: typeof THREE.FloatType | typeof THREE.HalfFloatType;
   exposure?: number;
   maxLuminance?: number;
   preserveHDR?: boolean;
-  
-  // Opciones para RGBELoader (si aplican)
-  rgbeLoaderOptions?: any;
 };
 
 export class HDRILoader {
   private static rgbeLoader = new ThreeRGBELoader();
   private static webpLoader = new WebPHDRLoader();
   
-  // Opciones globales por defecto
   private static defaultOptions: HDRILoaderOptions = {
     dataType: THREE.FloatType,
     exposure: 1.0,
@@ -40,12 +35,8 @@ export class HDRILoader {
     preserveHDR: true,
   };
   
-  // Opciones actuales
   private static currentOptions = { ...this.defaultOptions };
 
-  /**
-   * Configura las opciones globales del loader
-   */
   static configure(options: HDRILoaderOptions): void {
     this.currentOptions = { ...this.defaultOptions, ...options };
     
@@ -63,16 +54,8 @@ export class HDRILoader {
       this.webpLoader.setPreserveHDR(options.preserveHDR);
     }
     
-    // Aplicar opciones al RGBE loader si es necesario
-    if (options.rgbeLoaderOptions) {
-      // Configurar RGBELoader según sea necesario
-      // this.rgbeLoader.setSomething(options.rgbeLoaderOptions.something);
-    }
   }
 
-  /**
-   * Restaura las opciones por defecto
-   */
   static reset(): void {
     this.currentOptions = { ...this.defaultOptions };
     this.webpLoader.setDataType(this.defaultOptions.dataType!);
@@ -81,9 +64,6 @@ export class HDRILoader {
     this.webpLoader.setPreserveHDR(this.defaultOptions.preserveHDR!);
   }
 
-  /**
-   * Obtiene las opciones actuales
-   */
   static getOptions(): HDRILoaderOptions {
     return { ...this.currentOptions };
   }
@@ -141,9 +121,9 @@ export class HDRILoader {
 
     return new Promise((resolve, reject) => {
       // loader.load() retorna una textura INMEDIATAMENTE
-      const texture = loader.load(
+      loader.load(
         url,
-        (loadedTexture: THREE.Texture, data?: any) => {
+        (loadedTexture: THREE.Texture) => {
           // Esta textura es la MISMA que se retornó arriba, ya actualizada
           
           // Aplicar configuración adicional

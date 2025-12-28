@@ -247,7 +247,7 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
           onProgress: (progress) => {
             this.dispatchEvent({ type: 'hdri::progress', progress, entry } as never);
           },
-          onError: (error, url) => {
+          onError: (error) => {
             console.error(`[Orchestrator] Error cargando HDRI ${entry.id}:`, error);
             this.dispatchEvent({ type: 'hdri::error', error, entry } as never);
           },

@@ -17,24 +17,14 @@ type HDRILoaderOptions = {
     exposure?: number;
     maxLuminance?: number;
     preserveHDR?: boolean;
-    rgbeLoaderOptions?: any;
 };
 declare class HDRILoader {
     private static rgbeLoader;
     private static webpLoader;
     private static defaultOptions;
     private static currentOptions;
-    /**
-     * Configura las opciones globales del loader
-     */
     static configure(options: HDRILoaderOptions): void;
-    /**
-     * Restaura las opciones por defecto
-     */
     static reset(): void;
-    /**
-     * Obtiene las opciones actuales
-     */
     static getOptions(): HDRILoaderOptions;
     static load(entry: ManifestEntry, events?: HDRIEvents, customOptions?: HDRILoaderOptions): Promise<THREE.Texture>;
     private static fetchAndLoad;

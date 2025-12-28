@@ -4,10 +4,10 @@
 var _chunkFVN3RA46cjs = require('../../chunk-FVN3RA46.cjs');
 
 
-var _chunkDORUFBZFcjs = require('../../chunk-DORUFBZF.cjs');
+var _chunkISDKKMXIcjs = require('../../chunk-ISDKKMXI.cjs');
 
 
-var _chunkZJAPFMHDcjs = require('../../chunk-ZJAPFMHD.cjs');
+var _chunkQPTSJCSBcjs = require('../../chunk-QPTSJCSB.cjs');
 require('../../chunk-7W7IF4LU.cjs');
 require('../../chunk-EA3XQ4KJ.cjs');
 require('../../chunk-T2YGLA3W.cjs');
@@ -16,4 +16,4 @@ require('../../chunk-UW5RKAXQ.cjs');
 
 
 
-exports.GLTFLoader = _chunkFVN3RA46cjs.GLTFLoader; exports.HDRILoader = _chunkDORUFBZFcjs.HDRILoader; exports.WebPHDRLoader = _chunkZJAPFMHDcjs.WebPHDRLoader;
+exports.GLTFLoader = _chunkFVN3RA46cjs.GLTFLoader; exports.HDRILoader = _chunkISDKKMXIcjs.HDRILoader; exports.WebPHDRLoader = _chunkQPTSJCSBcjs.WebPHDRLoader;

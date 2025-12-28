@@ -1,13 +1,6 @@
-import * as THREE from 'three';
-
-type TX = 'array' | 'map';
-type TR = {
-    array: {
-        key: string;
-        model: THREE.Group;
-    }[];
-    map: Map<string, THREE.Group<THREE.Object3DEventMap>>;
-};
-declare const usePreload: <T extends TX = "map">() => TR[T];
-
-export { usePreload };
+export { usePreload } from '../context/SceneContext.js';
+import 'react';
+import '../SceneOrchestrator-DxWUNuG8.js';
+import '../core/loaders/HDRILoader.js';
+import '../core/cache/types.js';
+import 'three';

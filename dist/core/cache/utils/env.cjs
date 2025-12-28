@@ -1,8 +1,8 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
 
-var _chunk7WPOL7PKcjs = require('../../../chunk-7WPOL7PK.cjs');
+var _chunkVI2Z3BIAcjs = require('../../../chunk-VI2Z3BIA.cjs');
 
 
 
-exports.isDev = _chunk7WPOL7PKcjs.isDev; exports.isProduction = _chunk7WPOL7PKcjs.isProduction;
+exports.isDev = _chunkVI2Z3BIAcjs.isDev; exports.isProduction = _chunkVI2Z3BIAcjs.isProduction;

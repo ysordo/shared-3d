@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { S as SceneConfig, a as SceneOrchestrator } from '../SceneOrchestrator-DxWUNuG8.js';
 import * as THREE from 'three';
 import '../core/loaders/HDRILoader.js';
@@ -6,14 +6,27 @@ import '../core/cache/types.js';
 
 type SceneContextValue = {
     orchestrator: SceneOrchestrator;
-    activeModel: THREE.Group | null;
-    preload: Map<string, THREE.Group>;
+    /** Precarga un modelo y lo añade al mapa interno */
+    preloadModel: (id: string, model: THREE.Group) => void;
+    /** Remueve un modelo precargado */
+    removePreloaded: (id: string) => void;
+    /** Obtiene un modelo precargado (solo lectura) */
+    getPreloaded: (id: string) => THREE.Group | undefined;
+    /** Mapa completo de precargados (solo lectura, shallow copy para seguridad) */
+    preloadedModels: ReadonlyMap<string, THREE.Group>;
 };
 type SceneProviderProps = {
-    children: ReactNode;
+    children: React.ReactNode;
     config?: SceneConfig | undefined;
 };
 declare const SceneProvider: React.ForwardRefExoticComponent<SceneProviderProps & React.RefAttributes<HTMLCanvasElement>>;
 declare const useSceneContext: () => SceneContextValue;
+declare const useScene: () => SceneOrchestrator;
+declare const usePreload: () => {
+    preloadModel: (id: string, model: THREE.Group) => void;
+    removePreloaded: (id: string) => void;
+    getPreloaded: (id: string) => THREE.Group | undefined;
+    preloadedModels: ReadonlyMap<string, THREE.Group<THREE.Object3DEventMap>>;
+};
 
-export { SceneProvider, useSceneContext };
+export { SceneProvider, usePreload, useScene, useSceneContext };

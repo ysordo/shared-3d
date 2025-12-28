@@ -8,7 +8,7 @@ export interface WebPHDRData {
   exposure: number;
   maxLuminance: number;
   averageLuminance: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, never>;
 }
 
 /**
@@ -144,7 +144,7 @@ export class WebPHDRLoader {
             width: result.width,
             height: result.height,
             data: result.data
-          } as any;
+          } as THREE.TextureImageData;
           
           texture.format = THREE.RGBAFormat;
           texture.type = result.type;
@@ -242,9 +242,6 @@ export class WebPHDRLoader {
             // Analyze HDR characteristics
             const hdrStats = this.analyzeHDRCharacteristics(tempFloatData, THREE.FloatType);
             
-            // Adjust max luminance based on actual content
-            const actualMaxLuminance = Math.max(hdrStats.maxLuminance, 1.0);
-
             // Second pass: convert to final format with proper HDR range
             if (this.type === THREE.FloatType) {
               data = new Float32Array(numElements * 4);
@@ -277,7 +274,7 @@ export class WebPHDRLoader {
                   max: hdrStats.maxLuminance,
                   average: hdrStats.averageLuminance
                 }
-              }
+              } as never
             };
             
             resolve(result);

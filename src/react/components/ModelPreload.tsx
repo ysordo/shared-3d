@@ -66,7 +66,7 @@ export const ModelPreload: React.FC<ModelPreloadProps> = ({
   onStatus,
   children,
 }) => {
-  const preload = usePreload();
+  const { preloadModel } = usePreload();
 
   // Estado granular por modelo
   const [progressList, setProgressList] = useState<
@@ -112,7 +112,7 @@ export const ModelPreload: React.FC<ModelPreloadProps> = ({
             if (aborted) {
               return;
             }
-            preload.set(entry.id, obj);
+            preloadModel(entry.id, obj);
             setProgress((prev) => ({ ...prev, completed: prev.completed + 1 }));
             setProgressList((prev) =>
               prev.map((item) =>
@@ -155,7 +155,7 @@ export const ModelPreload: React.FC<ModelPreloadProps> = ({
     return () => {
       aborted = true;
     };
-  }, [entries, draco, preload]);
+  }, [entries, draco]);
 
   useEffect(() => {
     if (progressList.length === 0) {

@@ -1,4 +1,4 @@
-export { SceneProvider } from './context/SceneContext.js';
+export { SceneProvider, useScene } from './context/SceneContext.js';
 export { CacheProvider } from './context/CacheContext.js';
 export { CacheValidator, ValidationOptions } from './core/cache/CacheValidator.js';
 export { FileWatcher } from './core/cache/FileWatcher.js';
@@ -19,7 +19,6 @@ export { MeasurementConfig, MeasurementEvent, MeasurementToolPlugin } from './co
 export { OrbitControlsPlugin } from './core/orchestrator/plugins/OrbitControlsPlugin.js';
 export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './core/orchestrator/plugins/RaycasterPlugin.js';
 export { PostProcessingConfig, PostProcessingPlugin } from './core/orchestrator/plugins/PostProcessingPlugin.js';
-export { useScene } from './hooks/useScene.js';
 export { useActiveModel } from './hooks/useActiveModel.js';
 export { useHDRI } from './hooks/useHDRI.js';
 export { useRaycaster } from './hooks/useRaycaster.js';

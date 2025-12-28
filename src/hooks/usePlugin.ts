@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useScene } from './useScene';
 import type { Plugin } from '../core/orchestrator/types';
 

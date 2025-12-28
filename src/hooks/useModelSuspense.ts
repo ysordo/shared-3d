@@ -1,22 +1,21 @@
 'use client';
 
-import { usePreload } from './usePreload';
 import type { ManifestEntry } from '../lib/types';
 import type { THREE } from '../lib';
 import { useEffect, useRef } from 'react';
+import { usePreload } from './usePreload';
 
 export const useModelSuspense = (entry: ManifestEntry): THREE.Group | undefined => {
-  const preload = usePreload<'map'>();
+  const { getPreloaded } = usePreload();
   const model = useRef<THREE.Group | undefined>(undefined);
 
   useEffect(()=>{
-    if(!preload){return;}
-    model.current = preload.get(entry.id);
+    model.current = getPreloaded(entry.id);
   
     if (!model.current) {
       throw new Promise<void>((resolve) => {
         const check = () => {
-          const m = preload.get(entry.id);
+          const m = getPreloaded(entry.id);
           if (m) {
             resolve();
           } else {
@@ -27,7 +26,7 @@ export const useModelSuspense = (entry: ManifestEntry): THREE.Group | undefined 
       });
     }
 
-  }, [preload]);
+  }, [entry.id]);
 
   return model.current;
 };

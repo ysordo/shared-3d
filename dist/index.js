@@ -2,118 +2,118 @@ import "./chunk-GY6RJQO5.js";
 import "./chunk-VHIECBSI.js";
 import {
   PostProcessing
-} from "./chunk-D2OBTZMQ.js";
+} from "./chunk-J6UAAA36.js";
 import {
   Raycaster
-} from "./chunk-RUHFKWT7.js";
+} from "./chunk-PQC3OGDS.js";
 import {
   SpotLight
-} from "./chunk-RUW3ZBYT.js";
+} from "./chunk-GGLXJFAC.js";
 import {
   SuspenseModel
-} from "./chunk-EOT6SUXR.js";
+} from "./chunk-KS2GHPCH.js";
 import {
   Suspense
 } from "./chunk-RUDNMJTZ.js";
 import {
   TheaterLighting
-} from "./chunk-MG2L7FI7.js";
+} from "./chunk-IFTSLCIU.js";
 import {
   VRButton
-} from "./chunk-M4DQ6OJE.js";
+} from "./chunk-BKJA4HET.js";
 import {
   Hotspots
-} from "./chunk-DW7RYM2G.js";
+} from "./chunk-A6V36OI6.js";
 import {
   InstancedModel
-} from "./chunk-YX6ALFXH.js";
+} from "./chunk-KIXQD2VQ.js";
 import {
   LODSystem
-} from "./chunk-HR5SJ3DA.js";
+} from "./chunk-ZZUJOPQ3.js";
 import {
   MeasurementTool
-} from "./chunk-2E2NXQEF.js";
+} from "./chunk-V2YZIJ2J.js";
 import {
   Model
-} from "./chunk-4Q7LGUL4.js";
+} from "./chunk-KO2AUDKP.js";
 import {
   ModelPreload
-} from "./chunk-YNMUEV4E.js";
+} from "./chunk-3HS6TLI6.js";
 import {
   OrbitControls as OrbitControls2
-} from "./chunk-6S6AEJCZ.js";
+} from "./chunk-EDHORPJQ.js";
 import {
   PointLight
-} from "./chunk-SLAEGPA6.js";
+} from "./chunk-RL2WCJWI.js";
 import {
   Canvas
-} from "./chunk-DPZR6WGN.js";
+} from "./chunk-CU5QYKCK.js";
 import {
   DirectionalLight
-} from "./chunk-TFX6L2HR.js";
+} from "./chunk-7QKAAMAY.js";
 import {
   DistanceDisplay
-} from "./chunk-XJBVFWBF.js";
+} from "./chunk-IPN2UATP.js";
 import {
   EnvironmentPreset
-} from "./chunk-Q6UWCO7X.js";
+} from "./chunk-BAZFR4OK.js";
 import {
   ErrorBoundary3D
 } from "./chunk-POOGUPPI.js";
 import {
   GroundSurface
-} from "./chunk-YHBR5P62.js";
+} from "./chunk-MEBNC73O.js";
 import {
   HDRI
-} from "./chunk-BDN63S5B.js";
+} from "./chunk-GCICEOIU.js";
 import {
   Hotspot
-} from "./chunk-TFH64SAB.js";
+} from "./chunk-UVLDXGUV.js";
 import {
   AdvancedCameraCollision
-} from "./chunk-S6XZALVQ.js";
+} from "./chunk-GMHL73FK.js";
 import {
   AdvancedDragRaycaster
-} from "./chunk-DFQAQWID.js";
+} from "./chunk-6ZR4LSQ5.js";
 import {
   AdvancedOrbitControls
-} from "./chunk-EFLEU6NL.js";
+} from "./chunk-TUBZMIKL.js";
 import {
   AdvancedRaycaster
-} from "./chunk-FHCJU47J.js";
+} from "./chunk-VQO5Z2K6.js";
 import {
   AmbientLight
-} from "./chunk-PRO74SWS.js";
+} from "./chunk-DVLCGY2A.js";
 import {
   AnimationTimeline
-} from "./chunk-AMFT77HR.js";
+} from "./chunk-SDIDG3FU.js";
 import {
   Annotations
-} from "./chunk-OP4EMGHX.js";
+} from "./chunk-6PXY77KF.js";
 import {
   AutoLODSystem
-} from "./chunk-HLSZGF6U.js";
+} from "./chunk-PA3EKEVH.js";
 import "./chunk-JH6IQNCJ.js";
 import {
   AnimationController
-} from "./chunk-N6XD5BBU.js";
+} from "./chunk-5FBAWUH3.js";
 import {
   LightingController
-} from "./chunk-O2PUINXK.js";
+} from "./chunk-YAMX6IWZ.js";
 import {
   MaterialController
-} from "./chunk-VYNWN2CT.js";
+} from "./chunk-SLWTLSBO.js";
 import "./chunk-52BWUKU3.js";
 import "./chunk-5RGQXC4Q.js";
 import {
   SceneObject
-} from "./chunk-6XHXOLH5.js";
+} from "./chunk-GMWT3PB3.js";
 import {
   ARButton
-} from "./chunk-MW2UC3FQ.js";
+} from "./chunk-EZPEJHSG.js";
 import "./chunk-AWVHTM2E.js";
-import "./chunk-CKCOWOEK.js";
-import "./chunk-HLQMH3OC.js";
+import "./chunk-2EAHK3JA.js";
+import "./chunk-XZDEPNIW.js";
 import "./chunk-SCNS52XI.js";
 import "./chunk-PFUSRKMN.js";
 import "./chunk-EC4WICT5.js";
@@ -157,47 +157,46 @@ import "./chunk-G5YWPRA4.js";
 import "./chunk-UBVYEZI3.js";
 import {
   useCache
-} from "./chunk-ZGOLR5KC.js";
+} from "./chunk-5QOXISYS.js";
 import {
   useHDRI
-} from "./chunk-K6DDXACF.js";
+} from "./chunk-NQL6Z6AV.js";
 import {
   useRaycaster
-} from "./chunk-S4UAMNIO.js";
-import {
-  useScene
-} from "./chunk-VV62LZ2Q.js";
+} from "./chunk-IM5IZNGD.js";
+import "./chunk-5JSUCVRE.js";
 import {
   CacheProvider
-} from "./chunk-TEX62OAE.js";
+} from "./chunk-LT5STPD2.js";
 import {
   RaycasterPlugin
 } from "./chunk-U3LDU6I7.js";
 import {
   CacheValidator
-} from "./chunk-NQSGSI4W.js";
+} from "./chunk-6SDKICTC.js";
 import {
   FileWatcher
-} from "./chunk-777TCJKN.js";
-import "./chunk-SRUKCELR.js";
+} from "./chunk-7JOXFFIX.js";
+import "./chunk-RZGW4YCZ.js";
 import {
   useAnimation
-} from "./chunk-6SORP5DL.js";
+} from "./chunk-PCEZ2B5Q.js";
 import {
   useActiveModel
-} from "./chunk-CBOWVY3Q.js";
+} from "./chunk-BJHCZT75.js";
 import {
-  SceneProvider
-} from "./chunk-VCRCZ2DI.js";
+  SceneProvider,
+  useScene
+} from "./chunk-IXZHJYWG.js";
 import {
   SceneOrchestrator
-} from "./chunk-SDC57GRH.js";
+} from "./chunk-L2TOEG6R.js";
 import {
   HDRILoader
-} from "./chunk-QHQFF7D7.js";
+} from "./chunk-U6YB3DJH.js";
 import {
   WebPHDRLoader
-} from "./chunk-W5OYT3BE.js";
+} from "./chunk-SRRBNWVQ.js";
 import "./chunk-OK2NCVM7.js";
 import {
   DRACOLoader,

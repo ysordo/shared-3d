@@ -1,18 +1,18 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkTSW5YA2Mcjs = require('../../chunk-TSW5YA2M.cjs');
-require('../../chunk-SA74WZGB.cjs');
+var _chunkVNOC7B7Wcjs = require('../../chunk-VNOC7B7W.cjs');
+require('../../chunk-PUHKVNJB.cjs');
 require('../../chunk-QVBX2IUF.cjs');
-require('../../chunk-NTBKAU5M.cjs');
-require('../../chunk-KFT7QPML.cjs');
-require('../../chunk-MTR2BMWJ.cjs');
-require('../../chunk-DORUFBZF.cjs');
-require('../../chunk-ZJAPFMHD.cjs');
+require('../../chunk-2IGZJ5CV.cjs');
+require('../../chunk-SLDMT4C4.cjs');
+require('../../chunk-6X2UB7MU.cjs');
+require('../../chunk-ISDKKMXI.cjs');
+require('../../chunk-QPTSJCSB.cjs');
 require('../../chunk-7W7IF4LU.cjs');
 require('../../chunk-EA3XQ4KJ.cjs');
 require('../../chunk-T2YGLA3W.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.Hotspots = _chunkTSW5YA2Mcjs.Hotspots;
+exports.Hotspots = _chunkVNOC7B7Wcjs.Hotspots;
