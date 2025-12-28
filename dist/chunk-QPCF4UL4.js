@@ -3,7 +3,7 @@ import {
 } from "./chunk-TKOCD4HC.js";
 import {
   AdvancedRaycasterPlugin
-} from "./chunk-QGUYSH32.js";
+} from "./chunk-2YWOEOVL.js";
 import {
   useActiveModel
 } from "./chunk-JY7NWOQT.js";
@@ -32,7 +32,7 @@ var AdvancedDragRaycaster = ({
   onDrag,
   onDragEnd
 }) => {
-  const { camera } = useScene();
+  const { camera, renderer } = useScene();
   const model = useActiveModel();
   const [isEnabled, setIsEnabled] = useState(defaultEnabled);
   const [isResetting, setIsResetting] = useState(false);
@@ -43,6 +43,8 @@ var AdvancedDragRaycaster = ({
       v1: new THREE.Vector3(),
       v2: new THREE.Vector3(),
       v3: new THREE.Vector3(),
+      v1_1: new THREE.Vector3(),
+      v2_2: new THREE.Vector3(),
       plane: new THREE.Plane(),
       quat: new THREE.Quaternion()
     }),
@@ -61,7 +63,7 @@ var AdvancedDragRaycaster = ({
     [onDragStart]
   );
   const handleDrag = useCallback(
-    (obj, deltaScreen) => {
+    (obj, currentPosition, startPosition) => {
       if (!model || !camera) {
         return;
       }
@@ -69,21 +71,27 @@ var AdvancedDragRaycaster = ({
       camera.getWorldDirection(temp.v2);
       temp.plane.setFromNormalAndCoplanarPoint(temp.v2.negate(), temp.v1);
       const ndc = new THREE.Vector2(
-        deltaScreen.x / window.innerWidth * 2,
-        -(deltaScreen.y / window.innerHeight) * 2
+        currentPosition.x / renderer.domElement.width * 2 - 1,
+        -(currentPosition.y / renderer.domElement.height) * 2 + 1
+      );
+      const nds = new THREE.Vector2(
+        startPosition.x / renderer.domElement.width * 2 - 1,
+        -(startPosition.y / renderer.domElement.height) * 2 + 1
       );
       const ray = new THREE.Raycaster();
       ray.setFromCamera(ndc, camera);
-      ray.ray.intersectPlane(temp.plane, temp.v3);
-      const worldDelta = temp.v3.sub(temp.v1);
+      ray.ray.intersectPlane(temp.plane, temp.v1_1);
+      ray.setFromCamera(nds, camera);
+      ray.ray.intersectPlane(temp.plane, temp.v2_2);
+      temp.v3.subVectors(temp.v1_1, temp.v2_2);
       if (enableRotationCompensation && model) {
         model.getWorldQuaternion(temp.quat).invert();
-        worldDelta.applyQuaternion(temp.quat);
+        temp.v3.applyQuaternion(temp.quat);
       }
-      obj.position.add(worldDelta);
-      onDrag?.(obj, worldDelta);
+      obj.position.add(temp.v3);
+      onDrag?.(obj, temp.v3);
     },
-    [camera, model, enableRotationCompensation, onDrag, temp]
+    [model, camera, temp.v1, temp.v2, temp.plane, temp.v1_1, temp.v2_2, temp.v3, temp.quat, renderer.domElement.width, renderer.domElement.height, enableRotationCompensation, onDrag]
   );
   const handleDragEnd = useCallback(
     (obj) => {
@@ -104,7 +112,8 @@ var AdvancedDragRaycaster = ({
         case "objectdrag":
           handleDrag(
             event.object,
-            event.current
+            event.currentPosition,
+            event.startPosition
           );
           break;
         case "objectdragend":

@@ -1,5 +1,6 @@
 import type { ConfigToTuple, Plugin, PluginContext } from '../types';
 import { THREE } from '../../../lib';
+import { start } from 'repl';
 
 interface PluginConfig {
   model: THREE.Object3D | null;
@@ -239,7 +240,8 @@ class RaycasterManager extends THREE.EventDispatcher {
     this.dispatchEvent({
       type: 'objectdrag',
       object: this.currentDragObject!,
-      current,
+      currentPosition: current,
+      startPosition: this.dragStartPosition.clone(),
       delta,
       normalizedDelta: new THREE.Vector2(
         delta.x / this.domElement.clientWidth,

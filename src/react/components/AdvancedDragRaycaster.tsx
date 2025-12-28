@@ -72,7 +72,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   onDrag,
   onDragEnd,
 }) => {
-  const { camera } = useScene();
+  const { camera, renderer } = useScene();
   const model = useActiveModel();
 
   const [isEnabled, setIsEnabled] = useState(defaultEnabled);
@@ -92,6 +92,8 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
       v1: new THREE.Vector3(),
       v2: new THREE.Vector3(),
       v3: new THREE.Vector3(),
+      v1_1: new THREE.Vector3(),
+      v2_2: new THREE.Vector3(),
       plane: new THREE.Plane(),
       quat: new THREE.Quaternion(),
     }),
@@ -113,7 +115,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   );
 
   const handleDrag = useCallback(
-    (obj: THREE.Object3D, deltaScreen: THREE.Vector2) => {
+    (obj: THREE.Object3D, currentPosition: THREE.Vector2, startPosition: THREE.Vector2) => {
       if (!model || !camera) {
         return;
       }
@@ -125,25 +127,31 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
 
       // Proyectar delta pantalla a plano
       const ndc = new THREE.Vector2(
-        (deltaScreen.x / window.innerWidth) * 2,
-        -(deltaScreen.y / window.innerHeight) * 2
+        (currentPosition.x / renderer.domElement.width) * 2 - 1,
+        -(currentPosition.y / renderer.domElement.height) * 2 + 1
+      );
+      const nds = new THREE.Vector2(
+        (startPosition.x / renderer.domElement.width) * 2 - 1,
+        -(startPosition.y / renderer.domElement.height) * 2 + 1
       );
       const ray = new THREE.Raycaster();
       ray.setFromCamera(ndc, camera);
-      ray.ray.intersectPlane(temp.plane, temp.v3);
+      ray.ray.intersectPlane(temp.plane, temp.v1_1);
+      ray.setFromCamera(nds, camera);
+      ray.ray.intersectPlane(temp.plane, temp.v2_2);
 
-      const worldDelta = temp.v3.sub(temp.v1);
+      temp.v3.subVectors(temp.v1_1, temp.v2_2);
 
       // Compensación de rotación del modelo raíz
       if (enableRotationCompensation && model) {
         model.getWorldQuaternion(temp.quat).invert();
-        worldDelta.applyQuaternion(temp.quat);
+        temp.v3.applyQuaternion(temp.quat);
       }
 
-      obj.position.add(worldDelta);
-      onDrag?.(obj, worldDelta);
+      obj.position.add(temp.v3);
+      onDrag?.(obj, temp.v3);
     },
-    [camera, model, enableRotationCompensation, onDrag, temp]
+    [model, camera, temp.v1, temp.v2, temp.plane, temp.v1_1, temp.v2_2, temp.v3, temp.quat, renderer.domElement.width, renderer.domElement.height, enableRotationCompensation, onDrag]
   );
 
   const handleDragEnd = useCallback(
@@ -167,7 +175,8 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
         case 'objectdrag':
           handleDrag(
             event.object,
-            event.current
+            event.currentPosition,
+            event.startPosition
           );
           break;
         case 'objectdragend':

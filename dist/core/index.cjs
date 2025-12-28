@@ -34,7 +34,7 @@ var _chunkIG4KQTIZcjs = require('../chunk-IG4KQTIZ.cjs');
 var _chunkQTS2NOFLcjs = require('../chunk-QTS2NOFL.cjs');
 
 
-var _chunkSOHWGVSRcjs = require('../chunk-SOHWGVSR.cjs');
+var _chunkM2IDI4WEcjs = require('../chunk-M2IDI4WE.cjs');
 require('../chunk-SR4V6L3A.cjs');
 require('../chunk-2RPXTPO6.cjs');
 
@@ -81,4 +81,4 @@ var _chunkUW5RKAXQcjs = require('../chunk-UW5RKAXQ.cjs');
 
 
 
-exports.AdvancedCameraCollisionPlugin = _chunkIG4KQTIZcjs.AdvancedCameraCollisionPlugin; exports.AdvancedOrbitControlsPlugin = _chunkQTS2NOFLcjs.AdvancedOrbitControlsPlugin; exports.AdvancedRaycasterPlugin = _chunkSOHWGVSRcjs.AdvancedRaycasterPlugin; exports.AnnotationsPlugin = _chunkXGVWG5RUcjs.AnnotationsPlugin; exports.AutoLODSystemPlugin = _chunkLW56STZBcjs.AutoLODSystemPlugin; exports.CacheValidator = _chunkTS2WCK2Bcjs.CacheValidator; exports.FileWatcher = _chunkTGS6EYUYcjs.FileWatcher; exports.GLTFLoader = _chunkFVN3RA46cjs.GLTFLoader; exports.HDRILoader = _chunkISDKKMXIcjs.HDRILoader; exports.HotspotPlugin = _chunkQVBX2IUFcjs.HotspotPlugin; exports.LODSystemPlugin = _chunkF6IFBPPEcjs.LODSystemPlugin; exports.MeasurementToolPlugin = _chunkNTCOPW47cjs.MeasurementToolPlugin; exports.ObjectCache = _chunkUW5RKAXQcjs.ObjectCache; exports.OrbitControlsPlugin = _chunkC4ITTLVVcjs.OrbitControlsPlugin; exports.PostProcessingPlugin = _chunk7XTWFKZPcjs.PostProcessingPlugin; exports.RaycasterPlugin = _chunkZHLNOXCWcjs.RaycasterPlugin; exports.SceneOrchestrator = _chunk6X2UB7MUcjs.SceneOrchestrator; exports.WebPHDRLoader = _chunkQPTSJCSBcjs.WebPHDRLoader;
+exports.AdvancedCameraCollisionPlugin = _chunkIG4KQTIZcjs.AdvancedCameraCollisionPlugin; exports.AdvancedOrbitControlsPlugin = _chunkQTS2NOFLcjs.AdvancedOrbitControlsPlugin; exports.AdvancedRaycasterPlugin = _chunkM2IDI4WEcjs.AdvancedRaycasterPlugin; exports.AnnotationsPlugin = _chunkXGVWG5RUcjs.AnnotationsPlugin; exports.AutoLODSystemPlugin = _chunkLW56STZBcjs.AutoLODSystemPlugin; exports.CacheValidator = _chunkTS2WCK2Bcjs.CacheValidator; exports.FileWatcher = _chunkTGS6EYUYcjs.FileWatcher; exports.GLTFLoader = _chunkFVN3RA46cjs.GLTFLoader; exports.HDRILoader = _chunkISDKKMXIcjs.HDRILoader; exports.HotspotPlugin = _chunkQVBX2IUFcjs.HotspotPlugin; exports.LODSystemPlugin = _chunkF6IFBPPEcjs.LODSystemPlugin; exports.MeasurementToolPlugin = _chunkNTCOPW47cjs.MeasurementToolPlugin; exports.ObjectCache = _chunkUW5RKAXQcjs.ObjectCache; exports.OrbitControlsPlugin = _chunkC4ITTLVVcjs.OrbitControlsPlugin; exports.PostProcessingPlugin = _chunk7XTWFKZPcjs.PostProcessingPlugin; exports.RaycasterPlugin = _chunkZHLNOXCWcjs.RaycasterPlugin; exports.SceneOrchestrator = _chunk6X2UB7MUcjs.SceneOrchestrator; exports.WebPHDRLoader = _chunkQPTSJCSBcjs.WebPHDRLoader;

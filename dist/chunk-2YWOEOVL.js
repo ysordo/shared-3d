@@ -201,7 +201,8 @@ var RaycasterManager = class extends THREE.EventDispatcher {
     this.dispatchEvent({
       type: "objectdrag",
       object: this.currentDragObject,
-      current,
+      currentPosition: current,
+      startPosition: this.dragStartPosition.clone(),
       delta,
       normalizedDelta: new THREE.Vector2(
         delta.x / this.domElement.clientWidth,
