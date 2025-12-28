@@ -2,7 +2,7 @@
 require('../chunk-2IGZJ5CV.cjs');
 
 
-var _chunkSLDMT4C4cjs = require('../chunk-SLDMT4C4.cjs');
+var _chunkHPWY57UUcjs = require('../chunk-HPWY57UU.cjs');
 require('../chunk-6X2UB7MU.cjs');
 require('../chunk-ISDKKMXI.cjs');
 require('../chunk-QPTSJCSB.cjs');
@@ -12,4 +12,4 @@ require('../chunk-T2YGLA3W.cjs');
 require('../chunk-UW5RKAXQ.cjs');
 
 
-exports.useScene = _chunkSLDMT4C4cjs.useScene;
+exports.useScene = _chunkHPWY57UUcjs.useScene;

@@ -51,9 +51,6 @@ export const SceneProvider = forwardRef<HTMLCanvasElement, SceneProviderProps>(
       const orch = SceneOrchestrator.getInstance(canvas, config);
       setOrchestrator(orch);
 
-      return () => {
-        orch.dispose();
-      };
     }, [ref, config, orchestrator]);
 
     const contextValue = useMemo<SceneContextValue | undefined>(() => {

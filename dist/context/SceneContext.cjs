@@ -4,7 +4,7 @@
 
 
 
-var _chunkSLDMT4C4cjs = require('../chunk-SLDMT4C4.cjs');
+var _chunkHPWY57UUcjs = require('../chunk-HPWY57UU.cjs');
 require('../chunk-6X2UB7MU.cjs');
 require('../chunk-ISDKKMXI.cjs');
 require('../chunk-QPTSJCSB.cjs');
@@ -17,4 +17,4 @@ require('../chunk-UW5RKAXQ.cjs');
 
 
 
-exports.SceneProvider = _chunkSLDMT4C4cjs.SceneProvider; exports.usePreload = _chunkSLDMT4C4cjs.usePreload; exports.useScene = _chunkSLDMT4C4cjs.useScene; exports.useSceneContext = _chunkSLDMT4C4cjs.useSceneContext;
+exports.SceneProvider = _chunkHPWY57UUcjs.SceneProvider; exports.usePreload = _chunkHPWY57UUcjs.usePreload; exports.useScene = _chunkHPWY57UUcjs.useScene; exports.useSceneContext = _chunkHPWY57UUcjs.useSceneContext;
