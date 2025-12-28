@@ -9,7 +9,13 @@ import {
 } from "./chunk-OVHQQSEK.js";
 
 // src/react/controls/MaterialController.tsx
-import { useEffect, useRef, useMemo, useCallback, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+  useState
+} from "react";
 import { jsx } from "react/jsx-runtime";
 var MaterialController = ({
   materials,
@@ -54,6 +60,7 @@ var MaterialController = ({
       }
       meshesRef.current.push(child);
     });
+    meshesRef.current.sort((a, b) => a.uuid.localeCompare(b.uuid));
   }, [model]);
   const applyToMesh = useCallback(
     (mesh, config) => {
@@ -111,6 +118,9 @@ var MaterialController = ({
       if (!model || isTransitioning || meshesRef.current.length === 0) {
         return;
       }
+      if (meshesRef.current.length === 0) {
+        return;
+      }
       setOldName(activeName ?? "");
       setIsTransitioning(true);
       percentageRef.current = 0;
@@ -130,7 +140,10 @@ var MaterialController = ({
         const t = Math.min(elapsed / duration, 1);
         const targetCount = Math.floor(meshesRef.current.length * t);
         for (let i = percentageRef.current; i < targetCount; i++) {
-          applyToMesh(meshesRef.current[i], config);
+          const mesh = meshesRef.current[i];
+          if (mesh) {
+            applyToMesh(mesh, config);
+          }
         }
         percentageRef.current = targetCount / meshesRef.current.length * 100;
         if (t < 1) {
@@ -155,14 +168,14 @@ var MaterialController = ({
     [materials, oldName, activeName, applyMaterial]
   );
   useEffect(() => {
-    if (activeName || items.length === 0) {
+    if (!model || activeName || items.length === 0) {
       return;
     }
     const defaultItem = items.find((i) => i.name === activeDefault) || items[0];
-    if (defaultItem) {
+    if (defaultItem && meshesRef.current.length > 0) {
       defaultItem.apply();
     }
-  }, [items, activeDefault, activeName]);
+  }, [model, items, activeDefault, activeName]);
   useEffect(() => {
     return () => {
       if (rafRef.current) {

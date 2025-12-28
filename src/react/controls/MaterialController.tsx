@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useEffect, useRef, useMemo, useCallback, useState } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+  useState,
+} from 'react';
 import { useActiveModel } from '../../hooks/useActiveModel';
 import { createQuadWireframe } from '../../core/utils';
 import { THREE } from '../../lib';
@@ -135,6 +141,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
 
       meshesRef.current.push(child);
     });
+    meshesRef.current.sort((a, b) => a.uuid.localeCompare(b.uuid));
   }, [model]);
 
   // Aplicar material a un mesh individual
@@ -199,6 +206,9 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       if (!model || isTransitioning || meshesRef.current.length === 0) {
         return;
       }
+      if (meshesRef.current.length === 0) {
+        return;
+      }
 
       setOldName(activeName ?? '');
       setIsTransitioning(true);
@@ -224,7 +234,10 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
 
         const targetCount = Math.floor(meshesRef.current.length * t);
         for (let i = percentageRef.current; i < targetCount; i++) {
-          applyToMesh(meshesRef.current[i]!, config);
+          const mesh = meshesRef.current[i];
+          if (mesh) {
+            applyToMesh(mesh, config);
+          }
         }
 
         percentageRef.current = (targetCount / meshesRef.current.length) * 100;
@@ -257,15 +270,15 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
 
   // Aplicar material por defecto al montar
   useEffect(() => {
-    if (activeName || items.length === 0) {
+    if (!model || activeName || items.length === 0) {
       return;
     }
 
     const defaultItem = items.find((i) => i.name === activeDefault) || items[0];
-    if (defaultItem) {
+    if (defaultItem && meshesRef.current.length > 0) {
       defaultItem.apply();
     }
-  }, [items, activeDefault, activeName]);
+  }, [model, items, activeDefault, activeName]);
 
   // Cleanup RAF
   useEffect(() => {
