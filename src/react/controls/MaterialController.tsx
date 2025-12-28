@@ -103,11 +103,17 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   const percentageRef = useRef(0);
   const rafRef = useRef<number | null>(null);
   const meshesRef = useRef<THREE.Mesh[]>([]);
+  const processedModelRef = useRef<THREE.Group | null>(null);
 
   // Inicialización única de meshes + wireframes
   useEffect(() => {
     if (!model) {
       meshesRef.current = [];
+      processedModelRef.current = null;
+      return;
+    }
+
+    if (processedModelRef.current === model) {
       return;
     }
 
@@ -142,6 +148,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       meshesRef.current.push(child);
     });
     meshesRef.current.sort((a, b) => a.uuid.localeCompare(b.uuid));
+    processedModelRef.current = model;
   }, [model]);
 
   // Aplicar material a un mesh individual

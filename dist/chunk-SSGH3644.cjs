@@ -1,4 +1,7 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }
+
+var _chunkQ7EPE3QCcjs = require('./chunk-Q7EPE3QC.cjs');
+
 
 var _chunkHPWY57UUcjs = require('./chunk-HPWY57UU.cjs');
 
@@ -6,7 +9,7 @@ var _chunkHPWY57UUcjs = require('./chunk-HPWY57UU.cjs');
 var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
 
 // src/react/components/DistanceDisplay.tsx
-var _react = require('react');
+var _react = require('react'); var _react2 = _interopRequireDefault(_react);
 var _jsxruntime = require('react/jsx-runtime');
 var unitConversions = {
   m: 1,
@@ -30,18 +33,14 @@ var DistanceDisplay = ({
   decimals = 2
 }) => {
   const orchestrator = _chunkHPWY57UUcjs.useScene.call(void 0, );
+  const model = _chunkQ7EPE3QCcjs.useActiveModel.call(void 0, );
   const animationRef = _react.useRef.call(void 0, 0);
   const [currentDistance, setCurrentDistance] = _react.useState.call(void 0, 0);
   const [minDistance, setMinDistance] = _react.useState.call(void 0, 0);
   const [maxDistance, setMaxDistance] = _react.useState.call(void 0, 50);
   const [initialDistance, setInitialDistance] = _react.useState.call(void 0, null);
-  const updateLimits = () => {
+  const updateLimits = _react2.default.useCallback(() => {
     if (!orchestrator) {
-      return;
-    }
-    const model = orchestrator.getActiveModel();
-    const camera = orchestrator.camera;
-    if (!model || !camera) {
       return;
     }
     let calculatedMin = 0;
@@ -63,25 +62,34 @@ var DistanceDisplay = ({
     }
     setMinDistance(calculatedMin);
     setMaxDistance(calculatedMax);
-  };
-  const updateDistance = () => {
-    if (!orchestrator) {
-      return 0;
-    }
-    const model = orchestrator.getActiveModel();
-    const camera = orchestrator.camera;
-    if (!model || !camera) {
-      return 0;
-    }
-    const modelCenter = new _chunkEA3XQ4KJcjs.THREE.Vector3();
-    model.getWorldPosition(modelCenter);
-    return camera.position.distanceTo(modelCenter);
-  };
+  }, [orchestrator]);
   _react.useEffect.call(void 0, () => {
     if (!orchestrator) {
       return;
     }
     updateLimits();
+  }, [
+    orchestrator,
+    model,
+    // ← nuevo: si cambia el modelo, puede afectar collision
+    updateLimits
+  ]);
+  const updateDistance = _react2.default.useCallback(() => {
+    if (!orchestrator) {
+      return 0;
+    }
+    const camera = orchestrator.camera;
+    if (!model || !camera) {
+      return 0;
+    }
+    const center = new _chunkEA3XQ4KJcjs.THREE.Vector3();
+    model.getWorldPosition(center);
+    return camera.position.distanceTo(center);
+  }, [orchestrator, model]);
+  _react.useEffect.call(void 0, () => {
+    if (!orchestrator) {
+      return;
+    }
     const loop = () => {
       const dist = updateDistance();
       setCurrentDistance(dist);
@@ -96,7 +104,7 @@ var DistanceDisplay = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [orchestrator]);
+  }, [orchestrator, updateDistance]);
   const percentage = maxDistance > minDistance ? Math.max(
     0,
     Math.min(

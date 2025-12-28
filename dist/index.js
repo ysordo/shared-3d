@@ -1,8 +1,4 @@
 import "./chunk-GY6RJQO5.js";
-import "./chunk-5RGQXC4Q.js";
-import {
-  SceneObject
-} from "./chunk-IVYZBSVV.js";
 import "./chunk-VHIECBSI.js";
 import {
   VRButton
@@ -16,7 +12,11 @@ import {
 } from "./chunk-RBJZW4CK.js";
 import {
   MaterialController
-} from "./chunk-DECECGXF.js";
+} from "./chunk-DJ7TK7IU.js";
+import "./chunk-5RGQXC4Q.js";
+import {
+  SceneObject
+} from "./chunk-IVYZBSVV.js";
 import {
   OrbitControls as OrbitControls2
 } from "./chunk-CMEAWRQR.js";
@@ -79,7 +79,7 @@ import {
 } from "./chunk-T6VPNVNL.js";
 import {
   DistanceDisplay
-} from "./chunk-2GNGKAUS.js";
+} from "./chunk-JJ3HIRIQ.js";
 import {
   EnvironmentPreset
 } from "./chunk-AHBEHZWO.js";

@@ -31,9 +31,14 @@ var MaterialController = ({
   const percentageRef = useRef(0);
   const rafRef = useRef(null);
   const meshesRef = useRef([]);
+  const processedModelRef = useRef(null);
   useEffect(() => {
     if (!model) {
       meshesRef.current = [];
+      processedModelRef.current = null;
+      return;
+    }
+    if (processedModelRef.current === model) {
       return;
     }
     meshesRef.current = [];
@@ -61,6 +66,7 @@ var MaterialController = ({
       meshesRef.current.push(child);
     });
     meshesRef.current.sort((a, b) => a.uuid.localeCompare(b.uuid));
+    processedModelRef.current = model;
   }, [model]);
   const applyToMesh = useCallback(
     (mesh, config) => {

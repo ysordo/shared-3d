@@ -1,4 +1,7 @@
 import {
+  useActiveModel
+} from "./chunk-JY7NWOQT.js";
+import {
   useScene
 } from "./chunk-RUU4KTPM.js";
 import {
@@ -6,7 +9,7 @@ import {
 } from "./chunk-OVHQQSEK.js";
 
 // src/react/components/DistanceDisplay.tsx
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Fragment, jsx } from "react/jsx-runtime";
 var unitConversions = {
   m: 1,
@@ -30,18 +33,14 @@ var DistanceDisplay = ({
   decimals = 2
 }) => {
   const orchestrator = useScene();
+  const model = useActiveModel();
   const animationRef = useRef(0);
   const [currentDistance, setCurrentDistance] = useState(0);
   const [minDistance, setMinDistance] = useState(0);
   const [maxDistance, setMaxDistance] = useState(50);
   const [initialDistance, setInitialDistance] = useState(null);
-  const updateLimits = () => {
+  const updateLimits = React.useCallback(() => {
     if (!orchestrator) {
-      return;
-    }
-    const model = orchestrator.getActiveModel();
-    const camera = orchestrator.camera;
-    if (!model || !camera) {
       return;
     }
     let calculatedMin = 0;
@@ -63,25 +62,34 @@ var DistanceDisplay = ({
     }
     setMinDistance(calculatedMin);
     setMaxDistance(calculatedMax);
-  };
-  const updateDistance = () => {
-    if (!orchestrator) {
-      return 0;
-    }
-    const model = orchestrator.getActiveModel();
-    const camera = orchestrator.camera;
-    if (!model || !camera) {
-      return 0;
-    }
-    const modelCenter = new THREE.Vector3();
-    model.getWorldPosition(modelCenter);
-    return camera.position.distanceTo(modelCenter);
-  };
+  }, [orchestrator]);
   useEffect(() => {
     if (!orchestrator) {
       return;
     }
     updateLimits();
+  }, [
+    orchestrator,
+    model,
+    // ← nuevo: si cambia el modelo, puede afectar collision
+    updateLimits
+  ]);
+  const updateDistance = React.useCallback(() => {
+    if (!orchestrator) {
+      return 0;
+    }
+    const camera = orchestrator.camera;
+    if (!model || !camera) {
+      return 0;
+    }
+    const center = new THREE.Vector3();
+    model.getWorldPosition(center);
+    return camera.position.distanceTo(center);
+  }, [orchestrator, model]);
+  useEffect(() => {
+    if (!orchestrator) {
+      return;
+    }
     const loop = () => {
       const dist = updateDistance();
       setCurrentDistance(dist);
@@ -96,7 +104,7 @@ var DistanceDisplay = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [orchestrator]);
+  }, [orchestrator, updateDistance]);
   const percentage = maxDistance > minDistance ? Math.max(
     0,
     Math.min(

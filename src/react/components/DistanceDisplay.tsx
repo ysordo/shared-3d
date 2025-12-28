@@ -8,6 +8,7 @@ import type {
   AdvancedOrbitControlsPlugin,
   OrbitControlsPlugin,
 } from '../../core/orchestrator/plugins';
+import { useActiveModel } from '../../hooks';
 
 type DistanceUnit = 'm' | 'cm' | 'mm' | 'px' | 'in' | 'ft' | 'km';
 
@@ -84,31 +85,24 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
   decimals = 2,
 }) => {
   const orchestrator = useScene();
+  const model = useActiveModel(); // ← Reactividad al modelo activo
 
   const animationRef = useRef<number>(0);
   const [currentDistance, setCurrentDistance] = useState(0);
   const [minDistance, setMinDistance] = useState(0);
   const [maxDistance, setMaxDistance] = useState(50);
-
-  // initialDistance = primera distancia válida > 0 (útil para comparaciones)
   const [initialDistance, setInitialDistance] = useState<number | null>(null);
 
-  // Cálculo de límites min/max (collision + controls)
-  const updateLimits = () => {
+  // === Cálculo de límites min/max (collision + controls) ===
+  const updateLimits = React.useCallback(() => {
     if (!orchestrator) {
-      return;
-    }
-
-    const model = orchestrator.getActiveModel();
-    const camera = orchestrator.camera;
-    if (!model || !camera) {
       return;
     }
 
     let calculatedMin = 0;
     let calculatedMax = 50;
 
-    // AdvancedCameraCollision → distancia mínima realista
+    // AdvancedCameraCollision
     const collisionPlugin = orchestrator.plugin<AdvancedCameraCollisionPlugin>(
       'AdvancedCameraCollision'
     );
@@ -117,11 +111,12 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
         collisionPlugin.distanceThreshold + collisionPlugin.pushBackOffset;
     }
 
-    // OrbitControls → límites configurados
+    // OrbitControls (Advanced o básico)
     const controls =
       orchestrator.plugin<AdvancedOrbitControlsPlugin>(
         'AdvancedOrbitControls'
       ) || orchestrator.plugin<OrbitControlsPlugin>('OrbitControls');
+
     if (controls) {
       calculatedMax = controls.maxDistance ?? calculatedMax;
       if (calculatedMin === 0) {
@@ -131,40 +126,46 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
 
     setMinDistance(calculatedMin);
     setMaxDistance(calculatedMax);
-  };
+  }, [orchestrator]);
 
-  // Distancia actual cámara → centro del modelo
-  const updateDistance = () => {
+  // === Ejecutar updateLimits cuando cambien cosas relevantes ===
+  useEffect(() => {
+    if (!orchestrator) {
+      return;
+    }
+    updateLimits();
+  }, [
+    orchestrator,
+    model, // ← nuevo: si cambia el modelo, puede afectar collision
+    updateLimits,
+  ]);
+
+  // === Loop de distancia actual ===
+  const updateDistance = React.useCallback(() => {
     if (!orchestrator) {
       return 0;
     }
-
-    const model = orchestrator.getActiveModel();
     const camera = orchestrator.camera;
     if (!model || !camera) {
       return 0;
     }
 
-    const modelCenter = new THREE.Vector3();
-    model.getWorldPosition(modelCenter);
-    return camera.position.distanceTo(modelCenter);
-  };
+    const center = new THREE.Vector3();
+    model.getWorldPosition(center);
+    return camera.position.distanceTo(center);
+  }, [orchestrator, model]);
 
   useEffect(() => {
     if (!orchestrator) {
       return;
     }
 
-    updateLimits();
-
     const loop = () => {
       const dist = updateDistance();
       setCurrentDistance(dist);
-
       if (initialDistance === null && dist > 0) {
         setInitialDistance(dist);
       }
-
       animationRef.current = requestAnimationFrame(loop);
     };
 
@@ -175,9 +176,9 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [orchestrator]);
+  }, [orchestrator, updateDistance]);
 
-  // Porcentaje siempre calculado (seguro incluso con valores iniciales)
+  // === Porcentaje calculado ===
   const percentage =
     maxDistance > minDistance
       ? Math.max(
@@ -190,13 +191,10 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
         )
       : 0;
 
-  // Valores seguros para renderizado (initialDistance = current hasta primer cálculo válido)
   const safeInitial = initialDistance ?? currentDistance;
-
   const formatted = formatValue(currentDistance, unit, decimals);
   const formattedInitial = formatValue(safeInitial, unit, decimals);
 
-  // Fallback mientras no hay distancia válida (opcional)
   if (currentDistance === 0 && fallback) {
     return <>{fallback}</>;
   }
