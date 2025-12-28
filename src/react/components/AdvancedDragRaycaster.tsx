@@ -113,7 +113,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   );
 
   const handleDrag = useCallback(
-    (obj: THREE.Object3D, currentPosition: THREE.Vector2) => {
+    (obj: THREE.Object3D, deltaScreen: THREE.Vector2) => {
       if (!model || !camera) {
         return;
       }
@@ -125,8 +125,8 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
 
       // Proyectar delta pantalla a plano
       const ndc = new THREE.Vector2(
-        (currentPosition.x / window.innerWidth) * 2,
-        -(currentPosition.y / window.innerHeight) * 2
+        (deltaScreen.x / window.innerWidth) * 2,
+        -(deltaScreen.y / window.innerHeight) * 2
       );
       const ray = new THREE.Raycaster();
       ray.setFromCamera(ndc, camera);
@@ -156,6 +156,10 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   // Handler único para el plugin (estabilizado)
   const eventHandler = useCallback(
     (event: any) => {
+      console.log(
+        '[AdvancedDragRaycaster] Test verify events actions, capture de content: ',
+        event
+      );
       switch (event.type) {
         case 'objectdragstart':
           handleDragStart(event.object);
@@ -163,7 +167,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
         case 'objectdrag':
           handleDrag(
             event.object,
-            event.startPosition,
+            event.normalizedDelta
           );
           break;
         case 'objectdragend':
