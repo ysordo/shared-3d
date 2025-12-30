@@ -1,9 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { usePlugin } from '../../hooks/usePlugin';
-import type { AOCPluginConfig } from '../../core/orchestrator/plugins/AdvancedOrbitControlsPlugin';
-import { AdvancedOrbitControlsPlugin } from '../../core/orchestrator/plugins/AdvancedOrbitControlsPlugin';
+import { usePlugin } from '../hooks/usePlugin';
+import type { AOCPluginConfig } from '../../core/plugins/AdvancedOrbitControlsPlugin';
+import { AdvancedOrbitControlsPlugin } from '../../core/plugins/AdvancedOrbitControlsPlugin';
 
 type StateProps = {
   /** Estado actual de pan */

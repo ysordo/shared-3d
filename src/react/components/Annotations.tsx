@@ -1,10 +1,10 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { usePlugin } from '../../hooks/usePlugin';
-import type { AnnotationData } from '../../core/orchestrator/plugins/AnnotationsPlugin';
-import { AnnotationsPlugin } from '../../core/orchestrator/plugins/AnnotationsPlugin';
-import { useScene } from '../../hooks/useScene';
+import { usePlugin } from '../hooks/usePlugin';
+import type { AnnotationData } from '../../core/plugins/AnnotationsPlugin';
+import { AnnotationsPlugin } from '../../core/plugins/AnnotationsPlugin';
+import { useScene } from '../hooks/useScene';
 import { THREE } from '../../lib';
 
 type Annotation = {

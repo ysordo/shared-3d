@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-export { ManifestEntries, ManifestEntry } from '../core/cache/types.js';
-export { HDRILoaderOptions } from '../core/loaders/HDRILoader.js';
-export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-DxWUNuG8.js';
+export { CacheEntry, CacheReport, ManifestEntries, ManifestEntry } from '../core/cache/types.js';
+export { GLTFLoaderEvents, GLTFLoaderOptions, HDRIEvents, HDRILoaderOptions, ProgressEvent, WebPHDRData } from '../core/loaders/loaders.d.js';
+export { C as ConfigToTuple, b as Plugin, P as PluginContext } from '../index-oH7U2rpR.js';
 export { CustomMaterialFactory, MaterialConfig } from '../react/controls/MaterialController.js';
 import 'react';
 

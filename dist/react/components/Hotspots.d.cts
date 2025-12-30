@@ -1,8 +1,8 @@
-import { HotspotData } from '../../core/orchestrator/plugins/HotspotPlugin.cjs';
-import '../../SceneOrchestrator-HtKaYZ3E.cjs';
-import '../../core/loaders/HDRILoader.cjs';
-import '../../core/cache/types.cjs';
+import { HotspotData } from '../../core/plugins/HotspotPlugin.cjs';
+import '../../index-BbV6Hzfa.cjs';
+import '../../core/loaders/loaders.d.cjs';
 import 'three';
+import '../../core/cache/types.cjs';
 
 type HotspotsProps = {
     /** Array de hotspots a renderizar */

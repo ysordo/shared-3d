@@ -68,14 +68,14 @@
       "require": "./dist/react/components/*.cjs"
     },
     "./react/hooks": {
-      "types": "./dist/hooks/index.d.ts",
-      "import": "./dist/hooks/index.js",
-      "require": "./dist/hooks/index.cjs"
+      "types": "./dist/react/hooks/index.d.ts",
+      "import": "./dist/react/hooks/index.js",
+      "require": "./dist/react/hooks/index.cjs"
     },
     "./react/hooks/*": {
-      "types": "./dist/hooks/*.d.ts",
-      "import": "./dist/hooks/*.js",
-      "require": "./dist/hooks/*.cjs"
+      "types": "./dist/react/hooks/*.d.ts",
+      "import": "./dist/react/hooks/*.js",
+      "require": "./dist/react/hooks/*.cjs"
     },
     "./react/controls": {
       "types": "./dist/react/controls/index.d.ts",
@@ -98,14 +98,14 @@
       "require": "./dist/react/primitives/*.cjs"
     },
     "./react/contexts": {
-      "types": "./dist/context/index.d.ts",
-      "import": "./dist/context/index.js",
-      "require": "./dist/context/index.cjs"
+      "types": "./dist/react/contexts/index.d.ts",
+      "import": "./dist/react/contexts/index.js",
+      "require": "./dist/react/contexts/index.cjs"
     },
     "./react/contexts/*": {
-      "types": "./dist/context/*.d.ts",
-      "import": "./dist/context/*.js",
-      "require": "./dist/context/*.cjs"
+      "types": "./dist/react/contexts/*.d.ts",
+      "import": "./dist/react/contexts/*.js",
+      "require": "./dist/react/contexts/*.cjs"
     },
     "./core": {
       "types": "./dist/core/index.d.ts",
@@ -133,14 +133,14 @@
       "require": "./dist/core/orchestrator/SceneOrchestrator.cjs"
     },
     "./core/plugins": {
-      "types": "./dist/core/orchestrator/plugins/index.d.ts",
-      "import": "./dist/core/orchestrator/plugins/index.js",
-      "require": "./dist/core/orchestrator/plugins/index.cjs"
+      "types": "./dist/core/plugins/index.d.ts",
+      "import": "./dist/core/plugins/index.js",
+      "require": "./dist/core/plugins/index.cjs"
     },
     "./core/plugins/*": {
-      "types": "./dist/core/orchestrator/plugins/*.d.ts",
-      "import": "./dist/core/orchestrator/plugins/*.js",
-      "require": "./dist/core/orchestrator/plugins/*.cjs"
+      "types": "./dist/core/plugins/*.d.ts",
+      "import": "./dist/core/plugins/*.js",
+      "require": "./dist/core/plugins/*.cjs"
     },
     "./core/utils/*": {
       "types": "./dist/core/utils/*.d.ts",

@@ -1,23 +1,7 @@
 import { ManifestEntry } from '../cache/types.cjs';
 import * as THREE from 'three';
+import { HDRILoaderOptions, HDRIEvents } from './loaders.d.cjs';
 
-type HDRIProgress = {
-    loaded: number;
-    total: number;
-    percent: number;
-    url: string;
-};
-type HDRIEvents = {
-    onProgress?: (progress: HDRIProgress) => void;
-    onLoaded?: (texture: THREE.Texture, entry: ManifestEntry) => void;
-    onError?: (error: Error, url: string) => void;
-};
-type HDRILoaderOptions = {
-    dataType?: typeof THREE.FloatType | typeof THREE.HalfFloatType;
-    exposure?: number;
-    maxLuminance?: number;
-    preserveHDR?: boolean;
-};
 declare class HDRILoader {
     private static rgbeLoader;
     private static webpLoader;
@@ -32,4 +16,4 @@ declare class HDRILoader {
     static invalidate(id: string): Promise<void>;
 }
 
-export { type HDRIEvents, HDRILoader, type HDRILoaderOptions, type HDRIProgress };
+export { HDRILoader };

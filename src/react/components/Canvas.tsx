@@ -1,7 +1,7 @@
 'use client';
 
 import React, { forwardRef, useRef } from 'react';
-import { SceneProvider } from '../../context/SceneContext';
+import { SceneProvider } from '../contexts/SceneContext';
 import type { SceneConfig } from '../../core/orchestrator/SceneOrchestrator';
 
 type CanvasProps = React.CanvasHTMLAttributes<HTMLCanvasElement> & {

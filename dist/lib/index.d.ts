@@ -10,8 +10,8 @@ export { EXRLoader as ThreeEXRLoader } from 'three/examples/jsm/loaders/EXRLoade
 export { EffectComposer as ThreeEffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 export { RenderPass as ThreeRenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 export { UnrealBloomPass as ThreeUnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-export { ManifestEntries, ManifestEntry } from '../core/cache/types.js';
-export { HDRILoaderOptions } from '../core/loaders/HDRILoader.js';
-export { b as Plugin, P as PluginContext } from '../SceneOrchestrator-DxWUNuG8.js';
+export { CacheEntry, CacheReport, ManifestEntries, ManifestEntry } from '../core/cache/types.js';
 export { CustomMaterialFactory, MaterialConfig } from '../react/controls/MaterialController.js';
+export { GLTFLoaderEvents, GLTFLoaderOptions, HDRIEvents, HDRILoaderOptions, ProgressEvent, WebPHDRData } from '../core/loaders/loaders.d.js';
+export { C as ConfigToTuple, b as Plugin, P as PluginContext } from '../index-oH7U2rpR.js';
 import 'react';

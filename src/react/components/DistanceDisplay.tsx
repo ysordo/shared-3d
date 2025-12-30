@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useScene } from '../hooks/useScene';
 import { THREE } from '../../lib';
 import type {
   AdvancedCameraCollisionPlugin,
   AdvancedOrbitControlsPlugin,
   OrbitControlsPlugin,
-} from '../../core/orchestrator/plugins';
-import { useActiveModel } from '../../hooks';
+} from '../../core/plugins';
+import { useActiveModel } from '../hooks';
 
 type DistanceUnit = 'm' | 'cm' | 'mm' | 'px' | 'in' | 'ft' | 'km';
 
@@ -103,7 +103,7 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
     let calculatedMax = 50;
 
     // AdvancedCameraCollision
-    const collisionPlugin = orchestrator.plugin<AdvancedCameraCollisionPlugin>(
+    const collisionPlugin = orchestrator.plugin.get<AdvancedCameraCollisionPlugin>(
       'AdvancedCameraCollision'
     );
     if (collisionPlugin) {
@@ -113,9 +113,9 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({
 
     // OrbitControls (Advanced o básico)
     const controls =
-      orchestrator.plugin<AdvancedOrbitControlsPlugin>(
+      orchestrator.plugin.get<AdvancedOrbitControlsPlugin>(
         'AdvancedOrbitControls'
-      ) || orchestrator.plugin<OrbitControlsPlugin>('OrbitControls');
+      ) || orchestrator.plugin.get<OrbitControlsPlugin>('OrbitControls');
 
     if (controls) {
       calculatedMax = controls.maxDistance ?? calculatedMax;

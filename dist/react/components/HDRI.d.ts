@@ -1,7 +1,7 @@
 import React from 'react';
 import { ManifestEntry } from '../../core/cache/types.js';
 import * as THREE from 'three';
-import { HDRILoaderOptions } from '../../core/loaders/HDRILoader.js';
+import { HDRILoaderOptions } from '../../core/loaders/loaders.d.js';
 
 type HDRIProps = {
     entry: ManifestEntry;

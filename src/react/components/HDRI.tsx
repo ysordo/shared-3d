@@ -1,7 +1,7 @@
 'use client';
 import type React from 'react';
 import { useCallback, useEffect, useRef } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useScene } from '../hooks/useScene';
 import type { ManifestEntry } from '../../core/cache/types';
 import type { HDRILoaderOptions, THREE } from '../../lib';
 
@@ -20,8 +20,8 @@ type HDRIProps = {
 
 export const HDRI: React.FC<HDRIProps> = ({
   entry,
-  exposure=1.0,
-  maxLuminance=16.0,
+  exposure = 1.0,
+  maxLuminance = 16.0,
   onLoaded,
   onProgress,
   onError,
@@ -82,9 +82,9 @@ export const HDRI: React.FC<HDRIProps> = ({
       isHandle.current = true;
     }
     if (isHandle.current) {
-      if (orch.getActiveHDRI()?.name !== entry.id && !isloaded.current) {
+      if (orch.activeHDRI.get?.name !== entry.id && !isloaded.current) {
         isloaded.current = false;
-        orch.setHDRI(entry, {exposure, maxLuminance}).catch(console.error);
+        orch.activeHDRI.set(entry, { exposure, maxLuminance }).catch(console.error);
       }
     }
     return () => {
@@ -102,7 +102,7 @@ export const HDRI: React.FC<HDRIProps> = ({
         'hdri::error' as never,
         handleHDRIEvent as EventListener
       );
-      orch.clearHDRI();
+      orch.activeHDRI.clear();
       isloaded.current = false;
     };
   }, [entry.id, exposure, handleHDRIEvent, maxLuminance, orch]);

@@ -1,7 +1,7 @@
 'use client';
 import type React from 'react';
 import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useScene } from '../hooks/useScene';
 import { THREE } from '../../lib';
 
 type DirectionalLightProps = {
@@ -19,7 +19,7 @@ export const DirectionalLight: React.FC<DirectionalLightProps> = ({
   castShadow = true,
   shadowMapSize = 2048,
 }) => {
-  const {scene} = useScene();
+  const { scene } = useScene();
 
   useEffect(() => {
     const light = new THREE.DirectionalLight(color, intensity);

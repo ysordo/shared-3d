@@ -1,7 +1,7 @@
 'use client';
 import type React from 'react';
 import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useScene } from '../hooks/useScene';
 import { THREE } from '../../lib';
 
 type SpotLightProps = {
@@ -25,7 +25,7 @@ export const SpotLight: React.FC<SpotLightProps> = ({
   distance = 50,
   castShadow = true,
 }) => {
-  const {scene} = useScene();
+  const { scene } = useScene();
 
   useEffect(() => {
     const light = new THREE.SpotLight(

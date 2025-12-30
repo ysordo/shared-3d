@@ -1,7 +1,7 @@
 'use client';
 import type React from 'react';
 import { useEffect, useRef } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useScene } from '../hooks/useScene';
 import { GLTFLoader } from '../../core/loaders/GLTFLoader';
 import type { ManifestEntry } from '../../core/cache/types';
 import { THREE } from '../../lib';
@@ -34,7 +34,9 @@ export const InstancedModel: React.FC<InstancedModelProps> = ({
   const instancedMeshes = useRef<Map<string, THREE.InstancedMesh>>(new Map());
 
   useEffect(() => {
-    if(!orchestrator){return;}
+    if (!orchestrator) {
+      return;
+    }
     const scene = orchestrator.scene;
 
     let isMounted = true;

@@ -1,7 +1,7 @@
 'use client';
 import type { ReactNode } from 'react';
 import React, { useEffect, useState } from 'react';
-import { useActiveModel } from '../../hooks/useActiveModel';
+import { useActiveModel } from '../hooks/useActiveModel';
 import { THREE } from '../../lib';
 
 type AnimationItem = {

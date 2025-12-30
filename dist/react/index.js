@@ -1,150 +1,166 @@
-import "../chunk-GY6RJQO5.js";
-import "../chunk-VHIECBSI.js";
-import {
-  VRButton
-} from "../chunk-HLVFRVKO.js";
+import "../chunk-MQDFSDBK.js";
 import "../chunk-5RGQXC4Q.js";
 import {
   SceneObject
-} from "../chunk-IVYZBSVV.js";
-import "../chunk-JH6IQNCJ.js";
-import {
-  AnimationController
-} from "../chunk-P5KSBEDA.js";
-import {
-  LightingController
-} from "../chunk-RBJZW4CK.js";
-import {
-  MaterialController
-} from "../chunk-4JGGIS6U.js";
-import {
-  OrbitControls
-} from "../chunk-CMEAWRQR.js";
+} from "../chunk-QGX7WWIG.js";
+import "../chunk-VHIECBSI.js";
 import {
   PointLight
-} from "../chunk-G2PJO3O4.js";
+} from "../chunk-QYCJUI6H.js";
 import {
   PostProcessing
-} from "../chunk-AQAIJZQ6.js";
+} from "../chunk-6S67P6BR.js";
 import {
   Raycaster
-} from "../chunk-34CBOX73.js";
+} from "../chunk-QGPRQZAM.js";
 import {
   SpotLight
-} from "../chunk-IZAVNT3T.js";
+} from "../chunk-RWP2SRUN.js";
 import {
   SuspenseModel
-} from "../chunk-OIMHAFGG.js";
+} from "../chunk-3MLNZO5H.js";
 import {
   Suspense
 } from "../chunk-RUDNMJTZ.js";
 import {
   TheaterLighting
-} from "../chunk-G4T3RGII.js";
+} from "../chunk-CJYNZV2T.js";
 import {
-  HDRI
-} from "../chunk-37HE3J6A.js";
+  VRButton
+} from "../chunk-GWWTDYDE.js";
 import {
   Hotspot
-} from "../chunk-7XTWMEFJ.js";
+} from "../chunk-MTNA4CXO.js";
 import {
   Hotspots
-} from "../chunk-SFI3HDWS.js";
+} from "../chunk-FUSJH7HZ.js";
 import {
   InstancedModel
-} from "../chunk-7KONCDLP.js";
+} from "../chunk-O7N4IS3N.js";
 import {
   LODSystem
-} from "../chunk-C4BN6NFY.js";
+} from "../chunk-3RAXKOGZ.js";
 import {
   MeasurementTool
-} from "../chunk-MSQNWHFO.js";
+} from "../chunk-MC26DERZ.js";
 import {
   Model
-} from "../chunk-5ZYLDZNS.js";
+} from "../chunk-J2IFMPYX.js";
 import {
   ModelPreload
-} from "../chunk-NIC5SHMT.js";
+} from "../chunk-TZ5USYJ3.js";
+import "../chunk-25QOJ2PL.js";
 import {
-  Annotations
-} from "../chunk-BMK3NC76.js";
+  OrbitControls
+} from "../chunk-JP6PI2XT.js";
 import {
   AutoLODSystem
-} from "../chunk-QEMUAR2E.js";
+} from "../chunk-NVRLP6ZQ.js";
 import {
   Canvas
-} from "../chunk-NQJV2TJC.js";
+} from "../chunk-Z4FTGUP6.js";
 import {
   DirectionalLight
-} from "../chunk-T6VPNVNL.js";
+} from "../chunk-5NYM6BHV.js";
 import {
   DistanceDisplay
-} from "../chunk-JJ3HIRIQ.js";
+} from "../chunk-5YMACKPH.js";
+import "../chunk-XWVCAGFT.js";
+import {
+  useRaycaster
+} from "../chunk-VV25TTEM.js";
+import {
+  useAnimation
+} from "../chunk-FBXWANHT.js";
+import "../chunk-KEVHL7DJ.js";
+import {
+  useHDRI
+} from "../chunk-PMUA6I3P.js";
 import {
   EnvironmentPreset
-} from "../chunk-AHBEHZWO.js";
+} from "../chunk-YMGVGFHZ.js";
 import {
   ErrorBoundary3D
 } from "../chunk-POOGUPPI.js";
 import {
   GroundSurface
-} from "../chunk-7ESWYBAU.js";
-import "../chunk-52BWUKU3.js";
+} from "../chunk-CGAED4QB.js";
+import {
+  HDRI
+} from "../chunk-4H3WF3A2.js";
 import {
   ARButton
-} from "../chunk-4DE4NC2C.js";
+} from "../chunk-QFLSD5VX.js";
 import {
   AdvancedCameraCollision
-} from "../chunk-LQG2ALJG.js";
+} from "../chunk-CDZLDRRZ.js";
 import {
   AdvancedDragRaycaster
-} from "../chunk-QPCF4UL4.js";
+} from "../chunk-6NX7JS2N.js";
 import {
   AdvancedOrbitControls
-} from "../chunk-5R2LW4VB.js";
+} from "../chunk-J7UGLSWS.js";
 import {
   AdvancedRaycaster
-} from "../chunk-XIERMNB5.js";
+} from "../chunk-XKPUK36P.js";
 import {
   AmbientLight
-} from "../chunk-U6MKQFCO.js";
+} from "../chunk-WCGDFLPW.js";
 import {
   AnimationTimeline
-} from "../chunk-RMNHVZPV.js";
+} from "../chunk-Y2FBCVKL.js";
+import {
+  Annotations
+} from "../chunk-H3UAMA63.js";
+import "../chunk-JF442FAR.js";
+import "../chunk-NYCPSKPP.js";
+import {
+  CacheProvider,
+  useCache
+} from "../chunk-ORZ3OVUC.js";
+import "../chunk-JH6IQNCJ.js";
+import {
+  AnimationController
+} from "../chunk-QJKIG3UC.js";
+import {
+  LightingController
+} from "../chunk-X2OIUF37.js";
+import "../chunk-PYBGN7YC.js";
+import {
+  MaterialController
+} from "../chunk-DTXEQUFF.js";
+import {
+  useActiveModel
+} from "../chunk-NFKWZ656.js";
+import {
+  SceneProvider,
+  useScene
+} from "../chunk-R5SGHSIE.js";
+import "../chunk-SRYLJLZ5.js";
+import "../chunk-XYVNLCWO.js";
+import "../chunk-APUYWADJ.js";
+import "../chunk-LEO5KEBL.js";
+import "../chunk-RQB2RLAY.js";
+import "../chunk-WE37JDEL.js";
+import "../chunk-VFXDH6LA.js";
+import "../chunk-375RC3KZ.js";
+import "../chunk-52BWUKU3.js";
 import "../chunk-AWVHTM2E.js";
-import "../chunk-TKOCD4HC.js";
-import "../chunk-XZDEPNIW.js";
+import "../chunk-NIUZU6ND.js";
+import "../chunk-UNGIWPJL.js";
+import "../chunk-CQTY6LVA.js";
+import "../chunk-JX3LRZFE.js";
 import "../chunk-6FBDZUDJ.js";
-import "../chunk-WQS6CQ5N.js";
-import "../chunk-6KG4HOKU.js";
-import "../chunk-7L6JPLGD.js";
-import "../chunk-VZOLVXKC.js";
-import "../chunk-3R7JMNWE.js";
-import "../chunk-K5ZHNR6J.js";
-import "../chunk-PYT2UBW2.js";
-import "../chunk-W2MCMH32.js";
-import "../chunk-5ZCTV7NA.js";
-import "../chunk-2YWOEOVL.js";
-import "../chunk-UBVYEZI3.js";
-import "../chunk-5QOXISYS.js";
-import "../chunk-BLSBXVOZ.js";
-import "../chunk-DRA4TS5Q.js";
-import "../chunk-5JSUCVRE.js";
-import "../chunk-LT5STPD2.js";
-import "../chunk-U3LDU6I7.js";
-import "../chunk-6SDKICTC.js";
-import "../chunk-7JOXFFIX.js";
-import "../chunk-RZGW4YCZ.js";
-import "../chunk-EFMWRQO7.js";
-import "../chunk-JY7NWOQT.js";
-import "../chunk-RUU4KTPM.js";
-import "../chunk-L2TOEG6R.js";
 import "../chunk-U6YB3DJH.js";
 import "../chunk-SRRBNWVQ.js";
 import "../chunk-OK2NCVM7.js";
 import "../chunk-OVHQQSEK.js";
-import "../chunk-EPN65WJP.js";
+import "../chunk-RBZOTBBM.js";
+import "../chunk-7ZN6VXPX.js";
+import "../chunk-F7BXYAOK.js";
 import "../chunk-5QJW7WE3.js";
+import "../chunk-7JOXFFIX.js";
+import "../chunk-RZGW4YCZ.js";
 export {
   ARButton,
   AdvancedCameraCollision,
@@ -156,6 +172,7 @@ export {
   AnimationTimeline,
   Annotations,
   AutoLODSystem,
+  CacheProvider,
   Canvas,
   DirectionalLight,
   DistanceDisplay,
@@ -177,9 +194,16 @@ export {
   PostProcessing,
   Raycaster,
   SceneObject,
+  SceneProvider,
   SpotLight,
   Suspense,
   SuspenseModel,
   TheaterLighting,
-  VRButton
+  VRButton,
+  useActiveModel,
+  useAnimation,
+  useCache,
+  useHDRI,
+  useRaycaster,
+  useScene
 };

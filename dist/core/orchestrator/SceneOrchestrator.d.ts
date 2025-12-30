@@ -1,4 +1,4 @@
-import '../loaders/HDRILoader.js';
+import '../loaders/loaders.d.js';
 import '../cache/types.js';
-export { S as SceneConfig, a as SceneOrchestrator } from '../../SceneOrchestrator-DxWUNuG8.js';
+export { S as SceneConfig, a as SceneOrchestrator } from '../../index-oH7U2rpR.js';
 import 'three';

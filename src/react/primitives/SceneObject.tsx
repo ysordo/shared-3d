@@ -1,7 +1,7 @@
 'use client';
 import type React from 'react';
 import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useScene } from '../hooks/useScene';
 import { THREE } from '../../lib';
 
 type SceneObjectProps = {
@@ -37,7 +37,9 @@ export const SceneObject: React.FC<SceneObjectProps> = ({
   const orchestrator = useScene();
 
   useEffect(() => {
-    if(!orchestrator){return;}
+    if (!orchestrator) {
+      return;
+    }
     if (name) {
       object.name = name;
     }
@@ -60,7 +62,7 @@ export const SceneObject: React.FC<SceneObjectProps> = ({
     if (parent === 'scene') {
       targetParent = orchestrator.scene;
     } else if (parent === 'model') {
-      targetParent = orchestrator.getActiveModel();
+      targetParent = orchestrator.activeModel.get;
     } else if (typeof parent === 'string') {
       targetParent = orchestrator.scene.getObjectByName(parent) || null;
     } else if (parent instanceof THREE.Object3D) {

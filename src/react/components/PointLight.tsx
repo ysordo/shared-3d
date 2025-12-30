@@ -1,7 +1,7 @@
 'use client';
 import type React from 'react';
 import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useScene } from '../hooks/useScene';
 import { THREE } from '../../lib';
 
 type PointLightProps = {
@@ -19,7 +19,7 @@ export const PointLight: React.FC<PointLightProps> = ({
   distance = 0,
   decay = 2,
 }) => {
-  const {scene} = useScene();
+  const { scene } = useScene();
 
   useEffect(() => {
     const light = new THREE.PointLight(color, intensity, distance, decay);

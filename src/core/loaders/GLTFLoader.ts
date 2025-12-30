@@ -1,17 +1,8 @@
 import { ObjectCache } from '../cache/ObjectCache';
 import type { ManifestEntries, ManifestEntry } from '../cache/types';
 import { THREE, ThreeGLTFLoader, ThreeDRACOLoader } from '../../lib';
+import type { GLTFLoaderEvents, GLTFLoaderOptions } from './loaders';
 
-export type GLTFLoaderOptions = {
-  draco?: boolean | undefined;
-  decoderPath?: string | undefined;
-};
-
-export type GLTFLoaderEvents = {
-  onProgress?: (p: { loaded: number; total: number; percent: number; url: string }) => void | undefined;
-  onLoaded?: (obj: THREE.Group, entry: ManifestEntry) => void | undefined;
-  onError?: (err: Error, url: string) => void | undefined;
-};
 
 export class GLTFLoader {
   private static plainLoader = new ThreeGLTFLoader();

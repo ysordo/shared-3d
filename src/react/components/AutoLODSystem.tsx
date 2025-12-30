@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { usePlugin } from '../../hooks/usePlugin';
-import { AutoLODSystemPlugin } from '../../core/orchestrator/plugins/AutoLODSystemPlugin';
+import { usePlugin } from '../hooks/usePlugin';
+import { AutoLODSystemPlugin } from '../../core/plugins/AutoLODSystemPlugin';
 
 type AutoLODSystemProps = {
   /** Distancia a partir de la cual se activa el nivel medio (en unidades del mundo) */
@@ -17,17 +17,17 @@ type AutoLODSystemProps = {
 
 /**
  * AutoLODSystem
- * 
+ *
  * Componente declarativo para activar Level of Detail automático basado en distancia a cámara.
- * 
+ *
  * Características:
  * - Configuración totalmente reactiva (cambios en props → hot-update automático).
  * - Integración óptima con usePlugin inteligente: instancia única + update() en caliente.
  * - Generación progresiva de LODs mediante SimplifyModifier (high → medium → low → hidden).
  * - Componente headless puro (sin renderizado visual).
- * 
+ *
  * Ideal para optimización de rendimiento en modelos de alto polígono count con navegación libre.
- * 
+ *
  * @example
  * <AutoLODSystem
  *   mediumDistance={15}
@@ -45,7 +45,11 @@ export const AutoLODSystem: React.FC<AutoLODSystemProps> = ({
   // Configuración completa → fuente de verdad para deep equality en usePlugin
   const config = useMemo(
     () => ({
-      distances: [mediumDistance, lowDistance, hideDistance] as [number, number, number],
+      distances: [mediumDistance, lowDistance, hideDistance] as [
+        number,
+        number,
+        number
+      ],
       reductionPercentages,
     }),
     [mediumDistance, lowDistance, hideDistance, reductionPercentages]

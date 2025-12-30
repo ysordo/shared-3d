@@ -1,8 +1,8 @@
-import { AOCPluginConfig } from '../../core/orchestrator/plugins/AdvancedOrbitControlsPlugin.cjs';
-import '../../SceneOrchestrator-HtKaYZ3E.cjs';
-import '../../core/loaders/HDRILoader.cjs';
-import '../../core/cache/types.cjs';
+import { AOCPluginConfig } from '../../core/plugins/AdvancedOrbitControlsPlugin.cjs';
+import '../../index-BbV6Hzfa.cjs';
+import '../../core/loaders/loaders.d.cjs';
 import 'three';
+import '../../core/cache/types.cjs';
 
 type StateProps = {
     /** Estado actual de pan */

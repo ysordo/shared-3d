@@ -5,7 +5,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import { useEffect, useState } from 'react';
 import { GLTFLoader } from '../../core/loaders/GLTFLoader';
 import type { ManifestEntries } from '../../core/cache/types';
-import { usePreload } from '../../hooks/usePreload';
+import { usePreload } from '../hooks/usePreload';
 
 type ModelPreloadProps = {
   /** Manifest de modelos a precargar */

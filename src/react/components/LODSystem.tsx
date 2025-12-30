@@ -1,9 +1,9 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { usePlugin } from '../../hooks/usePlugin';
-import type { LODConfig } from '../../core/orchestrator/plugins/LODSystemPlugin';
-import { LODSystemPlugin } from '../../core/orchestrator/plugins/LODSystemPlugin';
+import { usePlugin } from '../hooks/usePlugin';
+import type { LODConfig } from '../../core/plugins/LODSystemPlugin';
+import { LODSystemPlugin } from '../../core/plugins/LODSystemPlugin';
 import type { THREE } from '../../lib';
 
 type LODLevel = {

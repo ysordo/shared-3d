@@ -7,7 +7,7 @@ import React, {
   useCallback,
   useState,
 } from 'react';
-import { useActiveModel } from '../../hooks/useActiveModel';
+import { useActiveModel } from '../hooks/useActiveModel';
 import { createQuadWireframe } from '../../core/utils';
 import { THREE } from '../../lib';
 
@@ -213,7 +213,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       if (!model || isTransitioning || meshesRef.current.length === 0) {
         return;
       }
-      setOldName(activeName??'');
+      setOldName(activeName ?? '');
 
       // Limpiar timeouts previos
       timeoutsRef.current.forEach(clearTimeout);

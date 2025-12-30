@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { usePlugin } from '../../hooks/usePlugin';
-import { AdvancedCameraCollisionPlugin } from '../../core/orchestrator/plugins/AdvancedCameraCollisionPlugin';
+import { usePlugin } from '../hooks/usePlugin';
+import { AdvancedCameraCollisionPlugin } from '../../core/plugins/AdvancedCameraCollisionPlugin';
 
 type Props = {
   /** Distancia mínima de detección de colisión (en unidades del mundo) */
@@ -17,15 +17,15 @@ type Props = {
 
 /**
  * AdvancedCameraCollision
- * 
+ *
  * Componente declarativo para activar prevención de colisiones avanzada en la cámara.
- * 
+ *
  * Características:
  * - Configuración totalmente reactiva (cambios en props → hot-update automático).
  * - Integración óptima con usePlugin inteligente: instancia única + update() en caliente.
  * - Sin renderizado visual → componente "headless" puro.
  * - Preparado para uso en escenas complejas con navegación orbital.
- * 
+ *
  * @example
  * <AdvancedCameraCollision
  *   distanceThreshold={0.8}

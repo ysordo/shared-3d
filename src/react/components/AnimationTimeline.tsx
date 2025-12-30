@@ -1,7 +1,7 @@
 'use client';
 import type React from 'react';
 import { useEffect, useRef } from 'react';
-import { useActiveModel } from '../../hooks/useActiveModel';
+import { useActiveModel } from '../hooks/useActiveModel';
 import { THREE } from '../../lib';
 
 type TimelineStep = {
@@ -50,7 +50,7 @@ export const AnimationTimeline: React.FC<AnimationTimelineProps> = ({
     animate();
 
     return () => {
-        mixer.stopAllAction();
+      mixer.stopAllAction();
     };
   }, [model]);
 

@@ -1,15 +1,7 @@
 import * as THREE from 'three';
+import { WebPHDRData } from './loaders.d.cjs';
+import '../cache/types.cjs';
 
-interface WebPHDRData {
-    width: number;
-    height: number;
-    data: Float32Array | Uint16Array;
-    type: typeof THREE.FloatType | typeof THREE.HalfFloatType;
-    exposure: number;
-    maxLuminance: number;
-    averageLuminance: number;
-    metadata?: Record<string, never>;
-}
 /**
  * Loader para WebP HDR (RGBM encoding)
  * Soporta .webp con metadatos HDR preservados
@@ -43,4 +35,4 @@ declare class WebPHDRLoader {
     loadAsync(url: string, onProgress?: (event: ProgressEvent) => void): Promise<THREE.DataTexture>;
 }
 
-export { type WebPHDRData, WebPHDRLoader };
+export { WebPHDRLoader };

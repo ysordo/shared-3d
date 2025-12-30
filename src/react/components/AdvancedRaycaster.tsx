@@ -1,9 +1,9 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { usePlugin } from '../../hooks/usePlugin';
-import { AdvancedRaycasterPlugin } from '../../core/orchestrator/plugins/AdvancedRaycasterPlugin';
-import { useActiveModel } from '../../hooks/useActiveModel';
+import { usePlugin } from '../hooks/usePlugin';
+import { AdvancedRaycasterPlugin } from '../../core/plugins/AdvancedRaycasterPlugin';
+import { useActiveModel } from '../hooks/useActiveModel';
 import type { THREE } from '../../lib';
 
 type AdvancedRaycasterProps = {

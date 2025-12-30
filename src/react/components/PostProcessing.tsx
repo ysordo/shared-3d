@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { usePlugin } from '../../hooks/usePlugin';
-import { PostProcessingPlugin } from '../../core/orchestrator/plugins/PostProcessingPlugin';
+import { usePlugin } from '../hooks/usePlugin';
+import { PostProcessingPlugin } from '../../core/plugins/PostProcessingPlugin';
 
 type PostProcessingProps = {
   strength?: number;
@@ -13,14 +13,14 @@ type PostProcessingProps = {
 
 /**
  * PostProcessing
- * 
+ *
  * Componente declarativo para efecto bloom configurable y reactivo.
- * 
+ *
  * Corrección clave:
  * - Eliminado early return condicional → evita violación de Rules of Hooks.
  * - Control de habilitación mediante prop enabled en config → usePlugin decide crear o desactivar en caliente.
  * - Cuando enabled=false el plugin no se crea (deep equality evita instalación) → zero overhead real.
- * 
+ *
  * @example
  * <PostProcessing enabled={enableBloom} strength={1.8} />
  */

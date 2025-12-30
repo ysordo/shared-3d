@@ -1,9 +1,9 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { usePlugin } from '../../hooks/usePlugin';
-import type { HotspotData } from '../../core/orchestrator/plugins/HotspotPlugin';
-import { HotspotPlugin } from '../../core/orchestrator/plugins/HotspotPlugin';
+import { usePlugin } from '../hooks/usePlugin';
+import type { HotspotData } from '../../core/plugins/HotspotPlugin';
+import { HotspotPlugin } from '../../core/plugins/HotspotPlugin';
 import { THREE } from '../../lib';
 
 type HotspotProps = {

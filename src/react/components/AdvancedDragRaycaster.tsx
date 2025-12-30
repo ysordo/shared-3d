@@ -7,10 +7,10 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { usePlugin } from '../../hooks/usePlugin';
-import { AdvancedRaycasterPlugin } from '../../core/orchestrator/plugins/AdvancedRaycasterPlugin';
-import { useScene } from '../../hooks/useScene';
-import { useActiveModel } from '../../hooks/useActiveModel';
+import { usePlugin } from '../hooks/usePlugin';
+import { AdvancedRaycasterPlugin } from '../../core/plugins/AdvancedRaycasterPlugin';
+import { useScene } from '../hooks/useScene';
+import { useActiveModel } from '../hooks/useActiveModel';
 import { THREE } from '../../lib';
 
 type AdvancedDragRaycasterProps = {
@@ -115,7 +115,11 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   );
 
   const handleDrag = useCallback(
-    (obj: THREE.Object3D, currentPosition: THREE.Vector2, startPosition: THREE.Vector2) => {
+    (
+      obj: THREE.Object3D,
+      currentPosition: THREE.Vector2,
+      startPosition: THREE.Vector2
+    ) => {
       if (!model || !camera) {
         return;
       }
@@ -151,7 +155,21 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
       obj.position.add(temp.v3);
       onDrag?.(obj, temp.v3);
     },
-    [model, camera, temp.v1, temp.v2, temp.plane, temp.v1_1, temp.v2_2, temp.v3, temp.quat, renderer.domElement.width, renderer.domElement.height, enableRotationCompensation, onDrag]
+    [
+      model,
+      camera,
+      temp.v1,
+      temp.v2,
+      temp.plane,
+      temp.v1_1,
+      temp.v2_2,
+      temp.v3,
+      temp.quat,
+      renderer.domElement.width,
+      renderer.domElement.height,
+      enableRotationCompensation,
+      onDrag,
+    ]
   );
 
   const handleDragEnd = useCallback(
@@ -173,11 +191,7 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
           handleDragStart(event.object);
           break;
         case 'objectdrag':
-          handleDrag(
-            event.object,
-            event.currentPosition,
-            event.startPosition
-          );
+          handleDrag(event.object, event.currentPosition, event.startPosition);
           break;
         case 'objectdragend':
           handleDragEnd(event.object);
@@ -262,11 +276,10 @@ export const AdvancedDragRaycaster: React.FC<AdvancedDragRaycasterProps> = ({
   );
 
   useEffect(() => {
-  console.log('[AdvancedDragRaycaster] model changed:', model);
-}, [model]);
+    console.log('[AdvancedDragRaycaster] model changed:', model);
+  }, [model]);
 
   useEffect(() => {
-
     plugin?.setEnabled(isEnabled);
   }, [isEnabled, plugin]);
 

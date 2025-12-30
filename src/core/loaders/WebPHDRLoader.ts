@@ -1,15 +1,5 @@
 import { THREE } from '../../lib';
-
-export interface WebPHDRData {
-  width: number;
-  height: number;
-  data: Float32Array | Uint16Array;
-  type: typeof THREE.FloatType | typeof THREE.HalfFloatType;
-  exposure: number;
-  maxLuminance: number;
-  averageLuminance: number;
-  metadata?: Record<string, never>;
-}
+import type { WebPHDRData } from './loaders';
 
 /**
  * Loader para WebP HDR (RGBM encoding)

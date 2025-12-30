@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { usePlugin } from '../../hooks/usePlugin';
-import { RaycasterPlugin } from '../../core/orchestrator/plugins/RaycasterPlugin';
+import { usePlugin } from '../hooks/usePlugin';
+import { RaycasterPlugin } from '../../core/plugins/RaycasterPlugin';
 import type { THREE } from '../../lib';
 
 type RaycasterProps = {
@@ -18,19 +18,19 @@ type RaycasterProps = {
 
 /**
  * Raycaster
- * 
+ *
  * Componente declarativo básico para interacción simple (click + hover) con raycasting.
- * 
+ *
  * Características:
  * - Configuración totalmente reactiva mediante usePlugin inteligente (deep equality + update() automático).
  * - Handler único estabilizado → actualizaciones en caliente sin recrear listeners.
  * - Soporte opcional para lista de objetos específica o fallback a escena completa.
  * - Instancia única del plugin + hot-update eficiente.
  * - Componente headless puro (sin renderizado visual propio).
- * 
+ *
  * Ideal para selección básica, tooltips simples o feedback hover cuando no se necesita drag ni throttling avanzado
  * (para funcionalidades completas usar <AdvancedRaycaster />).
- * 
+ *
  * @example
  * <Raycaster
  *   enabled={isInteractive}

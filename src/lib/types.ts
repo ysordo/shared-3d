@@ -5,7 +5,8 @@ export type Vector3Tuple = [number, number, number];
 export type ColorRepresentation = THREE.ColorRepresentation;
 
 /* === Manifest === */
-export type { ManifestEntry, ManifestEntries } from '../core/cache/types';
+export type { ManifestEntry, ManifestEntries, CacheEntry, CacheReport } from '../core/cache/types';
+
 
 /* === Common settings === */
 export type LightConfig = {
@@ -15,7 +16,7 @@ export type LightConfig = {
   castShadow?: boolean;
 };
 
-export type { HDRILoaderOptions } from '../core/loaders/HDRILoader';
+export type * from '../core/loaders/loaders';
 
 /* === Common Events === */
 export type ClickEvent = {
@@ -30,7 +31,7 @@ export type HoverEvent = {
 };
 
 /* === Plugin types (reexport if not in orchestrator) === */
-export type { PluginContext, Plugin } from '../core/orchestrator/types';
+export * from '../core/plugins/types';
 
 /* === Config Material (reusable) === */
 

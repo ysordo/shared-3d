@@ -1,20 +1,7 @@
 import { ManifestEntry, ManifestEntries } from '../cache/types.cjs';
 import * as THREE from 'three';
+import { GLTFLoaderOptions, GLTFLoaderEvents } from './loaders.d.cjs';
 
-type GLTFLoaderOptions = {
-    draco?: boolean | undefined;
-    decoderPath?: string | undefined;
-};
-type GLTFLoaderEvents = {
-    onProgress?: (p: {
-        loaded: number;
-        total: number;
-        percent: number;
-        url: string;
-    }) => void | undefined;
-    onLoaded?: (obj: THREE.Group, entry: ManifestEntry) => void | undefined;
-    onError?: (err: Error, url: string) => void | undefined;
-};
 declare class GLTFLoader {
     private static plainLoader;
     private static dracoLoaderInstance;
@@ -28,4 +15,4 @@ declare class GLTFLoader {
     static clearCache(): Promise<void>;
 }
 
-export { GLTFLoader, type GLTFLoaderEvents, type GLTFLoaderOptions };
+export { GLTFLoader };

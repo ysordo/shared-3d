@@ -1,5 +1,5 @@
 import { ManifestEntry } from '../../core/cache/types.cjs';
-import { GLTFLoaderEvents } from '../../core/loaders/GLTFLoader.cjs';
+import { GLTFLoaderEvents } from '../../core/loaders/loaders.d.cjs';
 import 'three';
 
 type ModelProps = {

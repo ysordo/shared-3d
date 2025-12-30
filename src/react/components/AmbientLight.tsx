@@ -1,7 +1,7 @@
 'use client';
 import type React from 'react';
 import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useScene } from '../hooks/useScene';
 import { THREE } from '../../lib';
 
 type AmbientLightProps = {

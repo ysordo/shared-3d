@@ -1,7 +1,7 @@
 'use client';
 import type React from 'react';
 import { useEffect } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useScene } from '../hooks/useScene';
 import { THREE, ThreeEXRLoader } from '../../lib';
 
 type EnvironmentPresetName =
@@ -47,7 +47,7 @@ export const EnvironmentPreset: React.FC<EnvironmentPresetProps> = ({
   intensity = 1,
   blur = 0,
 }) => {
-  const {scene} = useScene();
+  const { scene } = useScene();
 
   useEffect(() => {
     const url = PRESETS[name];

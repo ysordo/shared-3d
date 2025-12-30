@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useScene } from '../hooks/useScene';
 import type { ManifestEntry } from '../../core/cache/types';
-import type { GLTFLoaderEvents } from '../../core/loaders/GLTFLoader';
+import type { GLTFLoaderEvents } from '../../core/loaders/loaders';
 import { GLTFLoader } from '../../core/loaders/GLTFLoader';
-import { useActiveModel } from '../../hooks';
-import { usePreload } from '../../hooks/usePreload';
+import { useActiveModel } from '../hooks';
+import { usePreload } from '../hooks/usePreload';
 
 type ModelProps = {
   entry: ManifestEntry;
@@ -25,53 +25,50 @@ export const Model: React.FC<ModelProps> = ({
   const { preloadModel, getPreloaded } = usePreload();
   const cancelledRef = useRef(false);
 
-  useEffect(
-    () => {
-      if (!model || entry.id !== model.name) {
-        cancelledRef.current = false;
+  useEffect(() => {
+    if (!model || entry.id !== model.name) {
+      cancelledRef.current = false;
 
-        const t = getPreloaded(entry.id);
-        if (t) {
+      const t = getPreloaded(entry.id);
+      if (t) {
+        if (cancelledRef.current) {
+          return;
+        }
+        orchestrator.activeModel.set(t);
+        onLoaded?.(t, entry);
+        return;
+      }
+
+      GLTFLoader.load(entry, {
+        draco,
+        onLoaded: (obj, manifestEntry) => {
           if (cancelledRef.current) {
             return;
           }
-          orchestrator.setModel(t);
-          onLoaded?.(t, entry);
-          return;
-        }
+          preloadModel(manifestEntry.id, obj);
+          orchestrator.activeModel.set(obj);
+          onLoaded?.(obj, manifestEntry);
+        },
+        onProgress: (...args) => {
+          if (cancelledRef.current) {
+            return;
+          }
+          onProgress?.(...args);
+        },
+        onError: (...args) => {
+          if (cancelledRef.current) {
+            return;
+          }
+          onError?.(...args);
+        },
+      });
+    }
 
-        GLTFLoader.load(entry, {
-          draco,
-          onLoaded: (obj, manifestEntry) => {
-            if (cancelledRef.current) {
-              return;
-            }
-            preloadModel(manifestEntry.id, obj);
-            orchestrator.setModel(obj);
-            onLoaded?.(obj, manifestEntry);
-          },
-          onProgress: (...args) => {
-            if (cancelledRef.current) {
-              return;
-            }
-            onProgress?.(...args);
-          },
-          onError: (...args) => {
-            if (cancelledRef.current) {
-              return;
-            }
-            onError?.(...args);
-          },
-        });
-      }
+    return () => {
+      cancelledRef.current = true;
+      orchestrator.activeModel.remove();
+    };
+  }, [entry.id, draco, orchestrator, onLoaded, onProgress, onError, model]);
 
-      return () => {
-        cancelledRef.current = true;
-        orchestrator.removeModel();
-      };
-    },
-    [entry.id, draco, orchestrator, onLoaded, onProgress, onError, model]
-  );
-  
   return null;
 };

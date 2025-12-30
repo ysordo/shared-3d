@@ -1,7 +1,7 @@
 'use client';
 import type React from 'react';
 import { useEffect, useRef } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useScene } from '../hooks/useScene';
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 import { THREE } from '../../lib';
 
@@ -76,7 +76,7 @@ export const GroundSurface: React.FC<GroundSurfaceProps> = ({
   visible = true,
   ...custom
 }) => {
-  const {scene, camera} = useScene();
+  const { scene, camera } = useScene();
   const ground = useRef<THREE.Mesh | Reflector>(null);
 
   useEffect(() => {
@@ -160,7 +160,20 @@ export const GroundSurface: React.FC<GroundSurfaceProps> = ({
         ground.current.geometry.dispose();
       }
     };
-  }, [type, size, height, blur, resolution, camera, custom.color, custom.roughness, custom.metalness, custom.opacity, custom.transparent, scene]);
+  }, [
+    type,
+    size,
+    height,
+    blur,
+    resolution,
+    camera,
+    custom.color,
+    custom.roughness,
+    custom.metalness,
+    custom.opacity,
+    custom.transparent,
+    scene,
+  ]);
 
   useEffect(() => {
     if (ground.current) {

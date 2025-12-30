@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { useScene } from '../../hooks/useScene';
+import { useScene } from '../hooks/useScene';
 import { THREE } from '../../lib';
 
 export const LightingController: React.FC<{ className?: string }> = ({
@@ -19,7 +19,9 @@ export const LightingController: React.FC<{ className?: string }> = ({
   };
 
   React.useEffect(() => {
-    if(!orchestrator){return;}
+    if (!orchestrator) {
+      return;
+    }
     orchestrator.scene.traverse((obj) => {
       if (obj instanceof THREE.Light) {
         obj.userData.baseIntensity = obj.intensity;

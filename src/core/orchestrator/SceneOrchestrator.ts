@@ -1,9 +1,9 @@
-import type { HDRILoaderOptions } from '../loaders/HDRILoader';
+import type { HDRILoaderOptions } from '../loaders/loaders';
 import { HDRILoader } from '../loaders/HDRILoader';
 import type { ManifestEntry } from '../cache/types';
-import type { Plugin, PluginContext } from './types';
+import type { Plugin, PluginContext } from '../plugins/types';
 import { THREE } from '../../lib';
-import type { AdvancedOrbitControlsPlugin, OrbitControlsPlugin } from './plugins';
+import type { AdvancedOrbitControlsPlugin, OrbitControlsPlugin } from '../plugins';
 
 export type SceneConfig = {
   antialias?: boolean;
@@ -14,25 +14,6 @@ export type SceneConfig = {
   clearColor?: THREE.ColorRepresentation;
 };
 
-/**
- * SceneOrchestrator
- * 
- * Núcleo central y singleton de la librería Three.js para React.
- * 
- * Responsabilidades:
- * - Gestión única de renderer, scene, camera y ciclo de vida global.
- * - Sistema de plugins moderno con loop de animación centralizado (preRender / postRender).
- * - Render delegable a PostProcessingPlugin cuando está activo.
- * - Resize global que notifica a todos los plugins.
- * - Intercepción segura de setModel para integración con controles orbitales.
- * - API pública estable y mínima exposición de internals.
- * 
- * Arquitectura alineada con principios de librería escalable:
- * - Core puro Three.js desacoplado de React.
- * - Ciclo de vida explícito y determinista.
- * - Optimización de rendimiento (un único requestAnimationFrame).
- * - Limpieza exhaustiva de recursos.
- */
 export class SceneOrchestrator extends THREE.EventDispatcher {
   private static instance: SceneOrchestrator | null = null;
 
@@ -40,8 +21,8 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
   public readonly camera: THREE.PerspectiveCamera;
   public readonly renderer: THREE.WebGLRenderer;
 
-  private activeModel: THREE.Group | null = null;
-  private activeHDRI: THREE.Texture | null = null;
+  private _activeModel: THREE.Group | null = null;
+  private _activeHDRI: THREE.Texture | null = null;
   private canvas: HTMLCanvasElement;
 
   private animationId: number | null = null;
@@ -53,7 +34,6 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
 
     this.canvas = canvas;
 
-    // Renderer setup
     this.renderer = new THREE.WebGLRenderer({
       canvas,
       antialias: config.antialias ?? true,
@@ -70,11 +50,9 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
       this.renderer.setClearColor(config.clearColor);
     }
 
-    // Camera setup
     this.camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
     this.camera.position.set(0, 1.6, 5);
 
-    // Scene setup
     this.scene = new THREE.Scene();
 
     if (config.background instanceof THREE.Texture) {
@@ -84,7 +62,6 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
       this.scene.background = new THREE.Color(config.background);
     }
 
-    // Global resize handling
     this.resizeObserver = new ResizeObserver(() => {
       const { clientWidth, clientHeight } = this.canvas;
       const width = clientWidth;
@@ -94,16 +71,13 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
       this.camera.aspect = width / height;
       this.camera.updateProjectionMatrix();
 
-      // Notify all plugins
       this.plugins.forEach((plugin) => plugin.resize?.(width, height));
     });
     this.resizeObserver.observe(canvas);
 
-    // Start centralized animation loop
     this.startAnimationLoop();
   }
 
-  /** Singleton access */
   static getInstance(canvas?: HTMLCanvasElement, config?: SceneConfig): SceneOrchestrator {
     if (!SceneOrchestrator.instance) {
       if (!canvas) {throw new Error('Canvas is required on first initialization');}
@@ -112,19 +86,14 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
     return SceneOrchestrator.instance;
   }
 
-  /* ============================
-   * Centralized Animation Loop
-   * ============================ */
   private startAnimationLoop(): void {
     if (this.animationId !== null) {return;}
 
     const loop = () => {
       this.animationId = requestAnimationFrame(loop);
 
-      // Pre-render phase: controls, LOD, camera collision, hotspots, etc.
       this.plugins.forEach((plugin) => plugin?.preRender?.());
 
-      // Main render: delegate to PostProcessing if active
       if (!this.plugins.has('PostProcessing')) {
         this.renderer.render(this.scene, this.camera);
       }
@@ -135,13 +104,17 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
     loop();
   }
 
-  /* ============================
-   * Plugin System
-   * ============================ */
-  use<T extends Plugin>(plugin: T): T {
+  plugin = {
+    use: this.usePlugin.bind(this),
+    get: this.getPlugin.bind(this),
+    has: this.hasPlugin.bind(this),
+    remove: this.removePlugin.bind(this),
+  };
+
+  private usePlugin<T extends Plugin>(plugin: T): T {
     if (this.plugins.has(plugin.name)) {
       console.info(`[Orchestrator] Plugin "${plugin.name}" ya instalado. Sobrescribiendo.`);
-      this.remove(plugin.name);
+      this.removePlugin(plugin.name);
     }
 
     const context: PluginContext = {
@@ -162,15 +135,15 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
     return plugin as T;
   }
 
-  plugin<T extends Plugin = Plugin>(name: string): T | undefined {
+  private getPlugin<T extends Plugin = Plugin>(name: string): T | undefined {
     return this.plugins.get(name) as T | undefined;
   }
 
-  has(name: string): boolean {
+  private hasPlugin(name: string): boolean {
     return this.plugins.has(name);
   }
 
-  remove(name: string): void {
+  private removePlugin(name: string): void {
     const plugin = this.plugins.get(name);
     if (plugin) {
       plugin.dispose?.();
@@ -179,15 +152,18 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
     }
   }
 
-  /* ============================
-   * Model Management
-   * ============================ */
-  async setModel(model: THREE.Group): Promise<void> {
+  activeModel = {
+    set: this.setModel.bind(this),
+    get: this._activeModel,
+    remove: this.removeModel.bind(this),
+  };
+
+  private async setModel(model: THREE.Group): Promise<void> {
     this.removeModel();
 
     const controls =
-      this.plugin<OrbitControlsPlugin>('OrbitControls') ||
-      this.plugin<AdvancedOrbitControlsPlugin>('AdvancedOrbitControls');
+      this.getPlugin<OrbitControlsPlugin>('OrbitControls') ||
+      this.getPlugin<AdvancedOrbitControlsPlugin>('AdvancedOrbitControls');
 
     const defaultDistance = controls
       ? (controls.maxDistance + controls.minDistance) / 2
@@ -196,33 +172,35 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
     this.camera.position.set(0, 1.6, defaultDistance);
     this.camera.lookAt(model.position);
 
-    this.activeModel = model;
+    this._activeModel = model;
     this.scene.add(model);
 
     this.dispatchEvent({ type: 'model::loaded', model } as never);
     console.info(`[Orchestrator] Modelo activo: ${model.name || 'sin nombre'}`);
   }
 
-  removeModel(): void {
-    if (this.activeModel) {
-      this.scene.remove(this.activeModel);
-      this.activeModel = null;
+  private removeModel(): void {
+    if (this._activeModel) {
+      this.scene.remove(this._activeModel);
+      this._activeModel = null;
       this.dispatchEvent({ type: 'model::removed', model: null } as never);
     }
   }
 
-  /* ============================
-   * HDRI Management
-   * ============================ */
-  async setHDRI(
+  activeHDRI = {
+    set: this.setHDRI.bind(this),
+    get: this._activeHDRI,
+    clear: this.clearHDRI.bind(this),
+  };
+  private async setHDRI(
     entry: ManifestEntry,
     config: Partial<Omit<HDRILoaderOptions, 'dataType' | 'preserveHDR' | 'rgbeLoaderOptions'>> = {}
   ): Promise<THREE.Texture> {
     try {
-      if (this.activeHDRI) {
-        if (this.activeHDRI.name === entry.id) {return this.activeHDRI;}
-        this.activeHDRI.dispose();
-        this.activeHDRI = null;
+      if (this._activeHDRI) {
+        if (this._activeHDRI.name === entry.id) {return this._activeHDRI;}
+        this._activeHDRI.dispose();
+        this._activeHDRI = null;
         this.scene.environment = null;
         this.scene.background = null;
       }
@@ -231,7 +209,7 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
         entry,
         {
           onLoaded: (tex, loadedEntry) => {
-            this.activeHDRI = tex;
+            this._activeHDRI = tex;
             this.scene.environment = tex;
             this.scene.background = tex;
             tex.userData = {
@@ -267,12 +245,12 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
     }
   }
 
-  clearHDRI(): void {
-    if (this.activeHDRI) {
+  private clearHDRI(): void {
+    if (this._activeHDRI) {
       this.scene.environment = null;
       this.scene.background = new THREE.Color(0x000000);
-      this.activeHDRI.dispose();
-      this.activeHDRI = null;
+      this._activeHDRI.dispose();
+      this._activeHDRI = null;
     }
   }
 
@@ -287,7 +265,6 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
 
     this.resizeObserver.disconnect();
 
-    // Dispose plugins (reverse order recommended)
     Array.from(this.plugins.values())
       .reverse()
       .forEach((plugin) => plugin.dispose?.());
@@ -304,16 +281,5 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
 
     SceneOrchestrator.instance = null;
     console.info('[Orchestrator] Dispose completo');
-  }
-
-  /* ============================
-   * Getters
-   * ============================ */
-  getActiveModel(): THREE.Group | null {
-    return this.activeModel;
-  }
-
-  getActiveHDRI(): THREE.Texture | null {
-    return this.activeHDRI;
   }
 }

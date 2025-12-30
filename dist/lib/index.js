@@ -11,7 +11,8 @@ import {
   THREE_VERSION,
   UnrealBloomPass
 } from "../chunk-OVHQQSEK.js";
-import "../chunk-EPN65WJP.js";
+import "../chunk-RBZOTBBM.js";
+import "../chunk-7ZN6VXPX.js";
 export {
   THREE,
   THREE_VERSION,

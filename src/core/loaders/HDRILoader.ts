@@ -3,26 +3,7 @@ import { WebPHDRLoader } from './WebPHDRLoader';
 import { ObjectCache } from '../cache/ObjectCache';
 import type { ManifestEntry } from '../cache/types';
 import { THREE, ThreeRGBELoader } from '../../lib';
-
-export type HDRIProgress = {
-  loaded: number;
-  total: number;
-  percent: number;
-  url: string;
-};
-
-export type HDRIEvents = {
-  onProgress?: (progress: HDRIProgress) => void;
-  onLoaded?: (texture: THREE.Texture, entry: ManifestEntry) => void;
-  onError?: (error: Error, url: string) => void;
-};
-
-export type HDRILoaderOptions = {
-  dataType?: typeof THREE.FloatType | typeof THREE.HalfFloatType;
-  exposure?: number;
-  maxLuminance?: number;
-  preserveHDR?: boolean;
-};
+import type { HDRIEvents, HDRILoaderOptions } from './loaders';
 
 export class HDRILoader {
   private static rgbeLoader = new ThreeRGBELoader();
