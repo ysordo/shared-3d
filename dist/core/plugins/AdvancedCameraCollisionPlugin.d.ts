@@ -1,4 +1,4 @@
-import { b as Plugin, C as ConfigToTuple, P as PluginContext } from '../../index-oH7U2rpR.js';
+import { b as Plugin, C as ConfigToTuple, P as PluginContext } from '../../index-vk5WYF3C.js';
 import '../loaders/loaders.d.js';
 import 'three';
 import '../cache/types.js';

@@ -154,10 +154,10 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
 
   activeModel = {
     set: this.setModel.bind(this),
-    get: this._activeModel,
+    get: (): THREE.Group | null => this._activeModel,
     remove: this.removeModel.bind(this),
   };
-
+  
   private async setModel(model: THREE.Group): Promise<void> {
     this.removeModel();
 
@@ -189,7 +189,7 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
 
   activeHDRI = {
     set: this.setHDRI.bind(this),
-    get: this._activeHDRI,
+    get: (): THREE.Texture | null => this._activeHDRI,
     clear: this.clearHDRI.bind(this),
   };
   private async setHDRI(

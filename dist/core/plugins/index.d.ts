@@ -9,7 +9,7 @@ export { MeasurementConfig, MeasurementEvent, MeasurementToolPlugin } from './Me
 export { OrbitControlsPlugin } from './OrbitControlsPlugin.js';
 export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './RaycasterPlugin.js';
 export { PostProcessingConfig, PostProcessingPlugin } from './PostProcessingPlugin.js';
-import '../../index-oH7U2rpR.js';
+import '../../index-vk5WYF3C.js';
 import '../loaders/loaders.d.js';
 import 'three';
 import '../cache/types.js';

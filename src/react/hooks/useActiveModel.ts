@@ -1,6 +1,6 @@
 'use client';
 import { useSyncExternalStore } from 'react';
-import { useScene } from '../contexts/SceneContext';
+import { useScene } from './useScene';
 import type { THREE } from '../../lib';
 
 export const useActiveModel = (): THREE.Group | null => {
@@ -17,6 +17,6 @@ export const useActiveModel = (): THREE.Group | null => {
         orchestrator.removeEventListener('model::removed' as never, removed);
       };
     },
-    () => orchestrator.activeModel.get,
+    () => orchestrator.activeModel.get(),
   );
 };

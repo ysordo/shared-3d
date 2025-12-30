@@ -1,5 +1,5 @@
 import React from 'react';
-import { S as SceneConfig, a as SceneOrchestrator } from '../../index-BbV6Hzfa.cjs';
+import { S as SceneConfig, a as SceneOrchestrator } from '../../index-DE4jh8VF.cjs';
 import * as THREE from 'three';
 import '../../core/loaders/loaders.d.cjs';
 import '../../core/cache/types.cjs';

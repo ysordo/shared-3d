@@ -1,5 +1,5 @@
 import { HotspotData } from '../../core/plugins/HotspotPlugin.js';
-import '../../index-oH7U2rpR.js';
+import '../../index-vk5WYF3C.js';
 import '../../core/loaders/loaders.d.js';
 import 'three';
 import '../../core/cache/types.js';

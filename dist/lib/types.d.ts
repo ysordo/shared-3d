@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 export { CacheEntry, CacheReport, ManifestEntries, ManifestEntry } from '../core/cache/types.js';
 export { GLTFLoaderEvents, GLTFLoaderOptions, HDRIEvents, HDRILoaderOptions, ProgressEvent, WebPHDRData } from '../core/loaders/loaders.d.js';
-export { C as ConfigToTuple, b as Plugin, P as PluginContext } from '../index-oH7U2rpR.js';
+export { C as ConfigToTuple, b as Plugin, P as PluginContext } from '../index-vk5WYF3C.js';
 export { CustomMaterialFactory, MaterialConfig } from '../react/controls/MaterialController.js';
 import 'react';
 

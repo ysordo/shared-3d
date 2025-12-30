@@ -5,7 +5,7 @@ export { useRaycaster } from './useRaycaster.js';
 export { useCache } from '../contexts/CacheContext.js';
 export { useAnimation } from './useAnimation.js';
 import 'react';
-import '../../index-oH7U2rpR.js';
+import '../../index-vk5WYF3C.js';
 import '../../core/loaders/loaders.d.js';
 import 'three';
 import '../../core/cache/types.js';

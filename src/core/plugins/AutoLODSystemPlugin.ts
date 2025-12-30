@@ -56,7 +56,7 @@ export class AutoLODSystemPlugin implements Plugin {
     this.camera = camera;
     this.orchestrator = orchestrator;
 
-    const activeModel = this.orchestrator.activeModel.get;
+    const activeModel = this.orchestrator.activeModel.get();
     if (activeModel) {
       this.applyLODToModel(activeModel);
     }
@@ -64,7 +64,7 @@ export class AutoLODSystemPlugin implements Plugin {
     this.originalSetModel = this.orchestrator.activeModel.set.bind(this.orchestrator);
     this.orchestrator.activeModel.set = async (...args) => {
       await this.originalSetModel!(...args);
-      const newModel = this.orchestrator.activeModel.get;
+      const newModel = this.orchestrator.activeModel.get();
       if (newModel) {
         this.applyLODToModel(newModel);
       }

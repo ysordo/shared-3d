@@ -1,4 +1,4 @@
-import { b as Plugin, P as PluginContext } from '../../index-BbV6Hzfa.cjs';
+import { b as Plugin, P as PluginContext } from '../../index-DE4jh8VF.cjs';
 import * as THREE from 'three';
 import '../loaders/loaders.d.cjs';
 import '../cache/types.cjs';

@@ -5,7 +5,7 @@ export { CacheEntry, CacheReport, ManifestEntries, ManifestEntry } from './cache
 export { GLTFLoader } from './loaders/GLTFLoader.js';
 export { HDRILoader } from './loaders/HDRILoader.js';
 export { WebPHDRLoader } from './loaders/WebPHDRLoader.js';
-export { S as SceneConfig, a as SceneOrchestrator } from '../index-oH7U2rpR.js';
+export { S as SceneConfig, a as SceneOrchestrator } from '../index-vk5WYF3C.js';
 export { AdvancedCameraCollisionPlugin } from './plugins/AdvancedCameraCollisionPlugin.js';
 export { AOCPluginConfig, AdvancedOrbitControlsPlugin } from './plugins/AdvancedOrbitControlsPlugin.js';
 export { AdvancedRaycasterPlugin } from './plugins/AdvancedRaycasterPlugin.js';

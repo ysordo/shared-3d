@@ -1,5 +1,5 @@
 import React from 'react';
-import { S as SceneConfig } from '../../index-oH7U2rpR.js';
+import { S as SceneConfig } from '../../index-vk5WYF3C.js';
 import '../../core/loaders/loaders.d.js';
 import 'three';
 import '../../core/cache/types.js';

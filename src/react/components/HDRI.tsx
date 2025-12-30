@@ -82,7 +82,7 @@ export const HDRI: React.FC<HDRIProps> = ({
       isHandle.current = true;
     }
     if (isHandle.current) {
-      if (orch.activeHDRI.get?.name !== entry.id && !isloaded.current) {
+      if (orch.activeHDRI.get()?.name !== entry.id && !isloaded.current) {
         isloaded.current = false;
         orch.activeHDRI.set(entry, { exposure, maxLuminance }).catch(console.error);
       }

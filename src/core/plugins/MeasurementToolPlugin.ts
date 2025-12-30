@@ -134,7 +134,7 @@ export class MeasurementToolPlugin implements Plugin {
 
     this.raycaster.setFromCamera(this.pointer, this.camera);
 
-    const model = this.orchestrator.activeModel.get;
+    const model = this.orchestrator.activeModel.get();
     if (!model) {return;}
 
     const intersects = this.raycaster.intersectObject(model, true);

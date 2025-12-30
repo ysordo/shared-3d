@@ -62,7 +62,7 @@ export const SceneObject: React.FC<SceneObjectProps> = ({
     if (parent === 'scene') {
       targetParent = orchestrator.scene;
     } else if (parent === 'model') {
-      targetParent = orchestrator.activeModel.get;
+      targetParent = orchestrator.activeModel.get();
     } else if (typeof parent === 'string') {
       targetParent = orchestrator.scene.getObjectByName(parent) || null;
     } else if (parent instanceof THREE.Object3D) {

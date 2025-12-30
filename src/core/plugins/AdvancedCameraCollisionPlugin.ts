@@ -67,7 +67,7 @@ export class AdvancedCameraCollisionPlugin implements Plugin {
   }
 
   preRender(): void {
-    const model = this.orchestrator.activeModel.get;
+    const model = this.orchestrator.activeModel.get();
     if (!model) {return;}
 
     this.targetPos.copy(this.camera.position);

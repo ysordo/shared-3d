@@ -1,4 +1,4 @@
-import { b as Plugin, P as PluginContext } from '../../index-oH7U2rpR.js';
+import { b as Plugin, P as PluginContext } from '../../index-vk5WYF3C.js';
 import * as THREE from 'three';
 import '../loaders/loaders.d.js';
 import '../cache/types.js';

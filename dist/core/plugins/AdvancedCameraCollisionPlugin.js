@@ -1,6 +1,6 @@
 import {
   AdvancedCameraCollisionPlugin
-} from "../../chunk-NIUZU6ND.js";
+} from "../../chunk-HMWQD7BG.js";
 import "../../chunk-OK2NCVM7.js";
 import "../../chunk-OVHQQSEK.js";
 import "../../chunk-RBZOTBBM.js";
