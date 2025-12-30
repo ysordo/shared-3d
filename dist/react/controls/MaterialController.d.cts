@@ -24,6 +24,7 @@ type MaterialConfig = {
 type MaterialItem = {
     name: string;
     oldName: string;
+    nextName: string;
     apply: () => void;
     isActive: boolean;
     percentage: number;
@@ -36,7 +37,7 @@ type MaterialControllerProps = {
     /** Duración total de la transición secuencial (ms) */
     transitionDuration?: number;
     /** Render prop que recibe el estado de materiales */
-    children: (items: MaterialItem[]) => React.ReactNode;
+    children: (items: MaterialItem[], isTransitioning?: boolean) => React.ReactNode;
     className?: string;
 };
 /**
@@ -46,7 +47,7 @@ type MaterialControllerProps = {
  *
  * Problemas identificados y corregidos:
  * 1. **No renderizado**: Early return `if (!model)` antes de hooks → violación Rules of Hooks.
- * 2. **Estado inicial inconsistente**: `activeName` null hasta primer apply → items con oldName vacío.
+ * 2. **Estado inicial inconsistente**: `activeName` null hasta primer apply → items con prevName vacío.
  * 3. **Transición secuencial con timeouts dispersos**: Limpieza manual compleja + race conditions.
  * 4. **Wireframe creado en cada render**: Overhead innecesario.
  *

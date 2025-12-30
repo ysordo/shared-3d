@@ -35,6 +35,7 @@ export type MaterialConfig =
 type MaterialItem = {
   name: string;
   oldName: string;
+  nextName: string;
   apply: () => void;
   isActive: boolean;
   percentage: number;
@@ -48,7 +49,7 @@ type MaterialControllerProps = {
   /** Duración total de la transición secuencial (ms) */
   transitionDuration?: number;
   /** Render prop que recibe el estado de materiales */
-  children: (items: MaterialItem[]) => React.ReactNode;
+  children: (items: MaterialItem[], isTransitioning?: boolean) => React.ReactNode;
   className?: string;
 };
 
@@ -59,7 +60,7 @@ type MaterialControllerProps = {
  *
  * Problemas identificados y corregidos:
  * 1. **No renderizado**: Early return `if (!model)` antes de hooks → violación Rules of Hooks.
- * 2. **Estado inicial inconsistente**: `activeName` null hasta primer apply → items con oldName vacío.
+ * 2. **Estado inicial inconsistente**: `activeName` null hasta primer apply → items con prevName vacío.
  * 3. **Transición secuencial con timeouts dispersos**: Limpieza manual compleja + race conditions.
  * 4. **Wireframe creado en cada render**: Overhead innecesario.
  *
@@ -98,9 +99,10 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
 
   const [activeName, setActiveName] = useState<string | null>(null);
   const [oldName, setOldName] = useState<string>('');
+  const [nextName, setNextName] = useState<string>('');
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const percentageRef = useRef(0);
+  const [percentage, setPercentage] = useState(0);
   const meshesRef = useRef<THREE.Mesh[]>([]);
   const processedModelRef = useRef<THREE.Group | null>(null);
   const timeoutsRef = useRef<number[]>([]);
@@ -214,13 +216,14 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         return;
       }
       setOldName(activeName ?? '');
+      setNextName(config.name);
 
       // Limpiar timeouts previos
       timeoutsRef.current.forEach(clearTimeout);
       timeoutsRef.current = [];
 
       setIsTransitioning(true);
-      percentageRef.current = 0;
+      setPercentage(0);
 
       if (transitionDuration === 0) {
         meshesRef.current.forEach((m) => applyToMesh(m, config));
@@ -236,7 +239,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         const timeoutId = window.setTimeout(() => {
           applyToMesh(mesh, config);
           completed++;
-          percentageRef.current = (completed / meshesRef.current.length) * 100;
+          setPercentage((completed / meshesRef.current.length) * 100);
 
           if (completed === meshesRef.current.length) {
             setActiveName(config.name);
@@ -247,7 +250,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         timeoutsRef.current.push(timeoutId);
       });
     },
-    [model, isTransitioning, transitionDuration, applyToMesh]
+    [model, isTransitioning, activeName, transitionDuration, applyToMesh]
   );
 
   // Items para render prop (siempre disponibles, incluso sin modelo)
@@ -256,11 +259,12 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       materials.map((config) => ({
         name: config.name,
         oldName,
+        nextName,
         apply: () => applyMaterial(config),
         isActive: activeName === config.name,
-        percentage: percentageRef.current,
+        percentage,
       })),
-    [materials, oldName, activeName, applyMaterial]
+    [materials, oldName, nextName, activeName, percentage, applyMaterial]
   );
 
   // Aplicar material por defecto al montar
@@ -283,5 +287,5 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   }, []);
 
   // Renderizado siempre (items seguros incluso sin modelo)
-  return <div className={className}>{children(items)}</div>;
+  return <div className={className}>{children(items, isTransitioning)}</div>;
 };

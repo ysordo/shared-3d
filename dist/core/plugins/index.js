@@ -1,11 +1,5 @@
 import "../../chunk-USQ24ZCS.js";
 import {
-  AutoLODSystemPlugin
-} from "../../chunk-DYFEVAAB.js";
-import {
-  HotspotPlugin
-} from "../../chunk-XYVNLCWO.js";
-import {
   LODSystemPlugin
 } from "../../chunk-BDSK4HHN.js";
 import {
@@ -32,6 +26,12 @@ import {
 import {
   AnnotationsPlugin
 } from "../../chunk-JX3LRZFE.js";
+import {
+  AutoLODSystemPlugin
+} from "../../chunk-DYFEVAAB.js";
+import {
+  HotspotPlugin
+} from "../../chunk-XYVNLCWO.js";
 import "../../chunk-OK2NCVM7.js";
 import "../../chunk-OVHQQSEK.js";
 import "../../chunk-RBZOTBBM.js";
