@@ -1,7 +1,7 @@
 "use client";
 import {
   ARButton
-} from "../../chunk-4DH7Q4CD.js";
+} from "../../chunk-JMB4NQAB.js";
 import "../../chunk-PYBGN7YC.js";
 import "../../chunk-AARDPV3F.js";
 import "../../chunk-62VY7Y5Z.js";

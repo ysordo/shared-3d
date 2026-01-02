@@ -1,5 +1,10 @@
 import React from 'react';
 
-declare const VRButton: React.FC;
+type VRButtonProps = {
+    children?: React.ReactNode;
+    className?: string;
+    onClick?: () => void;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+declare const VRButton: React.FC<VRButtonProps>;
 
 export { VRButton };

@@ -1,28 +1,28 @@
-import {
-  usePlugin
-} from "./chunk-LRTR63O6.js";
-import {
-  useActiveModel
-} from "./chunk-4Y6GMSZS.js";
-import {
-  useScene
-} from "./chunk-AARDPV3F.js";
-import {
-  AdvancedRaycasterPlugin
-} from "./chunk-CQTY6LVA.js";
-import {
-  THREE
-} from "./chunk-OVHQQSEK.js";
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
+
+var _chunkCUEKVN7Qcjs = require('./chunk-CUEKVN7Q.cjs');
+
+
+var _chunkRLPJUVA4cjs = require('./chunk-RLPJUVA4.cjs');
+
+
+var _chunkWAZQGQ6Zcjs = require('./chunk-WAZQGQ6Z.cjs');
+
+
+var _chunkPWY2ROIAcjs = require('./chunk-PWY2ROIA.cjs');
+
+
+var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
 
 // src/react/components/AdvancedDragRaycaster.tsx
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from "react";
-import { Fragment, jsx } from "react/jsx-runtime";
+
+
+
+
+
+
+var _react = require('react');
+var _jsxruntime = require('react/jsx-runtime');
 var AdvancedDragRaycaster = ({
   children,
   defaultEnabled = true,
@@ -32,25 +32,25 @@ var AdvancedDragRaycaster = ({
   onDrag,
   onDragEnd
 }) => {
-  const { camera, renderer } = useScene();
-  const model = useActiveModel();
-  const [isEnabled, setIsEnabled] = useState(defaultEnabled);
-  const [isResetting, setIsResetting] = useState(false);
-  const rafRef = useRef(null);
-  const originalStatesRef = useRef(/* @__PURE__ */ new Map());
-  const temp = useMemo(
+  const { camera, renderer } = _chunkWAZQGQ6Zcjs.useScene.call(void 0, );
+  const model = _chunkCUEKVN7Qcjs.useActiveModel.call(void 0, );
+  const [isEnabled, setIsEnabled] = _react.useState.call(void 0, defaultEnabled);
+  const [isResetting, setIsResetting] = _react.useState.call(void 0, false);
+  const rafRef = _react.useRef.call(void 0, null);
+  const originalStatesRef = _react.useRef.call(void 0, /* @__PURE__ */ new Map());
+  const temp = _react.useMemo.call(void 0, 
     () => ({
-      v1: new THREE.Vector3(),
-      v2: new THREE.Vector3(),
-      v3: new THREE.Vector3(),
-      v1_1: new THREE.Vector3(),
-      v2_2: new THREE.Vector3(),
-      plane: new THREE.Plane(),
-      quat: new THREE.Quaternion()
+      v1: new _chunkEA3XQ4KJcjs.THREE.Vector3(),
+      v2: new _chunkEA3XQ4KJcjs.THREE.Vector3(),
+      v3: new _chunkEA3XQ4KJcjs.THREE.Vector3(),
+      v1_1: new _chunkEA3XQ4KJcjs.THREE.Vector3(),
+      v2_2: new _chunkEA3XQ4KJcjs.THREE.Vector3(),
+      plane: new _chunkEA3XQ4KJcjs.THREE.Plane(),
+      quat: new _chunkEA3XQ4KJcjs.THREE.Quaternion()
     }),
     []
   );
-  const handleDragStart = useCallback(
+  const handleDragStart = _react.useCallback.call(void 0, 
     (obj) => {
       if (!originalStatesRef.current.has(obj)) {
         originalStatesRef.current.set(obj, {
@@ -58,11 +58,11 @@ var AdvancedDragRaycaster = ({
           quaternion: obj.quaternion.clone()
         });
       }
-      onDragStart?.(obj);
+      _optionalChain([onDragStart, 'optionalCall', _ => _(obj)]);
     },
     [onDragStart]
   );
-  const handleDrag = useCallback(
+  const handleDrag = _react.useCallback.call(void 0, 
     (obj, currentPosition, startPosition) => {
       if (!model || !camera) {
         return;
@@ -70,15 +70,15 @@ var AdvancedDragRaycaster = ({
       obj.getWorldPosition(temp.v1);
       camera.getWorldDirection(temp.v2);
       temp.plane.setFromNormalAndCoplanarPoint(temp.v2.negate(), temp.v1);
-      const ndc = new THREE.Vector2(
+      const ndc = new _chunkEA3XQ4KJcjs.THREE.Vector2(
         currentPosition.x / renderer.domElement.width * 2 - 1,
         -(currentPosition.y / renderer.domElement.height) * 2 + 1
       );
-      const nds = new THREE.Vector2(
+      const nds = new _chunkEA3XQ4KJcjs.THREE.Vector2(
         startPosition.x / renderer.domElement.width * 2 - 1,
         -(startPosition.y / renderer.domElement.height) * 2 + 1
       );
-      const ray = new THREE.Raycaster();
+      const ray = new _chunkEA3XQ4KJcjs.THREE.Raycaster();
       ray.setFromCamera(ndc, camera);
       ray.ray.intersectPlane(temp.plane, temp.v1_1);
       ray.setFromCamera(nds, camera);
@@ -89,7 +89,7 @@ var AdvancedDragRaycaster = ({
         temp.v3.applyQuaternion(temp.quat);
       }
       obj.position.add(temp.v3);
-      onDrag?.(obj, temp.v3);
+      _optionalChain([onDrag, 'optionalCall', _2 => _2(obj, temp.v3)]);
     },
     [
       model,
@@ -107,13 +107,13 @@ var AdvancedDragRaycaster = ({
       onDrag
     ]
   );
-  const handleDragEnd = useCallback(
+  const handleDragEnd = _react.useCallback.call(void 0, 
     (obj) => {
-      onDragEnd?.(obj);
+      _optionalChain([onDragEnd, 'optionalCall', _3 => _3(obj)]);
     },
     [onDragEnd]
   );
-  const eventHandler = useCallback(
+  const eventHandler = _react.useCallback.call(void 0, 
     (event) => {
       console.log(
         "[AdvancedDragRaycaster] Test verify events actions, capture de content: ",
@@ -133,20 +133,20 @@ var AdvancedDragRaycaster = ({
     },
     [handleDragStart, handleDrag, handleDragEnd]
   );
-  const config = useMemo(
+  const config = _react.useMemo.call(void 0, 
     () => ({
-      model: model ?? null,
+      model: _nullishCoalesce(model, () => ( null)),
       onEvent: eventHandler
       //enabled: isEnabled,
     }),
     [model, eventHandler]
   );
-  const factory = useCallback(
-    () => new AdvancedRaycasterPlugin(null, void 0),
+  const factory = _react.useCallback.call(void 0, 
+    () => new (0, _chunkPWY2ROIAcjs.AdvancedRaycasterPlugin)(null, void 0),
     []
   );
-  const plugin = usePlugin(factory, config);
-  const resetAll = useCallback(() => {
+  const plugin = _chunkRLPJUVA4cjs.usePlugin.call(void 0, factory, config);
+  const resetAll = _react.useCallback.call(void 0, () => {
     if (isResetting || originalStatesRef.current.size === 0) {
       return;
     }
@@ -168,19 +168,19 @@ var AdvancedDragRaycaster = ({
     };
     rafRef.current = requestAnimationFrame(animate);
   }, [isResetting, transitionDuration]);
-  useEffect(() => {
+  _react.useEffect.call(void 0, () => {
     return () => {
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
       }
     };
   }, []);
-  const toggleEnabled = useCallback(() => setIsEnabled((prev) => !prev), []);
-  const setEnabledCallback = useCallback(
+  const toggleEnabled = _react.useCallback.call(void 0, () => setIsEnabled((prev) => !prev), []);
+  const setEnabledCallback = _react.useCallback.call(void 0, 
     (value) => setIsEnabled(value),
     []
   );
-  const controlState = useMemo(
+  const controlState = _react.useMemo.call(void 0, 
     () => ({
       isEnabled,
       toggleEnabled,
@@ -190,15 +190,15 @@ var AdvancedDragRaycaster = ({
     }),
     [isEnabled, toggleEnabled, setEnabledCallback, resetAll, isResetting]
   );
-  useEffect(() => {
+  _react.useEffect.call(void 0, () => {
     console.log("[AdvancedDragRaycaster] model changed:", model);
   }, [model]);
-  useEffect(() => {
-    plugin?.setEnabled(isEnabled);
+  _react.useEffect.call(void 0, () => {
+    _optionalChain([plugin, 'optionalAccess', _4 => _4.setEnabled, 'call', _5 => _5(isEnabled)]);
   }, [isEnabled, plugin]);
-  return /* @__PURE__ */ jsx(Fragment, { children: children?.(controlState) });
+  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, _jsxruntime.Fragment, { children: _optionalChain([children, 'optionalCall', _6 => _6(controlState)]) });
 };
 
-export {
-  AdvancedDragRaycaster
-};
+
+
+exports.AdvancedDragRaycaster = AdvancedDragRaycaster;
