@@ -30,13 +30,9 @@ type MaterialItem = {
     percentage: number;
 };
 type MaterialControllerProps = {
-    /** Configuración de materiales disponibles */
     materials: MaterialConfig[];
-    /** Material activo por defecto al cargar el modelo */
     activeDefault?: string;
-    /** Duración total de la transición secuencial (ms) */
     transitionDuration?: number;
-    /** Render prop que recibe el estado de materiales */
     children: (items: MaterialItem[], isTransitioning?: boolean) => React.ReactNode;
     className?: string;
 };

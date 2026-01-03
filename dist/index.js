@@ -5,11 +5,11 @@ import "./chunk-E64RDZHI.js";
 import "./chunk-G5YWPRA4.js";
 import "./chunk-EC4WICT5.js";
 import "./chunk-MQDFSDBK.js";
-import "./chunk-JH6IQNCJ.js";
 import "./chunk-5RGQXC4Q.js";
 import {
   SceneObject
 } from "./chunk-WPONBNZ6.js";
+import "./chunk-JH6IQNCJ.js";
 import "./chunk-VHIECBSI.js";
 import {
   VRButton
@@ -23,7 +23,7 @@ import {
 } from "./chunk-2HGPMGIS.js";
 import {
   MaterialController
-} from "./chunk-ZVOFVBXX.js";
+} from "./chunk-ZZCBNZMK.js";
 import {
   OrbitControls as OrbitControls2
 } from "./chunk-QQD6B5V4.js";

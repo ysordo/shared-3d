@@ -42,13 +42,9 @@ type MaterialItem = {
 };
 
 type MaterialControllerProps = {
-  /** Configuración de materiales disponibles */
   materials: MaterialConfig[];
-  /** Material activo por defecto al cargar el modelo */
   activeDefault?: string;
-  /** Duración total de la transición secuencial (ms) */
   transitionDuration?: number;
-  /** Render prop que recibe el estado de materiales */
   children: (items: MaterialItem[], isTransitioning?: boolean) => React.ReactNode;
   className?: string;
 };
@@ -107,7 +103,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   const processedModelRef = useRef<THREE.Group | null>(null);
   const timeoutsRef = useRef<number[]>([]);
 
-  // Inicialización única de meshes + wireframes
   useEffect(() => {
     if (!model) {
       meshesRef.current = [];
@@ -126,12 +121,10 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         return;
       }
 
-      // Guardar material original (solo primera vez)
       if (!child.userData.originalMaterial) {
         child.userData.originalMaterial = child.material.clone();
       }
 
-      // Crear wireframe una sola vez
       if (!child.getObjectByName(`${child.name}-wireframe`)) {
         const wireGeo = createQuadWireframe(child.geometry);
         const lineMat = new THREE.LineBasicMaterial({
@@ -149,11 +142,11 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
 
       meshesRef.current.push(child);
     });
-    meshesRef.current.sort((a, b) => a.uuid.localeCompare(b.uuid));
+    //meshesRef.current.sort((a, b) => a.uuid.localeCompare(b.uuid));
+    meshesRef.current.sort((a, b) => a.position.x - b.position.x);
     processedModelRef.current = model;
   }, [model]);
 
-  // Aplicar material a un mesh individual
   const applyToMesh = useCallback(
     (mesh: THREE.Mesh, config: MaterialConfig) => {
       const wireframe = mesh.getObjectByName(
@@ -170,23 +163,31 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
           }
           break;
         case 'solid':
-          newMat = new THREE.MeshStandardMaterial({
+          /*newMat = new THREE.MeshStandardMaterial({
             color: config.color ?? 0x888888,
             metalness: config.metalness ?? 0.5,
             roughness: config.roughness ?? 0.7,
             side: THREE.DoubleSide,
-          });
+          });*/
+          newMat = mesh.userData.originalMaterial.clone();
+          (newMat as THREE.MeshStandardMaterial).color.set(config.color ?? 0x888888);
+          (newMat as THREE.MeshStandardMaterial).metalness = config.metalness ?? 0.5;
+          (newMat as THREE.MeshStandardMaterial).roughness = config.roughness ?? 0.7;
           if (wireframe) {
             wireframe.visible = false;
           }
           break;
         case 'wireframe':
-          newMat = new THREE.MeshStandardMaterial({
+          /*newMat = new THREE.MeshStandardMaterial({
             color: config.color ?? 0x888888,
             transparent: true,
             opacity: 0.95,
             side: THREE.DoubleSide,
-          });
+          });*/
+          newMat = mesh.userData.originalMaterial.clone();
+          (newMat as THREE.MeshStandardMaterial).color.set(config.color ?? 0x888888);
+          (newMat as THREE.MeshStandardMaterial).transparent = true;
+          (newMat as THREE.MeshStandardMaterial).opacity = 0.95;
           if (wireframe) {
             wireframe.visible = true;
             (wireframe.material as THREE.LineBasicMaterial).color.set(
@@ -209,7 +210,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     []
   );
 
-  // Transición animada suave (RAF en lugar de timeouts)
   const applyMaterial = useCallback(
     (config: MaterialConfig) => {
       if (!model || isTransitioning || meshesRef.current.length === 0) {
@@ -218,7 +218,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       setOldName(activeName ?? '');
       setNextName(config.name);
 
-      // Limpiar timeouts previos
       timeoutsRef.current.forEach(clearTimeout);
       timeoutsRef.current = [];
 
@@ -253,7 +252,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     [model, isTransitioning, activeName, transitionDuration, applyToMesh]
   );
 
-  // Items para render prop (siempre disponibles, incluso sin modelo)
   const items = useMemo<MaterialItem[]>(
     () =>
       materials.map((config) => ({
@@ -267,7 +265,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     [materials, oldName, nextName, activeName, percentage, applyMaterial]
   );
 
-  // Aplicar material por defecto al montar
   useEffect(() => {
     if (!model || activeName || items.length === 0) {
       return;
@@ -279,13 +276,15 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     }
   }, [model, items, activeDefault, activeName]);
 
-  // Cleanup RAF
   useEffect(() => {
     return () => {
       timeoutsRef.current.forEach(clearTimeout);
     };
   }, []);
 
-  // Renderizado siempre (items seguros incluso sin modelo)
+  if(!model) {
+    return <div className={className}>{children([], false)}</div>;
+  }
+
   return <div className={className}>{children(items, isTransitioning)}</div>;
 };
