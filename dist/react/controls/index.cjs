@@ -7,7 +7,7 @@ var _chunkDMGYAYTUcjs = require('../../chunk-DMGYAYTU.cjs');
 var _chunk3HCN76F3cjs = require('../../chunk-3HCN76F3.cjs');
 
 
-var _chunkURY3OQLRcjs = require('../../chunk-URY3OQLR.cjs');
+var _chunkQMSZIS7Acjs = require('../../chunk-QMSZIS7A.cjs');
 require('../../chunk-CUEKVN7Q.cjs');
 require('../../chunk-4RZWCRXE.cjs');
 require('../../chunk-WAZQGQ6Z.cjs');
@@ -25,4 +25,4 @@ require('../../chunk-UW5RKAXQ.cjs');
 
 
 
-exports.AnimationController = _chunkDMGYAYTUcjs.AnimationController; exports.LightingController = _chunk3HCN76F3cjs.LightingController; exports.MaterialController = _chunkURY3OQLRcjs.MaterialController;
+exports.AnimationController = _chunkDMGYAYTUcjs.AnimationController; exports.LightingController = _chunk3HCN76F3cjs.LightingController; exports.MaterialController = _chunkQMSZIS7Acjs.MaterialController;

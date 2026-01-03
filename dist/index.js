@@ -23,7 +23,7 @@ import {
 } from "./chunk-2HGPMGIS.js";
 import {
   MaterialController
-} from "./chunk-ZZCBNZMK.js";
+} from "./chunk-4FOUZQVS.js";
 import {
   OrbitControls as OrbitControls2
 } from "./chunk-QQD6B5V4.js";

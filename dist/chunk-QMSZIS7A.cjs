@@ -75,32 +75,77 @@ var MaterialController = ({
         `${mesh.name}-wireframe`
       );
       let newMat;
+      const original = mesh.userData.originalMaterial;
       switch (config.type) {
         case "textured":
-          newMat = mesh.userData.originalMaterial;
+          newMat = original;
           if (wireframe) {
             wireframe.visible = false;
           }
           break;
-        case "solid":
-          newMat = mesh.userData.originalMaterial.clone();
-          newMat.color.set(_nullishCoalesce(config.color, () => ( 8947848)));
-          newMat.metalness = _nullishCoalesce(config.metalness, () => ( 0.5));
-          newMat.roughness = _nullishCoalesce(config.roughness, () => ( 0.7));
+        /*case 'solid':
+          newMat = new THREE.MeshStandardMaterial({
+            color: config.color ?? 0x888888,
+            metalness: config.metalness ?? 0.5,
+            roughness: config.roughness ?? 0.7,
+            side: THREE.DoubleSide,
+          });
           if (wireframe) {
             wireframe.visible = false;
           }
           break;
-        case "wireframe":
+        case 'wireframe':
+          newMat = new THREE.MeshStandardMaterial({
+            color: config.color ?? 0x888888,
+            transparent: true,
+            opacity: 0.95,
+            side: THREE.DoubleSide,
+          });
           newMat = mesh.userData.originalMaterial.clone();
-          newMat.color.set(_nullishCoalesce(config.color, () => ( 8947848)));
-          newMat.transparent = true;
-          newMat.opacity = 0.95;
+          (newMat as THREE.MeshStandardMaterial).color.set(config.color ?? 0x888888);
+          (newMat as THREE.MeshStandardMaterial).transparent = true;
+          (newMat as THREE.MeshStandardMaterial).opacity = 0.95;
           if (wireframe) {
             wireframe.visible = true;
-            wireframe.material.color.set(
-              _nullishCoalesce(config.lineColor, () => ( 0))
+            (wireframe.material as THREE.LineBasicMaterial).color.set(
+              config.lineColor ?? 0x000000
             );
+          }*/
+        case "solid":
+        case "wireframe":
+          if (Array.isArray(original)) {
+            newMat = original.map((origMat) => {
+              const cloned = origMat.clone();
+              cloned.color.set(_nullishCoalesce(config.color, () => ( 8947848)));
+              if (cloned instanceof _chunkEA3XQ4KJcjs.THREE.MeshStandardMaterial && config.type === "solid") {
+                cloned.metalness = _nullishCoalesce(config.metalness, () => ( 0.5));
+                cloned.roughness = _nullishCoalesce(config.roughness, () => ( 0.7));
+              }
+              if (cloned instanceof _chunkEA3XQ4KJcjs.THREE.MeshStandardMaterial && config.type === "wireframe") {
+                cloned.transparent = true;
+                cloned.opacity = 0.95;
+              }
+              return cloned;
+            });
+          } else {
+            newMat = original.clone();
+            newMat.color.set(_nullishCoalesce(config.color, () => ( 8947848)));
+            if (newMat instanceof _chunkEA3XQ4KJcjs.THREE.MeshStandardMaterial && config.type === "solid") {
+              newMat.metalness = _nullishCoalesce(config.metalness, () => ( 0.5));
+              newMat.roughness = _nullishCoalesce(config.roughness, () => ( 0.7));
+            }
+            if (newMat instanceof _chunkEA3XQ4KJcjs.THREE.MeshStandardMaterial && config.type === "wireframe") {
+              newMat.transparent = true;
+              newMat.opacity = 0.95;
+            }
+          }
+          if (wireframe) {
+            wireframe.visible = config.type === "wireframe";
+            if (config.type === "wireframe") {
+              wireframe.material.color.set(
+                _nullishCoalesce(config.lineColor, () => ( 0))
+              );
+            }
           }
           break;
         case "custom":
