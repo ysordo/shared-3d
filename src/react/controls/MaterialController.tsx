@@ -45,7 +45,10 @@ type MaterialControllerProps = {
   materials: MaterialConfig[];
   activeDefault?: string;
   transitionDuration?: number;
-  children: (items: MaterialItem[], isTransitioning?: boolean) => React.ReactNode;
+  children: (
+    items: MaterialItem[],
+    isTransitioning?: boolean
+  ) => React.ReactNode;
   className?: string;
 };
 
@@ -153,92 +156,54 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         `${mesh.name}-wireframe`
       ) as THREE.LineSegments | null;
 
-      let newMat: THREE.Material | THREE.Material[];
       const original = mesh.userData.originalMaterial;
+      let newMaterials: THREE.Material | THREE.Material[];
 
       switch (config.type) {
         case 'textured':
-          newMat = original;
+          newMaterials = original;
           if (wireframe) {
             wireframe.visible = false;
           }
           break;
-        /*case 'solid':
-          newMat = new THREE.MeshStandardMaterial({
-            color: config.color ?? 0x888888,
-            metalness: config.metalness ?? 0.5,
-            roughness: config.roughness ?? 0.7,
-            side: THREE.DoubleSide,
-          });
-          if (wireframe) {
-            wireframe.visible = false;
-          }
-          break;
-        case 'wireframe':
-          newMat = new THREE.MeshStandardMaterial({
-            color: config.color ?? 0x888888,
-            transparent: true,
-            opacity: 0.95,
-            side: THREE.DoubleSide,
-          });
-          newMat = mesh.userData.originalMaterial.clone();
-          (newMat as THREE.MeshStandardMaterial).color.set(config.color ?? 0x888888);
-          (newMat as THREE.MeshStandardMaterial).transparent = true;
-          (newMat as THREE.MeshStandardMaterial).opacity = 0.95;
-          if (wireframe) {
-            wireframe.visible = true;
-            (wireframe.material as THREE.LineBasicMaterial).color.set(
-              config.lineColor ?? 0x000000
-            );
-          }*/
+
         case 'solid':
         case 'wireframe':
-          if(Array.isArray(original)) {
-            newMat = original.map((origMat) => {
-              const cloned = origMat.clone();
-              cloned.color.set(config.color ?? 0x888888);
-              if(cloned instanceof THREE.MeshStandardMaterial && config.type === 'solid') {
-                cloned.metalness = config.metalness ?? 0.5;
-                cloned.roughness = config.roughness ?? 0.7;
-              }
-              if(cloned instanceof THREE.MeshStandardMaterial && config.type === 'wireframe') {
-                cloned.transparent = true;
-                cloned.opacity = 0.95;
-              }
-              return cloned;
+          const isWireframe = config.type === 'wireframe';
+
+          if (Array.isArray(original)) {
+            newMaterials = original.map((origMat: THREE.Material) => {
+              return synthesizeMaterial(origMat.clone(), isWireframe, config);
             });
-          }else {
-            newMat = original.clone();
-            (newMat as THREE.MeshStandardMaterial).color.set(config.color ?? 0x888888);
-            if(newMat instanceof THREE.MeshStandardMaterial && config.type === 'solid') {
-              newMat.metalness = config.metalness ?? 0.5;
-              newMat.roughness = config.roughness ?? 0.7;
-            }
-            if(newMat instanceof THREE.MeshStandardMaterial && config.type === 'wireframe') {
-              newMat.transparent = true;
-              newMat.opacity = 0.95;
-            }
+          } else {
+            newMaterials = synthesizeMaterial(original.cloned(), isWireframe, config);
           }
-          if(wireframe) {
-            wireframe.visible = config.type === 'wireframe';
-            if(config.type === 'wireframe') {
+
+          if (wireframe && isWireframe) {
               (wireframe.material as THREE.LineBasicMaterial).color.set(
                 config.lineColor ?? 0x000000
               );
-            }
           }
           break;
+
         case 'custom':
-          newMat = config.factory(mesh.userData.originalMaterial);
+          if (Array.isArray(original)) {
+            newMaterials = original.map((mat: THREE.Material) =>
+              config.factory(mat)
+            );
+          } else {
+            newMaterials = config.factory(original);
+          }
           if (wireframe) {
             wireframe.visible = false;
           }
           break;
+
         default:
           return;
       }
 
-      mesh.material = newMat;
+      mesh.material = newMaterials;
     },
     []
   );
@@ -315,9 +280,30 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     };
   }, []);
 
-  if(!model) {
+  if (!model) {
     return <div className={className}>{children([], false)}</div>;
   }
 
   return <div className={className}>{children(items, isTransitioning)}</div>;
 };
+
+function synthesizeMaterial(cloned: THREE.Material, isWireframe: boolean, config: any): THREE.Material {
+  if('color' in cloned && cloned.color instanceof THREE.Color) {
+    cloned.color.set(config.color ?? 0x888888);
+  } else {
+    (cloned as any).color = new THREE.Color(config.color ?? 0x888888);
+  }
+  if('map' in cloned) {cloned.map = null;}
+  if(!isWireframe){
+    if('metalness' in cloned) {cloned.metalness = config.metalness ?? cloned.metalness;}
+    if('roughness' in cloned) {cloned.roughness = config.roughness ?? cloned.roughness;}
+  }
+
+  if (isWireframe) {
+    cloned.transparent = true;
+    cloned.opacity = 0.95;
+  }
+
+  cloned.needsUpdate = true;
+  return cloned;
+}

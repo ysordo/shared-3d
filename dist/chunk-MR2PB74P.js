@@ -1,9 +1,9 @@
 import {
-  usePlugin
-} from "./chunk-LRTR63O6.js";
-import {
   useActiveModel
 } from "./chunk-4Y6GMSZS.js";
+import {
+  usePlugin
+} from "./chunk-LRTR63O6.js";
 import {
   useScene
 } from "./chunk-AARDPV3F.js";
@@ -115,10 +115,6 @@ var AdvancedDragRaycaster = ({
   );
   const eventHandler = useCallback(
     (event) => {
-      console.log(
-        "[AdvancedDragRaycaster] Test verify events actions, capture de content: ",
-        event
-      );
       switch (event.type) {
         case "objectdragstart":
           handleDragStart(event.object);
@@ -190,9 +186,6 @@ var AdvancedDragRaycaster = ({
     }),
     [isEnabled, toggleEnabled, setEnabledCallback, resetAll, isResetting]
   );
-  useEffect(() => {
-    console.log("[AdvancedDragRaycaster] model changed:", model);
-  }, [model]);
   useEffect(() => {
     plugin?.setEnabled(isEnabled);
   }, [isEnabled, plugin]);
