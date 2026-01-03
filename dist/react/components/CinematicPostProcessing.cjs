@@ -4,10 +4,10 @@
 var _chunk5J475KONcjs = require('../../chunk-5J475KON.cjs');
 
 
-var _chunkRLPJUVA4cjs = require('../../chunk-RLPJUVA4.cjs');
+var _chunkEC2ZLY2Vcjs = require('../../chunk-EC2ZLY2V.cjs');
 require('../../chunk-4RZWCRXE.cjs');
-require('../../chunk-WAZQGQ6Z.cjs');
-require('../../chunk-OS5KFCWO.cjs');
+require('../../chunk-7J7CBFY2.cjs');
+require('../../chunk-O74QSQFU.cjs');
 require('../../chunk-ISDKKMXI.cjs');
 require('../../chunk-QPTSJCSB.cjs');
 require('../../chunk-7W7IF4LU.cjs');
@@ -49,7 +49,7 @@ var CinematicPostProcessing = ({
     ]
   );
   const factory = _react.useCallback.call(void 0, () => new (0, _chunk5J475KONcjs.CinematicPostProcessingPlugin)(), []);
-  _chunkRLPJUVA4cjs.usePlugin.call(void 0, factory, config);
+  _chunkEC2ZLY2Vcjs.usePlugin.call(void 0, factory, config);
   return null;
 };
 

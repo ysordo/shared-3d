@@ -16,7 +16,7 @@ export { HotspotData, HotspotPlugin } from './plugins/HotspotPlugin.cjs';
 export { LODConfig, LODSystemPlugin } from './plugins/LODSystemPlugin.cjs';
 export { MeasurementConfig, MeasurementEvent, MeasurementToolPlugin } from './plugins/MeasurementToolPlugin.cjs';
 export { OrbitControlsPlugin } from './plugins/OrbitControlsPlugin.cjs';
-export { PostProcessingConfig, PostProcessingPlugin } from './plugins/PostProcessingPlugin.cjs';
+export { BloomPostProcessingConfig, BloomPostProcessingPlugin } from './plugins/BloomPostProcessingPlugin.cjs';
 export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './plugins/RaycasterPlugin.cjs';
 export { createQuadWireframe } from './utils/QuadWireframe.cjs';
 import 'three';

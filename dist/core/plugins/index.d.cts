@@ -8,7 +8,7 @@ export { HotspotData, HotspotPlugin } from './HotspotPlugin.cjs';
 export { LODConfig, LODSystemPlugin } from './LODSystemPlugin.cjs';
 export { MeasurementConfig, MeasurementEvent, MeasurementToolPlugin } from './MeasurementToolPlugin.cjs';
 export { OrbitControlsPlugin } from './OrbitControlsPlugin.cjs';
-export { PostProcessingConfig, PostProcessingPlugin } from './PostProcessingPlugin.cjs';
+export { BloomPostProcessingConfig, BloomPostProcessingPlugin } from './BloomPostProcessingPlugin.cjs';
 export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './RaycasterPlugin.cjs';
 import '../../index-DE4jh8VF.cjs';
 import '../loaders/loaders.d.cjs';

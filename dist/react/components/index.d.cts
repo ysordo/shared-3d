@@ -23,7 +23,7 @@ export { Model } from './Model.cjs';
 export { ModelPreload } from './ModelPreload.cjs';
 export { OrbitControls } from './OrbitControls.cjs';
 export { PointLight } from './PointLight.cjs';
-export { PostProcessing } from './PostProcessing.cjs';
+export { BloomPostProcessing } from './BloomPostProcessing.cjs';
 export { Raycaster } from './Raycaster.cjs';
 export { SpotLight } from './SpotLight.cjs';
 export { Suspense } from './Suspense.cjs';

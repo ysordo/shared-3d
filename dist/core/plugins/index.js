@@ -15,9 +15,6 @@ import {
   OrbitControlsPlugin
 } from "../../chunk-RQB2RLAY.js";
 import {
-  PostProcessingPlugin
-} from "../../chunk-WE37JDEL.js";
-import {
   RaycasterPlugin
 } from "../../chunk-VFXDH6LA.js";
 import {
@@ -35,6 +32,9 @@ import {
 import {
   AutoLODSystemPlugin
 } from "../../chunk-DYFEVAAB.js";
+import {
+  BloomPostProcessingPlugin
+} from "../../chunk-3HYQC7ZZ.js";
 import "../../chunk-OK2NCVM7.js";
 import "../../chunk-OVHQQSEK.js";
 import "../../chunk-RBZOTBBM.js";
@@ -45,11 +45,11 @@ export {
   AdvancedRaycasterPlugin,
   AnnotationsPlugin,
   AutoLODSystemPlugin,
+  BloomPostProcessingPlugin,
   CinematicPostProcessingPlugin,
   HotspotPlugin,
   LODSystemPlugin,
   MeasurementToolPlugin,
   OrbitControlsPlugin,
-  PostProcessingPlugin,
   RaycasterPlugin
 };

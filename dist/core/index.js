@@ -1,9 +1,9 @@
 import "../chunk-7MGZDKNL.js";
 import "../chunk-SA6GO7S2.js";
-import "../chunk-F6GXA7RW.js";
 import {
   CinematicPostProcessingPlugin
 } from "../chunk-RTN7ZJDY.js";
+import "../chunk-F6GXA7RW.js";
 import "../chunk-E64RDZHI.js";
 import "../chunk-G5YWPRA4.js";
 import "../chunk-EC4WICT5.js";
@@ -24,14 +24,11 @@ import {
   OrbitControlsPlugin
 } from "../chunk-RQB2RLAY.js";
 import {
-  PostProcessingPlugin
-} from "../chunk-WE37JDEL.js";
-import {
   RaycasterPlugin
 } from "../chunk-VFXDH6LA.js";
 import {
   SceneOrchestrator
-} from "../chunk-62VY7Y5Z.js";
+} from "../chunk-YS7SZK5L.js";
 import {
   AdvancedCameraCollisionPlugin
 } from "../chunk-HMWQD7BG.js";
@@ -47,6 +44,9 @@ import {
 import {
   AutoLODSystemPlugin
 } from "../chunk-DYFEVAAB.js";
+import {
+  BloomPostProcessingPlugin
+} from "../chunk-3HYQC7ZZ.js";
 import {
   GLTFLoader
 } from "../chunk-6FBDZUDJ.js";
@@ -76,6 +76,7 @@ export {
   AdvancedRaycasterPlugin,
   AnnotationsPlugin,
   AutoLODSystemPlugin,
+  BloomPostProcessingPlugin,
   CacheValidator,
   CinematicPostProcessingPlugin,
   FileWatcher,
@@ -86,7 +87,6 @@ export {
   MeasurementToolPlugin,
   ObjectCache,
   OrbitControlsPlugin,
-  PostProcessingPlugin,
   RaycasterPlugin,
   SceneOrchestrator,
   WebPHDRLoader,

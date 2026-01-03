@@ -8,5 +8,5 @@ export * from './HotspotPlugin';
 export * from './LODSystemPlugin';
 export * from './MeasurementToolPlugin';
 export * from './OrbitControlsPlugin';
-export * from './PostProcessingPlugin';
+export * from './BloomPostProcessingPlugin';
 export * from './RaycasterPlugin';

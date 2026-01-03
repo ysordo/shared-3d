@@ -8,7 +8,7 @@ export { HotspotData, HotspotPlugin } from './HotspotPlugin.js';
 export { LODConfig, LODSystemPlugin } from './LODSystemPlugin.js';
 export { MeasurementConfig, MeasurementEvent, MeasurementToolPlugin } from './MeasurementToolPlugin.js';
 export { OrbitControlsPlugin } from './OrbitControlsPlugin.js';
-export { PostProcessingConfig, PostProcessingPlugin } from './PostProcessingPlugin.js';
+export { BloomPostProcessingConfig, BloomPostProcessingPlugin } from './BloomPostProcessingPlugin.js';
 export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './RaycasterPlugin.js';
 import '../../index-vk5WYF3C.js';
 import '../loaders/loaders.d.js';

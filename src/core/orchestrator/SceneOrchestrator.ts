@@ -93,8 +93,11 @@ export class SceneOrchestrator extends THREE.EventDispatcher {
       this.animationId = requestAnimationFrame(loop);
 
       this.plugins.forEach((plugin) => plugin?.preRender?.());
+      const hasPostProcessingPlugin = Array.from(this.plugins.keys()).some(
+        (key) => key.endsWith('PostProcessing')
+      );
 
-      if (!this.plugins.has('PostProcessing')) {
+      if (!hasPostProcessingPlugin) {
         this.renderer.render(this.scene, this.camera);
       }
       this.plugins.forEach((plugin) => plugin?.postRender?.());

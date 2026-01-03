@@ -23,7 +23,7 @@ export { Model } from './Model';
 export { ModelPreload } from './ModelPreload';
 export { OrbitControls } from './OrbitControls';
 export { PointLight } from './PointLight';
-export { PostProcessing } from './PostProcessing';
+export { BloomPostProcessing } from './BloomPostProcessing';
 export { Raycaster } from './Raycaster';
 export { SpotLight } from './SpotLight';
 export { Suspense } from './Suspense';
