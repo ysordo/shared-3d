@@ -26,26 +26,26 @@ const TEXTURE_PROPS = [
   'thicknessMap',
 ];
 
-
 export type CustomMaterialFactory = (
   originalMaterial: THREE.Material
 ) => THREE.Material;
 
+type Texture = { name: string; type: 'textured' };
+type Solid = Omit<Texture, 'type'> & {
+  type: 'solid';
+  color?: THREE.ColorRepresentation;
+  metalness?: number;
+  roughness?: number;
+};
+type Wireframe = Omit<Solid,'type'> & {
+  type: 'wireframe';
+  lineColor?: THREE.ColorRepresentation;
+};
+
 export type MaterialConfig =
-  | { name: string; type: 'textured' }
-  | {
-      name: string;
-      type: 'solid';
-      color?: THREE.ColorRepresentation;
-      metalness?: number;
-      roughness?: number;
-    }
-  | {
-      name: string;
-      type: 'wireframe';
-      color?: THREE.ColorRepresentation;
-      lineColor?: THREE.ColorRepresentation;
-    }
+  | Texture
+  | Solid
+  | Wireframe
   | { name: string; type: 'custom'; factory: CustomMaterialFactory };
 
 type MaterialItem = {
@@ -192,13 +192,20 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
               return synthesizeMaterial(origMat.clone(), isWireframe, config);
             });
           } else {
-            newMaterials = synthesizeMaterial(original.clone(), isWireframe, config);
+            newMaterials = synthesizeMaterial(
+              original.clone(),
+              isWireframe,
+              config
+            );
           }
 
-          if (wireframe && isWireframe) {
+          if (wireframe) {
+            wireframe.visible = isWireframe;
+            if (isWireframe) {
               (wireframe.material as THREE.LineBasicMaterial).color.set(
                 config.lineColor ?? 0x000000
               );
+            }
           }
           break;
 
@@ -303,13 +310,17 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   return <div className={className}>{children(items, isTransitioning)}</div>;
 };
 
-function synthesizeMaterial(cloned: THREE.Material, isWireframe: boolean, config: any): THREE.Material {
-  if('color' in cloned && cloned.color instanceof THREE.Color) {
+function synthesizeMaterial(
+  cloned: THREE.Material,
+  isWireframe: boolean,
+  config: any
+): THREE.Material {
+  if ('color' in cloned && cloned.color instanceof THREE.Color) {
     cloned.color.set(config.color ?? 0x888888);
   } else {
     (cloned as any).color = new THREE.Color(config.color ?? 0x888888);
   }
-  if('alphaTest' in cloned){
+  if ('alphaTest' in cloned) {
     cloned.alphaTest = 0;
   }
   for (const key of TEXTURE_PROPS) {
@@ -317,22 +328,26 @@ function synthesizeMaterial(cloned: THREE.Material, isWireframe: boolean, config
       (cloned as any)[key] = null;
     }
   }
-  if (!isWireframe) {
-    if ('metalness' in cloned) {
-      cloned.metalness = config.metalness ?? cloned.metalness;
-    }
-    if ('roughness' in cloned) {
-      cloned.roughness = config.roughness ?? cloned.roughness;
-    }
+  if ('metalness' in cloned) {
+    cloned.metalness = config.metalness ?? cloned.metalness;
   }
-  if ('transmission' in cloned) {cloned.transmission = 0;}
-  if ('thickness' in cloned) {cloned.thickness = 0;}
-  if ('ior' in cloned) {cloned.ior = 1;}
+  if ('roughness' in cloned) {
+    cloned.roughness = config.roughness ?? cloned.roughness;
+  }
+  if ('transmission' in cloned) {
+    cloned.transmission = 0;
+  }
+  if ('thickness' in cloned) {
+    cloned.thickness = 0;
+  }
+  if ('ior' in cloned) {
+    cloned.ior = 1;
+  }
 
   if (isWireframe) {
     cloned.transparent = true;
     cloned.opacity = 0.95;
-  }else {
+  } else {
     cloned.transparent = false;
     cloned.opacity = 1;
   }

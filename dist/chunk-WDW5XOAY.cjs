@@ -1,22 +1,22 @@
-import {
-  useActiveModel
-} from "./chunk-4Y6GMSZS.js";
-import {
-  createQuadWireframe
-} from "./chunk-AWVHTM2E.js";
-import {
-  THREE
-} from "./chunk-OVHQQSEK.js";
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }
+
+var _chunkCUEKVN7Qcjs = require('./chunk-CUEKVN7Q.cjs');
+
+
+var _chunkGICX4QCOcjs = require('./chunk-GICX4QCO.cjs');
+
+
+var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
 
 // src/react/controls/MaterialController.tsx
-import {
-  useEffect,
-  useRef,
-  useMemo,
-  useCallback,
-  useState
-} from "react";
-import { jsx } from "react/jsx-runtime";
+
+
+
+
+
+
+var _react = require('react');
+var _jsxruntime = require('react/jsx-runtime');
 var TEXTURE_PROPS = [
   "map",
   "alphaMap",
@@ -38,16 +38,16 @@ var MaterialController = ({
   children,
   className
 }) => {
-  const model = useActiveModel();
-  const [activeName, setActiveName] = useState(null);
-  const [oldName, setOldName] = useState("");
-  const [nextName, setNextName] = useState("");
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [percentage, setPercentage] = useState(0);
-  const meshesRef = useRef([]);
-  const processedModelRef = useRef(null);
-  const timeoutsRef = useRef([]);
-  useEffect(() => {
+  const model = _chunkCUEKVN7Qcjs.useActiveModel.call(void 0, );
+  const [activeName, setActiveName] = _react.useState.call(void 0, null);
+  const [oldName, setOldName] = _react.useState.call(void 0, "");
+  const [nextName, setNextName] = _react.useState.call(void 0, "");
+  const [isTransitioning, setIsTransitioning] = _react.useState.call(void 0, false);
+  const [percentage, setPercentage] = _react.useState.call(void 0, 0);
+  const meshesRef = _react.useRef.call(void 0, []);
+  const processedModelRef = _react.useRef.call(void 0, null);
+  const timeoutsRef = _react.useRef.call(void 0, []);
+  _react.useEffect.call(void 0, () => {
     if (!model) {
       meshesRef.current = [];
       processedModelRef.current = null;
@@ -58,21 +58,21 @@ var MaterialController = ({
     }
     meshesRef.current = [];
     model.traverse((child) => {
-      if (!(child instanceof THREE.Mesh)) {
+      if (!(child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh)) {
         return;
       }
       if (!child.userData.originalMaterial) {
         child.userData.originalMaterial = child.material.clone();
       }
       if (!child.getObjectByName(`${child.name}-wireframe`)) {
-        const wireGeo = createQuadWireframe(child.geometry);
-        const lineMat = new THREE.LineBasicMaterial({
+        const wireGeo = _chunkGICX4QCOcjs.createQuadWireframe.call(void 0, child.geometry);
+        const lineMat = new _chunkEA3XQ4KJcjs.THREE.LineBasicMaterial({
           color: 0,
           polygonOffset: true,
           polygonOffsetFactor: 1,
           polygonOffsetUnits: 1
         });
-        const wireframe = new THREE.LineSegments(wireGeo, lineMat);
+        const wireframe = new _chunkEA3XQ4KJcjs.THREE.LineSegments(wireGeo, lineMat);
         wireframe.name = `${child.name}-wireframe`;
         wireframe.renderOrder = 999;
         wireframe.visible = false;
@@ -83,7 +83,7 @@ var MaterialController = ({
     meshesRef.current.sort((a, b) => a.position.x - b.position.x);
     processedModelRef.current = model;
   }, [model]);
-  const applyToMesh = useCallback(
+  const applyToMesh = _react.useCallback.call(void 0, 
     (mesh, config) => {
       const wireframe = mesh.getObjectByName(
         `${mesh.name}-wireframe`
@@ -105,12 +105,19 @@ var MaterialController = ({
               return synthesizeMaterial(origMat.clone(), isWireframe, config);
             });
           } else {
-            newMaterials = synthesizeMaterial(original.clone(), isWireframe, config);
-          }
-          if (wireframe && isWireframe) {
-            wireframe.material.color.set(
-              config.lineColor ?? 0
+            newMaterials = synthesizeMaterial(
+              original.clone(),
+              isWireframe,
+              config
             );
+          }
+          if (wireframe) {
+            wireframe.visible = isWireframe;
+            if (isWireframe) {
+              wireframe.material.color.set(
+                _nullishCoalesce(config.lineColor, () => ( 0))
+              );
+            }
           }
           break;
         case "custom":
@@ -132,12 +139,12 @@ var MaterialController = ({
     },
     []
   );
-  const applyMaterial = useCallback(
+  const applyMaterial = _react.useCallback.call(void 0, 
     (config) => {
       if (!model || isTransitioning || meshesRef.current.length === 0) {
         return;
       }
-      setOldName(activeName ?? "");
+      setOldName(_nullishCoalesce(activeName, () => ( "")));
       setNextName(config.name);
       timeoutsRef.current.forEach(clearTimeout);
       timeoutsRef.current = [];
@@ -166,7 +173,7 @@ var MaterialController = ({
     },
     [model, isTransitioning, activeName, transitionDuration, applyToMesh]
   );
-  const items = useMemo(
+  const items = _react.useMemo.call(void 0, 
     () => materials.map((config) => ({
       name: config.name,
       oldName,
@@ -177,7 +184,7 @@ var MaterialController = ({
     })),
     [materials, oldName, nextName, activeName, percentage, applyMaterial]
   );
-  useEffect(() => {
+  _react.useEffect.call(void 0, () => {
     if (!model || activeName || items.length === 0) {
       return;
     }
@@ -186,21 +193,21 @@ var MaterialController = ({
       defaultItem.apply();
     }
   }, [model, items, activeDefault, activeName]);
-  useEffect(() => {
+  _react.useEffect.call(void 0, () => {
     return () => {
       timeoutsRef.current.forEach(clearTimeout);
     };
   }, []);
   if (!model) {
-    return /* @__PURE__ */ jsx("div", { className, children: children([], false) });
+    return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: children([], false) });
   }
-  return /* @__PURE__ */ jsx("div", { className, children: children(items, isTransitioning) });
+  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: children(items, isTransitioning) });
 };
 function synthesizeMaterial(cloned, isWireframe, config) {
-  if ("color" in cloned && cloned.color instanceof THREE.Color) {
-    cloned.color.set(config.color ?? 8947848);
+  if ("color" in cloned && cloned.color instanceof _chunkEA3XQ4KJcjs.THREE.Color) {
+    cloned.color.set(_nullishCoalesce(config.color, () => ( 8947848)));
   } else {
-    cloned.color = new THREE.Color(config.color ?? 8947848);
+    cloned.color = new _chunkEA3XQ4KJcjs.THREE.Color(_nullishCoalesce(config.color, () => ( 8947848)));
   }
   if ("alphaTest" in cloned) {
     cloned.alphaTest = 0;
@@ -210,13 +217,11 @@ function synthesizeMaterial(cloned, isWireframe, config) {
       cloned[key] = null;
     }
   }
-  if (!isWireframe) {
-    if ("metalness" in cloned) {
-      cloned.metalness = config.metalness ?? cloned.metalness;
-    }
-    if ("roughness" in cloned) {
-      cloned.roughness = config.roughness ?? cloned.roughness;
-    }
+  if ("metalness" in cloned) {
+    cloned.metalness = _nullishCoalesce(config.metalness, () => ( cloned.metalness));
+  }
+  if ("roughness" in cloned) {
+    cloned.roughness = _nullishCoalesce(config.roughness, () => ( cloned.roughness));
   }
   if ("transmission" in cloned) {
     cloned.transmission = 0;
@@ -238,6 +243,6 @@ function synthesizeMaterial(cloned, isWireframe, config) {
   return cloned;
 }
 
-export {
-  MaterialController
-};
+
+
+exports.MaterialController = MaterialController;

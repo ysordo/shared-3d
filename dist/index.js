@@ -23,7 +23,7 @@ import {
 } from "./chunk-2HGPMGIS.js";
 import {
   MaterialController
-} from "./chunk-VBUUGDKF.js";
+} from "./chunk-6GNAYAQI.js";
 import {
   OrbitControls as OrbitControls2
 } from "./chunk-QQD6B5V4.js";
@@ -142,7 +142,12 @@ import {
   SceneProvider,
   useScene
 } from "./chunk-AARDPV3F.js";
-import "./chunk-52BWUKU3.js";
+import {
+  AutoLODSystemPlugin
+} from "./chunk-DYFEVAAB.js";
+import {
+  HotspotPlugin
+} from "./chunk-XYVNLCWO.js";
 import {
   LODSystemPlugin
 } from "./chunk-BDSK4HHN.js";
@@ -159,11 +164,12 @@ import {
   RaycasterPlugin
 } from "./chunk-VFXDH6LA.js";
 import {
-  createQuadWireframe
-} from "./chunk-AWVHTM2E.js";
-import {
   SceneOrchestrator
 } from "./chunk-62VY7Y5Z.js";
+import "./chunk-52BWUKU3.js";
+import {
+  createQuadWireframe
+} from "./chunk-AWVHTM2E.js";
 import {
   AdvancedCameraCollisionPlugin
 } from "./chunk-HMWQD7BG.js";
@@ -176,12 +182,6 @@ import {
 import {
   AnnotationsPlugin
 } from "./chunk-JX3LRZFE.js";
-import {
-  AutoLODSystemPlugin
-} from "./chunk-DYFEVAAB.js";
-import {
-  HotspotPlugin
-} from "./chunk-XYVNLCWO.js";
 import {
   GLTFLoader as GLTFLoader2
 } from "./chunk-6FBDZUDJ.js";

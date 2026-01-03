@@ -2,21 +2,21 @@ import React from 'react';
 import * as THREE from 'three';
 
 type CustomMaterialFactory = (originalMaterial: THREE.Material) => THREE.Material;
-type MaterialConfig = {
+type Texture = {
     name: string;
     type: 'textured';
-} | {
-    name: string;
+};
+type Solid = Omit<Texture, 'type'> & {
     type: 'solid';
     color?: THREE.ColorRepresentation;
     metalness?: number;
     roughness?: number;
-} | {
-    name: string;
+};
+type Wireframe = Omit<Solid, 'type'> & {
     type: 'wireframe';
-    color?: THREE.ColorRepresentation;
     lineColor?: THREE.ColorRepresentation;
-} | {
+};
+type MaterialConfig = Texture | Solid | Wireframe | {
     name: string;
     type: 'custom';
     factory: CustomMaterialFactory;
