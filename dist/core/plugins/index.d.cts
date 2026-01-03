@@ -3,12 +3,13 @@ export { AOCPluginConfig, AdvancedOrbitControlsPlugin } from './AdvancedOrbitCon
 export { AdvancedRaycasterPlugin } from './AdvancedRaycasterPlugin.cjs';
 export { AnnotationData, AnnotationsPlugin } from './AnnotationsPlugin.cjs';
 export { AutoLODConfig, AutoLODSystemPlugin } from './AutoLODSystemPlugin.cjs';
+export { CinematicPostProcessingConfig, CinematicPostProcessingPlugin } from './CinematicPostProcessingPlugin.cjs';
 export { HotspotData, HotspotPlugin } from './HotspotPlugin.cjs';
 export { LODConfig, LODSystemPlugin } from './LODSystemPlugin.cjs';
 export { MeasurementConfig, MeasurementEvent, MeasurementToolPlugin } from './MeasurementToolPlugin.cjs';
 export { OrbitControlsPlugin } from './OrbitControlsPlugin.cjs';
-export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './RaycasterPlugin.cjs';
 export { PostProcessingConfig, PostProcessingPlugin } from './PostProcessingPlugin.cjs';
+export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './RaycasterPlugin.cjs';
 import '../../index-DE4jh8VF.cjs';
 import '../loaders/loaders.d.cjs';
 import 'three';

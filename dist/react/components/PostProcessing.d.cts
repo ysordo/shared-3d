@@ -5,14 +5,14 @@ type PostProcessingProps = {
     enabled?: boolean;
 };
 /**
- * PostProcessing
+ * Post Processing
  *
- * Componente declarativo para efecto bloom configurable y reactivo.
+ * Declarative component for configurable and reactive bloom effect.
  *
- * Corrección clave:
- * - Eliminado early return condicional → evita violación de Rules of Hooks.
- * - Control de habilitación mediante prop enabled en config → usePlugin decide crear o desactivar en caliente.
- * - Cuando enabled=false el plugin no se crea (deep equality evita instalación) → zero overhead real.
+ * Key fix:
+ * -Removed early return conditional → avoids violation of Rules of Hooks.
+ * -Enable control via prop enabled in config → usePlugin decides to create or disable hot.
+ * -When enabled=false the plugin is not created (deep equality prevents installation) → zero real overhead.
  *
  * @example
  * <PostProcessing enabled={enableBloom} strength={1.8} />

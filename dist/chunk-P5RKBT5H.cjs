@@ -1,9 +1,9 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkW2T32FMRcjs = require('./chunk-W2T32FMR.cjs');
-
-
 var _chunkNZOURXVBcjs = require('./chunk-NZOURXVB.cjs');
+
+
+var _chunkW2T32FMRcjs = require('./chunk-W2T32FMR.cjs');
 
 // src/react/components/SuspenseModel.tsx
 var _jsxruntime = require('react/jsx-runtime');

@@ -11,12 +11,13 @@ export { AOCPluginConfig, AdvancedOrbitControlsPlugin } from './plugins/Advanced
 export { AdvancedRaycasterPlugin } from './plugins/AdvancedRaycasterPlugin.js';
 export { AnnotationData, AnnotationsPlugin } from './plugins/AnnotationsPlugin.js';
 export { AutoLODConfig, AutoLODSystemPlugin } from './plugins/AutoLODSystemPlugin.js';
+export { CinematicPostProcessingConfig, CinematicPostProcessingPlugin } from './plugins/CinematicPostProcessingPlugin.js';
 export { HotspotData, HotspotPlugin } from './plugins/HotspotPlugin.js';
 export { LODConfig, LODSystemPlugin } from './plugins/LODSystemPlugin.js';
 export { MeasurementConfig, MeasurementEvent, MeasurementToolPlugin } from './plugins/MeasurementToolPlugin.js';
 export { OrbitControlsPlugin } from './plugins/OrbitControlsPlugin.js';
-export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './plugins/RaycasterPlugin.js';
 export { PostProcessingConfig, PostProcessingPlugin } from './plugins/PostProcessingPlugin.js';
+export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './plugins/RaycasterPlugin.js';
 export { createQuadWireframe } from './utils/QuadWireframe.js';
 import 'three';
 import './loaders/loaders.d.js';

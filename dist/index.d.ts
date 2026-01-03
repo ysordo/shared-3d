@@ -11,12 +11,13 @@ export { AOCPluginConfig, AdvancedOrbitControlsPlugin } from './core/plugins/Adv
 export { AdvancedRaycasterPlugin } from './core/plugins/AdvancedRaycasterPlugin.js';
 export { AnnotationData, AnnotationsPlugin } from './core/plugins/AnnotationsPlugin.js';
 export { AutoLODConfig, AutoLODSystemPlugin } from './core/plugins/AutoLODSystemPlugin.js';
+export { CinematicPostProcessingConfig, CinematicPostProcessingPlugin } from './core/plugins/CinematicPostProcessingPlugin.js';
 export { HotspotData, HotspotPlugin } from './core/plugins/HotspotPlugin.js';
 export { LODConfig, LODSystemPlugin } from './core/plugins/LODSystemPlugin.js';
 export { MeasurementConfig, MeasurementEvent, MeasurementToolPlugin } from './core/plugins/MeasurementToolPlugin.js';
 export { OrbitControlsPlugin } from './core/plugins/OrbitControlsPlugin.js';
-export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './core/plugins/RaycasterPlugin.js';
 export { PostProcessingConfig, PostProcessingPlugin } from './core/plugins/PostProcessingPlugin.js';
+export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './core/plugins/RaycasterPlugin.js';
 export { createQuadWireframe } from './core/utils/QuadWireframe.js';
 export { THREE_VERSION } from './lib/three.js';
 export { ClickEvent, ColorRepresentation, DeepPartial, HoverEvent, LightConfig, Vector3Tuple } from './lib/types.js';

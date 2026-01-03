@@ -80,7 +80,6 @@ var MaterialController = ({
       }
       meshesRef.current.push(child);
     });
-    meshesRef.current.sort((a, b) => a.position.x - b.position.x);
     processedModelRef.current = model;
   }, [model]);
   const applyToMesh = _react.useCallback.call(void 0, 

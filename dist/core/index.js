@@ -1,12 +1,16 @@
 import "../chunk-7MGZDKNL.js";
-import "../chunk-USQ24ZCS.js";
+import "../chunk-SA6GO7S2.js";
 import "../chunk-F6GXA7RW.js";
+import {
+  CinematicPostProcessingPlugin
+} from "../chunk-RTN7ZJDY.js";
 import "../chunk-E64RDZHI.js";
 import "../chunk-G5YWPRA4.js";
 import "../chunk-EC4WICT5.js";
+import "../chunk-52BWUKU3.js";
 import {
-  AutoLODSystemPlugin
-} from "../chunk-DYFEVAAB.js";
+  createQuadWireframe
+} from "../chunk-AWVHTM2E.js";
 import {
   HotspotPlugin
 } from "../chunk-XYVNLCWO.js";
@@ -28,10 +32,6 @@ import {
 import {
   SceneOrchestrator
 } from "../chunk-62VY7Y5Z.js";
-import "../chunk-52BWUKU3.js";
-import {
-  createQuadWireframe
-} from "../chunk-AWVHTM2E.js";
 import {
   AdvancedCameraCollisionPlugin
 } from "../chunk-HMWQD7BG.js";
@@ -44,6 +44,9 @@ import {
 import {
   AnnotationsPlugin
 } from "../chunk-JX3LRZFE.js";
+import {
+  AutoLODSystemPlugin
+} from "../chunk-DYFEVAAB.js";
 import {
   GLTFLoader
 } from "../chunk-6FBDZUDJ.js";
@@ -74,6 +77,7 @@ export {
   AnnotationsPlugin,
   AutoLODSystemPlugin,
   CacheValidator,
+  CinematicPostProcessingPlugin,
   FileWatcher,
   GLTFLoader,
   HDRILoader,

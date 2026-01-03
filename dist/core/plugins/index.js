@@ -1,7 +1,7 @@
-import "../../chunk-USQ24ZCS.js";
+import "../../chunk-SA6GO7S2.js";
 import {
-  AutoLODSystemPlugin
-} from "../../chunk-DYFEVAAB.js";
+  CinematicPostProcessingPlugin
+} from "../../chunk-RTN7ZJDY.js";
 import {
   HotspotPlugin
 } from "../../chunk-XYVNLCWO.js";
@@ -32,6 +32,9 @@ import {
 import {
   AnnotationsPlugin
 } from "../../chunk-JX3LRZFE.js";
+import {
+  AutoLODSystemPlugin
+} from "../../chunk-DYFEVAAB.js";
 import "../../chunk-OK2NCVM7.js";
 import "../../chunk-OVHQQSEK.js";
 import "../../chunk-RBZOTBBM.js";
@@ -42,6 +45,7 @@ export {
   AdvancedRaycasterPlugin,
   AnnotationsPlugin,
   AutoLODSystemPlugin,
+  CinematicPostProcessingPlugin,
   HotspotPlugin,
   LODSystemPlugin,
   MeasurementToolPlugin,

@@ -162,7 +162,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       meshesRef.current.push(child);
     });
     //meshesRef.current.sort((a, b) => a.uuid.localeCompare(b.uuid));
-    meshesRef.current.sort((a, b) => a.position.x - b.position.x);
+    //meshesRef.current.sort((a, b) => a.position.x - b.position.x);
     processedModelRef.current = model;
   }, [model]);
 
