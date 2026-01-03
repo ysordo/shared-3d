@@ -7,7 +7,7 @@ import { VRButton as ThreeVRButton } from 'three/examples/jsm/webxr/VRButton.js'
 type VRButtonProps = {
   children?: React.ReactNode;
   className?: string;
-  onClick?: () => void;
+  onClick?: (e: PointerEvent) => void;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const VRButton: React.FC<VRButtonProps> = ({
@@ -58,19 +58,18 @@ export const VRButton: React.FC<VRButtonProps> = ({
       margin: 0,
       cursor: 'pointer',
       zIndex: 10,
+      display: 'none',
+      pointerEvents: !isSupported ? 'none' : 'auto',
     });
 
     if (buttonRef.current) {
       buttonRef.current.style.position = 'relative';
       buttonRef.current.appendChild(vrButton);
+      buttonRef.current.onclick = (e: PointerEvent) => {
+        vrButton.onclick?.(e);
+        onClick?.(e);
+      };
     }
-
-    const originalClick = vrButton.onclick as ((e: PointerEvent) => void) | null;
-    vrButton.onclick = (e: PointerEvent) => {
-      originalClick?.(e);
-      onClick?.();
-    };
-
     return () => {
       if (vrButton.parentNode) {
         vrButton.parentNode.removeChild(vrButton);

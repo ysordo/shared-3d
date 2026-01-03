@@ -1,7 +1,7 @@
 "use client";
 import {
   VRButton
-} from "../../chunk-VON6LMPE.js";
+} from "../../chunk-DT7GZV4G.js";
 import "../../chunk-PYBGN7YC.js";
 import "../../chunk-AARDPV3F.js";
 import "../../chunk-62VY7Y5Z.js";

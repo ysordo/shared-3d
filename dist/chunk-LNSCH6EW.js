@@ -1,21 +1,21 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
-
-var _chunkWAZQGQ6Zcjs = require('./chunk-WAZQGQ6Z.cjs');
+import {
+  useScene
+} from "./chunk-AARDPV3F.js";
 
 // src/react/components/ARButton.tsx
-var _react = require('react');
-var _ARButtonjs = require('three/examples/jsm/webxr/ARButton.js');
-var _jsxruntime = require('react/jsx-runtime');
+import { useEffect, useRef, useState } from "react";
+import { ARButton as ThreeARButton } from "three/examples/jsm/webxr/ARButton.js";
+import { jsx } from "react/jsx-runtime";
 var ARButton = ({
   children,
   className = "",
   onClick,
   ...restProps
 }) => {
-  const { renderer } = _chunkWAZQGQ6Zcjs.useScene.call(void 0, );
-  const buttonRef = _react.useRef.call(void 0, null);
-  const [isSupported, setIsSupported] = _react.useState.call(void 0, null);
-  _react.useEffect.call(void 0, () => {
+  const { renderer } = useScene();
+  const buttonRef = useRef(null);
+  const [isSupported, setIsSupported] = useState(null);
+  useEffect(() => {
     if (!renderer) {
       return;
     }
@@ -35,7 +35,7 @@ var ARButton = ({
       }
     };
     checkSupport();
-    const arButton = _ARButtonjs.ARButton.createButton(renderer);
+    const arButton = ThreeARButton.createButton(renderer);
     arButton.style.cssText = "";
     arButton.className = "";
     Object.assign(arButton.style, {
@@ -48,17 +48,18 @@ var ARButton = ({
       padding: 0,
       margin: 0,
       cursor: "pointer",
-      zIndex: 10
+      zIndex: 10,
+      display: "none",
+      pointerEvents: !isSupported ? "none" : "auto"
     });
     if (buttonRef.current) {
       buttonRef.current.style.position = "relative";
       buttonRef.current.appendChild(arButton);
+      buttonRef.current.onclick = (e) => {
+        arButton.onclick?.(e);
+        onClick?.(e);
+      };
     }
-    const originalClick = arButton.onclick;
-    arButton.onclick = (e) => {
-      _optionalChain([originalClick, 'optionalCall', _ => _(e)]);
-      _optionalChain([onClick, 'optionalCall', _2 => _2()]);
-    };
     return () => {
       if (arButton.parentNode) {
         arButton.parentNode.removeChild(arButton);
@@ -66,7 +67,7 @@ var ARButton = ({
     };
   }, [renderer, onClick]);
   const disabledClasses = !isSupported ? "opacity-40! cursor-not-allowed! grayscale!" : "";
-  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, 
+  return /* @__PURE__ */ jsx(
     "button",
     {
       ref: buttonRef,
@@ -79,6 +80,6 @@ var ARButton = ({
   );
 };
 
-
-
-exports.ARButton = ARButton;
+export {
+  ARButton
+};

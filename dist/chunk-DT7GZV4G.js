@@ -2,11 +2,11 @@ import {
   useScene
 } from "./chunk-AARDPV3F.js";
 
-// src/react/components/ARButton.tsx
+// src/react/components/VRButton.tsx
 import { useEffect, useRef, useState } from "react";
-import { ARButton as ThreeARButton } from "three/examples/jsm/webxr/ARButton.js";
+import { VRButton as ThreeVRButton } from "three/examples/jsm/webxr/VRButton.js";
 import { jsx } from "react/jsx-runtime";
-var ARButton = ({
+var VRButton = ({
   children,
   className = "",
   onClick,
@@ -24,7 +24,7 @@ var ARButton = ({
       if ("xr" in navigator) {
         try {
           const supported = await navigator.xr.isSessionSupported(
-            "immersive-ar"
+            "immersive-vr"
           );
           setIsSupported(supported);
         } catch (e) {
@@ -35,10 +35,10 @@ var ARButton = ({
       }
     };
     checkSupport();
-    const arButton = ThreeARButton.createButton(renderer);
-    arButton.style.cssText = "";
-    arButton.className = "";
-    Object.assign(arButton.style, {
+    const vrButton = ThreeVRButton.createButton(renderer);
+    vrButton.style.cssText = "";
+    vrButton.className = "";
+    Object.assign(vrButton.style, {
       position: "absolute",
       inset: 0,
       width: "100%",
@@ -48,20 +48,21 @@ var ARButton = ({
       padding: 0,
       margin: 0,
       cursor: "pointer",
-      zIndex: 10
+      zIndex: 10,
+      display: "none",
+      pointerEvents: !isSupported ? "none" : "auto"
     });
     if (buttonRef.current) {
       buttonRef.current.style.position = "relative";
-      buttonRef.current.appendChild(arButton);
+      buttonRef.current.appendChild(vrButton);
+      buttonRef.current.onclick = (e) => {
+        vrButton.onclick?.(e);
+        onClick?.(e);
+      };
     }
-    const originalClick = arButton.onclick;
-    arButton.onclick = (e) => {
-      originalClick?.(e);
-      onClick?.();
-    };
     return () => {
-      if (arButton.parentNode) {
-        arButton.parentNode.removeChild(arButton);
+      if (vrButton.parentNode) {
+        vrButton.parentNode.removeChild(vrButton);
       }
     };
   }, [renderer, onClick]);
@@ -80,5 +81,5 @@ var ARButton = ({
 };
 
 export {
-  ARButton
+  VRButton
 };

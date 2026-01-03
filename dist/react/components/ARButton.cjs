@@ -1,7 +1,7 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkVQ5LNVOLcjs = require('../../chunk-VQ5LNVOL.cjs');
+var _chunk3WJYOLDWcjs = require('../../chunk-3WJYOLDW.cjs');
 require('../../chunk-4RZWCRXE.cjs');
 require('../../chunk-WAZQGQ6Z.cjs');
 require('../../chunk-OS5KFCWO.cjs');
@@ -14,4 +14,4 @@ require('../../chunk-EQHV3NLZ.cjs');
 require('../../chunk-UW5RKAXQ.cjs');
 
 
-exports.ARButton = _chunkVQ5LNVOLcjs.ARButton;
+exports.ARButton = _chunk3WJYOLDWcjs.ARButton;

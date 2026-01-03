@@ -6,7 +6,7 @@ import { ARButton as ThreeARButton } from 'three/examples/jsm/webxr/ARButton.js'
 type ARButtonProps = {
   children?: React.ReactNode;
   className?: string;
-  onClick?: () => void;
+  onClick?: (e: PointerEvent) => void;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const ARButton: React.FC<ARButtonProps> = ({
@@ -57,18 +57,18 @@ export const ARButton: React.FC<ARButtonProps> = ({
       margin: 0,
       cursor: 'pointer',
       zIndex: 10,
+      display: 'none',
+      pointerEvents: !isSupported ? 'none' : 'auto',
     });
 
     if (buttonRef.current) {
       buttonRef.current.style.position = 'relative';
       buttonRef.current.appendChild(arButton);
+      buttonRef.current.onclick = (e: PointerEvent) => {
+        arButton.onclick?.(e);
+        onClick?.(e);
+      };
     }
-
-    const originalClick = arButton.onclick as ((e: PointerEvent) => void) | null;
-    arButton.onclick = (e: PointerEvent) => {
-      originalClick?.(e);
-      onClick?.();
-    };
 
     return () => {
       if (arButton.parentNode) {

@@ -48,17 +48,18 @@ var VRButton = ({
       padding: 0,
       margin: 0,
       cursor: "pointer",
-      zIndex: 10
+      zIndex: 10,
+      display: "none",
+      pointerEvents: !isSupported ? "none" : "auto"
     });
     if (buttonRef.current) {
       buttonRef.current.style.position = "relative";
       buttonRef.current.appendChild(vrButton);
+      buttonRef.current.onclick = (e) => {
+        _optionalChain([vrButton, 'access', _ => _.onclick, 'optionalCall', _2 => _2(e)]);
+        _optionalChain([onClick, 'optionalCall', _3 => _3(e)]);
+      };
     }
-    const originalClick = vrButton.onclick;
-    vrButton.onclick = (e) => {
-      _optionalChain([originalClick, 'optionalCall', _ => _(e)]);
-      _optionalChain([onClick, 'optionalCall', _2 => _2()]);
-    };
     return () => {
       if (vrButton.parentNode) {
         vrButton.parentNode.removeChild(vrButton);
