@@ -11,6 +11,22 @@ import { useActiveModel } from '../hooks/useActiveModel';
 import { createQuadWireframe } from '../../core/utils';
 import { THREE } from '../../lib';
 
+const TEXTURE_PROPS = [
+  'map',
+  'alphaMap',
+  'metalnessMap',
+  'roughnessMap',
+  'specularMap',
+  'clearcoatMap',
+  'clearcoatNormalMap',
+  'clearcoatRoughnessMap',
+  'sheenColorMap',
+  'sheenRoughnessMap',
+  'transmissionMap',
+  'thicknessMap',
+];
+
+
 export type CustomMaterialFactory = (
   originalMaterial: THREE.Material
 ) => THREE.Material;
@@ -176,7 +192,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
               return synthesizeMaterial(origMat.clone(), isWireframe, config);
             });
           } else {
-            newMaterials = synthesizeMaterial(original.cloned(), isWireframe, config);
+            newMaterials = synthesizeMaterial(original.clone(), isWireframe, config);
           }
 
           if (wireframe && isWireframe) {
@@ -293,15 +309,32 @@ function synthesizeMaterial(cloned: THREE.Material, isWireframe: boolean, config
   } else {
     (cloned as any).color = new THREE.Color(config.color ?? 0x888888);
   }
-  if('map' in cloned) {cloned.map = null;}
-  if(!isWireframe){
-    if('metalness' in cloned) {cloned.metalness = config.metalness ?? cloned.metalness;}
-    if('roughness' in cloned) {cloned.roughness = config.roughness ?? cloned.roughness;}
+  if('alphaTest' in cloned){
+    cloned.alphaTest = 0;
   }
+  for (const key of TEXTURE_PROPS) {
+    if (key in cloned) {
+      (cloned as any)[key] = null;
+    }
+  }
+  if (!isWireframe) {
+    if ('metalness' in cloned) {
+      cloned.metalness = config.metalness ?? cloned.metalness;
+    }
+    if ('roughness' in cloned) {
+      cloned.roughness = config.roughness ?? cloned.roughness;
+    }
+  }
+  if ('transmission' in cloned) {cloned.transmission = 0;}
+  if ('thickness' in cloned) {cloned.thickness = 0;}
+  if ('ior' in cloned) {cloned.ior = 1;}
 
   if (isWireframe) {
     cloned.transparent = true;
     cloned.opacity = 0.95;
+  }else {
+    cloned.transparent = false;
+    cloned.opacity = 1;
   }
 
   cloned.needsUpdate = true;

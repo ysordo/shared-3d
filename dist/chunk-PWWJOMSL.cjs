@@ -17,6 +17,20 @@ var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
 
 var _react = require('react');
 var _jsxruntime = require('react/jsx-runtime');
+var TEXTURE_PROPS = [
+  "map",
+  "alphaMap",
+  "metalnessMap",
+  "roughnessMap",
+  "specularMap",
+  "clearcoatMap",
+  "clearcoatNormalMap",
+  "clearcoatRoughnessMap",
+  "sheenColorMap",
+  "sheenRoughnessMap",
+  "transmissionMap",
+  "thicknessMap"
+];
 var MaterialController = ({
   materials,
   activeDefault,
@@ -91,7 +105,7 @@ var MaterialController = ({
               return synthesizeMaterial(origMat.clone(), isWireframe, config);
             });
           } else {
-            newMaterials = synthesizeMaterial(original.cloned(), isWireframe, config);
+            newMaterials = synthesizeMaterial(original.clone(), isWireframe, config);
           }
           if (wireframe && isWireframe) {
             wireframe.material.color.set(
@@ -188,8 +202,13 @@ function synthesizeMaterial(cloned, isWireframe, config) {
   } else {
     cloned.color = new _chunkEA3XQ4KJcjs.THREE.Color(_nullishCoalesce(config.color, () => ( 8947848)));
   }
-  if ("map" in cloned) {
-    cloned.map = null;
+  if ("alphaTest" in cloned) {
+    cloned.alphaTest = 0;
+  }
+  for (const key of TEXTURE_PROPS) {
+    if (key in cloned) {
+      cloned[key] = null;
+    }
   }
   if (!isWireframe) {
     if ("metalness" in cloned) {
@@ -199,9 +218,21 @@ function synthesizeMaterial(cloned, isWireframe, config) {
       cloned.roughness = _nullishCoalesce(config.roughness, () => ( cloned.roughness));
     }
   }
+  if ("transmission" in cloned) {
+    cloned.transmission = 0;
+  }
+  if ("thickness" in cloned) {
+    cloned.thickness = 0;
+  }
+  if ("ior" in cloned) {
+    cloned.ior = 1;
+  }
   if (isWireframe) {
     cloned.transparent = true;
     cloned.opacity = 0.95;
+  } else {
+    cloned.transparent = false;
+    cloned.opacity = 1;
   }
   cloned.needsUpdate = true;
   return cloned;
