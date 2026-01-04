@@ -1,14 +1,15 @@
+export { BloomPostProcessingConfig, BloomPostProcessingPlugin } from './postprocessing/BloomPostProcessingPlugin.js';
+export { CinematicPostProcessingConfig, CinematicPostProcessingPlugin } from './postprocessing/CinematicPostProcessingPlugin.js';
+export { RealismPostProcessingConfig, RealismPostProcessingPlugin } from './postprocessing/RealismPostProcessingPlugin.js';
 export { AdvancedCameraCollisionPlugin } from './AdvancedCameraCollisionPlugin.js';
 export { AOCPluginConfig, AdvancedOrbitControlsPlugin } from './AdvancedOrbitControlsPlugin.js';
 export { AdvancedRaycasterPlugin } from './AdvancedRaycasterPlugin.js';
 export { AnnotationData, AnnotationsPlugin } from './AnnotationsPlugin.js';
 export { AutoLODConfig, AutoLODSystemPlugin } from './AutoLODSystemPlugin.js';
-export { CinematicPostProcessingConfig, CinematicPostProcessingPlugin } from './CinematicPostProcessingPlugin.js';
 export { HotspotData, HotspotPlugin } from './HotspotPlugin.js';
 export { LODConfig, LODSystemPlugin } from './LODSystemPlugin.js';
 export { MeasurementConfig, MeasurementEvent, MeasurementToolPlugin } from './MeasurementToolPlugin.js';
 export { OrbitControlsPlugin } from './OrbitControlsPlugin.js';
-export { BloomPostProcessingConfig, BloomPostProcessingPlugin } from './BloomPostProcessingPlugin.js';
 export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './RaycasterPlugin.js';
 import '../../index-vk5WYF3C.js';
 import '../loaders/loaders.d.js';

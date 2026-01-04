@@ -24,6 +24,6 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true
   },
-  "include": ["src", "src/index.d.ts"],
+  "include": ["src", "types"],
   "exclude": ["node_modules", "dist"]
 }

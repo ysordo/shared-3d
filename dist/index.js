@@ -1,8 +1,6 @@
 import "./chunk-7MGZDKNL.js";
-import "./chunk-SA6GO7S2.js";
-import {
-  CinematicPostProcessingPlugin
-} from "./chunk-RTN7ZJDY.js";
+import "./chunk-USQ24ZCS.js";
+import "./chunk-PB3L5QS7.js";
 import "./chunk-F6GXA7RW.js";
 import "./chunk-E64RDZHI.js";
 import "./chunk-G5YWPRA4.js";
@@ -19,51 +17,51 @@ import {
 import {
   MaterialController
 } from "./chunk-ZVHK7OSV.js";
-import "./chunk-VHIECBSI.js";
+import "./chunk-N4S5S4XF.js";
+import "./chunk-JUWIZNQP.js";
 import {
-  SuspenseModel
-} from "./chunk-NVGRQ2PI.js";
+  PointLight
+} from "./chunk-OTNKXHLS.js";
+import {
+  SpotLight
+} from "./chunk-PLPDGUHI.js";
 import {
   TheaterLighting
-} from "./chunk-GCF3ATJG.js";
+} from "./chunk-73OHKK7B.js";
+import "./chunk-UVX2SCWE.js";
 import {
-  VRButton
-} from "./chunk-3DXIBJPU.js";
-import "./chunk-NYCPSKPP.js";
+  BloomPostProcessing
+} from "./chunk-XFCWNCQ3.js";
 import {
-  AnimationController
-} from "./chunk-L3T5CZE6.js";
+  CinematicPostProcessing
+} from "./chunk-4MA3A75R.js";
 import {
-  MeasurementTool
-} from "./chunk-PPMY66RS.js";
+  RealismPostProcessing
+} from "./chunk-FR6MBX2L.js";
 import {
-  Model
-} from "./chunk-ZIZU4MDM.js";
+  AmbientLight
+} from "./chunk-VMNJJHN5.js";
 import {
   ModelPreload
 } from "./chunk-DIHJJ6OR.js";
-import "./chunk-25QOJ2PL.js";
 import {
   OrbitControls as OrbitControls2
 } from "./chunk-KDMM6CPF.js";
 import {
-  PointLight
-} from "./chunk-6ANZLI2D.js";
-import {
   Raycaster
 } from "./chunk-NZZESHAZ.js";
 import {
-  SpotLight
-} from "./chunk-DFDPSNZX.js";
+  SuspenseModel
+} from "./chunk-SJKTRQOD.js";
 import {
   Suspense
 } from "./chunk-RUDNMJTZ.js";
 import {
-  EnvironmentPreset
-} from "./chunk-FY4BVG5P.js";
+  VRButton
+} from "./chunk-3DXIBJPU.js";
 import {
-  ErrorBoundary3D
-} from "./chunk-POOGUPPI.js";
+  AnimationController
+} from "./chunk-L3T5CZE6.js";
 import {
   GroundSurface
 } from "./chunk-LLAYV6FR.js";
@@ -83,6 +81,13 @@ import {
   LODSystem
 } from "./chunk-IP4NPMPN.js";
 import {
+  MeasurementTool
+} from "./chunk-PPMY66RS.js";
+import {
+  Model
+} from "./chunk-ZIZU4MDM.js";
+import "./chunk-25QOJ2PL.js";
+import {
   AnimationTimeline
 } from "./chunk-XT4H2TR3.js";
 import {
@@ -91,9 +96,6 @@ import {
 import {
   AutoLODSystem
 } from "./chunk-KI3EMR2L.js";
-import {
-  BloomPostProcessing
-} from "./chunk-M5VIZP2I.js";
 import {
   Canvas
 } from "./chunk-ZAV7PER2.js";
@@ -114,6 +116,13 @@ import "./chunk-KEVHL7DJ.js";
 import {
   useHDRI
 } from "./chunk-MGH4XO3F.js";
+import {
+  EnvironmentPreset
+} from "./chunk-FY4BVG5P.js";
+import {
+  ErrorBoundary3D
+} from "./chunk-POOGUPPI.js";
+import "./chunk-NYCPSKPP.js";
 import {
   CacheProvider,
   useCache
@@ -137,21 +146,20 @@ import {
   useActiveModel
 } from "./chunk-V55S5YL6.js";
 import "./chunk-VGY2SOT6.js";
-import {
-  AmbientLight
-} from "./chunk-FG36SQ2C.js";
 import "./chunk-PYBGN7YC.js";
 import {
   SceneProvider,
   useScene
 } from "./chunk-NHJD6U4Z.js";
-import "./chunk-52BWUKU3.js";
 import {
-  createQuadWireframe
-} from "./chunk-AWVHTM2E.js";
+  BloomPostProcessingPlugin
+} from "./chunk-TXXNOUZQ.js";
 import {
-  HotspotPlugin
-} from "./chunk-XYVNLCWO.js";
+  CinematicPostProcessingPlugin
+} from "./chunk-2PCISXWO.js";
+import {
+  RealismPostProcessingPlugin
+} from "./chunk-F4V6CFDF.js";
 import {
   LODSystemPlugin
 } from "./chunk-BDSK4HHN.js";
@@ -164,6 +172,10 @@ import {
 import {
   RaycasterPlugin
 } from "./chunk-VFXDH6LA.js";
+import "./chunk-52BWUKU3.js";
+import {
+  createQuadWireframe
+} from "./chunk-AWVHTM2E.js";
 import {
   SceneOrchestrator
 } from "./chunk-YS7SZK5L.js";
@@ -183,8 +195,8 @@ import {
   AutoLODSystemPlugin
 } from "./chunk-DYFEVAAB.js";
 import {
-  BloomPostProcessingPlugin
-} from "./chunk-3HYQC7ZZ.js";
+  HotspotPlugin
+} from "./chunk-XYVNLCWO.js";
 import {
   GLTFLoader as GLTFLoader2
 } from "./chunk-6FBDZUDJ.js";
@@ -240,6 +252,7 @@ export {
   CacheProvider,
   CacheValidator,
   Canvas,
+  CinematicPostProcessing,
   CinematicPostProcessingPlugin,
   DirectionalLight,
   DistanceDisplay,
@@ -268,6 +281,8 @@ export {
   PointLight,
   Raycaster,
   RaycasterPlugin,
+  RealismPostProcessing,
+  RealismPostProcessingPlugin,
   SceneObject,
   SceneOrchestrator,
   SceneProvider,

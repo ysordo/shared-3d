@@ -1,10 +1,14 @@
-import "../../chunk-SA6GO7S2.js";
+import "../../chunk-USQ24ZCS.js";
+import "../../chunk-PB3L5QS7.js";
+import {
+  BloomPostProcessingPlugin
+} from "../../chunk-TXXNOUZQ.js";
 import {
   CinematicPostProcessingPlugin
-} from "../../chunk-RTN7ZJDY.js";
+} from "../../chunk-2PCISXWO.js";
 import {
-  HotspotPlugin
-} from "../../chunk-XYVNLCWO.js";
+  RealismPostProcessingPlugin
+} from "../../chunk-F4V6CFDF.js";
 import {
   LODSystemPlugin
 } from "../../chunk-BDSK4HHN.js";
@@ -33,8 +37,8 @@ import {
   AutoLODSystemPlugin
 } from "../../chunk-DYFEVAAB.js";
 import {
-  BloomPostProcessingPlugin
-} from "../../chunk-3HYQC7ZZ.js";
+  HotspotPlugin
+} from "../../chunk-XYVNLCWO.js";
 import "../../chunk-OK2NCVM7.js";
 import "../../chunk-OVHQQSEK.js";
 import "../../chunk-RBZOTBBM.js";
@@ -51,5 +55,6 @@ export {
   LODSystemPlugin,
   MeasurementToolPlugin,
   OrbitControlsPlugin,
-  RaycasterPlugin
+  RaycasterPlugin,
+  RealismPostProcessingPlugin
 };
