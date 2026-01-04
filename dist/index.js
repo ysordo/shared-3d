@@ -37,7 +37,7 @@ import {
 } from "./chunk-4MA3A75R.js";
 import {
   RealismPostProcessing
-} from "./chunk-FR6MBX2L.js";
+} from "./chunk-WL7CR7N4.js";
 import {
   AmbientLight
 } from "./chunk-VMNJJHN5.js";
@@ -159,7 +159,7 @@ import {
 } from "./chunk-2PCISXWO.js";
 import {
   RealismPostProcessingPlugin
-} from "./chunk-F4V6CFDF.js";
+} from "./chunk-46Q3AFGV.js";
 import {
   LODSystemPlugin
 } from "./chunk-BDSK4HHN.js";

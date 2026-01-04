@@ -5,7 +5,7 @@ import {
   MotionBlurEffect,
   VelocityDepthNormalPass,
   HBAOEffect,
-} from 'realism-effects';
+} from 'realism-effects-adel';
 import type { Plugin, PluginContext } from '../types';
 import { THREE } from '../../../lib';
 

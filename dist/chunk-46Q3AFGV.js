@@ -10,7 +10,7 @@ import {
   MotionBlurEffect,
   VelocityDepthNormalPass,
   HBAOEffect
-} from "realism-effects";
+} from "realism-effects-adel";
 var DEFAULT_CONFIG = {
   enabled: true,
   ssgi: { distance: 10, thickness: 10, denoiseIterations: 2, resolutionScale: 1 },

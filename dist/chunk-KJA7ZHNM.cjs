@@ -10,7 +10,7 @@ var _postprocessing = require('postprocessing'); var POSTPROCESSING = _interopRe
 
 
 
-var _realismeffects = require('realism-effects');
+var _realismeffectsadel = require('realism-effects-adel');
 var DEFAULT_CONFIG = {
   enabled: true,
   ssgi: { distance: 10, thickness: 10, denoiseIterations: 2, resolutionScale: 1 },
@@ -37,15 +37,15 @@ var RealismPostProcessingPlugin = (_class = class {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = _chunkEA3XQ4KJcjs.THREE.PCFSoftShadowMap;
     this.composer = new POSTPROCESSING.EffectComposer(renderer);
-    this.velocityPass = new (0, _realismeffects.VelocityDepthNormalPass)(scene, camera);
+    this.velocityPass = new (0, _realismeffectsadel.VelocityDepthNormalPass)(scene, camera);
     this.composer.addPass(this.velocityPass);
-    this.ssgiEffect = new (0, _realismeffects.SSGIEffect)(scene, camera, this.velocityPass, this.config.ssgi);
-    this.hbaoEffect = new (0, _realismeffects.HBAOEffect)(this.composer, camera, scene);
+    this.ssgiEffect = new (0, _realismeffectsadel.SSGIEffect)(scene, camera, this.velocityPass, this.config.ssgi);
+    this.hbaoEffect = new (0, _realismeffectsadel.HBAOEffect)(this.composer, camera, scene);
     this.hbaoEffect.intensity = this.config.hbao.intensity;
     this.hbaoEffect.bias = this.config.hbao.bias;
-    this.traaEffect = new (0, _realismeffects.TRAAEffect)(scene, camera, this.velocityPass);
+    this.traaEffect = new (0, _realismeffectsadel.TRAAEffect)(scene, camera, this.velocityPass);
     this.traaEffect.blend = this.config.traa.blend;
-    this.motionBlurEffect = new (0, _realismeffects.MotionBlurEffect)(this.velocityPass);
+    this.motionBlurEffect = new (0, _realismeffectsadel.MotionBlurEffect)(this.velocityPass);
     this.motionBlurEffect.intensity = this.config.motionBlur.intensity;
     const mainPass = new POSTPROCESSING.EffectPass(camera, this.hbaoEffect, this.ssgiEffect);
     const aaPass = new POSTPROCESSING.EffectPass(camera, this.traaEffect, this.motionBlurEffect);

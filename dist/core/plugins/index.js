@@ -8,7 +8,7 @@ import {
 } from "../../chunk-2PCISXWO.js";
 import {
   RealismPostProcessingPlugin
-} from "../../chunk-F4V6CFDF.js";
+} from "../../chunk-46Q3AFGV.js";
 import {
   LODSystemPlugin
 } from "../../chunk-BDSK4HHN.js";

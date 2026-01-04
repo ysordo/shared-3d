@@ -3,7 +3,7 @@ import {
 } from "./chunk-VGY2SOT6.js";
 import {
   RealismPostProcessingPlugin
-} from "./chunk-F4V6CFDF.js";
+} from "./chunk-46Q3AFGV.js";
 
 // src/react/components/postprocessing/RealismPostProcessing.tsx
 import { useCallback, useMemo } from "react";

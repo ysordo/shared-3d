@@ -1,10 +1,10 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkR2BT2YHVcjs = require('../../../chunk-R2BT2YHV.cjs');
+var _chunkKJA7ZHNMcjs = require('../../../chunk-KJA7ZHNM.cjs');
 require('../../../chunk-7W7IF4LU.cjs');
 require('../../../chunk-EA3XQ4KJ.cjs');
 require('../../../chunk-EZWJIGJ6.cjs');
 require('../../../chunk-EQHV3NLZ.cjs');
 
 
-exports.RealismPostProcessingPlugin = _chunkR2BT2YHVcjs.RealismPostProcessingPlugin;
+exports.RealismPostProcessingPlugin = _chunkKJA7ZHNMcjs.RealismPostProcessingPlugin;

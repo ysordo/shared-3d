@@ -3,7 +3,7 @@
 var _chunkEC2ZLY2Vcjs = require('./chunk-EC2ZLY2V.cjs');
 
 
-var _chunkR2BT2YHVcjs = require('./chunk-R2BT2YHV.cjs');
+var _chunkKJA7ZHNMcjs = require('./chunk-KJA7ZHNM.cjs');
 
 // src/react/components/postprocessing/RealismPostProcessing.tsx
 var _react = require('react');
@@ -53,7 +53,7 @@ var RealismPostProcessing = ({
       toneMappingExposure
     ]
   );
-  const factory = _react.useCallback.call(void 0, () => new (0, _chunkR2BT2YHVcjs.RealismPostProcessingPlugin)(), []);
+  const factory = _react.useCallback.call(void 0, () => new (0, _chunkKJA7ZHNMcjs.RealismPostProcessingPlugin)(), []);
   _chunkEC2ZLY2Vcjs.usePlugin.call(void 0, factory, config);
   return null;
 };

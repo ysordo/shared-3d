@@ -1,1 +1,1 @@
-declare module 'realism-effects';
+declare module 'realism-effects-adel';
