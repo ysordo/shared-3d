@@ -1,16 +1,16 @@
-// src/core/plugins/postprocessing/ureal-engine/TAAPlugin.ts
-import { Effect } from "postprocessing";
-import { RenderTarget, Uniform } from "three";
+"use strict";Object.defineProperty(exports, "__esModule", {value: true});// src/core/plugins/postprocessing/ureal-engine/TAAPlugin.ts
+var _postprocessing = require('postprocessing');
+var _three = require('three');
 var TAAPlugin = class {
-  effect;
-  previousFrame;
-  velocityPass;
-  blend;
+  
+  
+  
+  
   constructor(camera, velocityPass, renderer, blend = 0.9) {
     this.velocityPass = velocityPass;
     this.blend = blend;
-    this.previousFrame = new RenderTarget(renderer.domElement.width, renderer.domElement.height);
-    this.effect = new Effect(
+    this.previousFrame = new (0, _three.RenderTarget)(renderer.domElement.width, renderer.domElement.height);
+    this.effect = new (0, _postprocessing.Effect)(
       "TAA",
       `
       uniform sampler2D previousFrame;
@@ -30,9 +30,9 @@ var TAAPlugin = class {
       `,
       {
         uniforms: /* @__PURE__ */ new Map([
-          ["previousFrame", new Uniform(this.previousFrame.texture)],
-          ["velocityTexture", new Uniform(this.velocityPass.getTexture())],
-          ["blend", new Uniform(this.blend)]
+          ["previousFrame", new (0, _three.Uniform)(this.previousFrame.texture)],
+          ["velocityTexture", new (0, _three.Uniform)(this.velocityPass.getTexture())],
+          ["blend", new (0, _three.Uniform)(this.blend)]
         ])
       }
     );
@@ -42,11 +42,14 @@ var TAAPlugin = class {
     this.previousFrame.texture = previousFrameTexture;
     this.effect.uniforms.get("previousFrame").value = previousFrameTexture;
   }
+  setBlend(blend) {
+    this.effect.uniforms.get("blend").value = blend;
+  }
   resize(width, height) {
     this.previousFrame.setSize(width, height);
   }
 };
 
-export {
-  TAAPlugin
-};
+
+
+exports.TAAPlugin = TAAPlugin;

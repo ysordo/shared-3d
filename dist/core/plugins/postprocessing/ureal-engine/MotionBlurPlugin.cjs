@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkYYQHSRHFcjs = require('../../../../chunk-YYQHSRHF.cjs');
+var _chunk5SMAAE4Ccjs = require('../../../../chunk-5SMAAE4C.cjs');
 
 
-exports.MotionBlurPlugin = _chunkYYQHSRHFcjs.MotionBlurPlugin;
+exports.MotionBlurPlugin = _chunk5SMAAE4Ccjs.MotionBlurPlugin;

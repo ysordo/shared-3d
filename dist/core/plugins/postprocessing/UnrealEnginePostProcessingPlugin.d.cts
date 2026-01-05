@@ -12,6 +12,22 @@ import * as THREE from 'three';
 import '../../loaders/loaders.d.cjs';
 import '../../cache/types.cjs';
 
+type UnrealEnginePostProcessingConfig = {
+    bloom?: {
+        intensity?: number;
+        luminanceThreshold?: number;
+    };
+    motionBlur?: {
+        intensity?: number;
+    };
+    taa?: {
+        blend?: number;
+    };
+    sharpen?: {
+        strength?: number;
+    };
+    toneMappingExposure?: number;
+};
 declare class UnrealEnginePostProcessingPlugin implements Plugin {
     name: string;
     composer: POST.EffectComposer;
@@ -26,10 +42,14 @@ declare class UnrealEnginePostProcessingPlugin implements Plugin {
     camera: THREE.PerspectiveCamera;
     domElement: HTMLElement;
     scene: THREE.Scene;
+    private sceneRenderTarget;
+    private config;
+    constructor(config?: Partial<UnrealEnginePostProcessingConfig>);
     install({ scene, camera, renderer }: PluginContext): void;
     postRender(): void;
     resize(width: number, height: number): void;
+    update(newConfig: Partial<UnrealEnginePostProcessingConfig>): void;
     dispose(): void;
 }
 
-export { UnrealEnginePostProcessingPlugin };
+export { type UnrealEnginePostProcessingConfig, UnrealEnginePostProcessingPlugin };

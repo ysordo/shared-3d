@@ -50,6 +50,10 @@ export class TAAPlugin {
     this.effect.uniforms.get('previousFrame')!.value = previousFrameTexture;
   }
 
+  setBlend(blend: number) {
+    this.effect.uniforms.get('blend')!.value = blend;
+  }
+
   resize(width: number, height: number) {
     this.previousFrame.setSize(width, height);
   }

@@ -1,21 +1,14 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true});
-
-var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
-
-// src/core/plugins/postprocessing/ureal-engine/GILitePlugin.ts
+"use strict";Object.defineProperty(exports, "__esModule", {value: true});// src/core/plugins/postprocessing/ureal-engine/GILitePlugin.ts
 var _postprocessing = require('postprocessing');
 var _three = require('three');
 var GILitePlugin = class {
   
   
   
-  constructor(scene, camera, velocityPass, renderer) {
+  constructor(velocityPass, renderer) {
     this.velocityPass = velocityPass;
-    this.renderTarget = new (0, _three.WebGLRenderTarget)(renderer.domElement.width, renderer.domElement.height, {
-      format: _chunkEA3XQ4KJcjs.THREE.RGBAFormat,
-      type: _chunkEA3XQ4KJcjs.THREE.HalfFloatType,
-      depthBuffer: true
-    });
+    this.renderTarget = renderer;
+    this.renderTarget.depthBuffer = true;
     this.renderTarget.texture.name = "GILiteScene";
     this.effect = new (0, _postprocessing.Effect)(
       "GILite",

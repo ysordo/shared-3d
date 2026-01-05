@@ -1,23 +1,21 @@
 // core/post/GILitePlugin.ts
 import { Effect, } from 'postprocessing';
-import { THREE } from '../../../../lib';
+import type { THREE } from '../../../../lib';
 import type { VelocityPassPlugin } from './VelocityPassPlugin';
-import { Uniform, WebGLRenderTarget } from 'three';
+import type { WebGLRenderTarget } from 'three';
+import { Uniform } from 'three';
 
 export class GILitePlugin {
   effect: Effect;
   private velocityPass: VelocityPassPlugin;
   private renderTarget: WebGLRenderTarget;
 
-  constructor(scene: THREE.Scene, camera: THREE.PerspectiveCamera, velocityPass: VelocityPassPlugin, renderer: THREE.WebGLRenderer) {
+  constructor(velocityPass: VelocityPassPlugin, renderer: THREE.WebGLRenderTarget) {
     this.velocityPass = velocityPass;
 
     // RenderTarget para escena (profundidad + color)
-    this.renderTarget = new WebGLRenderTarget(renderer.domElement.width, renderer.domElement.height, {
-      format: THREE.RGBAFormat,
-      type: THREE.HalfFloatType,
-      depthBuffer: true,
-    });
+    this.renderTarget = renderer;
+    this.renderTarget.depthBuffer= true;
     this.renderTarget.texture.name = 'GILiteScene';
 
     // Effect que hace screen-space GI

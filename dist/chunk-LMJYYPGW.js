@@ -1,26 +1,21 @@
-import { Effect, EffectPass } from 'postprocessing';
-import type { VelocityPassPlugin } from './VelocityPassPlugin';
-import { Uniform, WebGLRenderTarget, LinearFilter, RGBAFormat } from 'three';
-
-export class MotionBlurPlugin {
-  effect: Effect;
-  private velocityPass: VelocityPassPlugin;
-  private intensity: number;
-  private renderTarget: WebGLRenderTarget;
-
-  constructor(velocityPass: VelocityPassPlugin, intensity = 0.4) {
+// src/core/plugins/postprocessing/ureal-engine/MotionBlurPlugin.ts
+import { Effect } from "postprocessing";
+import { Uniform, WebGLRenderTarget, LinearFilter, RGBAFormat } from "three";
+var MotionBlurPlugin = class {
+  effect;
+  velocityPass;
+  intensity;
+  renderTarget;
+  constructor(velocityPass, intensity = 0.4) {
     this.velocityPass = velocityPass;
     this.intensity = intensity;
-
-    // RenderTarget temporal para la textura de la escena actual
     this.renderTarget = new WebGLRenderTarget(1, 1, {
       minFilter: LinearFilter,
       magFilter: LinearFilter,
-      format: RGBAFormat,
+      format: RGBAFormat
     });
-
     this.effect = new Effect(
-      'MotionBlur',
+      "MotionBlur",
       `
       uniform sampler2D tColor;          // textura de la escena actual
       uniform sampler2D velocityTexture; // velocity map
@@ -38,28 +33,29 @@ export class MotionBlurPlugin {
       }
       `,
       {
-        uniforms: new Map<string, Uniform<any>>([
-          ['tColor', new Uniform(this.renderTarget.texture)],
-          ['velocityTexture', new Uniform(this.velocityPass.getTexture())],
-          ['intensity', new Uniform(this.intensity)],
-        ]),
+        uniforms: /* @__PURE__ */ new Map([
+          ["tColor", new Uniform(this.renderTarget.texture)],
+          ["velocityTexture", new Uniform(this.velocityPass.getTexture())],
+          ["intensity", new Uniform(this.intensity)]
+        ])
       }
     );
   }
-
   /** Permite actualizar intensidad en tiempo real */
-  setIntensity(intensity: number) {
+  setIntensity(intensity) {
     this.intensity = intensity;
-    this.effect.uniforms.get('intensity')!.value = intensity;
+    this.effect.uniforms.get("intensity").value = intensity;
   }
-
   /** Debe llamarse antes de renderizar el efecto, con la textura de la escena actual */
-  updateSceneTexture(texture: WebGLRenderTarget) {
-    this.effect.uniforms.get('tColor')!.value = texture.texture;
+  updateSceneTexture(texture) {
+    this.effect.uniforms.get("tColor").value = texture.texture;
   }
-
   /** Ajusta tamaño del render target */
-  resize(width: number, height: number) {
+  resize(width, height) {
     this.renderTarget.setSize(width, height);
   }
-}
+};
+
+export {
+  MotionBlurPlugin
+};

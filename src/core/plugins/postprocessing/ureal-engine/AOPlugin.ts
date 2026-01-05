@@ -5,10 +5,10 @@ export class AOPlugin {
   effect: SSAOEffect;
   private normalPass: NormalPass;
 
-  constructor(scene: THREE.Scene, camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer) {
+  constructor(scene: THREE.Scene, camera: THREE.PerspectiveCamera, {width, height}: {width: number,height: number}) {
     // NormalPass para capturar normales de la escena
     this.normalPass = new NormalPass(scene, camera);
-    this.normalPass.setSize(renderer.domElement.width, renderer.domElement.height);
+    this.normalPass.setSize(width, height);
 
     // SSAOEffect moderno
     this.effect = new SSAOEffect(camera, this.normalPass.getDepthTexture(), {

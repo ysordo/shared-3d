@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkLF7XH2W5cjs = require('../../../../chunk-LF7XH2W5.cjs');
+var _chunk3VCWOULOcjs = require('../../../../chunk-3VCWOULO.cjs');
 
 
-exports.TAAPlugin = _chunkLF7XH2W5cjs.TAAPlugin;
+exports.TAAPlugin = _chunk3VCWOULOcjs.TAAPlugin;

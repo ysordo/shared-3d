@@ -1,12 +1,12 @@
-// src/core/plugins/postprocessing/ureal-engine/AOPlugin.ts
-import { SSAOEffect, NormalPass } from "postprocessing";
+"use strict";Object.defineProperty(exports, "__esModule", {value: true});// src/core/plugins/postprocessing/ureal-engine/AOPlugin.ts
+var _postprocessing = require('postprocessing');
 var AOPlugin = class {
-  effect;
-  normalPass;
-  constructor(scene, camera, renderer) {
-    this.normalPass = new NormalPass(scene, camera);
-    this.normalPass.setSize(renderer.domElement.width, renderer.domElement.height);
-    this.effect = new SSAOEffect(camera, this.normalPass.getDepthTexture(), {
+  
+  
+  constructor(scene, camera, { width, height }) {
+    this.normalPass = new (0, _postprocessing.NormalPass)(scene, camera);
+    this.normalPass.setSize(width, height);
+    this.effect = new (0, _postprocessing.SSAOEffect)(camera, this.normalPass.getDepthTexture(), {
       intensity: 1.3,
       // Fuerza del AO
       radius: 5,
@@ -30,6 +30,6 @@ var AOPlugin = class {
   }
 };
 
-export {
-  AOPlugin
-};
+
+
+exports.AOPlugin = AOPlugin;

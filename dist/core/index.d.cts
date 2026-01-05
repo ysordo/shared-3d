@@ -10,7 +10,7 @@ export { BloomPostProcessingConfig, BloomPostProcessingPlugin } from './plugins/
 export { CinematicPostProcessingConfig, CinematicPostProcessingPlugin } from './plugins/postprocessing/CinematicPostProcessingPlugin.cjs';
 export { HighResPostProcessingConfig, HighResPostProcessingPlugin } from './plugins/postprocessing/HighResPostProcessingPlugin.cjs';
 export { RealisticPostProcessingConfig, RealisticPostProcessingPlugin } from './plugins/postprocessing/RealisticPostProcessingPlugin.cjs';
-export { UnrealEnginePostProcessingPlugin } from './plugins/postprocessing/UnrealEnginePostProcessingPlugin.cjs';
+export { UnrealEnginePostProcessingConfig, UnrealEnginePostProcessingPlugin } from './plugins/postprocessing/UnrealEnginePostProcessingPlugin.cjs';
 export { AdvancedCameraCollisionPlugin } from './plugins/AdvancedCameraCollisionPlugin.cjs';
 export { AOCPluginConfig, AdvancedOrbitControlsPlugin } from './plugins/AdvancedOrbitControlsPlugin.cjs';
 export { AdvancedRaycasterPlugin } from './plugins/AdvancedRaycasterPlugin.cjs';

@@ -2,7 +2,7 @@ export { BloomPostProcessingConfig, BloomPostProcessingPlugin } from './BloomPos
 export { CinematicPostProcessingConfig, CinematicPostProcessingPlugin } from './CinematicPostProcessingPlugin.js';
 export { HighResPostProcessingConfig, HighResPostProcessingPlugin } from './HighResPostProcessingPlugin.js';
 export { RealisticPostProcessingConfig, RealisticPostProcessingPlugin } from './RealisticPostProcessingPlugin.js';
-export { UnrealEnginePostProcessingPlugin } from './UnrealEnginePostProcessingPlugin.js';
+export { UnrealEnginePostProcessingConfig, UnrealEnginePostProcessingPlugin } from './UnrealEnginePostProcessingPlugin.js';
 import '../../../index-vk5WYF3C.js';
 import '../../loaders/loaders.d.js';
 import 'three';

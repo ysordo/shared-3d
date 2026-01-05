@@ -1,21 +1,14 @@
-import {
-  THREE
-} from "./chunk-OVHQQSEK.js";
-
 // src/core/plugins/postprocessing/ureal-engine/GILitePlugin.ts
 import { Effect } from "postprocessing";
-import { Uniform, WebGLRenderTarget } from "three";
+import { Uniform } from "three";
 var GILitePlugin = class {
   effect;
   velocityPass;
   renderTarget;
-  constructor(scene, camera, velocityPass, renderer) {
+  constructor(velocityPass, renderer) {
     this.velocityPass = velocityPass;
-    this.renderTarget = new WebGLRenderTarget(renderer.domElement.width, renderer.domElement.height, {
-      format: THREE.RGBAFormat,
-      type: THREE.HalfFloatType,
-      depthBuffer: true
-    });
+    this.renderTarget = renderer;
+    this.renderTarget.depthBuffer = true;
     this.renderTarget.texture.name = "GILiteScene";
     this.effect = new Effect(
       "GILite",

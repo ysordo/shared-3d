@@ -9,6 +9,7 @@ declare class TAAPlugin {
     private blend;
     constructor(camera: THREE.PerspectiveCamera, velocityPass: VelocityPassPlugin, renderer: THREE.WebGLRenderer, blend?: number);
     update(previousFrameTexture: THREE.Texture): void;
+    setBlend(blend: number): void;
     resize(width: number, height: number): void;
 }
 
