@@ -1,23 +1,13 @@
-'use client';
+import {
+  usePlugin
+} from "./chunk-VGY2SOT6.js";
+import {
+  RealisticPostProcessingPlugin
+} from "./chunk-NBZOFQPO.js";
 
-import { useCallback, useMemo } from 'react';
-import { usePlugin } from '../../hooks/usePlugin';
-import { RealisticPostProcessingPlugin } from '../../../core/plugins/postprocessing/RealisticPostProcessingPlugin';
-
-type RealisticPostProcessingProps = {
-  enabled?: boolean;
-  bloomIntensity?: number;
-  bloomLuminanceThreshold?: number;
-  dofBokehScale?: number;
-  dofFocusDistance?: number;
-  dofFocalLength?: number;
-  vignetteDarkness?: number;
-  vignetteOffset?: number
-  noiseOpacity?: number;
-  toneMappingExposure?: number;
-};
-
-export const RealisticPostProcessing: React.FC<RealisticPostProcessingProps> = ({
+// src/react/components/postprocessing/RealisticPostProcessing.tsx
+import { useCallback, useMemo } from "react";
+var RealisticPostProcessing = ({
   enabled = true,
   bloomIntensity = 0.8,
   bloomLuminanceThreshold = 0.9,
@@ -27,7 +17,7 @@ export const RealisticPostProcessing: React.FC<RealisticPostProcessingProps> = (
   vignetteDarkness = 0.8,
   vignetteOffset = 0.5,
   noiseOpacity = 0.02,
-  toneMappingExposure = 1.0,
+  toneMappingExposure = 1
 }) => {
   const config = useMemo(() => ({
     enabled,
@@ -35,12 +25,13 @@ export const RealisticPostProcessing: React.FC<RealisticPostProcessingProps> = (
     dof: { bokehScale: dofBokehScale, focusDistance: dofFocusDistance, focalLength: dofFocalLength },
     vignette: { darkness: vignetteDarkness, offset: vignetteOffset },
     noise: { opacity: noiseOpacity },
-    toneMappingExposure,
+    toneMappingExposure
   }), [enabled, bloomIntensity, bloomLuminanceThreshold, dofBokehScale, dofFocusDistance, dofFocalLength, vignetteDarkness, vignetteOffset, noiseOpacity, toneMappingExposure]);
-
   const factory = useCallback(() => new RealisticPostProcessingPlugin(), []);
-
   usePlugin(factory, config);
-
   return null;
+};
+
+export {
+  RealisticPostProcessing
 };

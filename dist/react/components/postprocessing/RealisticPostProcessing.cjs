@@ -1,7 +1,7 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunkGLIOKFLGcjs = require('../../../chunk-GLIOKFLG.cjs');
+var _chunkBM4JAISKcjs = require('../../../chunk-BM4JAISK.cjs');
 require('../../../chunk-EC2ZLY2V.cjs');
 require('../../../chunk-4RZWCRXE.cjs');
 require('../../../chunk-7J7CBFY2.cjs');
@@ -16,4 +16,4 @@ require('../../../chunk-EQHV3NLZ.cjs');
 require('../../../chunk-UW5RKAXQ.cjs');
 
 
-exports.RealisticPostProcessing = _chunkGLIOKFLGcjs.RealisticPostProcessing;
+exports.RealisticPostProcessing = _chunkBM4JAISKcjs.RealisticPostProcessing;
