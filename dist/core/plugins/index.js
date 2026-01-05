@@ -1,11 +1,14 @@
 import "../../chunk-USQ24ZCS.js";
-import "../../chunk-PB3L5QS7.js";
+import "../../chunk-VBDIJ4OD.js";
 import {
   BloomPostProcessingPlugin
 } from "../../chunk-TXXNOUZQ.js";
 import {
   CinematicPostProcessingPlugin
 } from "../../chunk-2PCISXWO.js";
+import {
+  HighResPostProcessingPlugin
+} from "../../chunk-M6FH6YMZ.js";
 import {
   RealisticPostProcessingPlugin
 } from "../../chunk-NBZOFQPO.js";
@@ -51,6 +54,7 @@ export {
   AutoLODSystemPlugin,
   BloomPostProcessingPlugin,
   CinematicPostProcessingPlugin,
+  HighResPostProcessingPlugin,
   HotspotPlugin,
   LODSystemPlugin,
   MeasurementToolPlugin,

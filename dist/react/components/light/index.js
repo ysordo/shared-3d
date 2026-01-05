@@ -1,5 +1,8 @@
 import "../../../chunk-JUWIZNQP.js";
 import {
+  AmbientLight
+} from "../../../chunk-VMNJJHN5.js";
+import {
   PointLight
 } from "../../../chunk-OTNKXHLS.js";
 import {
@@ -8,9 +11,6 @@ import {
 import {
   TheaterLighting
 } from "../../../chunk-73OHKK7B.js";
-import {
-  AmbientLight
-} from "../../../chunk-VMNJJHN5.js";
 import "../../../chunk-PYBGN7YC.js";
 import "../../../chunk-NHJD6U4Z.js";
 import "../../../chunk-YS7SZK5L.js";

@@ -1,18 +1,22 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true});require('../../../chunk-QCECFUOM.cjs');
+"use strict";Object.defineProperty(exports, "__esModule", {value: true});require('../../../chunk-BHBH7UV2.cjs');
+
+
+var _chunkKSPHXGIGcjs = require('../../../chunk-KSPHXGIG.cjs');
+
+
+var _chunkBM4JAISKcjs = require('../../../chunk-BM4JAISK.cjs');
 
 
 var _chunkZTOXMRC2cjs = require('../../../chunk-ZTOXMRC2.cjs');
 
 
 var _chunkZ3ABTNKUcjs = require('../../../chunk-Z3ABTNKU.cjs');
-
-
-var _chunkBM4JAISKcjs = require('../../../chunk-BM4JAISK.cjs');
 require('../../../chunk-EC2ZLY2V.cjs');
 require('../../../chunk-4RZWCRXE.cjs');
 require('../../../chunk-7J7CBFY2.cjs');
 require('../../../chunk-S23E3JRG.cjs');
 require('../../../chunk-SWYK3VHK.cjs');
+require('../../../chunk-J3ZUKSPF.cjs');
 require('../../../chunk-NIVVR6XY.cjs');
 require('../../../chunk-O74QSQFU.cjs');
 require('../../../chunk-ISDKKMXI.cjs');
@@ -26,4 +30,5 @@ require('../../../chunk-UW5RKAXQ.cjs');
 
 
 
-exports.BloomPostProcessing = _chunkZTOXMRC2cjs.BloomPostProcessing; exports.CinematicPostProcessing = _chunkZ3ABTNKUcjs.CinematicPostProcessing; exports.RealisticPostProcessing = _chunkBM4JAISKcjs.RealisticPostProcessing;
+
+exports.BloomPostProcessing = _chunkZTOXMRC2cjs.BloomPostProcessing; exports.CinematicPostProcessing = _chunkZ3ABTNKUcjs.CinematicPostProcessing; exports.HighResPostProcessing = _chunkKSPHXGIGcjs.HighResPostProcessing; exports.RealisticPostProcessing = _chunkBM4JAISKcjs.RealisticPostProcessing;

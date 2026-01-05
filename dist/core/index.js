@@ -1,6 +1,6 @@
 import "../chunk-7MGZDKNL.js";
 import "../chunk-USQ24ZCS.js";
-import "../chunk-PB3L5QS7.js";
+import "../chunk-VBDIJ4OD.js";
 import "../chunk-F6GXA7RW.js";
 import "../chunk-E64RDZHI.js";
 import "../chunk-G5YWPRA4.js";
@@ -11,6 +11,9 @@ import {
 import {
   CinematicPostProcessingPlugin
 } from "../chunk-2PCISXWO.js";
+import {
+  HighResPostProcessingPlugin
+} from "../chunk-M6FH6YMZ.js";
 import {
   RealisticPostProcessingPlugin
 } from "../chunk-NBZOFQPO.js";
@@ -86,6 +89,7 @@ export {
   FileWatcher,
   GLTFLoader,
   HDRILoader,
+  HighResPostProcessingPlugin,
   HotspotPlugin,
   LODSystemPlugin,
   MeasurementToolPlugin,

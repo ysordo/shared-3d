@@ -27,6 +27,7 @@ export { ModelPreload } from './ModelPreload.cjs';
 export { OrbitControls } from './OrbitControls.cjs';
 export { BloomPostProcessing } from './postprocessing/BloomPostProcessing.cjs';
 export { CinematicPostProcessing } from './postprocessing/CinematicPostProcessing.cjs';
+export { HighResPostProcessing } from './postprocessing/HighResPostProcessing.cjs';
 export { RealisticPostProcessing } from './postprocessing/RealisticPostProcessing.cjs';
 export { Raycaster } from './Raycaster.cjs';
 export { Suspense } from './Suspense.cjs';

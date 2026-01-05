@@ -1,5 +1,6 @@
 export { BloomPostProcessingConfig, BloomPostProcessingPlugin } from './postprocessing/BloomPostProcessingPlugin.js';
 export { CinematicPostProcessingConfig, CinematicPostProcessingPlugin } from './postprocessing/CinematicPostProcessingPlugin.js';
+export { HighResPostProcessingConfig, HighResPostProcessingPlugin } from './postprocessing/HighResPostProcessingPlugin.js';
 export { RealisticPostProcessingConfig, RealisticPostProcessingPlugin } from './postprocessing/RealisticPostProcessingPlugin.js';
 export { AdvancedCameraCollisionPlugin } from './AdvancedCameraCollisionPlugin.js';
 export { AOCPluginConfig, AdvancedOrbitControlsPlugin } from './AdvancedOrbitControlsPlugin.js';
