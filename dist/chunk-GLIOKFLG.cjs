@@ -3,11 +3,11 @@
 var _chunkEC2ZLY2Vcjs = require('./chunk-EC2ZLY2V.cjs');
 
 
-var _chunkKJA7ZHNMcjs = require('./chunk-KJA7ZHNM.cjs');
+var _chunkNIVVR6XYcjs = require('./chunk-NIVVR6XY.cjs');
 
-// src/react/components/postprocessing/RealismPostProcessing.tsx
+// src/react/components/postprocessing/RealisticPostProcessing.tsx
 var _react = require('react');
-var RealismPostProcessing = ({
+var RealisticPostProcessing = ({
   enabled = true,
   ssgiDistance = 10,
   ssgiThickness = 10,
@@ -53,11 +53,11 @@ var RealismPostProcessing = ({
       toneMappingExposure
     ]
   );
-  const factory = _react.useCallback.call(void 0, () => new (0, _chunkKJA7ZHNMcjs.RealismPostProcessingPlugin)(), []);
+  const factory = _react.useCallback.call(void 0, () => new (0, _chunkNIVVR6XYcjs.RealisticPostProcessingPlugin)(), []);
   _chunkEC2ZLY2Vcjs.usePlugin.call(void 0, factory, config);
   return null;
 };
 
 
 
-exports.RealismPostProcessing = RealismPostProcessing;
+exports.RealisticPostProcessing = RealisticPostProcessing;

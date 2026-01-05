@@ -8,7 +8,7 @@ export { WebPHDRLoader } from './loaders/WebPHDRLoader.js';
 export { S as SceneConfig, a as SceneOrchestrator } from '../index-vk5WYF3C.js';
 export { BloomPostProcessingConfig, BloomPostProcessingPlugin } from './plugins/postprocessing/BloomPostProcessingPlugin.js';
 export { CinematicPostProcessingConfig, CinematicPostProcessingPlugin } from './plugins/postprocessing/CinematicPostProcessingPlugin.js';
-export { RealismPostProcessingConfig, RealismPostProcessingPlugin } from './plugins/postprocessing/RealismPostProcessingPlugin.js';
+export { RealisticPostProcessingConfig, RealisticPostProcessingPlugin } from './plugins/postprocessing/RealisticPostProcessingPlugin.js';
 export { AdvancedCameraCollisionPlugin } from './plugins/AdvancedCameraCollisionPlugin.js';
 export { AOCPluginConfig, AdvancedOrbitControlsPlugin } from './plugins/AdvancedOrbitControlsPlugin.js';
 export { AdvancedRaycasterPlugin } from './plugins/AdvancedRaycasterPlugin.js';

@@ -7,7 +7,7 @@ var _chunkS23E3JRGcjs = require('../../../chunk-S23E3JRG.cjs');
 var _chunkSWYK3VHKcjs = require('../../../chunk-SWYK3VHK.cjs');
 
 
-var _chunkKJA7ZHNMcjs = require('../../../chunk-KJA7ZHNM.cjs');
+var _chunkNIVVR6XYcjs = require('../../../chunk-NIVVR6XY.cjs');
 require('../../../chunk-7W7IF4LU.cjs');
 require('../../../chunk-EA3XQ4KJ.cjs');
 require('../../../chunk-EZWJIGJ6.cjs');
@@ -16,4 +16,4 @@ require('../../../chunk-EQHV3NLZ.cjs');
 
 
 
-exports.BloomPostProcessingPlugin = _chunkS23E3JRGcjs.BloomPostProcessingPlugin; exports.CinematicPostProcessingPlugin = _chunkSWYK3VHKcjs.CinematicPostProcessingPlugin; exports.RealismPostProcessingPlugin = _chunkKJA7ZHNMcjs.RealismPostProcessingPlugin;
+exports.BloomPostProcessingPlugin = _chunkS23E3JRGcjs.BloomPostProcessingPlugin; exports.CinematicPostProcessingPlugin = _chunkSWYK3VHKcjs.CinematicPostProcessingPlugin; exports.RealisticPostProcessingPlugin = _chunkNIVVR6XYcjs.RealisticPostProcessingPlugin;

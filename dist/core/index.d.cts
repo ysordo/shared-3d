@@ -8,7 +8,7 @@ export { WebPHDRLoader } from './loaders/WebPHDRLoader.cjs';
 export { S as SceneConfig, a as SceneOrchestrator } from '../index-DE4jh8VF.cjs';
 export { BloomPostProcessingConfig, BloomPostProcessingPlugin } from './plugins/postprocessing/BloomPostProcessingPlugin.cjs';
 export { CinematicPostProcessingConfig, CinematicPostProcessingPlugin } from './plugins/postprocessing/CinematicPostProcessingPlugin.cjs';
-export { RealismPostProcessingConfig, RealismPostProcessingPlugin } from './plugins/postprocessing/RealismPostProcessingPlugin.cjs';
+export { RealisticPostProcessingConfig, RealisticPostProcessingPlugin } from './plugins/postprocessing/RealisticPostProcessingPlugin.cjs';
 export { AdvancedCameraCollisionPlugin } from './plugins/AdvancedCameraCollisionPlugin.cjs';
 export { AOCPluginConfig, AdvancedOrbitControlsPlugin } from './plugins/AdvancedOrbitControlsPlugin.cjs';
 export { AdvancedRaycasterPlugin } from './plugins/AdvancedRaycasterPlugin.cjs';

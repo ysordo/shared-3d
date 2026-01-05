@@ -1,4 +1,4 @@
-type RealismPostProcessingProps = {
+type RealisticPostProcessingProps = {
     enabled?: boolean;
     ssgiDistance?: number;
     ssgiThickness?: number;
@@ -11,14 +11,14 @@ type RealismPostProcessingProps = {
     toneMappingExposure?: number;
 };
 /**
- * RealismPostProcessing
+ * RealisticPostProcessing
  *
  * Componente declarativo para post-processing realista inspirado en Unreal Engine.
  * Incluye SSGI, HBAO, TRAA, Motion Blur.
  *
  * @example
- * <RealismPostProcessing enabled={true} ssgiDistance={10} toneMappingExposure={1.0} />
+ * <RealisticPostProcessing enabled={true} ssgiDistance={10} toneMappingExposure={1.0} />
  */
-declare const RealismPostProcessing: React.FC<RealismPostProcessingProps>;
+declare const RealisticPostProcessing: React.FC<RealisticPostProcessingProps>;
 
-export { RealismPostProcessing };
+export { RealisticPostProcessing };

@@ -2,9 +2,9 @@
 
 import { useCallback, useMemo } from 'react';
 import { usePlugin } from '../../hooks/usePlugin';
-import { RealismPostProcessingPlugin } from '../../../core/plugins/postprocessing/RealismPostProcessingPlugin';
+import { RealisticPostProcessingPlugin } from '../../../core/plugins/postprocessing/RealisticPostProcessingPlugin';
 
-type RealismPostProcessingProps = {
+type RealisticPostProcessingProps = {
   enabled?: boolean;
   ssgiDistance?: number;
   ssgiThickness?: number;
@@ -18,15 +18,15 @@ type RealismPostProcessingProps = {
 };
 
 /**
- * RealismPostProcessing
+ * RealisticPostProcessing
  *
  * Componente declarativo para post-processing realista inspirado en Unreal Engine.
  * Incluye SSGI, HBAO, TRAA, Motion Blur.
  *
  * @example
- * <RealismPostProcessing enabled={true} ssgiDistance={10} toneMappingExposure={1.0} />
+ * <RealisticPostProcessing enabled={true} ssgiDistance={10} toneMappingExposure={1.0} />
  */
-export const RealismPostProcessing: React.FC<RealismPostProcessingProps> = ({
+export const RealisticPostProcessing: React.FC<RealisticPostProcessingProps> = ({
   enabled = true,
   ssgiDistance = 10,
   ssgiThickness = 10,
@@ -73,7 +73,7 @@ export const RealismPostProcessing: React.FC<RealismPostProcessingProps> = ({
     ]
   );
 
-  const factory = useCallback(() => new RealismPostProcessingPlugin(), []);
+  const factory = useCallback(() => new RealisticPostProcessingPlugin(), []);
 
   usePlugin(factory, config);
 

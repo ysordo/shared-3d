@@ -29,8 +29,8 @@ import {
   CinematicPostProcessing
 } from "../chunk-4MA3A75R.js";
 import {
-  RealismPostProcessing
-} from "../chunk-WL7CR7N4.js";
+  RealisticPostProcessing
+} from "../chunk-GW3GCHUE.js";
 import {
   AmbientLight
 } from "../chunk-VMNJJHN5.js";
@@ -146,7 +146,7 @@ import {
 } from "../chunk-NHJD6U4Z.js";
 import "../chunk-TXXNOUZQ.js";
 import "../chunk-2PCISXWO.js";
-import "../chunk-46Q3AFGV.js";
+import "../chunk-NBZOFQPO.js";
 import "../chunk-BDSK4HHN.js";
 import "../chunk-2UT35WWK.js";
 import "../chunk-RQB2RLAY.js";
@@ -204,7 +204,7 @@ export {
   OrbitControls,
   PointLight,
   Raycaster,
-  RealismPostProcessing,
+  RealisticPostProcessing,
   SceneObject,
   SceneProvider,
   SpotLight,

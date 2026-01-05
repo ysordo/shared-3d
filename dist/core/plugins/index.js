@@ -7,8 +7,8 @@ import {
   CinematicPostProcessingPlugin
 } from "../../chunk-2PCISXWO.js";
 import {
-  RealismPostProcessingPlugin
-} from "../../chunk-46Q3AFGV.js";
+  RealisticPostProcessingPlugin
+} from "../../chunk-NBZOFQPO.js";
 import {
   LODSystemPlugin
 } from "../../chunk-BDSK4HHN.js";
@@ -56,5 +56,5 @@ export {
   MeasurementToolPlugin,
   OrbitControlsPlugin,
   RaycasterPlugin,
-  RealismPostProcessingPlugin
+  RealisticPostProcessingPlugin
 };

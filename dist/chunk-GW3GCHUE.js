@@ -2,12 +2,12 @@ import {
   usePlugin
 } from "./chunk-VGY2SOT6.js";
 import {
-  RealismPostProcessingPlugin
-} from "./chunk-46Q3AFGV.js";
+  RealisticPostProcessingPlugin
+} from "./chunk-NBZOFQPO.js";
 
-// src/react/components/postprocessing/RealismPostProcessing.tsx
+// src/react/components/postprocessing/RealisticPostProcessing.tsx
 import { useCallback, useMemo } from "react";
-var RealismPostProcessing = ({
+var RealisticPostProcessing = ({
   enabled = true,
   ssgiDistance = 10,
   ssgiThickness = 10,
@@ -53,11 +53,11 @@ var RealismPostProcessing = ({
       toneMappingExposure
     ]
   );
-  const factory = useCallback(() => new RealismPostProcessingPlugin(), []);
+  const factory = useCallback(() => new RealisticPostProcessingPlugin(), []);
   usePlugin(factory, config);
   return null;
 };
 
 export {
-  RealismPostProcessing
+  RealisticPostProcessing
 };

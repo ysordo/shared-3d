@@ -36,8 +36,8 @@ import {
   CinematicPostProcessing
 } from "./chunk-4MA3A75R.js";
 import {
-  RealismPostProcessing
-} from "./chunk-WL7CR7N4.js";
+  RealisticPostProcessing
+} from "./chunk-GW3GCHUE.js";
 import {
   AmbientLight
 } from "./chunk-VMNJJHN5.js";
@@ -158,8 +158,8 @@ import {
   CinematicPostProcessingPlugin
 } from "./chunk-2PCISXWO.js";
 import {
-  RealismPostProcessingPlugin
-} from "./chunk-46Q3AFGV.js";
+  RealisticPostProcessingPlugin
+} from "./chunk-NBZOFQPO.js";
 import {
   LODSystemPlugin
 } from "./chunk-BDSK4HHN.js";
@@ -281,8 +281,8 @@ export {
   PointLight,
   Raycaster,
   RaycasterPlugin,
-  RealismPostProcessing,
-  RealismPostProcessingPlugin,
+  RealisticPostProcessing,
+  RealisticPostProcessingPlugin,
   SceneObject,
   SceneOrchestrator,
   SceneProvider,

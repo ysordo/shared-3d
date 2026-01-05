@@ -167,7 +167,6 @@
   "dependencies": {
     "idb-keyval": "^6.2.2",
     "postprocessing": "^6.38.2",
-    "realism-effects-adel": "^1.0.0",
     "three": "^0.177.0"
   },
   "devDependencies": {

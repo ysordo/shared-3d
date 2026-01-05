@@ -1,1 +1,0 @@
-declare module 'realism-effects-adel';
