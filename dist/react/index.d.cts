@@ -29,6 +29,7 @@ export { BloomPostProcessing } from './components/postprocessing/BloomPostProces
 export { CinematicPostProcessing } from './components/postprocessing/CinematicPostProcessing.cjs';
 export { HighResPostProcessing } from './components/postprocessing/HighResPostProcessing.cjs';
 export { RealisticPostProcessing } from './components/postprocessing/RealisticPostProcessing.cjs';
+export { UnrealEnginePostProcessing } from './components/postprocessing/UnrealEnginePostProcessing.cjs';
 export { Raycaster } from './components/Raycaster.cjs';
 export { Suspense } from './components/Suspense.cjs';
 export { SuspenseModel } from './components/SuspenseModel.cjs';
