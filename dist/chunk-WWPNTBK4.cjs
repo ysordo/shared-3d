@@ -1,27 +1,27 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; } var _class;
 
-var _chunk5SMAAE4Ccjs = require('./chunk-5SMAAE4C.cjs');
+var _chunkR5EP6VAUcjs = require('./chunk-R5EP6VAU.cjs');
 
 
-var _chunkL5PHFQV3cjs = require('./chunk-L5PHFQV3.cjs');
+var _chunkMHW4NKXTcjs = require('./chunk-MHW4NKXT.cjs');
 
 
-var _chunk3VCWOULOcjs = require('./chunk-3VCWOULO.cjs');
+var _chunkY7JTNLGVcjs = require('./chunk-Y7JTNLGV.cjs');
 
 
-var _chunk3AELWAFNcjs = require('./chunk-3AELWAFN.cjs');
+var _chunkDZ2BWJT3cjs = require('./chunk-DZ2BWJT3.cjs');
 
 
-var _chunkWYU2CPHMcjs = require('./chunk-WYU2CPHM.cjs');
+var _chunkNJU22NMUcjs = require('./chunk-NJU22NMU.cjs');
 
 
-var _chunkNA3ZO4CRcjs = require('./chunk-NA3ZO4CR.cjs');
+var _chunkHRUNE2V4cjs = require('./chunk-HRUNE2V4.cjs');
 
 
-var _chunk2KEFRGGDcjs = require('./chunk-2KEFRGGD.cjs');
+var _chunk63NW36UQcjs = require('./chunk-63NW36UQ.cjs');
 
 
-var _chunkABEMXJHJcjs = require('./chunk-ABEMXJHJ.cjs');
+var _chunkRSUHDGCJcjs = require('./chunk-RSUHDGCJ.cjs');
 
 
 var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
@@ -29,31 +29,18 @@ var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
 // src/core/plugins/postprocessing/UnrealEnginePostProcessingPlugin.ts
 var _postprocessing = require('postprocessing'); var POST = _interopRequireWildcard(_postprocessing);
 var DEFAULT_UNREAL_ENGINE_PP_CONFIG = {
-  bloom: {
-    intensity: 0.4,
-    // intensidad del bloom
-    luminanceThreshold: 1.2
-    // umbral de luminancia
-  },
-  motionBlur: {
-    intensity: 0.4
-    // intensidad del motion blur
-  },
-  taa: {
-    blend: 0.9
-    // blend de TAA
-  },
-  sharpen: {
-    strength: 0.2
-    // fuerza del sharpen
-  },
-  toneMappingExposure: 1.1
-  // exposición del tone mapping del renderer
+  bloom: { intensity: 0.4, luminanceThreshold: 1.2 },
+  motionBlur: { intensity: 0.4 },
+  taa: { blend: 0.9 },
+  sharpen: { strength: 0.2 },
+  toneMappingExposure: 1.1,
+  lodLevels: 5
+  // Niveles de LOD para polígonos "infinitos"
 };
 var UnrealEnginePostProcessingPlugin = (_class = class {
   __init() {this.name = "UnrealEnginePostProcessing"}
   
-  __init2() {this.frameState = new (0, _chunk2KEFRGGDcjs.FrameState)()}
+  __init2() {this.frameState = new (0, _chunk63NW36UQcjs.FrameState)()}
   
   
   
@@ -64,13 +51,15 @@ var UnrealEnginePostProcessingPlugin = (_class = class {
   
   
   
-  // Render target temporal para Motion Blur
   
+  __init3() {this.lodGroup = new _chunkEA3XQ4KJcjs.THREE.Group()}
+  // Para Nanite-like LOD management
   
-  constructor(config) {;_class.prototype.__init.call(this);_class.prototype.__init2.call(this);
+  constructor(config) {;_class.prototype.__init.call(this);_class.prototype.__init2.call(this);_class.prototype.__init3.call(this);
     this.config = { ...DEFAULT_UNREAL_ENGINE_PP_CONFIG, ...config };
   }
-  install({ scene, camera, renderer }) {
+  install(context) {
+    const { scene, camera, renderer } = context;
     this.camera = camera;
     this.domElement = renderer.domElement;
     this.scene = scene;
@@ -82,33 +71,61 @@ var UnrealEnginePostProcessingPlugin = (_class = class {
     this.composer = new POST.EffectComposer(renderer);
     this.sceneRenderTarget = new _chunkEA3XQ4KJcjs.THREE.WebGLRenderTarget(width, height, {
       format: _chunkEA3XQ4KJcjs.THREE.RGBAFormat,
-      type: _chunkEA3XQ4KJcjs.THREE.HalfFloatType
+      type: _chunkEA3XQ4KJcjs.THREE.HalfFloatType,
+      samples: 8
+      // MSAA para high-res realism
     });
-    this.velocity = new (0, _chunk3AELWAFNcjs.VelocityPassPlugin)(width, height);
-    this.ao = new (0, _chunkWYU2CPHMcjs.AOPlugin)(scene, camera, { width, height });
-    this.gi = new (0, _chunkABEMXJHJcjs.GILitePlugin)(this.velocity, this.sceneRenderTarget);
-    this.bloom = new (0, _chunkNA3ZO4CRcjs.BloomPlugin)();
-    this.motion = new (0, _chunk5SMAAE4Ccjs.MotionBlurPlugin)(this.velocity);
-    this.taa = new (0, _chunk3VCWOULOcjs.TAAPlugin)(camera, this.velocity, renderer);
-    this.sharpen = new (0, _chunkL5PHFQV3cjs.SharpenEffect)(0.2);
+    this.velocity = new (0, _chunkDZ2BWJT3cjs.VelocityPassPlugin)(width, height);
+    this.velocity.install(context);
+    this.ao = new (0, _chunkNJU22NMUcjs.AOPlugin)({ width, height });
+    this.ao.install(context);
+    this.ao.setQualityPreset("ultra");
+    this.composer.addPass(this.ao.effect);
+    this.gi = new (0, _chunkRSUHDGCJcjs.GILitePlugin)(this.velocity, this.sceneRenderTarget);
+    this.gi.install(context);
+    this.bloom = new (0, _chunkHRUNE2V4cjs.BloomPlugin)();
+    this.motion = new (0, _chunkR5EP6VAUcjs.MotionBlurPlugin)(this.velocity, this.config.motionBlur.intensity);
+    this.motion.install(context);
+    this.taa = new (0, _chunkY7JTNLGVcjs.TAAPlugin)(this.velocity);
+    this.taa.install(context);
+    this.sharpen = new (0, _chunkMHW4NKXTcjs.SharpenEffect)(0.2);
     this.bloom.effect.intensity = this.config.bloom.intensity;
     this.bloom.effect.luminanceMaterial.threshold = this.config.bloom.luminanceThreshold;
-    this.motion.setIntensity(this.config.motionBlur.intensity);
     this.taa.setBlend(this.config.taa.blend);
+    const renderPass = new POST.RenderPass(scene, camera);
+    this.composer.addPass(renderPass);
     const realismPass = new POST.EffectPass(
       camera,
-      this.ao.effect,
       this.gi.effect,
       this.bloom.effect
     );
+    this.composer.addPass(realismPass);
     const finalPass = new POST.EffectPass(
       camera,
       this.taa.effect,
       this.motion.effect,
       this.sharpen
     );
-    this.composer.addPass(realismPass);
     this.composer.addPass(finalPass);
+    this.setupNaniteLOD(scene);
+  }
+  setupNaniteLOD(scene) {
+    scene.traverse((child) => {
+      if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh && child.geometry.attributes.position.count > 1e5) {
+        const lod = new _chunkEA3XQ4KJcjs.THREE.LOD();
+        for (let i = 0; i < this.config.lodLevels; i++) {
+          const decimatedMesh = child.clone();
+          decimatedMesh.geometry = this.decimateGeometry(decimatedMesh.geometry, i);
+          lod.addLevel(decimatedMesh, i * 50);
+        }
+        _optionalChain([child, 'access', _ => _.parent, 'optionalAccess', _2 => _2.add, 'call', _3 => _3(lod)]);
+        _optionalChain([child, 'access', _4 => _4.parent, 'optionalAccess', _5 => _5.remove, 'call', _6 => _6(child)]);
+      }
+    });
+    scene.add(this.lodGroup);
+  }
+  decimateGeometry(geometry, level) {
+    return geometry;
   }
   postRender() {
     const renderer = this.composer.getRenderer();
@@ -117,18 +134,15 @@ var UnrealEnginePostProcessingPlugin = (_class = class {
     this.frameState.update(this.camera, width, height);
     this.velocity.render(renderer, this.scene, this.camera);
     this.gi.renderScene(renderer, this.scene, this.camera);
-    renderer.setRenderTarget(this.sceneRenderTarget);
-    renderer.render(this.scene, this.camera);
     this.taa.update(this.sceneRenderTarget.texture);
-    renderer.setRenderTarget(null);
-    this.motion.updateSceneTexture(this.sceneRenderTarget);
+    _optionalChain([this, 'access', _7 => _7.motion, 'access', _8 => _8.update, 'optionalCall', _9 => _9({ texture: this.sceneRenderTarget.texture })]);
     this.composer.render();
   }
   resize(width, height) {
     this.composer.setSize(width, height);
     this.velocity.resize(width, height);
     this.sceneRenderTarget.setSize(width, height);
-    this.motion.resize(width, height);
+    this.ao.resize(width, height);
   }
   update(newConfig) {
     this.config = { ...this.config, ...newConfig };
@@ -140,13 +154,13 @@ var UnrealEnginePostProcessingPlugin = (_class = class {
         this.bloom.effect.luminanceMaterial.threshold = newConfig.bloom.luminanceThreshold;
       }
     }
-    if (_optionalChain([newConfig, 'access', _ => _.motionBlur, 'optionalAccess', _2 => _2.intensity]) !== void 0) {
-      this.motion.setIntensity(newConfig.motionBlur.intensity);
+    if (_optionalChain([newConfig, 'access', _10 => _10.motionBlur, 'optionalAccess', _11 => _11.intensity]) !== void 0) {
+      _optionalChain([this, 'access', _12 => _12.motion, 'access', _13 => _13.update, 'optionalCall', _14 => _14({ intensity: newConfig.motionBlur.intensity })]);
     }
-    if (_optionalChain([newConfig, 'access', _3 => _3.taa, 'optionalAccess', _4 => _4.blend]) !== void 0) {
+    if (_optionalChain([newConfig, 'access', _15 => _15.taa, 'optionalAccess', _16 => _16.blend]) !== void 0) {
       this.taa.setBlend(newConfig.taa.blend);
     }
-    if (_optionalChain([newConfig, 'access', _5 => _5.sharpen, 'optionalAccess', _6 => _6.strength]) !== void 0) {
+    if (_optionalChain([newConfig, 'access', _17 => _17.sharpen, 'optionalAccess', _18 => _18.strength]) !== void 0) {
       this.sharpen.uniforms.get("strength").value = newConfig.sharpen.strength;
     }
     if (newConfig.toneMappingExposure !== void 0) {

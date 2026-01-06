@@ -1,65 +1,64 @@
-import { Effect, EffectPass } from 'postprocessing';
+import { Effect } from 'postprocessing';
 import type { VelocityPassPlugin } from './VelocityPassPlugin';
-import { Uniform, WebGLRenderTarget, LinearFilter, RGBAFormat } from 'three';
+import { THREE } from '../../../../lib';
+import type { Plugin, PluginContext } from '../../types';
 
-export class MotionBlurPlugin {
-  effect: Effect;
+export type MotionBlurPluginConfig = {
+  intensity?: number;
+  texture?: THREE.Texture | undefined,
+}
+
+export const DEFAULT_MOTION_BLUR_CONFIG: Required<MotionBlurPluginConfig> = {
+  intensity: 0.4,
+  texture: undefined,
+};
+export class MotionBlurPlugin implements Plugin {
+  readonly name = 'MotionBlur';
+  effect!: Effect;
   private velocityPass: VelocityPassPlugin;
-  private intensity: number;
-  private renderTarget: WebGLRenderTarget;
 
-  constructor(velocityPass: VelocityPassPlugin, intensity = 0.4) {
+  private config: Required<MotionBlurPluginConfig>;
+
+  constructor(velocityPass: VelocityPassPlugin, intensity: MotionBlurPluginConfig['intensity']=0.4) {
+    this.config = {...DEFAULT_MOTION_BLUR_CONFIG, intensity};
     this.velocityPass = velocityPass;
-    this.intensity = intensity;
-
-    // RenderTarget temporal para la textura de la escena actual
-    this.renderTarget = new WebGLRenderTarget(1, 1, {
-      minFilter: LinearFilter,
-      magFilter: LinearFilter,
-      format: RGBAFormat,
-    });
-
+  }
+  install({renderer}: PluginContext): void {
     this.effect = new Effect(
       'MotionBlur',
       `
-      uniform sampler2D tColor;          // textura de la escena actual
-      uniform sampler2D velocityTexture; // velocity map
+      uniform sampler2D velocityTexture; 
       uniform float intensity;
 
       void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outColor){
-          vec2 velocity = texture(velocityTexture, uv).rg * 2.0 - 1.0;
-          vec2 offset = velocity * intensity * 0.02;
+        vec2 velocity = texture(velocityTexture, uv).rg * 2.0 - 1.0;
+        vec4 result = inputColor;
 
-          // Muestrea la escena desplazada por la velocity
-          vec3 blurred = texture(tColor, uv + offset).rgb;
+        // Multi-sample blur para realism (como Unreal)
+        const int samples = 8;
+        for (int i = 1; i < samples; ++i) {
+          vec2 offset = velocity * (float(i) / float(samples - 1) - 0.5) * intensity;
+          result += texture(inputBuffer, uv + offset);
+        }
+        result /= float(samples);
 
-          // Mezcla con el color original
-          outColor = vec4(mix(inputColor.rgb, blurred, intensity), 1.0);
+        outColor = result;
       }
       `,
       {
-        uniforms: new Map<string, Uniform<any>>([
-          ['tColor', new Uniform(this.renderTarget.texture)],
-          ['velocityTexture', new Uniform(this.velocityPass.getTexture())],
-          ['intensity', new Uniform(this.intensity)],
+        uniforms: new Map<string, THREE.Uniform>([
+          ['velocityTexture', new THREE.Uniform(this.velocityPass.getTexture())],
+          ['intensity', new THREE.Uniform(this.config.intensity)],
         ]),
       }
     );
-  }
+    this.config.texture = renderer.getRenderTarget()?.texture;
+  };
 
-  /** Permite actualizar intensidad en tiempo real */
-  setIntensity(intensity: number) {
-    this.intensity = intensity;
-    this.effect.uniforms.get('intensity')!.value = intensity;
-  }
-
-  /** Debe llamarse antes de renderizar el efecto, con la textura de la escena actual */
-  updateSceneTexture(texture: WebGLRenderTarget) {
-    this.effect.uniforms.get('tColor')!.value = texture.texture;
-  }
-
-  /** Ajusta tamaño del render target */
-  resize(width: number, height: number) {
-    this.renderTarget.setSize(width, height);
+  update?(newConfig: Partial<MotionBlurPluginConfig>): void {
+    this.config= {...this.config, ...newConfig};
+    if(newConfig.intensity!==undefined){
+      this.effect.uniforms.get('intensity')!.value = newConfig.intensity;
+    }
   }
 }

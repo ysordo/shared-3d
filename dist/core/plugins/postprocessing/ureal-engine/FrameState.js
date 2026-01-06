@@ -1,6 +1,6 @@
 import {
   FrameState
-} from "../../../../chunk-A2Q3JIXV.js";
+} from "../../../../chunk-4PPTXN5L.js";
 export {
   FrameState
 };

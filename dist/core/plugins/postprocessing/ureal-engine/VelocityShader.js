@@ -1,6 +1,6 @@
 import {
   VelocityShader
-} from "../../../../chunk-OGRDXHNW.js";
+} from "../../../../chunk-6PIP7YSB.js";
 export {
   VelocityShader
 };

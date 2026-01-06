@@ -6,9 +6,10 @@ import { GILitePlugin } from './ureal-engine/GILitePlugin.cjs';
 import { BloomPlugin } from './ureal-engine/BloomPlugin.cjs';
 import { MotionBlurPlugin } from './ureal-engine/MotionBlurPlugin.cjs';
 import { TAAPlugin } from './ureal-engine/TAAPlugin.cjs';
-import { SharpenEffect } from './ureal-engine/SharpenPlugin.cjs';
+import { SharpenEffect } from './ureal-engine/SharpenEffect.cjs';
 import { b as Plugin, P as PluginContext } from '../../../index-DE4jh8VF.cjs';
 import * as THREE from 'three';
+import 'n8ao';
 import '../../loaders/loaders.d.cjs';
 import '../../cache/types.cjs';
 
@@ -27,6 +28,7 @@ type UnrealEnginePostProcessingConfig = {
         strength?: number;
     };
     toneMappingExposure?: number;
+    lodLevels?: number;
 };
 declare class UnrealEnginePostProcessingPlugin implements Plugin {
     name: string;
@@ -43,9 +45,12 @@ declare class UnrealEnginePostProcessingPlugin implements Plugin {
     domElement: HTMLElement;
     scene: THREE.Scene;
     private sceneRenderTarget;
+    private lodGroup;
     private config;
     constructor(config?: Partial<UnrealEnginePostProcessingConfig>);
-    install({ scene, camera, renderer }: PluginContext): void;
+    install(context: PluginContext): void;
+    private setupNaniteLOD;
+    private decimateGeometry;
     postRender(): void;
     resize(width: number, height: number): void;
     update(newConfig: Partial<UnrealEnginePostProcessingConfig>): void;

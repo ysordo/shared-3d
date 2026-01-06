@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkMG2UFOODcjs = require('../../../../chunk-MG2UFOOD.cjs');
+var _chunkDXOJA6J4cjs = require('../../../../chunk-DXOJA6J4.cjs');
 
 
-exports.VelocityShader = _chunkMG2UFOODcjs.VelocityShader;
+exports.VelocityShader = _chunkDXOJA6J4cjs.VelocityShader;

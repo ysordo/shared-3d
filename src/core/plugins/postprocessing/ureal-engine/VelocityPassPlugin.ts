@@ -2,31 +2,19 @@ import * as THREE from 'three';
 import type { Scene, Camera } from 'three';
 import { ShaderMaterial, WebGLRenderTarget, Mesh, PlaneGeometry } from 'three';
 import { VelocityShader } from './VelocityShader';
+import type { Plugin, PluginContext } from '../../types';
 
-export class VelocityPassPlugin {
-  renderTarget: WebGLRenderTarget;
-  material: ShaderMaterial;
-  sceneQuad: Mesh;
+export class VelocityPassPlugin implements Plugin {
+  readonly name = 'VelocityPass';
+  renderTarget!: WebGLRenderTarget;
+  material!: ShaderMaterial;
+  sceneQuad!: Mesh;
 
   previousModelViewMatrix = new THREE.Matrix4();
   previousProjectionMatrix = new THREE.Matrix4();
 
-  constructor(width: number, height: number) {
-    this.renderTarget = new WebGLRenderTarget(width, height, {
-      type: THREE.HalfFloatType,
-      minFilter: THREE.NearestFilter,
-      magFilter: THREE.NearestFilter,
-      depthBuffer: false,
-    });
-
-    this.material = new ShaderMaterial({
-      uniforms: THREE.UniformsUtils.clone(VelocityShader.uniforms),
-      vertexShader: VelocityShader.vertexShader,
-      fragmentShader: VelocityShader.fragmentShader,
-    });
-
-    const plane = new PlaneGeometry(2, 2);
-    this.sceneQuad = new Mesh(plane, this.material);
+  constructor(private width: number, private height: number) {
+    
   }
 
   render(renderer: THREE.WebGLRenderer, scene: Scene, camera: Camera) {
@@ -42,7 +30,24 @@ export class VelocityPassPlugin {
     this.previousModelViewMatrix.copy(camera.matrixWorldInverse);
     this.previousProjectionMatrix.copy(camera.projectionMatrix);
   }
+  install(__context: PluginContext): void {
+    this.renderTarget = new WebGLRenderTarget(this.width, this.height, {
+      type: THREE.HalfFloatType,
+      minFilter: THREE.NearestFilter,
+      magFilter: THREE.NearestFilter,
+      depthBuffer: false,
+    });
 
+    this.material = new ShaderMaterial({
+      uniforms: THREE.UniformsUtils.clone(VelocityShader.uniforms),
+      vertexShader: VelocityShader.vertexShader,
+      fragmentShader: VelocityShader.fragmentShader,
+      transparent: true, // Para skeletal support
+    });
+
+    const plane = new PlaneGeometry(2, 2);
+    this.sceneQuad = new Mesh(plane, this.material);
+  }
   getTexture() {
     return this.renderTarget.texture;
   }

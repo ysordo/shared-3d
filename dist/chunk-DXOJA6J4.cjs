@@ -27,7 +27,10 @@ var VelocityShader = {
       vec2 current = vCurrentPos.xy / vCurrentPos.w;
       vec2 previous = vPrevPos.xy / vPrevPos.w;
       vec2 velocity = current - previous;
-      gl_FragColor = vec4(velocity * 0.5 + 0.5, 0.0, 1.0);
+
+      // Mejora para realism: encode depth para better reprojection
+      float depth = vCurrentPos.z / vCurrentPos.w;
+      gl_FragColor = vec4(velocity * 0.5 + 0.5, depth, 1.0);
     }
   `
 };

@@ -3,7 +3,7 @@
 var _chunkEC2ZLY2Vcjs = require('./chunk-EC2ZLY2V.cjs');
 
 
-var _chunk36UEN36Rcjs = require('./chunk-36UEN36R.cjs');
+var _chunkWWPNTBK4cjs = require('./chunk-WWPNTBK4.cjs');
 
 // src/react/components/postprocessing/UnrealEnginePostProcessing.tsx
 var _react = require('react');
@@ -33,7 +33,7 @@ var UnrealEnginePostProcessing = ({
       toneMappingExposure
     ]
   );
-  const factory = _react.useCallback.call(void 0, () => new (0, _chunk36UEN36Rcjs.UnrealEnginePostProcessingPlugin)(), []);
+  const factory = _react.useCallback.call(void 0, () => new (0, _chunkWWPNTBK4cjs.UnrealEnginePostProcessingPlugin)(), []);
   _chunkEC2ZLY2Vcjs.usePlugin.call(void 0, factory, config);
   return null;
 };

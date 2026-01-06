@@ -1,27 +1,27 @@
 import {
   MotionBlurPlugin
-} from "./chunk-LMJYYPGW.js";
+} from "./chunk-VLJOONUS.js";
 import {
   SharpenEffect
-} from "./chunk-SI7IKFAQ.js";
+} from "./chunk-ZGPF35LB.js";
 import {
   TAAPlugin
-} from "./chunk-BLHZPW6Q.js";
+} from "./chunk-LWO3T5LQ.js";
 import {
   VelocityPassPlugin
-} from "./chunk-Y5MGRU2I.js";
+} from "./chunk-5RDSJRJ6.js";
 import {
   AOPlugin
-} from "./chunk-T632CY6J.js";
+} from "./chunk-DM5MLAGX.js";
 import {
   BloomPlugin
-} from "./chunk-PEYXKPWT.js";
+} from "./chunk-MSWUWYLL.js";
 import {
   FrameState
-} from "./chunk-A2Q3JIXV.js";
+} from "./chunk-4PPTXN5L.js";
 import {
   GILitePlugin
-} from "./chunk-GQURLXJ3.js";
+} from "./chunk-7B4KF5BO.js";
 import {
   THREE
 } from "./chunk-OVHQQSEK.js";
@@ -29,26 +29,13 @@ import {
 // src/core/plugins/postprocessing/UnrealEnginePostProcessingPlugin.ts
 import * as POST from "postprocessing";
 var DEFAULT_UNREAL_ENGINE_PP_CONFIG = {
-  bloom: {
-    intensity: 0.4,
-    // intensidad del bloom
-    luminanceThreshold: 1.2
-    // umbral de luminancia
-  },
-  motionBlur: {
-    intensity: 0.4
-    // intensidad del motion blur
-  },
-  taa: {
-    blend: 0.9
-    // blend de TAA
-  },
-  sharpen: {
-    strength: 0.2
-    // fuerza del sharpen
-  },
-  toneMappingExposure: 1.1
-  // exposición del tone mapping del renderer
+  bloom: { intensity: 0.4, luminanceThreshold: 1.2 },
+  motionBlur: { intensity: 0.4 },
+  taa: { blend: 0.9 },
+  sharpen: { strength: 0.2 },
+  toneMappingExposure: 1.1,
+  lodLevels: 5
+  // Niveles de LOD para polígonos "infinitos"
 };
 var UnrealEnginePostProcessingPlugin = class {
   name = "UnrealEnginePostProcessing";
@@ -64,13 +51,15 @@ var UnrealEnginePostProcessingPlugin = class {
   camera;
   domElement;
   scene;
-  // Render target temporal para Motion Blur
   sceneRenderTarget;
+  lodGroup = new THREE.Group();
+  // Para Nanite-like LOD management
   config;
   constructor(config) {
     this.config = { ...DEFAULT_UNREAL_ENGINE_PP_CONFIG, ...config };
   }
-  install({ scene, camera, renderer }) {
+  install(context) {
+    const { scene, camera, renderer } = context;
     this.camera = camera;
     this.domElement = renderer.domElement;
     this.scene = scene;
@@ -82,33 +71,61 @@ var UnrealEnginePostProcessingPlugin = class {
     this.composer = new POST.EffectComposer(renderer);
     this.sceneRenderTarget = new THREE.WebGLRenderTarget(width, height, {
       format: THREE.RGBAFormat,
-      type: THREE.HalfFloatType
+      type: THREE.HalfFloatType,
+      samples: 8
+      // MSAA para high-res realism
     });
     this.velocity = new VelocityPassPlugin(width, height);
-    this.ao = new AOPlugin(scene, camera, { width, height });
+    this.velocity.install(context);
+    this.ao = new AOPlugin({ width, height });
+    this.ao.install(context);
+    this.ao.setQualityPreset("ultra");
+    this.composer.addPass(this.ao.effect);
     this.gi = new GILitePlugin(this.velocity, this.sceneRenderTarget);
+    this.gi.install(context);
     this.bloom = new BloomPlugin();
-    this.motion = new MotionBlurPlugin(this.velocity);
-    this.taa = new TAAPlugin(camera, this.velocity, renderer);
+    this.motion = new MotionBlurPlugin(this.velocity, this.config.motionBlur.intensity);
+    this.motion.install(context);
+    this.taa = new TAAPlugin(this.velocity);
+    this.taa.install(context);
     this.sharpen = new SharpenEffect(0.2);
     this.bloom.effect.intensity = this.config.bloom.intensity;
     this.bloom.effect.luminanceMaterial.threshold = this.config.bloom.luminanceThreshold;
-    this.motion.setIntensity(this.config.motionBlur.intensity);
     this.taa.setBlend(this.config.taa.blend);
+    const renderPass = new POST.RenderPass(scene, camera);
+    this.composer.addPass(renderPass);
     const realismPass = new POST.EffectPass(
       camera,
-      this.ao.effect,
       this.gi.effect,
       this.bloom.effect
     );
+    this.composer.addPass(realismPass);
     const finalPass = new POST.EffectPass(
       camera,
       this.taa.effect,
       this.motion.effect,
       this.sharpen
     );
-    this.composer.addPass(realismPass);
     this.composer.addPass(finalPass);
+    this.setupNaniteLOD(scene);
+  }
+  setupNaniteLOD(scene) {
+    scene.traverse((child) => {
+      if (child instanceof THREE.Mesh && child.geometry.attributes.position.count > 1e5) {
+        const lod = new THREE.LOD();
+        for (let i = 0; i < this.config.lodLevels; i++) {
+          const decimatedMesh = child.clone();
+          decimatedMesh.geometry = this.decimateGeometry(decimatedMesh.geometry, i);
+          lod.addLevel(decimatedMesh, i * 50);
+        }
+        child.parent?.add(lod);
+        child.parent?.remove(child);
+      }
+    });
+    scene.add(this.lodGroup);
+  }
+  decimateGeometry(geometry, level) {
+    return geometry;
   }
   postRender() {
     const renderer = this.composer.getRenderer();
@@ -117,18 +134,15 @@ var UnrealEnginePostProcessingPlugin = class {
     this.frameState.update(this.camera, width, height);
     this.velocity.render(renderer, this.scene, this.camera);
     this.gi.renderScene(renderer, this.scene, this.camera);
-    renderer.setRenderTarget(this.sceneRenderTarget);
-    renderer.render(this.scene, this.camera);
     this.taa.update(this.sceneRenderTarget.texture);
-    renderer.setRenderTarget(null);
-    this.motion.updateSceneTexture(this.sceneRenderTarget);
+    this.motion.update?.({ texture: this.sceneRenderTarget.texture });
     this.composer.render();
   }
   resize(width, height) {
     this.composer.setSize(width, height);
     this.velocity.resize(width, height);
     this.sceneRenderTarget.setSize(width, height);
-    this.motion.resize(width, height);
+    this.ao.resize(width, height);
   }
   update(newConfig) {
     this.config = { ...this.config, ...newConfig };
@@ -141,7 +155,7 @@ var UnrealEnginePostProcessingPlugin = class {
       }
     }
     if (newConfig.motionBlur?.intensity !== void 0) {
-      this.motion.setIntensity(newConfig.motionBlur.intensity);
+      this.motion.update?.({ intensity: newConfig.motionBlur.intensity });
     }
     if (newConfig.taa?.blend !== void 0) {
       this.taa.setBlend(newConfig.taa.blend);

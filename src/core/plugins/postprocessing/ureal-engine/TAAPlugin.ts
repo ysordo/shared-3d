@@ -1,20 +1,23 @@
 import { Effect } from 'postprocessing';
-import type { THREE } from '../../../../lib';
+import { THREE } from '../../../../lib';
 import type { VelocityPassPlugin } from './VelocityPassPlugin';
-import { RenderTarget, Uniform } from 'three';
+import type { Plugin, PluginContext } from '../../types';
 
-export class TAAPlugin {
-  effect: Effect;
-  private previousFrame: RenderTarget;
+export class TAAPlugin implements Plugin {
+  readonly name = 'TAA';
+  effect!: Effect;
+  private previousFrame!: THREE.WebGLRenderTarget;
   private velocityPass: VelocityPassPlugin;
   private blend: number;
 
-  constructor(camera: THREE.PerspectiveCamera, velocityPass: VelocityPassPlugin, renderer: THREE.WebGLRenderer, blend = 0.9) {
+  constructor(velocityPass: VelocityPassPlugin, blend = 0.9) {
     this.velocityPass = velocityPass;
     this.blend = blend;
-
-    // RenderTarget para almacenar el frame anterior
-    this.previousFrame = new RenderTarget(renderer.domElement.width, renderer.domElement.height);
+  }
+  install({renderer}: PluginContext): void {
+    this.previousFrame = new THREE.WebGLRenderTarget(renderer.domElement.width, renderer.domElement.height, {
+      type: THREE.HalfFloatType,
+    });
 
     this.effect = new Effect(
       'TAA',
@@ -24,30 +27,34 @@ export class TAAPlugin {
       uniform float blend;
 
       void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outColor){
-        vec4 prev = texture(previousFrame, uv);
-        vec2 vel = texture(velocityTexture, uv).rg * 2.0 - 1.0;
-        vec4 color = inputColor;
+        vec2 velocity = texture(velocityTexture, uv).rg * 2.0 - 1.0;
+        vec2 uvPrev = uv - velocity;
 
-        // Mezcla con frame anterior usando velocity
-        vec2 uvPrev = uv - vel; 
+        // Clamping para evitar ghosting (como Unreal)
+        uvPrev = clamp(uvPrev, 0.0, 1.0);
         vec4 samplePrev = texture(previousFrame, uvPrev);
-        outColor = mix(color, samplePrev, blend);
+
+        // History rejection para ultra-realism
+        float dist = length(velocity);
+        float reject = smoothstep(0.1, 0.5, dist); // Rechaza si alta motion
+
+        outColor = mix(inputColor, samplePrev, blend * (1.0 - reject));
       }
       `,
       {
-        uniforms: new Map<string, Uniform<any>>([
-          ['previousFrame', new Uniform(this.previousFrame.texture)],
-          ['velocityTexture', new Uniform(this.velocityPass.getTexture())],
-          ['blend', new Uniform(this.blend)],
+        uniforms: new Map<string,THREE.Uniform>([
+          ['previousFrame', new THREE.Uniform(this.previousFrame.texture)],
+          ['velocityTexture', new THREE.Uniform(this.velocityPass.getTexture())],
+          ['blend', new THREE.Uniform(this.blend)],
         ]),
       }
     );
   }
-
-  // Llamar después de renderizar para almacenar el frame actual
-  update(previousFrameTexture: THREE.Texture) {
-    this.previousFrame.texture = previousFrameTexture;
-    this.effect.uniforms.get('previousFrame')!.value = previousFrameTexture;
+  update(previousFrameTexture?: THREE.Texture) {
+    if(previousFrameTexture !== undefined){
+      this.previousFrame.texture = previousFrameTexture;
+      this.effect.uniforms.get('previousFrame')!.value = previousFrameTexture;
+    }
   }
 
   setBlend(blend: number) {

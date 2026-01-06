@@ -6,7 +6,7 @@ import { GILitePlugin } from './ureal-engine/GILitePlugin';
 import { BloomPlugin } from './ureal-engine/BloomPlugin';
 import { MotionBlurPlugin } from './ureal-engine/MotionBlurPlugin';
 import { TAAPlugin } from './ureal-engine/TAAPlugin';
-import { SharpenEffect } from './ureal-engine/SharpenPlugin';
+import { SharpenEffect } from './ureal-engine/SharpenEffect';
 import type { PluginContext, Plugin } from '../types';
 import { THREE } from '../../../lib';
 
@@ -16,23 +16,16 @@ export type UnrealEnginePostProcessingConfig = {
   taa?: { blend?: number };
   sharpen?: { strength?: number };
   toneMappingExposure?: number;
+  lodLevels?: number; // Para Nanite-like (niveles de LOD)
 };
 
 const DEFAULT_UNREAL_ENGINE_PP_CONFIG: Required<UnrealEnginePostProcessingConfig> = {
-  bloom: {
-    intensity: 0.4,           // intensidad del bloom
-    luminanceThreshold: 1.2,  // umbral de luminancia
-  },
-  motionBlur: {
-    intensity: 0.4,           // intensidad del motion blur
-  },
-  taa: {
-    blend: 0.9,               // blend de TAA
-  },
-  sharpen: {
-    strength: 0.2,            // fuerza del sharpen
-  },
-  toneMappingExposure: 1.1,   // exposición del tone mapping del renderer
+  bloom: { intensity: 0.4, luminanceThreshold: 1.2 },
+  motionBlur: { intensity: 0.4 },
+  taa: { blend: 0.9 },
+  sharpen: { strength: 0.2 },
+  toneMappingExposure: 1.1,
+  lodLevels: 5, // Niveles de LOD para polígonos "infinitos"
 };
 
 export class UnrealEnginePostProcessingPlugin implements Plugin {
@@ -51,16 +44,17 @@ export class UnrealEnginePostProcessingPlugin implements Plugin {
   domElement!: HTMLElement;
   scene!: THREE.Scene;
 
-  // Render target temporal para Motion Blur
   private sceneRenderTarget!: THREE.WebGLRenderTarget;
+  private lodGroup = new THREE.Group(); // Para Nanite-like LOD management
+
   private config: Required<UnrealEnginePostProcessingConfig>;
 
-  constructor(config?: Partial<UnrealEnginePostProcessingConfig>){
-    this.config ={...DEFAULT_UNREAL_ENGINE_PP_CONFIG, ...config};
+  constructor(config?: Partial<UnrealEnginePostProcessingConfig>) {
+    this.config = { ...DEFAULT_UNREAL_ENGINE_PP_CONFIG, ...config };
   }
 
-
-  install({ scene, camera, renderer }: PluginContext) {
+  install(context: PluginContext) {
+    const {scene, camera, renderer} = context;
     this.camera = camera;
     this.domElement = renderer.domElement;
     this.scene = scene;
@@ -74,43 +68,81 @@ export class UnrealEnginePostProcessingPlugin implements Plugin {
 
     this.composer = new POST.EffectComposer(renderer);
 
-    // Render target temporal para Motion Blur
+    // Scene render target para GI y Motion Blur
     this.sceneRenderTarget = new THREE.WebGLRenderTarget(width, height, {
       format: THREE.RGBAFormat,
       type: THREE.HalfFloatType,
+      samples: 8, // MSAA para high-res realism
     });
 
     // Plugins internos
     this.velocity = new VelocityPassPlugin(width, height);
+    this.velocity.install(context);
+    this.ao = new AOPlugin({ width, height });
+    this.ao.install(context);
+    this.ao.setQualityPreset('ultra');
 
-    this.ao = new AOPlugin(scene, camera, {width, height});
+    this.composer.addPass(this.ao.effect as unknown as POST.Pass);
     this.gi = new GILitePlugin(this.velocity, this.sceneRenderTarget);
+    this.gi.install(context);
     this.bloom = new BloomPlugin();
-    this.motion = new MotionBlurPlugin(this.velocity);
-    this.taa = new TAAPlugin(camera, this.velocity, renderer);
+    this.motion = new MotionBlurPlugin(this.velocity, this.config.motionBlur!.intensity!);
+    this.motion.install(context);
+    this.taa = new TAAPlugin(this.velocity);
+    this.taa.install(context);
     this.sharpen = new SharpenEffect(0.2);
 
+    // Aplicar configs iniciales
     this.bloom.effect.intensity = this.config.bloom!.intensity!;
     this.bloom.effect.luminanceMaterial.threshold = this.config.bloom!.luminanceThreshold!;
-    this.motion.setIntensity(this.config.motionBlur!.intensity!);
     this.taa.setBlend(this.config.taa!.blend!);
 
+    // RenderPass estándar
+    const renderPass = new POST.RenderPass(scene, camera);
+    this.composer.addPass(renderPass);
 
+    // Pase para realismo (AO + GI + Bloom)
     const realismPass = new POST.EffectPass(
       camera,
-      this.ao.effect,
       this.gi.effect,
       this.bloom.effect
     );
+    this.composer.addPass(realismPass);
+
+    // Pase final (TAA + Motion Blur + Sharpen)
     const finalPass = new POST.EffectPass(
       camera,
       this.taa.effect,
       this.motion.effect,
       this.sharpen
     );
-
-    this.composer.addPass(realismPass);
     this.composer.addPass(finalPass);
+
+    // Nanite-like: Agregar LOD para meshes high-poly
+    this.setupNaniteLOD(scene);
+  }
+
+  private setupNaniteLOD(scene: THREE.Scene) {
+    // Recorre la escena y agrega LOD a meshes con > 100k verts (ajusta threshold)
+    scene.traverse((child) => {
+      if (child instanceof THREE.Mesh && child.geometry.attributes.position.count > 100000) {
+        const lod = new THREE.LOD();
+        for (let i = 0; i < this.config.lodLevels; i++) {
+          const decimatedMesh = child.clone(); // Aquí usa decimación real (usa geometry-utils o external lib)
+          decimatedMesh.geometry = this.decimateGeometry(decimatedMesh.geometry, i);
+          lod.addLevel(decimatedMesh, i * 50); // Distancia basada en nivel
+        }
+        child.parent?.add(lod);
+        child.parent?.remove(child);
+      }
+    });
+    scene.add(this.lodGroup);
+  }
+
+  private decimateGeometry(geometry: THREE.BufferGeometry, level: number) {
+    // Placeholder para decimación (usa three.js GeometryUtils o external como Meshopt)
+    // En real: reduce verts por level (ej: 1 - level * 0.2)
+    return geometry; // Implementa decimación real para Nanite
   }
 
   postRender() {
@@ -120,22 +152,18 @@ export class UnrealEnginePostProcessingPlugin implements Plugin {
 
     // Actualizar jitter frame
     this.frameState.update(this.camera, width, height);
-    
-    // Render Velocity Pass
+
+    // Render velocity
     this.velocity.render(renderer, this.scene, this.camera);
 
+    // GI con escena
     this.gi.renderScene(renderer, this.scene, this.camera);
-    
-    // Render escena a textura temporal para Motion Blur
-    renderer.setRenderTarget(this.sceneRenderTarget);
-    renderer.render(this.scene, this.camera);
+
+    // Actualizar TAA y Motion Blur
     this.taa.update(this.sceneRenderTarget.texture);
-    renderer.setRenderTarget(null);
+    this.motion.update?.({texture: this.sceneRenderTarget.texture});
 
-    // Actualizar textura de Motion Blur
-    this.motion.updateSceneTexture(this.sceneRenderTarget);
-
-    // Render final
+    // Render final único
     this.composer.render();
   }
 
@@ -143,7 +171,7 @@ export class UnrealEnginePostProcessingPlugin implements Plugin {
     this.composer.setSize(width, height);
     this.velocity.resize(width, height);
     this.sceneRenderTarget.setSize(width, height);
-    this.motion.resize(width, height);
+    this.ao.resize(width,height);
   }
 
   update(newConfig: Partial<UnrealEnginePostProcessingConfig>): void {
@@ -161,7 +189,7 @@ export class UnrealEnginePostProcessingPlugin implements Plugin {
 
     // Motion Blur
     if (newConfig.motionBlur?.intensity !== undefined) {
-      this.motion.setIntensity(newConfig.motionBlur.intensity);
+      this.motion.update?.({intensity: newConfig.motionBlur.intensity});
     }
 
     // TAA

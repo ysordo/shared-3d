@@ -3,7 +3,7 @@ import {
 } from "./chunk-VGY2SOT6.js";
 import {
   UnrealEnginePostProcessingPlugin
-} from "./chunk-E76VJI2V.js";
+} from "./chunk-F5WLSZBY.js";
 
 // src/react/components/postprocessing/UnrealEnginePostProcessing.tsx
 import { useCallback, useMemo } from "react";
