@@ -12,7 +12,7 @@ var _chunkY7JTNLGVcjs = require('./chunk-Y7JTNLGV.cjs');
 var _chunkDZ2BWJT3cjs = require('./chunk-DZ2BWJT3.cjs');
 
 
-var _chunkNJU22NMUcjs = require('./chunk-NJU22NMU.cjs');
+var _chunkUS2OCVJScjs = require('./chunk-US2OCVJS.cjs');
 
 
 var _chunkHRUNE2V4cjs = require('./chunk-HRUNE2V4.cjs');
@@ -77,10 +77,8 @@ var UnrealEnginePostProcessingPlugin = (_class = class {
     });
     this.velocity = new (0, _chunkDZ2BWJT3cjs.VelocityPassPlugin)(width, height);
     this.velocity.install(context);
-    this.ao = new (0, _chunkNJU22NMUcjs.AOPlugin)({ width, height });
+    this.ao = new (0, _chunkUS2OCVJScjs.AOPlugin)(width, height);
     this.ao.install(context);
-    this.ao.setQualityPreset("ultra");
-    this.composer.addPass(this.ao.effect);
     this.gi = new (0, _chunkRSUHDGCJcjs.GILitePlugin)(this.velocity, this.sceneRenderTarget);
     this.gi.install(context);
     this.bloom = new (0, _chunkHRUNE2V4cjs.BloomPlugin)();
@@ -96,6 +94,7 @@ var UnrealEnginePostProcessingPlugin = (_class = class {
     this.composer.addPass(renderPass);
     const realismPass = new POST.EffectPass(
       camera,
+      this.ao.effect,
       this.gi.effect,
       this.bloom.effect
     );
@@ -133,9 +132,8 @@ var UnrealEnginePostProcessingPlugin = (_class = class {
     const height = this.domElement.clientHeight;
     this.frameState.update(this.camera, width, height);
     this.velocity.render(renderer, this.scene, this.camera);
-    this.gi.renderScene(renderer, this.scene, this.camera);
     this.taa.update(this.sceneRenderTarget.texture);
-    _optionalChain([this, 'access', _7 => _7.motion, 'access', _8 => _8.update, 'optionalCall', _9 => _9({ texture: this.sceneRenderTarget.texture })]);
+    this.motion.update({ texture: this.sceneRenderTarget.texture });
     this.composer.render();
   }
   resize(width, height) {
@@ -154,13 +152,13 @@ var UnrealEnginePostProcessingPlugin = (_class = class {
         this.bloom.effect.luminanceMaterial.threshold = newConfig.bloom.luminanceThreshold;
       }
     }
-    if (_optionalChain([newConfig, 'access', _10 => _10.motionBlur, 'optionalAccess', _11 => _11.intensity]) !== void 0) {
-      _optionalChain([this, 'access', _12 => _12.motion, 'access', _13 => _13.update, 'optionalCall', _14 => _14({ intensity: newConfig.motionBlur.intensity })]);
+    if (_optionalChain([newConfig, 'access', _7 => _7.motionBlur, 'optionalAccess', _8 => _8.intensity]) !== void 0) {
+      _optionalChain([this, 'access', _9 => _9.motion, 'access', _10 => _10.update, 'optionalCall', _11 => _11({ intensity: newConfig.motionBlur.intensity })]);
     }
-    if (_optionalChain([newConfig, 'access', _15 => _15.taa, 'optionalAccess', _16 => _16.blend]) !== void 0) {
+    if (_optionalChain([newConfig, 'access', _12 => _12.taa, 'optionalAccess', _13 => _13.blend]) !== void 0) {
       this.taa.setBlend(newConfig.taa.blend);
     }
-    if (_optionalChain([newConfig, 'access', _17 => _17.sharpen, 'optionalAccess', _18 => _18.strength]) !== void 0) {
+    if (_optionalChain([newConfig, 'access', _14 => _14.sharpen, 'optionalAccess', _15 => _15.strength]) !== void 0) {
       this.sharpen.uniforms.get("strength").value = newConfig.sharpen.strength;
     }
     if (newConfig.toneMappingExposure !== void 0) {

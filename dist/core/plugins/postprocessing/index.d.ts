@@ -11,7 +11,6 @@ import 'postprocessing';
 import './ureal-engine/FrameState.js';
 import './ureal-engine/VelocityPassPlugin.js';
 import './ureal-engine/AOPlugin.js';
-import 'n8ao';
 import './ureal-engine/GILitePlugin.js';
 import './ureal-engine/BloomPlugin.js';
 import './ureal-engine/MotionBlurPlugin.js';

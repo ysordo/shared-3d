@@ -17,7 +17,7 @@ declare class MotionBlurPlugin implements Plugin {
     private config;
     constructor(velocityPass: VelocityPassPlugin, intensity?: MotionBlurPluginConfig['intensity']);
     install({ renderer }: PluginContext): void;
-    update?(newConfig: Partial<MotionBlurPluginConfig>): void;
+    update(newConfig: Partial<MotionBlurPluginConfig>): void;
 }
 
 export { DEFAULT_MOTION_BLUR_CONFIG, MotionBlurPlugin, type MotionBlurPluginConfig };

@@ -55,7 +55,7 @@ export class MotionBlurPlugin implements Plugin {
     this.config.texture = renderer.getRenderTarget()?.texture;
   };
 
-  update?(newConfig: Partial<MotionBlurPluginConfig>): void {
+  update(newConfig: Partial<MotionBlurPluginConfig>): void {
     this.config= {...this.config, ...newConfig};
     if(newConfig.intensity!==undefined){
       this.effect.uniforms.get('intensity')!.value = newConfig.intensity;

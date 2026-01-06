@@ -9,7 +9,6 @@ import { TAAPlugin } from './ureal-engine/TAAPlugin.cjs';
 import { SharpenEffect } from './ureal-engine/SharpenEffect.cjs';
 import { b as Plugin, P as PluginContext } from '../../../index-DE4jh8VF.cjs';
 import * as THREE from 'three';
-import 'n8ao';
 import '../../loaders/loaders.d.cjs';
 import '../../cache/types.cjs';
 

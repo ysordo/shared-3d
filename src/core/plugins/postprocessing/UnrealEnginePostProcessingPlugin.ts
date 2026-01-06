@@ -78,11 +78,8 @@ export class UnrealEnginePostProcessingPlugin implements Plugin {
     // Plugins internos
     this.velocity = new VelocityPassPlugin(width, height);
     this.velocity.install(context);
-    this.ao = new AOPlugin({ width, height });
+    this.ao = new AOPlugin( width, height);
     this.ao.install(context);
-    this.ao.setQualityPreset('ultra');
-
-    this.composer.addPass(this.ao.effect as unknown as POST.Pass);
     this.gi = new GILitePlugin(this.velocity, this.sceneRenderTarget);
     this.gi.install(context);
     this.bloom = new BloomPlugin();
@@ -104,6 +101,7 @@ export class UnrealEnginePostProcessingPlugin implements Plugin {
     // Pase para realismo (AO + GI + Bloom)
     const realismPass = new POST.EffectPass(
       camera,
+      this.ao.effect,
       this.gi.effect,
       this.bloom.effect
     );
@@ -157,11 +155,11 @@ export class UnrealEnginePostProcessingPlugin implements Plugin {
     this.velocity.render(renderer, this.scene, this.camera);
 
     // GI con escena
-    this.gi.renderScene(renderer, this.scene, this.camera);
+    //this.gi.renderScene(renderer, this.scene, this.camera);
 
     // Actualizar TAA y Motion Blur
     this.taa.update(this.sceneRenderTarget.texture);
-    this.motion.update?.({texture: this.sceneRenderTarget.texture});
+    this.motion.update({texture: this.sceneRenderTarget.texture});
 
     // Render final único
     this.composer.render();

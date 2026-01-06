@@ -12,7 +12,7 @@ import {
 } from "./chunk-5RDSJRJ6.js";
 import {
   AOPlugin
-} from "./chunk-DM5MLAGX.js";
+} from "./chunk-MV5QEZLK.js";
 import {
   BloomPlugin
 } from "./chunk-MSWUWYLL.js";
@@ -77,10 +77,8 @@ var UnrealEnginePostProcessingPlugin = class {
     });
     this.velocity = new VelocityPassPlugin(width, height);
     this.velocity.install(context);
-    this.ao = new AOPlugin({ width, height });
+    this.ao = new AOPlugin(width, height);
     this.ao.install(context);
-    this.ao.setQualityPreset("ultra");
-    this.composer.addPass(this.ao.effect);
     this.gi = new GILitePlugin(this.velocity, this.sceneRenderTarget);
     this.gi.install(context);
     this.bloom = new BloomPlugin();
@@ -96,6 +94,7 @@ var UnrealEnginePostProcessingPlugin = class {
     this.composer.addPass(renderPass);
     const realismPass = new POST.EffectPass(
       camera,
+      this.ao.effect,
       this.gi.effect,
       this.bloom.effect
     );
@@ -133,9 +132,8 @@ var UnrealEnginePostProcessingPlugin = class {
     const height = this.domElement.clientHeight;
     this.frameState.update(this.camera, width, height);
     this.velocity.render(renderer, this.scene, this.camera);
-    this.gi.renderScene(renderer, this.scene, this.camera);
     this.taa.update(this.sceneRenderTarget.texture);
-    this.motion.update?.({ texture: this.sceneRenderTarget.texture });
+    this.motion.update({ texture: this.sceneRenderTarget.texture });
     this.composer.render();
   }
   resize(width, height) {
