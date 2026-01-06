@@ -1,12 +1,12 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true});
-
-var _chunkEC2ZLY2Vcjs = require('./chunk-EC2ZLY2V.cjs');
-
-
-var _chunk5WTIQN6Zcjs = require('./chunk-5WTIQN6Z.cjs');
+import {
+  usePlugin
+} from "./chunk-VGY2SOT6.js";
+import {
+  UnrealEnginePostProcessingPlugin
+} from "./chunk-GWHWIJDD.js";
 
 // src/react/components/postprocessing/UnrealEnginePostProcessing.tsx
-var _react = require('react');
+import { useCallback, useMemo } from "react";
 var UnrealEnginePostProcessing = ({
   enabled = true,
   bloomIntensity = 0.5,
@@ -15,7 +15,7 @@ var UnrealEnginePostProcessing = ({
   sharpenStrength = 0.2,
   toneMappingExposure = 1.1
 }) => {
-  const config = _react.useMemo.call(void 0, 
+  const config = useMemo(
     () => ({
       enabled,
       bloom: { intensity: bloomIntensity },
@@ -33,11 +33,11 @@ var UnrealEnginePostProcessing = ({
       toneMappingExposure
     ]
   );
-  const factory = _react.useCallback.call(void 0, () => new (0, _chunk5WTIQN6Zcjs.UnrealEnginePostProcessingPlugin)(), []);
-  _chunkEC2ZLY2Vcjs.usePlugin.call(void 0, factory, config);
+  const factory = useCallback(() => new UnrealEnginePostProcessingPlugin(), []);
+  usePlugin(factory, config);
   return null;
 };
 
-
-
-exports.UnrealEnginePostProcessing = UnrealEnginePostProcessing;
+export {
+  UnrealEnginePostProcessing
+};

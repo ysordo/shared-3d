@@ -4,6 +4,8 @@ var BloomPlugin = class {
   name = "Bloom";
   effect;
   constructor() {
+  }
+  install(__context) {
     this.effect = new BloomEffect({
       intensity: 0.4,
       mipmapBlur: true,
@@ -15,8 +17,6 @@ var BloomPlugin = class {
     });
     this.effect.luminanceMaterial.threshold = 1.2;
     this.effect.luminanceMaterial.smoothing = 0.025;
-  }
-  install() {
   }
 };
 

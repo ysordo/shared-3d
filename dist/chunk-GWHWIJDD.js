@@ -12,16 +12,16 @@ import {
 } from "./chunk-5RDSJRJ6.js";
 import {
   AOPlugin
-} from "./chunk-MV5QEZLK.js";
+} from "./chunk-PYW7RNLM.js";
 import {
   BloomPlugin
-} from "./chunk-MSWUWYLL.js";
+} from "./chunk-7YDGNTWC.js";
 import {
   FrameState
 } from "./chunk-4PPTXN5L.js";
 import {
   GILitePlugin
-} from "./chunk-7B4KF5BO.js";
+} from "./chunk-GXHJHS62.js";
 import {
   THREE
 } from "./chunk-OVHQQSEK.js";
@@ -82,6 +82,7 @@ var UnrealEnginePostProcessingPlugin = class {
     this.gi = new GILitePlugin(this.velocity, this.sceneRenderTarget);
     this.gi.install(context);
     this.bloom = new BloomPlugin();
+    this.bloom.install(context);
     this.motion = new MotionBlurPlugin(this.velocity, this.config.motionBlur.intensity);
     this.motion.install(context);
     this.taa = new TAAPlugin(this.velocity);

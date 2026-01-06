@@ -12,16 +12,16 @@ var _chunkY7JTNLGVcjs = require('./chunk-Y7JTNLGV.cjs');
 var _chunkDZ2BWJT3cjs = require('./chunk-DZ2BWJT3.cjs');
 
 
-var _chunkUS2OCVJScjs = require('./chunk-US2OCVJS.cjs');
+var _chunk2QX5SQYZcjs = require('./chunk-2QX5SQYZ.cjs');
 
 
-var _chunkHRUNE2V4cjs = require('./chunk-HRUNE2V4.cjs');
+var _chunkJYRQRKIScjs = require('./chunk-JYRQRKIS.cjs');
 
 
 var _chunk63NW36UQcjs = require('./chunk-63NW36UQ.cjs');
 
 
-var _chunkRSUHDGCJcjs = require('./chunk-RSUHDGCJ.cjs');
+var _chunkWOOTLQ5Tcjs = require('./chunk-WOOTLQ5T.cjs');
 
 
 var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
@@ -77,11 +77,12 @@ var UnrealEnginePostProcessingPlugin = (_class = class {
     });
     this.velocity = new (0, _chunkDZ2BWJT3cjs.VelocityPassPlugin)(width, height);
     this.velocity.install(context);
-    this.ao = new (0, _chunkUS2OCVJScjs.AOPlugin)(width, height);
+    this.ao = new (0, _chunk2QX5SQYZcjs.AOPlugin)(width, height);
     this.ao.install(context);
-    this.gi = new (0, _chunkRSUHDGCJcjs.GILitePlugin)(this.velocity, this.sceneRenderTarget);
+    this.gi = new (0, _chunkWOOTLQ5Tcjs.GILitePlugin)(this.velocity, this.sceneRenderTarget);
     this.gi.install(context);
-    this.bloom = new (0, _chunkHRUNE2V4cjs.BloomPlugin)();
+    this.bloom = new (0, _chunkJYRQRKIScjs.BloomPlugin)();
+    this.bloom.install(context);
     this.motion = new (0, _chunkR5EP6VAUcjs.MotionBlurPlugin)(this.velocity, this.config.motionBlur.intensity);
     this.motion.install(context);
     this.taa = new (0, _chunkY7JTNLGVcjs.TAAPlugin)(this.velocity);

@@ -1,27 +1,26 @@
-import {
-  THREE
-} from "./chunk-OVHQQSEK.js";
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); var _class;
+
+var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
 
 // src/core/plugins/postprocessing/ureal-engine/AOPlugin.ts
-import { Effect } from "postprocessing";
-import { Uniform } from "three";
+var _postprocessing = require('postprocessing');
 var DEFAULT_AO_CONFIG = {
   intensity: 1.3,
   aoRadius: 5,
   bias: 0.025,
   samples: 16
 };
-var AOPlugin = class {
-  constructor(width, height, config) {
+var AOPlugin = (_class = class {
+  constructor(width, height, config) {;_class.prototype.__init.call(this);
     this.width = width;
     this.height = height;
     this.config = { ...DEFAULT_AO_CONFIG, ...config };
   }
-  name = "HBAO";
-  effect;
-  config;
+  __init() {this.name = "HBAO"}
+  
+  
   install({ camera }) {
-    this.effect = new Effect(
+    this.effect = new (0, _postprocessing.Effect)(
       "HBAO",
       `
       uniform sampler2D sceneDepth;
@@ -79,20 +78,20 @@ var AOPlugin = class {
       `,
       {
         uniforms: /* @__PURE__ */ new Map([
-          ["intensity", new Uniform(this.config.intensity)],
+          ["intensity", new _chunkEA3XQ4KJcjs.THREE.Uniform(this.config.intensity)],
           // Fuerza AO
-          ["aoRadius", new Uniform(this.config.aoRadius)],
+          ["aoRadius", new _chunkEA3XQ4KJcjs.THREE.Uniform(this.config.aoRadius)],
           // Radio
-          ["bias", new Uniform(this.config.bias)],
+          ["bias", new _chunkEA3XQ4KJcjs.THREE.Uniform(this.config.bias)],
           // Bias para evitar artefactos
-          ["samples", new Uniform(this.config.samples)],
+          ["samples", new _chunkEA3XQ4KJcjs.THREE.Uniform(this.config.samples)],
           // Muestras (16=bueno, 32=ultra)
-          ["resolution", new Uniform(new THREE.Vector2(this.width, this.height))],
-          ["projectionMatrixInv", new Uniform(camera.projectionMatrixInverse)],
-          ["viewMatrixInv", new Uniform(camera.matrixWorld)],
-          ["cameraPos", new Uniform(camera.position)],
-          ["near", new Uniform(camera.near)],
-          ["far", new Uniform(camera.far)]
+          ["resolution", new _chunkEA3XQ4KJcjs.THREE.Uniform(new _chunkEA3XQ4KJcjs.THREE.Vector2(this.width, this.height))],
+          ["projectionMatrixInv", new _chunkEA3XQ4KJcjs.THREE.Uniform(camera.projectionMatrixInverse)],
+          ["viewMatrixInv", new _chunkEA3XQ4KJcjs.THREE.Uniform(camera.matrixWorld)],
+          ["cameraPos", new _chunkEA3XQ4KJcjs.THREE.Uniform(camera.position)],
+          ["near", new _chunkEA3XQ4KJcjs.THREE.Uniform(camera.near)],
+          ["far", new _chunkEA3XQ4KJcjs.THREE.Uniform(camera.far)]
         ])
       }
     );
@@ -118,9 +117,9 @@ var AOPlugin = class {
   dispose() {
     this.effect.dispose();
   }
-};
+}, _class);
 
-export {
-  DEFAULT_AO_CONFIG,
-  AOPlugin
-};
+
+
+
+exports.DEFAULT_AO_CONFIG = DEFAULT_AO_CONFIG; exports.AOPlugin = AOPlugin;

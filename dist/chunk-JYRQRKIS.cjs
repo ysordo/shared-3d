@@ -4,6 +4,8 @@ var BloomPlugin = (_class = class {
   __init() {this.name = "Bloom"}
   
   constructor() {;_class.prototype.__init.call(this);
+  }
+  install(__context) {
     this.effect = new (0, _postprocessing.BloomEffect)({
       intensity: 0.4,
       mipmapBlur: true,
@@ -15,8 +17,6 @@ var BloomPlugin = (_class = class {
     });
     this.effect.luminanceMaterial.threshold = 1.2;
     this.effect.luminanceMaterial.smoothing = 0.025;
-  }
-  install() {
   }
 }, _class);
 

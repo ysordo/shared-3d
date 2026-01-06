@@ -83,6 +83,7 @@ export class UnrealEnginePostProcessingPlugin implements Plugin {
     this.gi = new GILitePlugin(this.velocity, this.sceneRenderTarget);
     this.gi.install(context);
     this.bloom = new BloomPlugin();
+    this.bloom.install(context);
     this.motion = new MotionBlurPlugin(this.velocity, this.config.motionBlur!.intensity!);
     this.motion.install(context);
     this.taa = new TAAPlugin(this.velocity);

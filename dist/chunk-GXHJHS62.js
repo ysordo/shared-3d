@@ -12,6 +12,8 @@ var GILitePlugin = class {
   constructor(velocityPass, renderTarget) {
     this.velocityPass = velocityPass;
     this.renderTarget = renderTarget;
+  }
+  install(__context) {
     this.effect = new Effect(
       "GILite",
       `
@@ -19,23 +21,24 @@ var GILitePlugin = class {
       uniform sampler2D velocityTexture;
       uniform float distance;
       uniform float thickness;
-      uniform int denoiseIterations;
 
-      void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outColor){
+      void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outColor) {
         vec4 scene = texture(sceneTexture, uv);
-        vec4 vel = texture(velocityTexture, uv);
 
-        // SSGI real con ray marching (simula bounces como Unreal)
+        // SSGI simple con ray marching (simula bounces como Unreal)
         vec3 indirect = vec3(0.0);
-        for (int i = 0; i < 8; i++) { // Samples para realism
+        for (int i = 0; i < 8; i++) {
           vec2 offset = vec2(float(i) / 8.0 - 0.5) * distance;
-          vec4 sample = texture(sceneTexture, uv + offset);
-          indirect += sample.rgb * (1.0 - length(offset) / thickness);
+          
+          // \u2190 Cambiado 'sample' por 'sampledColor'
+          vec4 sampledColor = texture(sceneTexture, uv + offset);
+          
+          indirect += sampledColor.rgb * (1.0 - length(offset) / thickness);
         }
-        indirect /= 8.0; // Normalize
-        indirect = clamp(indirect, 0.0, 1.0) * 0.3; // Intensity
+        indirect /= 8.0;
+        indirect = clamp(indirect, 0.0, 1.0) * 0.3;
 
-        outColor = vec4(scene.rgb + indirect, 1.0);
+        outColor = vec4(scene.rgb + indirect, scene.a);
       }
       `,
       {
@@ -43,15 +46,11 @@ var GILitePlugin = class {
           ["sceneTexture", new THREE.Uniform(this.renderTarget.texture)],
           ["velocityTexture", new THREE.Uniform(this.velocityPass.getTexture())],
           ["distance", new THREE.Uniform(10)],
-          ["thickness", new THREE.Uniform(10)],
-          ["denoiseIterations", new THREE.Uniform(4)]
+          ["thickness", new THREE.Uniform(10)]
         ])
       }
     );
   }
-  install(__context) {
-  }
-  // Render scene to target (llamado en pre-render para sync)
   renderScene(renderer, scene, camera) {
     renderer.setRenderTarget(this.renderTarget);
     renderer.render(scene, camera);

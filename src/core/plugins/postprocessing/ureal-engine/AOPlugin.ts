@@ -1,6 +1,4 @@
 import { Effect } from 'postprocessing';
-import { Uniform } from 'three';
-import type { Scene, PerspectiveCamera } from 'three';
 import type { Plugin, PluginContext } from '../../types';
 import { THREE } from '../../../../lib';
 
@@ -82,17 +80,17 @@ export class AOPlugin implements Plugin {
       }
       `,
       {
-        uniforms: new Map<string, Uniform>([
-          ['intensity', new Uniform(this.config.intensity)], // Fuerza AO
-          ['aoRadius', new Uniform(this.config.aoRadius)],  // Radio
-          ['bias', new Uniform(this.config.bias)],    // Bias para evitar artefactos
-          ['samples', new Uniform(this.config.samples)],    // Muestras (16=bueno, 32=ultra)
-          ['resolution', new Uniform(new THREE.Vector2(this.width, this.height))],
-          ['projectionMatrixInv', new Uniform(camera.projectionMatrixInverse)],
-          ['viewMatrixInv', new Uniform(camera.matrixWorld)],
-          ['cameraPos', new Uniform(camera.position)],
-          ['near', new Uniform(camera.near)],
-          ['far', new Uniform(camera.far)],
+        uniforms: new Map<string, THREE.Uniform>([
+          ['intensity', new THREE.Uniform(this.config.intensity)], // Fuerza AO
+          ['aoRadius', new THREE.Uniform(this.config.aoRadius)],  // Radio
+          ['bias', new THREE.Uniform(this.config.bias)],    // Bias para evitar artefactos
+          ['samples', new THREE.Uniform(this.config.samples)],    // Muestras (16=bueno, 32=ultra)
+          ['resolution', new THREE.Uniform(new THREE.Vector2(this.width, this.height))],
+          ['projectionMatrixInv', new THREE.Uniform(camera.projectionMatrixInverse)],
+          ['viewMatrixInv', new THREE.Uniform(camera.matrixWorld)],
+          ['cameraPos', new THREE.Uniform(camera.position)],
+          ['near', new THREE.Uniform(camera.near)],
+          ['far', new THREE.Uniform(camera.far)],
         ]),
       }
     );
