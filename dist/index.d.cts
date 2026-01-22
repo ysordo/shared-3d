@@ -10,7 +10,6 @@ export { BloomPostProcessingConfig, BloomPostProcessingPlugin } from './core/plu
 export { CinematicPostProcessingConfig, CinematicPostProcessingPlugin } from './core/plugins/postprocessing/CinematicPostProcessingPlugin.cjs';
 export { HighResPostProcessingConfig, HighResPostProcessingPlugin } from './core/plugins/postprocessing/HighResPostProcessingPlugin.cjs';
 export { RealisticPostProcessingConfig, RealisticPostProcessingPlugin } from './core/plugins/postprocessing/RealisticPostProcessingPlugin.cjs';
-export { UnrealEnginePostProcessingConfig, UnrealEnginePostProcessingPlugin } from './core/plugins/postprocessing/UnrealEnginePostProcessingPlugin.cjs';
 export { AdvancedCameraCollisionPlugin } from './core/plugins/AdvancedCameraCollisionPlugin.cjs';
 export { AOCPluginConfig, AdvancedOrbitControlsPlugin } from './core/plugins/AdvancedOrbitControlsPlugin.cjs';
 export { AdvancedRaycasterPlugin } from './core/plugins/AdvancedRaycasterPlugin.cjs';
@@ -55,7 +54,6 @@ export { BloomPostProcessing } from './react/components/postprocessing/BloomPost
 export { CinematicPostProcessing } from './react/components/postprocessing/CinematicPostProcessing.cjs';
 export { HighResPostProcessing } from './react/components/postprocessing/HighResPostProcessing.cjs';
 export { RealisticPostProcessing } from './react/components/postprocessing/RealisticPostProcessing.cjs';
-export { UnrealEnginePostProcessing } from './react/components/postprocessing/UnrealEnginePostProcessing.cjs';
 export { Raycaster } from './react/components/Raycaster.cjs';
 export { Suspense } from './react/components/Suspense.cjs';
 export { SuspenseModel } from './react/components/SuspenseModel.cjs';
@@ -81,14 +79,5 @@ export { EffectComposer as ThreeEffectComposer } from 'three/examples/jsm/postpr
 export { RenderPass as ThreeRenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 export { UnrealBloomPass as ThreeUnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 export { GLTFLoaderEvents, GLTFLoaderOptions, HDRIEvents, HDRILoaderOptions, ProgressEvent, WebPHDRData } from './core/loaders/loaders.d.cjs';
-import 'postprocessing';
-import './core/plugins/postprocessing/ureal-engine/FrameState.cjs';
-import './core/plugins/postprocessing/ureal-engine/VelocityPassPlugin.cjs';
-import './core/plugins/postprocessing/ureal-engine/AOPlugin.cjs';
-import './core/plugins/postprocessing/ureal-engine/GILitePlugin.cjs';
-import './core/plugins/postprocessing/ureal-engine/BloomPlugin.cjs';
-import './core/plugins/postprocessing/ureal-engine/MotionBlurPlugin.cjs';
-import './core/plugins/postprocessing/ureal-engine/TAAPlugin.cjs';
-import './core/plugins/postprocessing/ureal-engine/SharpenEffect.cjs';
 import 'react';
 import 'react/jsx-runtime';

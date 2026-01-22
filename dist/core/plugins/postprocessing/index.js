@@ -1,4 +1,4 @@
-import "../../../chunk-F6KK2PJB.js";
+import "../../../chunk-VBDIJ4OD.js";
 import {
   BloomPostProcessingPlugin
 } from "../../../chunk-TXXNOUZQ.js";
@@ -11,18 +11,6 @@ import {
 import {
   RealisticPostProcessingPlugin
 } from "../../../chunk-NBZOFQPO.js";
-import {
-  UnrealEnginePostProcessingPlugin
-} from "../../../chunk-GWHWIJDD.js";
-import "../../../chunk-VLJOONUS.js";
-import "../../../chunk-ZGPF35LB.js";
-import "../../../chunk-LWO3T5LQ.js";
-import "../../../chunk-5RDSJRJ6.js";
-import "../../../chunk-6PIP7YSB.js";
-import "../../../chunk-PYW7RNLM.js";
-import "../../../chunk-7YDGNTWC.js";
-import "../../../chunk-4PPTXN5L.js";
-import "../../../chunk-GXHJHS62.js";
 import "../../../chunk-OK2NCVM7.js";
 import "../../../chunk-OVHQQSEK.js";
 import "../../../chunk-RBZOTBBM.js";
@@ -31,6 +19,5 @@ export {
   BloomPostProcessingPlugin,
   CinematicPostProcessingPlugin,
   HighResPostProcessingPlugin,
-  RealisticPostProcessingPlugin,
-  UnrealEnginePostProcessingPlugin
+  RealisticPostProcessingPlugin
 };

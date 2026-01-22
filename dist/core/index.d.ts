@@ -10,7 +10,6 @@ export { BloomPostProcessingConfig, BloomPostProcessingPlugin } from './plugins/
 export { CinematicPostProcessingConfig, CinematicPostProcessingPlugin } from './plugins/postprocessing/CinematicPostProcessingPlugin.js';
 export { HighResPostProcessingConfig, HighResPostProcessingPlugin } from './plugins/postprocessing/HighResPostProcessingPlugin.js';
 export { RealisticPostProcessingConfig, RealisticPostProcessingPlugin } from './plugins/postprocessing/RealisticPostProcessingPlugin.js';
-export { UnrealEnginePostProcessingConfig, UnrealEnginePostProcessingPlugin } from './plugins/postprocessing/UnrealEnginePostProcessingPlugin.js';
 export { AdvancedCameraCollisionPlugin } from './plugins/AdvancedCameraCollisionPlugin.js';
 export { AOCPluginConfig, AdvancedOrbitControlsPlugin } from './plugins/AdvancedOrbitControlsPlugin.js';
 export { AdvancedRaycasterPlugin } from './plugins/AdvancedRaycasterPlugin.js';
@@ -24,12 +23,3 @@ export { RaycasterConfig, RaycasterEvent, RaycasterPlugin } from './plugins/Rayc
 export { createQuadWireframe } from './utils/QuadWireframe.js';
 import 'three';
 import './loaders/loaders.d.js';
-import 'postprocessing';
-import './plugins/postprocessing/ureal-engine/FrameState.js';
-import './plugins/postprocessing/ureal-engine/VelocityPassPlugin.js';
-import './plugins/postprocessing/ureal-engine/AOPlugin.js';
-import './plugins/postprocessing/ureal-engine/GILitePlugin.js';
-import './plugins/postprocessing/ureal-engine/BloomPlugin.js';
-import './plugins/postprocessing/ureal-engine/MotionBlurPlugin.js';
-import './plugins/postprocessing/ureal-engine/TAAPlugin.js';
-import './plugins/postprocessing/ureal-engine/SharpenEffect.js';

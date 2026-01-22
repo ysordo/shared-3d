@@ -1,6 +1,6 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});
 
-var _chunkVGSUGZMOcjs = require('./chunk-VGSUGZMO.cjs');
+var _chunkTS2WCK2Bcjs = require('./chunk-TS2WCK2B.cjs');
 
 // src/react/contexts/CacheContext.tsx
 var _react = require('react');
@@ -13,7 +13,7 @@ var CacheProvider = ({ children }) => {
   const validate = async (manifest) => {
     setStatus("validating");
     setProgress(0);
-    const result = await _chunkVGSUGZMOcjs.CacheValidator.validate({
+    const result = await _chunkTS2WCK2Bcjs.CacheValidator.validate({
       manifest,
       onProgress: (p) => setProgress(Math.round(p)),
       onComplete: (r) => {

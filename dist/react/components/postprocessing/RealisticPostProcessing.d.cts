@@ -1,3 +1,5 @@
+import React from 'react';
+
 type RealisticPostProcessingProps = {
     enabled?: boolean;
     bloomIntensity?: number;
@@ -10,6 +12,8 @@ type RealisticPostProcessingProps = {
     noiseOpacity?: number;
     toneMappingExposure?: number;
 };
-declare const RealisticPostProcessing: React.FC<RealisticPostProcessingProps>;
+declare const RealisticPostProcessing: React.FC<RealisticPostProcessingProps> & {
+    defaultProps: RealisticPostProcessingProps;
+};
 
 export { RealisticPostProcessing };

@@ -2,17 +2,7 @@ export { BloomPostProcessingConfig, BloomPostProcessingPlugin } from './BloomPos
 export { CinematicPostProcessingConfig, CinematicPostProcessingPlugin } from './CinematicPostProcessingPlugin.js';
 export { HighResPostProcessingConfig, HighResPostProcessingPlugin } from './HighResPostProcessingPlugin.js';
 export { RealisticPostProcessingConfig, RealisticPostProcessingPlugin } from './RealisticPostProcessingPlugin.js';
-export { UnrealEnginePostProcessingConfig, UnrealEnginePostProcessingPlugin } from './UnrealEnginePostProcessingPlugin.js';
 import '../../../index-vk5WYF3C.js';
 import '../../loaders/loaders.d.js';
 import 'three';
 import '../../cache/types.js';
-import 'postprocessing';
-import './ureal-engine/FrameState.js';
-import './ureal-engine/VelocityPassPlugin.js';
-import './ureal-engine/AOPlugin.js';
-import './ureal-engine/GILitePlugin.js';
-import './ureal-engine/BloomPlugin.js';
-import './ureal-engine/MotionBlurPlugin.js';
-import './ureal-engine/TAAPlugin.js';
-import './ureal-engine/SharpenEffect.js';
