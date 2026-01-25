@@ -36,6 +36,8 @@ type Solid = Omit<Texture, 'type'> & {
   color?: THREE.ColorRepresentation;
   metalness?: number;
   roughness?: number;
+  keepGlass?: boolean;
+  keepLight?: 'blender' | 'default' | 'none';
 };
 type Wireframe = Omit<Solid, 'type'> & {
   type: 'wireframe';
@@ -364,13 +366,12 @@ import {
 export const MaterialController: React.FC<MaterialControllerProps> = ({
   materials,
   activeDefault,
-  transitionDuration = 800,
+  transitionDuration = 1200, // Ahora se respetará este tiempo real
   children,
   className,
 }) => {
   const model = useActiveModel();
 
-  // Estados requeridos por tu interfaz MaterialItem
   const [activeName, setActiveName] = useState<string | null>(null);
   const [oldName, setOldName] = useState<string>('');
   const [nextName, setNextName] = useState<string>('');
@@ -379,13 +380,14 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
 
   const processedModelRef = useRef<THREE.Group | null>(null);
 
+  // Inicialización y configuración de Shaders
   useEffect(() => {
-    if (!model || processedModelRef.current === model) {
-      return;
-    }
+    if (!model || processedModelRef.current === model) {return;}
+
     setupModelBounds(model);
     model.traverse((child) => {
       if (child instanceof THREE.Mesh) {
+        // Importante: inyectar el shader que maneja profundidad para cristales
         injectShader(child.material);
       }
     });
@@ -394,46 +396,53 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
 
   const applyMaterial = useCallback(
     async (config: MaterialConfig) => {
-      if (!model || isTransitioning) {
-        return;
-      }
+      // Permitimos el cambio si no es el mismo material activo
+      if (!model || isTransitioning || config.name === activeName) {return;}
 
-      // Seteamos nombres para la interfaz externa
+      setIsTransitioning(true);
       setOldName(activeName ?? '');
       setNextName(config.name);
-      setIsTransitioning(true);
       setPercentage(0);
 
       const isTextured = config.type === 'textured';
       const isWire = config.type === 'wireframe';
 
-      // Control de textura instantáneo (o podrías animarlo)
+      // 1. Configuración de Apariencia (Blender Style)
+      // Ajustamos intensidad de luz para look mate y decidimos si mantener cristales
       transitionUniforms.uUseTexture.value = isTextured ? 1.0 : 0.0;
+      transitionUniforms.uLightIntensity.value = (isTextured || config.keepLight === 'default') ? 1.0 : (config.keepLight === 'blender' ? 0.6 : 0.0);
+      // 'keepGlass' debe venir en tu MaterialConfig para decidir si el cristal se vuelve sólido
+      transitionUniforms.uGlassOpacity.value = isTextured ? 1.0 : (config.keepGlass ? 1.0 : 0.0);
 
+      // 2. Ejecución de la Animación
       if (!isTextured) {
-        const targetColor = config.color?.toString?.() || '#888888';
+        const targetColor = config.color?.toString() || '#888888';
 
-        // Ejecutamos animación y actualizamos el porcentaje para la UI
+        // Iniciamos la animación de GSAP que ahora devuelve el tween correctamente
         const animation = runPaintTransition(
           targetColor,
           isWire,
-          transitionDuration,
+          transitionDuration
         );
 
+        // Sincronización del porcentaje con la UI
         animation.eventCallback('onUpdate', () => {
-          setPercentage(Math.floor(animation.progress() * 100));
+          const p = Math.round(animation.progress() * 100);
+          setPercentage(p);
         });
 
         await animation;
       } else {
+        // Si es textura, saltamos la animación o podrías animar uUseTexture
         setPercentage(100);
       }
 
+      // 3. Finalización de estados
       setActiveName(config.name);
       setIsTransitioning(false);
-      setPercentage(0); // Reset para la siguiente
+      // No reseteamos percentage a 0 aquí para que la UI no parpadee al terminar
     },
-    [model, isTransitioning, activeName, transitionDuration],
+    [model, isTransitioning, activeName, transitionDuration]
   );
 
   const items = useMemo<MaterialItem[]>(
@@ -443,20 +452,24 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         oldName,
         nextName,
         isActive: activeName === config.name,
-        percentage: nextName === config.name ? percentage : 0,
+        // El porcentaje solo se muestra para el item que está transicionando
+        percentage,
         apply: () => applyMaterial(config),
       })),
-    [materials, oldName, nextName, activeName, percentage, applyMaterial],
+    [materials, oldName, nextName, activeName, percentage, applyMaterial]
   );
 
   // Aplicar default inicial
   useEffect(() => {
-    if (!model || activeName || items.length === 0) {
-      return;
-    }
+    if (!model || activeName || items.length === 0) {return;}
+    
     const def = items.find((i) => i.name === activeDefault) || items[0];
-    def?.apply?.();
-  }, [model, items, activeDefault, activeName]);
+    if (def) {
+      // Para el primer render, forzamos los valores sin esperar el await del click
+      const config = materials.find(m => m.name === def.name);
+      if (config) {applyMaterial(config);}
+    }
+  }, [model, items, activeDefault, activeName, materials, applyMaterial]);
 
   if (!model) {
     return <div className={className}>{children([], false)}</div>;
@@ -464,3 +477,4 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
 
   return <div className={className}>{children(items, isTransitioning)}</div>;
 };
+

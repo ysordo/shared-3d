@@ -14,13 +14,15 @@ if (uIsWireMode > 0.5) {
     targetRGB = mix(uColorNew, uColorOld, effect);
 }
 
-// Si uUseTexture es 1.0, diffuseColor.rgb contiene la textura original de Three.js
-// Si uUseTexture es 0.0, ignoramos la textura y usamos nuestro targetRGB
+// LÓGICA DE SALIDA
 if (uUseTexture > 0.5) {
-    // Aquí puedes decidir si quieres que la textura también barra o sea instantánea
-    // Para respetar el modelo original 100%:
-    diffuseColor.a = 1.0;
+    // MODO TEXTURA: Respetamos color y transparencia original del mapa
+    // NO tocamos diffuseColor.a para que el cristal funcione
 } else {
+    // MODO SÓLIDO / WIREFRAME
     diffuseColor.rgb = targetRGB;
-    diffuseColor.a = targetAlpha;
+    
+    // Si uGlassOpacity es 1.0, mantenemos el alpha original (cristal)
+    // Si es 0.0, usamos targetAlpha (1.0 o 0.95) para hacerlo bloque sólido
+    diffuseColor.a = mix(targetAlpha, diffuseColor.a, uGlassOpacity);
 }

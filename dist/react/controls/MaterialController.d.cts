@@ -11,6 +11,8 @@ type Solid = Omit<Texture, 'type'> & {
     color?: THREE.ColorRepresentation;
     metalness?: number;
     roughness?: number;
+    keepGlass?: boolean;
+    keepLight?: 'blender' | 'default' | 'none';
 };
 type Wireframe = Omit<Solid, 'type'> & {
     type: 'wireframe';

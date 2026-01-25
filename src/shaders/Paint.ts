@@ -3,17 +3,6 @@ import gsap from 'gsap';
 import vertexChunk from './paint.vert';
 import fragmentChunk from './paint.frag';
 
-export const transitionUniforms = {
-    uProgress: { value: 0 },
-    uColorNew: { value: new THREE.Color('#ffffff') },
-    uColorOld: { value: new THREE.Color('#ffffff') },
-    uWireColor: { value: new THREE.Color('#000000') },
-    uIsWireMode: { value: 0.0 },
-    uUseTexture: { value: 1.0 }, // 1.0 usa textura, 0.0 usa color/wire
-    uMinX: { value: 0 },
-    uMaxX: { value: 0 }
-};
-
 export const setupModelBounds = (model: THREE.Object3D) => {
     const box = new THREE.Box3().setFromObject(model);
     transitionUniforms.uMinX.value = box.min.x;
@@ -21,24 +10,46 @@ export const setupModelBounds = (model: THREE.Object3D) => {
 };
 
 export const runPaintTransition = (newColor: string, isWire: boolean, duration: number) => {
+    // 1. Antes de empezar, el color que era "nuevo" ahora es el "viejo"
     transitionUniforms.uColorOld.value.copy(transitionUniforms.uColorNew.value);
+    
+    // 2. Seteamos el nuevo color objetivo
     transitionUniforms.uColorNew.value.set(isWire ? '#888888' : newColor);
     transitionUniforms.uIsWireMode.value = isWire ? 1.0 : 0.0;
 
-    // Devolvemos el objeto Tween para que React pueda usar .progress()
-    return gsap.fromTo(transitionUniforms.uProgress, 
-        { value: 0 }, 
-        { 
-            value: 1, 
-            duration: duration / 1000, 
-            ease: 'power2.inOut',
-            overwrite: true 
+    // Aseguramos que el progreso empiece en 0 estrictamente
+    transitionUniforms.uProgress.value = 0;
+
+    return gsap.to(transitionUniforms.uProgress, {
+        value: 1,
+        duration: duration / 1000, // 1200 / 1000 = 1.2s
+        ease: 'power2.inOut',
+        overwrite: 'auto', // Cambiado de true a 'auto' para evitar cancelaciones bruscas
+        onUpdate: () => {
+            // Si no usas un loop de renderizado (requestAnimationFrame) externo, 
+            // podrías necesitar disparar un evento aquí, pero normalmente 
+            // el loop de Three.js ya lee el valor actualizado.
         }
-    );
+    });
+};
+
+export const transitionUniforms = {
+    uProgress: { value: 0 },
+    uColorNew: { value: new THREE.Color('#ffffff') },
+    uColorOld: { value: new THREE.Color('#ffffff') },
+    uWireColor: { value: new THREE.Color('#000000') },
+    uIsWireMode: { value: 0.0 },
+    uUseTexture: { value: 1.0 },
+    uMinX: { value: 0 },
+    uMaxX: { value: 0 },
+    uLightIntensity: { value: 1.0 }, // Control de brillo Blender
+    uGlassOpacity: { value: 1.0 }    // 1.0 = Mantiene cristal, 0.0 = Sólido
 };
 
 export const injectShader = (material: THREE.Material) => {
     material.transparent = true;
+    material.depthWrite = true; // Crucial para que el cristal no falle
+    
     material.onBeforeCompile = (shader) => {
         shader.uniforms = { ...shader.uniforms, ...transitionUniforms };
 
@@ -46,7 +57,7 @@ export const injectShader = (material: THREE.Material) => {
             varying float vPosX;
             varying vec2 vUv;
             ${shader.vertexShader}
-        `.replace('#include <begin_vertex>', `#include <begin_vertex>\n${vertexChunk}`);
+        `.replace('#include <begin_vertex>', `#include <begin_vertex>\n ${vertexChunk}`);
 
         shader.fragmentShader = `
             uniform float uProgress;
@@ -57,6 +68,8 @@ export const injectShader = (material: THREE.Material) => {
             uniform float uUseTexture;
             uniform float uMinX;
             uniform float uMaxX;
+            uniform float uLightIntensity;
+            uniform float uGlassOpacity;
             varying float vPosX;
             varying vec2 vUv;
 
@@ -65,10 +78,16 @@ export const injectShader = (material: THREE.Material) => {
                 return 1.0 - min(grid.x, grid.y);
             }
             ${shader.fragmentShader}
-        `.replace(
-            '#include <color_fragment>',
-            fragmentChunk // El archivo .frag que usa uUseTexture
-        );
+        `
+        .replace(
+            '#include <lights_physical_fragment>',
+            `#include <lights_physical_fragment>
+             // Reducción de intensidad para look Blender
+             reflectedLight.directDiffuse *= uLightIntensity;
+             reflectedLight.indirectDiffuse *= uLightIntensity;
+             reflectedLight.directSpecular *= uLightIntensity;`
+        )
+        .replace('#include <color_fragment>', fragmentChunk);
     };
     material.needsUpdate = true;
 };

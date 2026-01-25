@@ -21,20 +21,9 @@ var _gsap = require('gsap'); var _gsap2 = _interopRequireDefault(_gsap);
 var paint_default = "vPosX = position.x;\nvUv = uv;\n";
 
 // src/shaders/paint.frag
-var paint_default2 = "float normX = (vPosX - uMinX) / (uMaxX - uMinX);\nfloat threshold = uProgress * 1.1; \nfloat effect = smoothstep(threshold - 0.1, threshold, normX);\n\n// Color objetivo del pintado\nvec3 targetRGB;\nfloat targetAlpha = 1.0;\n\nif (uIsWireMode > 0.5) {\n    float wire = getWireframe(vUv);\n    targetRGB = mix(vec3(0.53), uWireColor, clamp(wire, 0.0, 1.0));\n    targetAlpha = 0.95;\n} else {\n    targetRGB = mix(uColorNew, uColorOld, effect);\n}\n\n// Si uUseTexture es 1.0, diffuseColor.rgb contiene la textura original de Three.js\n// Si uUseTexture es 0.0, ignoramos la textura y usamos nuestro targetRGB\nif (uUseTexture > 0.5) {\n    // Aqu\xED puedes decidir si quieres que la textura tambi\xE9n barra o sea instant\xE1nea\n    // Para respetar el modelo original 100%:\n    diffuseColor.a = 1.0;\n} else {\n    diffuseColor.rgb = targetRGB;\n    diffuseColor.a = targetAlpha;\n}\n";
+var paint_default2 = "float normX = (vPosX - uMinX) / (uMaxX - uMinX);\nfloat threshold = uProgress * 1.1; \nfloat effect = smoothstep(threshold - 0.1, threshold, normX);\n\n// Color objetivo del pintado\nvec3 targetRGB;\nfloat targetAlpha = 1.0;\n\nif (uIsWireMode > 0.5) {\n    float wire = getWireframe(vUv);\n    targetRGB = mix(vec3(0.53), uWireColor, clamp(wire, 0.0, 1.0));\n    targetAlpha = 0.95;\n} else {\n    targetRGB = mix(uColorNew, uColorOld, effect);\n}\n\n// L\xD3GICA DE SALIDA\nif (uUseTexture > 0.5) {\n    // MODO TEXTURA: Respetamos color y transparencia original del mapa\n    // NO tocamos diffuseColor.a para que el cristal funcione\n} else {\n    // MODO S\xD3LIDO / WIREFRAME\n    diffuseColor.rgb = targetRGB;\n    \n    // Si uGlassOpacity es 1.0, mantenemos el alpha original (cristal)\n    // Si es 0.0, usamos targetAlpha (1.0 o 0.95) para hacerlo bloque s\xF3lido\n    diffuseColor.a = mix(targetAlpha, diffuseColor.a, uGlassOpacity);\n}\n";
 
 // src/shaders/Paint.ts
-var transitionUniforms = {
-  uProgress: { value: 0 },
-  uColorNew: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#ffffff") },
-  uColorOld: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#ffffff") },
-  uWireColor: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#000000") },
-  uIsWireMode: { value: 0 },
-  uUseTexture: { value: 1 },
-  // 1.0 usa textura, 0.0 usa color/wire
-  uMinX: { value: 0 },
-  uMaxX: { value: 0 }
-};
 var setupModelBounds = (model) => {
   const box = new _chunkEA3XQ4KJcjs.THREE.Box3().setFromObject(model);
   transitionUniforms.uMinX.value = box.min.x;
@@ -44,19 +33,35 @@ var runPaintTransition = (newColor, isWire, duration) => {
   transitionUniforms.uColorOld.value.copy(transitionUniforms.uColorNew.value);
   transitionUniforms.uColorNew.value.set(isWire ? "#888888" : newColor);
   transitionUniforms.uIsWireMode.value = isWire ? 1 : 0;
-  return _gsap2.default.fromTo(
-    transitionUniforms.uProgress,
-    { value: 0 },
-    {
-      value: 1,
-      duration: duration / 1e3,
-      ease: "power2.inOut",
-      overwrite: true
+  transitionUniforms.uProgress.value = 0;
+  return _gsap2.default.to(transitionUniforms.uProgress, {
+    value: 1,
+    duration: duration / 1e3,
+    // 1200 / 1000 = 1.2s
+    ease: "power2.inOut",
+    overwrite: "auto",
+    // Cambiado de true a 'auto' para evitar cancelaciones bruscas
+    onUpdate: () => {
     }
-  );
+  });
+};
+var transitionUniforms = {
+  uProgress: { value: 0 },
+  uColorNew: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#ffffff") },
+  uColorOld: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#ffffff") },
+  uWireColor: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#000000") },
+  uIsWireMode: { value: 0 },
+  uUseTexture: { value: 1 },
+  uMinX: { value: 0 },
+  uMaxX: { value: 0 },
+  uLightIntensity: { value: 1 },
+  // Control de brillo Blender
+  uGlassOpacity: { value: 1 }
+  // 1.0 = Mantiene cristal, 0.0 = Sólido
 };
 var injectShader = (material) => {
   material.transparent = true;
+  material.depthWrite = true;
   material.onBeforeCompile = (shader) => {
     shader.uniforms = { ...shader.uniforms, ...transitionUniforms };
     shader.vertexShader = `
@@ -64,7 +69,7 @@ var injectShader = (material) => {
             varying vec2 vUv;
             ${shader.vertexShader}
         `.replace("#include <begin_vertex>", `#include <begin_vertex>
-${paint_default}`);
+ ${paint_default}`);
     shader.fragmentShader = `
             uniform float uProgress;
             uniform vec3 uColorNew;
@@ -74,6 +79,8 @@ ${paint_default}`);
             uniform float uUseTexture;
             uniform float uMinX;
             uniform float uMaxX;
+            uniform float uLightIntensity;
+            uniform float uGlassOpacity;
             varying float vPosX;
             varying vec2 vUv;
 
@@ -83,10 +90,13 @@ ${paint_default}`);
             }
             ${shader.fragmentShader}
         `.replace(
-      "#include <color_fragment>",
-      paint_default2
-      // El archivo .frag que usa uUseTexture
-    );
+      "#include <lights_physical_fragment>",
+      `#include <lights_physical_fragment>
+             // Reducci\xF3n de intensidad para look Blender
+             reflectedLight.directDiffuse *= uLightIntensity;
+             reflectedLight.indirectDiffuse *= uLightIntensity;
+             reflectedLight.directSpecular *= uLightIntensity;`
+    ).replace("#include <color_fragment>", paint_default2);
   };
   material.needsUpdate = true;
 };
@@ -96,7 +106,8 @@ var _jsxruntime = require('react/jsx-runtime');
 var MaterialController = ({
   materials,
   activeDefault,
-  transitionDuration = 800,
+  transitionDuration = 1200,
+  // Ahora se respetará este tiempo real
   children,
   className
 }) => {
@@ -121,25 +132,28 @@ var MaterialController = ({
   }, [model]);
   const applyMaterial = _react.useCallback.call(void 0, 
     async (config) => {
-      if (!model || isTransitioning) {
+      if (!model || isTransitioning || config.name === activeName) {
         return;
       }
+      setIsTransitioning(true);
       setOldName(_nullishCoalesce(activeName, () => ( "")));
       setNextName(config.name);
-      setIsTransitioning(true);
       setPercentage(0);
       const isTextured = config.type === "textured";
       const isWire = config.type === "wireframe";
       transitionUniforms.uUseTexture.value = isTextured ? 1 : 0;
+      transitionUniforms.uLightIntensity.value = isTextured || config.keepLight === "default" ? 1 : config.keepLight === "blender" ? 0.6 : 0;
+      transitionUniforms.uGlassOpacity.value = isTextured ? 1 : config.keepGlass ? 1 : 0;
       if (!isTextured) {
-        const targetColor = _optionalChain([config, 'access', _ => _.color, 'optionalAccess', _2 => _2.toString, 'optionalCall', _3 => _3()]) || "#888888";
+        const targetColor = _optionalChain([config, 'access', _ => _.color, 'optionalAccess', _2 => _2.toString, 'call', _3 => _3()]) || "#888888";
         const animation = runPaintTransition(
           targetColor,
           isWire,
           transitionDuration
         );
         animation.eventCallback("onUpdate", () => {
-          setPercentage(Math.floor(animation.progress() * 100));
+          const p = Math.round(animation.progress() * 100);
+          setPercentage(p);
         });
         await animation;
       } else {
@@ -147,7 +161,6 @@ var MaterialController = ({
       }
       setActiveName(config.name);
       setIsTransitioning(false);
-      setPercentage(0);
     },
     [model, isTransitioning, activeName, transitionDuration]
   );
@@ -157,7 +170,8 @@ var MaterialController = ({
       oldName,
       nextName,
       isActive: activeName === config.name,
-      percentage: nextName === config.name ? percentage : 0,
+      // El porcentaje solo se muestra para el item que está transicionando
+      percentage,
       apply: () => applyMaterial(config)
     })),
     [materials, oldName, nextName, activeName, percentage, applyMaterial]
@@ -167,8 +181,13 @@ var MaterialController = ({
       return;
     }
     const def = items.find((i) => i.name === activeDefault) || items[0];
-    _optionalChain([def, 'optionalAccess', _4 => _4.apply, 'optionalCall', _5 => _5()]);
-  }, [model, items, activeDefault, activeName]);
+    if (def) {
+      const config = materials.find((m) => m.name === def.name);
+      if (config) {
+        applyMaterial(config);
+      }
+    }
+  }, [model, items, activeDefault, activeName, materials, applyMaterial]);
   if (!model) {
     return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: children([], false) });
   }
