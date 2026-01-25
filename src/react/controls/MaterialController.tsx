@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react';
 import { useActiveModel } from '../hooks/useActiveModel';
-import { createQuadWireframe } from '../../core/utils';
+//import { createQuadWireframe } from '../../core/utils';
 import { THREE } from '../../lib';
 
 const TEXTURE_PROPS = [
@@ -27,7 +27,7 @@ const TEXTURE_PROPS = [
 ];
 
 export type CustomMaterialFactory = (
-  originalMaterial: THREE.Material
+  originalMaterial: THREE.Material,
 ) => THREE.Material;
 
 type Texture = { name: string; type: 'textured' };
@@ -37,7 +37,7 @@ type Solid = Omit<Texture, 'type'> & {
   metalness?: number;
   roughness?: number;
 };
-type Wireframe = Omit<Solid,'type'> & {
+type Wireframe = Omit<Solid, 'type'> & {
   type: 'wireframe';
   lineColor?: THREE.ColorRepresentation;
 };
@@ -46,7 +46,7 @@ export type MaterialConfig =
   | Texture
   | Solid
   | Wireframe
-  | { name: string; type: 'custom'; factory: CustomMaterialFactory };
+//  | { name: string; type: 'custom'; factory: CustomMaterialFactory };
 
 type MaterialItem = {
   name: string;
@@ -63,7 +63,7 @@ type MaterialControllerProps = {
   transitionDuration?: number;
   children: (
     items: MaterialItem[],
-    isTransitioning?: boolean
+    isTransitioning?: boolean,
   ) => React.ReactNode;
   className?: string;
 };
@@ -103,7 +103,7 @@ type MaterialControllerProps = {
  *   )}
  * </MaterialController>
  */
-export const MaterialController: React.FC<MaterialControllerProps> = ({
+/*export const MaterialController: React.FC<MaterialControllerProps> = ({
   materials,
   activeDefault,
   transitionDuration = 300,
@@ -161,8 +161,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
 
       meshesRef.current.push(child);
     });
-    //meshesRef.current.sort((a, b) => a.uuid.localeCompare(b.uuid));
-    //meshesRef.current.sort((a, b) => a.position.x - b.position.x);
     processedModelRef.current = model;
   }, [model]);
 
@@ -354,4 +352,115 @@ function synthesizeMaterial(
 
   cloned.needsUpdate = true;
   return cloned;
-}
+}*/
+
+import {
+  injectShader,
+  runPaintTransition,
+  setupModelBounds,
+  transitionUniforms,
+} from '../../shaders/Paint';
+
+export const MaterialController: React.FC<MaterialControllerProps> = ({
+  materials,
+  activeDefault,
+  transitionDuration = 800,
+  children,
+  className,
+}) => {
+  const model = useActiveModel();
+
+  // Estados requeridos por tu interfaz MaterialItem
+  const [activeName, setActiveName] = useState<string | null>(null);
+  const [oldName, setOldName] = useState<string>('');
+  const [nextName, setNextName] = useState<string>('');
+  const [percentage, setPercentage] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const processedModelRef = useRef<THREE.Group | null>(null);
+
+  useEffect(() => {
+    if (!model || processedModelRef.current === model) {
+      return;
+    }
+    setupModelBounds(model);
+    model.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        injectShader(child.material);
+      }
+    });
+    processedModelRef.current = model;
+  }, [model]);
+
+  const applyMaterial = useCallback(
+    async (config: MaterialConfig) => {
+      if (!model || isTransitioning) {
+        return;
+      }
+
+      // Seteamos nombres para la interfaz externa
+      setOldName(activeName ?? '');
+      setNextName(config.name);
+      setIsTransitioning(true);
+      setPercentage(0);
+
+      const isTextured = config.type === 'textured';
+      const isWire = config.type === 'wireframe';
+
+      // Control de textura instantáneo (o podrías animarlo)
+      transitionUniforms.uUseTexture.value = isTextured ? 1.0 : 0.0;
+
+      if (!isTextured) {
+        const targetColor = config.color?.toString?.() || '#888888';
+
+        // Ejecutamos animación y actualizamos el porcentaje para la UI
+        const animation = runPaintTransition(
+          targetColor,
+          isWire,
+          transitionDuration,
+        );
+
+        animation.eventCallback('onUpdate', () => {
+          setPercentage(Math.floor(animation.progress() * 100));
+        });
+
+        await animation;
+      } else {
+        setPercentage(100);
+      }
+
+      setActiveName(config.name);
+      setIsTransitioning(false);
+      setPercentage(0); // Reset para la siguiente
+    },
+    [model, isTransitioning, activeName, transitionDuration],
+  );
+
+  const items = useMemo<MaterialItem[]>(
+    () =>
+      materials.map((config) => ({
+        name: config.name,
+        oldName,
+        nextName,
+        isActive: activeName === config.name,
+        percentage: nextName === config.name ? percentage : 0,
+        apply: () => applyMaterial(config),
+      })),
+    [materials, oldName, nextName, activeName, percentage, applyMaterial],
+  );
+
+  // Aplicar default inicial
+  useEffect(() => {
+    if (!model || activeName || items.length === 0) {
+      return;
+    }
+    const def = items.find((i) => i.name === activeDefault) || items[0];
+    def?.apply?.();
+  }, [model, items, activeDefault, activeName]);
+
+  if (!model) {
+    return <div className={className}>{children([], false)}</div>;
+  }
+
+  return <div className={className}>{children(items, isTransitioning)}</div>;
+};

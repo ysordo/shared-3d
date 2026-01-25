@@ -11,7 +11,7 @@ require('../../chunk-I6NFS5JZ.cjs');
 var _chunkANBTHGFAcjs = require('../../chunk-ANBTHGFA.cjs');
 
 
-var _chunkQCHC75JMcjs = require('../../chunk-QCHC75JM.cjs');
+var _chunk3SGYYGPKcjs = require('../../chunk-3SGYYGPK.cjs');
 
 
 var _chunk76BBOGQKcjs = require('../../chunk-76BBOGQK.cjs');
@@ -27,10 +27,10 @@ require('../../chunk-7W7IF4LU.cjs');
 require('../../chunk-EA3XQ4KJ.cjs');
 require('../../chunk-EZWJIGJ6.cjs');
 require('../../chunk-EQHV3NLZ.cjs');
-require('../../chunk-TS2WCK2B.cjs');
+require('../../chunk-VGSUGZMO.cjs');
+require('../../chunk-UW5RKAXQ.cjs');
 require('../../chunk-TGS6EYUY.cjs');
 require('../../chunk-VI2Z3BIA.cjs');
-require('../../chunk-UW5RKAXQ.cjs');
 
 
 
@@ -38,4 +38,4 @@ require('../../chunk-UW5RKAXQ.cjs');
 
 
 
-exports.useActiveModel = _chunk76BBOGQKcjs.useActiveModel; exports.useAnimation = _chunkAIXPGHSDcjs.useAnimation; exports.useCache = _chunkQCHC75JMcjs.useCache; exports.useHDRI = _chunkANBTHGFAcjs.useHDRI; exports.useRaycaster = _chunk4JJRSZ7Dcjs.useRaycaster; exports.useScene = _chunk7J7CBFY2cjs.useScene;
+exports.useActiveModel = _chunk76BBOGQKcjs.useActiveModel; exports.useAnimation = _chunkAIXPGHSDcjs.useAnimation; exports.useCache = _chunk3SGYYGPKcjs.useCache; exports.useHDRI = _chunkANBTHGFAcjs.useHDRI; exports.useRaycaster = _chunk4JJRSZ7Dcjs.useRaycaster; exports.useScene = _chunk7J7CBFY2cjs.useScene;
