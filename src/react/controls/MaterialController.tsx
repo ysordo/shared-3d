@@ -44,10 +44,7 @@ type Wireframe = Omit<Solid, 'type'> & {
   lineColor?: THREE.ColorRepresentation;
 };
 
-export type MaterialConfig =
-  | Texture
-  | Solid
-  | Wireframe
+export type MaterialConfig = Texture | Solid | Wireframe;
 //  | { name: string; type: 'custom'; factory: CustomMaterialFactory };
 
 type MaterialItem = {
@@ -382,13 +379,17 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
 
   // Inicialización y configuración de Shaders
   useEffect(() => {
-    if (!model || processedModelRef.current === model) {return;}
+    if (!model || processedModelRef.current === model) {
+      return;
+    }
 
     setupModelBounds(model);
     model.traverse((child) => {
       if (child instanceof THREE.Mesh) {
         // Importante: inyectar el shader que maneja profundidad para cristales
-        injectShader(child.material);
+        Array.isArray(child.material)
+          ? child.material.forEach(injectShader)
+          : injectShader(child.material);
       }
     });
     processedModelRef.current = model;
@@ -397,7 +398,9 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   const applyMaterial = useCallback(
     async (config: MaterialConfig) => {
       // Permitimos el cambio si no es el mismo material activo
-      if (!model || isTransitioning || config.name === activeName) {return;}
+      if (!model || isTransitioning || config.name === activeName) {
+        return;
+      }
 
       setIsTransitioning(true);
       setOldName(activeName ?? '');
@@ -410,9 +413,16 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       // 1. Configuración de Apariencia (Blender Style)
       // Ajustamos intensidad de luz para look mate y decidimos si mantener cristales
       transitionUniforms.uUseTexture.value = isTextured ? 1.0 : 0.0;
-      transitionUniforms.uLightIntensity.value = (isTextured || config.keepLight === 'default') ? 1.0 : (config.keepLight === 'blender' ? 0.6 : 0.0);
+      transitionUniforms.uLightIntensity.value =
+        isTextured || config.keepLight === 'default'
+          ? 1.0
+          : config.keepLight === 'blender'
+            ? 0.6
+            : 0.0;
       // 'keepGlass' debe venir en tu MaterialConfig para decidir si el cristal se vuelve sólido
-      transitionUniforms.uGlassOpacity.value = isTextured ? 1.0 : (config.keepGlass ? 1.0 : 0.0);
+      transitionUniforms.uGlassOpacity.value = isTextured || config.keepGlass
+        ? 1.0
+        : 0.0;
 
       // 2. Ejecución de la Animación
       if (!isTextured) {
@@ -422,7 +432,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         const animation = runPaintTransition(
           targetColor,
           isWire,
-          transitionDuration
+          transitionDuration,
         );
 
         // Sincronización del porcentaje con la UI
@@ -442,7 +452,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       setIsTransitioning(false);
       // No reseteamos percentage a 0 aquí para que la UI no parpadee al terminar
     },
-    [model, isTransitioning, activeName, transitionDuration]
+    [model, isTransitioning, activeName, transitionDuration],
   );
 
   const items = useMemo<MaterialItem[]>(
@@ -456,18 +466,23 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         percentage,
         apply: () => applyMaterial(config),
       })),
-    [materials, oldName, nextName, activeName, percentage, applyMaterial]
+    [materials, oldName, nextName, activeName, percentage, applyMaterial],
   );
 
   // Aplicar default inicial
   useEffect(() => {
-    if (!model || activeName || items.length === 0) {return;}
-    
+    if (!model || activeName || items.length === 0) {
+      return;
+    }
+
     const def = items.find((i) => i.name === activeDefault) || items[0];
     if (def) {
       // Para el primer render, forzamos los valores sin esperar el await del click
-      const config = materials.find(m => m.name === def.name);
-      if (config) {applyMaterial(config);}
+      const config = materials.find((m) => m.name === def.name);
+      if (config) {
+        transitionUniforms.uColorOld.value = 'color' in config ? new THREE.Color(config?.color || '#888888') : new THREE.Color('#888888');
+        applyMaterial(config);
+      }
     }
   }, [model, items, activeDefault, activeName, materials, applyMaterial]);
 
@@ -477,4 +492,3 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
 
   return <div className={className}>{children(items, isTransitioning)}</div>;
 };
-
