@@ -9,42 +9,49 @@ export const setupModelBounds = (model: THREE.Object3D) => {
     transitionUniforms.uMaxX.value = box.max.x;
 };
 
-export const runPaintTransition = (newColor: string, isWire: boolean, duration: number) => {
-    // 1. Antes de empezar, el color que era "nuevo" ahora es el "viejo"
-    transitionUniforms.uColorOld.value.copy(transitionUniforms.uColorNew.value);
-    
-    // 2. Seteamos el nuevo color objetivo
-    transitionUniforms.uColorNew.value.set(isWire ? '#888888' : newColor);
-    transitionUniforms.uIsWireMode.value = isWire ? 1.0 : 0.0;
+export const runPaintTransition = (
+  newColor: string | THREE.Color,     // color base (sólido o fondo del wireframe)
+  isWire: boolean = false,
+  wireLineColor?: string | THREE.Color,  // opcional: color de la línea en wireframe
+  duration: number = 1200
+) => {
+  // 1. Guardar estado actual como "old"
+  transitionUniforms.uColorOld.value.copy(transitionUniforms.uColorNew.value);
+  transitionUniforms.uWireColorOld.value.copy(transitionUniforms.uWireColorNew.value);
 
-    // Aseguramos que el progreso empiece en 0 estrictamente
-    transitionUniforms.uProgress.value = 0;
+  // 2. Setear valores objetivo
+  transitionUniforms.uColorNew.value.set(newColor);
+  
+  if (isWire) {
+    transitionUniforms.uWireColorNew.value.set(wireLineColor ?? '#000000'); // default si no se pasa
+    transitionUniforms.uIsWireMode.value = 1.0;
+  } else {
+    transitionUniforms.uIsWireMode.value = 0.0;
+  }
 
-    return gsap.to(transitionUniforms.uProgress, {
-        value: 1,
-        duration: duration / 1000, // 1200 / 1000 = 1.2s
-        ease: 'power2.inOut',
-        overwrite: 'auto', // Cambiado de true a 'auto' para evitar cancelaciones bruscas
-        onUpdate: () => {
-            // Si no usas un loop de renderizado (requestAnimationFrame) externo, 
-            // podrías necesitar disparar un evento aquí, pero normalmente 
-            // el loop de Three.js ya lee el valor actualizado.
-        }
-    });
+  transitionUniforms.uProgress.value = 0;
+
+  return gsap.to(transitionUniforms.uProgress, {
+    value: 1,
+    duration: duration / 1000,
+    ease: 'power2.inOut',
+    overwrite: 'auto',
+  });
 };
 
-export const transitionUniforms = {
+export const transitionUniforms = Object.freeze({
     uProgress: { value: 0 },
     uColorNew: { value: new THREE.Color('#ffffff') },
     uColorOld: { value: new THREE.Color('#ffffff') },
-    uWireColor: { value: new THREE.Color('#000000') },
+    uWireColorNew: { value: new THREE.Color('#000000') },
+    uWireColorOld:   { value: new THREE.Color('#000000') },
     uIsWireMode: { value: 0.0 },
     uUseTexture: { value: 1.0 },
     uMinX: { value: 0 },
     uMaxX: { value: 0 },
     uLightIntensity: { value: 1.0 }, // Control de brillo Blender
     uGlassOpacity: { value: 1.0 }    // 1.0 = Mantiene cristal, 0.0 = Sólido
-};
+});
 
 export const injectShader = (material: THREE.Material) => {
     material.transparent = true;

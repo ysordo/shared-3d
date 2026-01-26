@@ -21,7 +21,7 @@ var _gsap = require('gsap'); var _gsap2 = _interopRequireDefault(_gsap);
 var paint_default = "vPosX = position.x;\nvUv = uv;\n";
 
 // src/shaders/paint.frag
-var paint_default2 = "float normX = (vPosX - uMinX) / (uMaxX - uMinX);\nfloat threshold = uProgress * 1.1; \nfloat effect = smoothstep(threshold - 0.1, threshold, normX);\n\n// Color objetivo del pintado\nvec3 targetRGB;\nfloat targetAlpha = 1.0;\n\nif (uIsWireMode > 0.5) {\n    float wire = getWireframe(vUv);\n    targetRGB = mix(vec3(0.53), uWireColor, clamp(wire, 0.0, 1.0));\n    targetAlpha = 0.95;\n} else {\n    targetRGB = mix(uColorNew, uColorOld, effect);\n}\n\n// L\xD3GICA DE SALIDA\nif (uUseTexture > 0.5) {\n    // MODO TEXTURA: Respetamos color y transparencia original del mapa\n    // NO tocamos diffuseColor.a para que el cristal funcione\n} else {\n    // MODO S\xD3LIDO / WIREFRAME\n    diffuseColor.rgb = targetRGB;\n    \n    // Si uGlassOpacity es 1.0, mantenemos el alpha original (cristal)\n    // Si es 0.0, usamos targetAlpha (1.0 o 0.95) para hacerlo bloque s\xF3lido\n    diffuseColor.a = mix(targetAlpha, diffuseColor.a, uGlassOpacity);\n}\n";
+var paint_default2 = "precision highp float;\n\nfloat normX = (vPosX - uMinX) / (uMaxX - uMinX);\nfloat threshold = uProgress * 1.1; \nfloat effect = smoothstep(threshold - 0.1, threshold, normX);\n\nvec3 targetRGB;\nfloat targetAlpha = 1.0;\n\nif (uIsWireMode > 0.5) {\n    float wire = getWireframe(vUv);\n    \n    // El fondo es el color que ya estaba transicionando (uColorOld \u2192 uColorNew)\n    vec3 background = mix(uColorNew, uColorOld, effect);\n    \n    // La l\xEDnea transiciona de forma independiente\n    vec3 lineColor = mix(uWireColorOld, uWireColorNew, effect);\n    \n    // Combinamos: donde wire > 0 \u2192 usamos lineColor, donde wire \u2248 0 \u2192 background\n    targetRGB = mix(background, lineColor, clamp(wire, 0.0, 1.0));\n    \n    targetAlpha = 0.95;  // o uWireAlpha si quieres hacerlo configurable despu\xE9s\n} else {\n    // Modo s\xF3lido: sin cambios\n    targetRGB = mix(uColorNew, uColorOld, effect);\n}\n\n// L\xD3GICA DE SALIDA (sin cambios)\nif (uUseTexture > 0.5) {\n    // MODO TEXTURA: respetamos color y transparencia original\n} else {\n    diffuseColor.rgb = targetRGB;\n    diffuseColor.a = mix(targetAlpha, diffuseColor.a, uGlassOpacity);\n}";
 
 // src/shaders/Paint.ts
 var setupModelBounds = (model) => {
@@ -29,27 +29,30 @@ var setupModelBounds = (model) => {
   transitionUniforms.uMinX.value = box.min.x;
   transitionUniforms.uMaxX.value = box.max.x;
 };
-var runPaintTransition = (newColor, isWire, duration) => {
+var runPaintTransition = (newColor, isWire = false, wireLineColor, duration = 1200) => {
   transitionUniforms.uColorOld.value.copy(transitionUniforms.uColorNew.value);
-  transitionUniforms.uColorNew.value.set(isWire ? "#888888" : newColor);
-  transitionUniforms.uIsWireMode.value = isWire ? 1 : 0;
+  transitionUniforms.uWireColorOld.value.copy(transitionUniforms.uWireColorNew.value);
+  transitionUniforms.uColorNew.value.set(newColor);
+  if (isWire) {
+    transitionUniforms.uWireColorNew.value.set(_nullishCoalesce(wireLineColor, () => ( "#000000")));
+    transitionUniforms.uIsWireMode.value = 1;
+  } else {
+    transitionUniforms.uIsWireMode.value = 0;
+  }
   transitionUniforms.uProgress.value = 0;
   return _gsap2.default.to(transitionUniforms.uProgress, {
     value: 1,
     duration: duration / 1e3,
-    // 1200 / 1000 = 1.2s
     ease: "power2.inOut",
-    overwrite: "auto",
-    // Cambiado de true a 'auto' para evitar cancelaciones bruscas
-    onUpdate: () => {
-    }
+    overwrite: "auto"
   });
 };
-var transitionUniforms = {
+var transitionUniforms = Object.freeze({
   uProgress: { value: 0 },
   uColorNew: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#ffffff") },
   uColorOld: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#ffffff") },
-  uWireColor: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#000000") },
+  uWireColorNew: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#000000") },
+  uWireColorOld: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#000000") },
   uIsWireMode: { value: 0 },
   uUseTexture: { value: 1 },
   uMinX: { value: 0 },
@@ -58,7 +61,7 @@ var transitionUniforms = {
   // Control de brillo Blender
   uGlassOpacity: { value: 1 }
   // 1.0 = Mantiene cristal, 0.0 = Sólido
-};
+});
 var injectShader = (material) => {
   material.transparent = true;
   material.depthWrite = true;
@@ -149,6 +152,7 @@ var MaterialController = ({
         const animation = runPaintTransition(
           targetColor,
           isWire,
+          _optionalChain([config, 'optionalAccess', _4 => _4.lineColor, 'optionalAccess', _5 => _5.toString, 'call', _6 => _6()]),
           transitionDuration
         );
         animation.eventCallback("onUpdate", () => {
@@ -184,7 +188,8 @@ var MaterialController = ({
     if (def) {
       const config = materials.find((m) => m.name === def.name);
       if (config) {
-        transitionUniforms.uColorOld.value = "color" in config ? new _chunkEA3XQ4KJcjs.THREE.Color(_optionalChain([config, 'optionalAccess', _4 => _4.color]) || "#888888") : new _chunkEA3XQ4KJcjs.THREE.Color("#888888");
+        transitionUniforms.uColorNew.value = "color" in config ? new _chunkEA3XQ4KJcjs.THREE.Color(_optionalChain([config, 'optionalAccess', _7 => _7.color]) || "#888888") : new _chunkEA3XQ4KJcjs.THREE.Color("#888888");
+        transitionUniforms.uWireColorNew.value = "lineColor" in config ? new _chunkEA3XQ4KJcjs.THREE.Color(_optionalChain([config, 'optionalAccess', _8 => _8.lineColor]) || "#000000") : new _chunkEA3XQ4KJcjs.THREE.Color("#000000");
         applyMaterial(config);
       }
     }

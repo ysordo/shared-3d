@@ -3,6 +3,13 @@ import "../chunk-5RGQXC4Q.js";
 import {
   SceneObject
 } from "../chunk-6UBI6I2I.js";
+import "../chunk-JH6IQNCJ.js";
+import {
+  LightingController
+} from "../chunk-SAQVCY5L.js";
+import {
+  MaterialController
+} from "../chunk-N3NSBPUR.js";
 import "../chunk-N4S5S4XF.js";
 import "../chunk-7UDWAQOP.js";
 import {
@@ -32,10 +39,20 @@ import {
 } from "../chunk-2P2AX6CN.js";
 import {
   SuspenseModel
-} from "../chunk-NVGRQ2PI.js";
+} from "../chunk-SJKTRQOD.js";
+import {
+  Suspense
+} from "../chunk-RUDNMJTZ.js";
 import {
   VRButton
 } from "../chunk-3DXIBJPU.js";
+import "../chunk-NYCPSKPP.js";
+import {
+  AnimationController
+} from "../chunk-L3T5CZE6.js";
+import {
+  Hotspots
+} from "../chunk-O3QKHTBZ.js";
 import {
   InstancedModel
 } from "../chunk-OIQRDBQO.js";
@@ -59,8 +76,8 @@ import {
   Raycaster
 } from "../chunk-NZZESHAZ.js";
 import {
-  Suspense
-} from "../chunk-RUDNMJTZ.js";
+  Canvas
+} from "../chunk-ZAV7PER2.js";
 import {
   DirectionalLight
 } from "../chunk-4G437CBD.js";
@@ -79,6 +96,10 @@ import {
   useHDRI
 } from "../chunk-MGH4XO3F.js";
 import {
+  CacheProvider,
+  useCache
+} from "../chunk-ORZ3OVUC.js";
+import {
   EnvironmentPreset
 } from "../chunk-FY4BVG5P.js";
 import {
@@ -94,23 +115,26 @@ import {
   Hotspot
 } from "../chunk-SIQ4LEZ4.js";
 import {
-  Hotspots
-} from "../chunk-O3QKHTBZ.js";
+  ARButton
+} from "../chunk-MTZJ6TN4.js";
 import {
   AdvancedCameraCollision
 } from "../chunk-GWO6ERIG.js";
 import {
   AdvancedDragRaycaster
-} from "../chunk-LB7WOQGG.js";
+} from "../chunk-SSCGM36P.js";
 import {
   AdvancedOrbitControls
 } from "../chunk-4HW7WXFK.js";
 import {
   AdvancedRaycaster
-} from "../chunk-6ODA4O4H.js";
+} from "../chunk-IFUR36ED.js";
 import {
   AnimationTimeline
 } from "../chunk-XT4H2TR3.js";
+import {
+  useActiveModel
+} from "../chunk-V55S5YL6.js";
 import {
   Annotations
 } from "../chunk-QZDJU7TI.js";
@@ -118,30 +142,6 @@ import {
   AutoLODSystem
 } from "../chunk-KI3EMR2L.js";
 import "../chunk-VGY2SOT6.js";
-import {
-  Canvas
-} from "../chunk-ZAV7PER2.js";
-import "../chunk-NYCPSKPP.js";
-import {
-  CacheProvider,
-  useCache
-} from "../chunk-ORZ3OVUC.js";
-import "../chunk-JH6IQNCJ.js";
-import {
-  AnimationController
-} from "../chunk-L3T5CZE6.js";
-import {
-  LightingController
-} from "../chunk-SAQVCY5L.js";
-import {
-  MaterialController
-} from "../chunk-FSFHMZQK.js";
-import {
-  useActiveModel
-} from "../chunk-V55S5YL6.js";
-import {
-  ARButton
-} from "../chunk-MTZJ6TN4.js";
 import "../chunk-PYBGN7YC.js";
 import {
   SceneProvider,

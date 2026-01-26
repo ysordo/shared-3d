@@ -432,6 +432,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         const animation = runPaintTransition(
           targetColor,
           isWire,
+          (config as any)?.lineColor?.toString(),
           transitionDuration,
         );
 
@@ -480,7 +481,8 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       // Para el primer render, forzamos los valores sin esperar el await del click
       const config = materials.find((m) => m.name === def.name);
       if (config) {
-        transitionUniforms.uColorOld.value = 'color' in config ? new THREE.Color(config?.color || '#888888') : new THREE.Color('#888888');
+        transitionUniforms.uColorNew.value = 'color' in config ? new THREE.Color(config?.color || '#888888') : new THREE.Color('#888888');
+        transitionUniforms.uWireColorNew.value = 'lineColor' in config ? new THREE.Color(config?.lineColor || '#000000') : new THREE.Color('#000000');
         applyMaterial(config);
       }
     }

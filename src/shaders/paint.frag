@@ -1,28 +1,34 @@
+precision highp float;
+
 float normX = (vPosX - uMinX) / (uMaxX - uMinX);
 float threshold = uProgress * 1.1; 
 float effect = smoothstep(threshold - 0.1, threshold, normX);
 
-// Color objetivo del pintado
 vec3 targetRGB;
 float targetAlpha = 1.0;
 
 if (uIsWireMode > 0.5) {
     float wire = getWireframe(vUv);
-    targetRGB = mix(vec3(0.53), uWireColor, clamp(wire, 0.0, 1.0));
-    targetAlpha = 0.95;
+    
+    // El fondo es el color que ya estaba transicionando (uColorOld → uColorNew)
+    vec3 background = mix(uColorNew, uColorOld, effect);
+    
+    // La línea transiciona de forma independiente
+    vec3 lineColor = mix(uWireColorOld, uWireColorNew, effect);
+    
+    // Combinamos: donde wire > 0 → usamos lineColor, donde wire ≈ 0 → background
+    targetRGB = mix(background, lineColor, clamp(wire, 0.0, 1.0));
+    
+    targetAlpha = 0.95;  // o uWireAlpha si quieres hacerlo configurable después
 } else {
+    // Modo sólido: sin cambios
     targetRGB = mix(uColorNew, uColorOld, effect);
 }
 
-// LÓGICA DE SALIDA
+// LÓGICA DE SALIDA (sin cambios)
 if (uUseTexture > 0.5) {
-    // MODO TEXTURA: Respetamos color y transparencia original del mapa
-    // NO tocamos diffuseColor.a para que el cristal funcione
+    // MODO TEXTURA: respetamos color y transparencia original
 } else {
-    // MODO SÓLIDO / WIREFRAME
     diffuseColor.rgb = targetRGB;
-    
-    // Si uGlassOpacity es 1.0, mantenemos el alpha original (cristal)
-    // Si es 0.0, usamos targetAlpha (1.0 o 0.95) para hacerlo bloque sólido
     diffuseColor.a = mix(targetAlpha, diffuseColor.a, uGlassOpacity);
 }

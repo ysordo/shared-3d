@@ -1,13 +1,13 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});require('../../chunk-3NLDE54Y.cjs');
 
 
-var _chunkBATFWFVMcjs = require('../../chunk-BATFWFVM.cjs');
-
-
 var _chunkYNFEBGKFcjs = require('../../chunk-YNFEBGKF.cjs');
 
 
-var _chunkL5EVK5RUcjs = require('../../chunk-L5EVK5RU.cjs');
+var _chunkXFK5JLBRcjs = require('../../chunk-XFK5JLBR.cjs');
+
+
+var _chunkBATFWFVMcjs = require('../../chunk-BATFWFVM.cjs');
 require('../../chunk-76BBOGQK.cjs');
 require('../../chunk-4RZWCRXE.cjs');
 require('../../chunk-7J7CBFY2.cjs');
@@ -23,4 +23,4 @@ require('../../chunk-UW5RKAXQ.cjs');
 
 
 
-exports.AnimationController = _chunkBATFWFVMcjs.AnimationController; exports.LightingController = _chunkYNFEBGKFcjs.LightingController; exports.MaterialController = _chunkL5EVK5RUcjs.MaterialController;
+exports.AnimationController = _chunkBATFWFVMcjs.AnimationController; exports.LightingController = _chunkYNFEBGKFcjs.LightingController; exports.MaterialController = _chunkXFK5JLBRcjs.MaterialController;

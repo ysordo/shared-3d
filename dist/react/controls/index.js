@@ -1,13 +1,13 @@
 import "../../chunk-JH6IQNCJ.js";
 import {
-  AnimationController
-} from "../../chunk-L3T5CZE6.js";
-import {
   LightingController
 } from "../../chunk-SAQVCY5L.js";
 import {
   MaterialController
-} from "../../chunk-FSFHMZQK.js";
+} from "../../chunk-N3NSBPUR.js";
+import {
+  AnimationController
+} from "../../chunk-L3T5CZE6.js";
 import "../../chunk-V55S5YL6.js";
 import "../../chunk-PYBGN7YC.js";
 import "../../chunk-NHJD6U4Z.js";
