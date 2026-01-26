@@ -221,6 +221,8 @@ export const injectShader = (material: THREE.Material) => {
             varying float vPosX;
             varying vec2 vUv;
 
+            uniform float uToTextureMode;
+
             float getWireframe(vec2 uv) {
                 vec2 grid = abs(fract(uv * 20.0 - 0.5) - 0.5) / fwidth(uv * 20.0);
                 return 1.0 - min(grid.x, grid.y);
