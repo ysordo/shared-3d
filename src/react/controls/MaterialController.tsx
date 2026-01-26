@@ -359,7 +359,6 @@ import {
   setupModelBounds,
   transitionUniforms,
 } from '../../shaders/Paint';
-import { useScene } from '../hooks';
 
 export const MaterialController: React.FC<MaterialControllerProps> = ({
   materials,
@@ -378,7 +377,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
 
   const processedModelRef = useRef<THREE.Group | null>(null);
 
-  // Inicialización de Shaders
   useEffect(() => {
     if (!model || processedModelRef.current === model) {
       return;
@@ -409,7 +407,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       const isTextured = config.type === 'textured';
       const isWire = config.type === 'wireframe';
 
-      // Configurar iluminación y opacidad INMEDIATAMENTE (estas no afectan la transición visual directamente)
+      // Configurar iluminación y cristal INMEDIATAMENTE
       transitionUniforms.uLightIntensity.value =
         isTextured || config.keepLight === 'default'
           ? 1.0
@@ -420,49 +418,26 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       transitionUniforms.uGlassOpacity.value =
         isTextured || config.keepGlass ? 1.0 : 0.0;
 
-      // IMPORTANTE: NO tocamos uUseTexture ni uIsWireMode aquí.
-      // Dejamos que runPaintTransition maneje la lógica de transición
-      // y solo al final (onComplete) se actualizarán estos valores.
+      // Ejecutar transición (ahora maneja tanto textured como no-textured)
+      const targetColor = isTextured
+        ? '#ffffff'
+        : config.color?.toString() || '#888888';
+      const lineColor = (config as any)?.lineColor?.toString();
 
-      if (!isTextured) {
-        const targetColor = config.color?.toString() || '#888888';
-        const lineColor = (config as any)?.lineColor?.toString();
+      const animation = runPaintTransition(
+        targetColor,
+        isWire,
+        isTextured,
+        lineColor,
+        transitionDuration,
+      );
 
-        // Iniciar animación
-        const animation = runPaintTransition(
-          targetColor,
-          isWire,
-          isTextured,
-          lineColor,
-          transitionDuration,
-        );
+      animation.eventCallback('onUpdate', () => {
+        setPercentage(Math.round(animation.progress() * 100));
+      });
 
-        // Sincronizar porcentaje con UI
-        animation.eventCallback('onUpdate', () => {
-          const p = Math.round(animation.progress() * 100);
-          setPercentage(p);
-        });
+      await animation;
 
-        await animation;
-      } else {
-        // Si es textura, igual hacemos la transición para que sea suave
-        // desde el color actual hacia la textura
-        const animation = runPaintTransition(
-          '#ffffff', // No se usa pero necesario para la firma
-          false,
-          true,
-          undefined,
-          transitionDuration,
-        );
-
-        animation.eventCallback('onUpdate', () => {
-          setPercentage(Math.round(animation.progress() * 100));
-        });
-
-        await animation;
-      }
-
-      // Finalización
       setActiveName(config.name);
       setIsTransitioning(false);
     },
@@ -476,13 +451,26 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         oldName,
         nextName,
         isActive: activeName === config.name,
-        percentage,
+        percentage:
+          activeName === config.name
+            ? 100
+            : isTransitioning && nextName === config.name
+              ? percentage
+              : 0,
         apply: () => applyMaterial(config),
       })),
-    [materials, oldName, nextName, activeName, percentage, applyMaterial],
+    [
+      materials,
+      oldName,
+      nextName,
+      activeName,
+      percentage,
+      isTransitioning,
+      applyMaterial,
+    ],
   );
 
-  // Aplicar default inicial
+  // Inicialización segura
   useEffect(() => {
     if (!model || activeName || items.length === 0) {
       return;
@@ -492,28 +480,26 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     if (def) {
       const config = materials.find((m) => m.name === def.name);
       if (config) {
-        // Setear estado inicial sin animación para el primer render
         const isTextured = config.type === 'textured';
         const isWire = config.type === 'wireframe';
 
+        // Setear estado inicial SIN animación
         transitionUniforms.uUseTexture.value = isTextured ? 1.0 : 0.0;
         transitionUniforms.uIsWireMode.value =
           !isTextured && isWire ? 1.0 : 0.0;
+        transitionUniforms.uProgress.value = 1.0; // Forzar completado
 
         if (!isTextured) {
-          transitionUniforms.uColorNew.value.set(
-            config.color?.toString() || '#888888',
-          );
-          transitionUniforms.uColorOld.value.copy(
-            transitionUniforms.uColorNew.value,
-          );
+          const c = new THREE.Color(config.color?.toString() || '#888888');
+          transitionUniforms.uColorNew.value.copy(c);
+          transitionUniforms.uColorOld.value.copy(c);
+
           if (isWire) {
-            transitionUniforms.uWireColorNew.value.set(
+            const wc = new THREE.Color(
               (config as any).lineColor?.toString() || '#000000',
             );
-            transitionUniforms.uWireColorOld.value.copy(
-              transitionUniforms.uWireColorNew.value,
-            );
+            transitionUniforms.uWireColorNew.value.copy(wc);
+            transitionUniforms.uWireColorOld.value.copy(wc);
           }
         }
 

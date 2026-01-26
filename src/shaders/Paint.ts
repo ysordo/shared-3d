@@ -3,6 +3,9 @@ import gsap from 'gsap';
 import vertexChunk from './paint.vert';
 import fragmentChunk from './paint.frag';
 
+// Helper para clonar colores de forma segura
+const cloneColor = (color: THREE.Color) => new THREE.Color().copy(color);
+
 export const setupModelBounds = (model: THREE.Object3D) => {
     const box = new THREE.Box3().setFromObject(model);
     transitionUniforms.uMinX.value = box.min.x;
@@ -10,80 +13,81 @@ export const setupModelBounds = (model: THREE.Object3D) => {
 };
 
 export const runPaintTransition = (
-  newColor: string | THREE.Color,
+  targetColor: string | THREE.Color,
   isWire: boolean = false,
   isTexture: boolean = false,
   wireLineColor?: string | THREE.Color,
   duration: number = 1200
 ) => {
-  // 1. DETECTAR ESTADO ACTUAL (origen)
-  const wasTexture = transitionUniforms.uUseTexture.value > 0.5;
-  const wasWire = transitionUniforms.uIsWireMode.value > 0.5;
+  // 1. CAPTURAR ESTADO ACTUAL EXACTO (antes de tocar nada)
+  const currentMode = {
+    texture: transitionUniforms.uUseTexture.value,
+    wire: transitionUniforms.uIsWireMode.value,
+    color: cloneColor(transitionUniforms.uColorNew.value),
+    wireColor: cloneColor(transitionUniforms.uWireColorNew.value)
+  };
 
-  // 2. SETEAR DIRECCIÓN CORRECTA: 
-  //  1.0 = hacia textura (solid→textured)
-  // -1.0 = desde textura (textured→solid)
-  //  0.0 = mismo tipo (solid→solid, wire→wire)
-  if (wasTexture && !isTexture) {
-    transitionUniforms.uToTextureMode.value = -1.0;
-  } else if (!wasTexture && isTexture) {
-    transitionUniforms.uToTextureMode.value = 1.0;
+  // 2. DETERMINAR DIRECCIÓN
+  const goingToTexture = isTexture;
+  const comingFromTexture = currentMode.texture > 0.5;
+  
+  // 3. SETEAR VALORES "OLD" (desde dónde partimos)
+  if (comingFromTexture) {
+    // Si venimos de textura, usamos un color neutro o el último solid conocido
+    // como punto de partida visual. Usamos gris medio si no hay histórico.
+    transitionUniforms.uColorOld.value.copy(currentMode.color);
+    transitionUniforms.uWireColorOld.value.copy(currentMode.wireColor);
   } else {
-    transitionUniforms.uToTextureMode.value = 0.0;
+    // Venimos de solid/wire: capturamos exactamente lo que se ve ahora
+    transitionUniforms.uColorOld.value.copy(currentMode.color);
+    transitionUniforms.uWireColorOld.value.copy(currentMode.wireColor);
   }
 
-  // 3. GUARDAR COLORES ORIGEN EN "OLD"
-  // Si venimos de textura, no tenemos color "old" definido, así que usamos un neutro
-  // o mantenemos el último conocido. Para transiciones suaves textured→solid,
-  // idealmente deberías samplear el color dominante de la textura aquí si quieres,
-  // pero por ahora usamos el último uColorNew conocido o un gris.
-  if (wasTexture) {
-    // Opcional: podrías setear un color "viejo" neutral si quieres que siempre 
-    // transicione desde un color específico al salir de textura
-    // transitionUniforms.uColorOld.value.set('#888888');
-  } else {
-    // Venimos de solid/wire: los colores actuales son los "Old"
-    transitionUniforms.uColorOld.value.copy(transitionUniforms.uColorNew.value);
-    transitionUniforms.uWireColorOld.value.copy(transitionUniforms.uWireColorNew.value);
-  }
-
-  // 4. SETEAR COLORES DESTINO "NEW"
+  // 4. SETEAR VALORES "NEW" (hacia dónde vamos)
   if (!isTexture) {
-    transitionUniforms.uColorNew.value.set(newColor);
+    transitionUniforms.uColorNew.value.set(targetColor);
     if (isWire) {
       transitionUniforms.uWireColorNew.value.set(wireLineColor ?? '#000000');
     }
   }
 
-  // 5. SETEAR MODO OBJETIVO (pero NO actualizamos uUseTexture/uIsWireMode todavía!)
-  // El shader usará uToTextureMode para saber qué mezclar.
-  // Guardamos el modo objetivo en variables temporales para el onComplete
-  const targetUseTexture = isTexture ? 1.0 : 0.0;
-  const targetIsWireMode = (!isTexture && isWire) ? 1.0 : 0.0;
+  // 5. CONFIGURAR MODO DE TRANSICIÓN PARA EL SHADER
+  // 0 = Solid/Solid o Wire/Wire (mismo tipo)
+  // 1 = Hacia Textura (cualquier modo → texture)
+  // -1 = Desde Textura (texture → cualquier modo)
+  if (goingToTexture && !comingFromTexture) {
+    transitionUniforms.uTransitionType.value = 1.0;
+  } else if (!goingToTexture && comingFromTexture) {
+    transitionUniforms.uTransitionType.value = -1.0;
+  } else {
+    transitionUniforms.uTransitionType.value = 0.0;
+  }
 
-  // 6. ANIMACIÓN
+  // 6. GUARDAR MODO OBJETIVO PARA EL FINAL
+  const targetMode = {
+    texture: isTexture ? 1.0 : 0.0,
+    wire: (!isTexture && isWire) ? 1.0 : 0.0
+  };
+
+  // 7. ANIMACIÓN
   transitionUniforms.uProgress.value = 0;
 
-  const tween = gsap.to(transitionUniforms.uProgress, {
+  return gsap.to(transitionUniforms.uProgress, {
     value: 1,
     duration: duration / 1000,
     ease: 'power2.inOut',
     overwrite: 'auto',
     onComplete: () => {
-      // Ahora sí actualizamos el estado final real
-      transitionUniforms.uUseTexture.value = targetUseTexture;
-      transitionUniforms.uIsWireMode.value = targetIsWireMode;
-      transitionUniforms.uToTextureMode.value = 0.0; // Resetear dirección
+      transitionUniforms.uUseTexture.value = targetMode.texture;
+      transitionUniforms.uIsWireMode.value = targetMode.wire;
+      transitionUniforms.uTransitionType.value = 0.0;
       
-      // Sincronizar colores para la próxima transición
-      if (!isTexture) {
-        transitionUniforms.uColorOld.value.copy(transitionUniforms.uColorNew.value);
-        transitionUniforms.uWireColorOld.value.copy(transitionUniforms.uWireColorNew.value);
-      }
+      // Sincronizar: después de cualquier transición, Old = New
+      // Esto asegura que la próxima transición Solid→Solid parta del color correcto
+      transitionUniforms.uColorOld.value.copy(transitionUniforms.uColorNew.value);
+      transitionUniforms.uWireColorOld.value.copy(transitionUniforms.uWireColorNew.value);
     }
   });
-
-  return tween;
 };
 
 export const transitionUniforms = Object.freeze({
@@ -92,13 +96,13 @@ export const transitionUniforms = Object.freeze({
     uColorOld: { value: new THREE.Color('#ffffff') },
     uWireColorNew: { value: new THREE.Color('#000000') },
     uWireColorOld: { value: new THREE.Color('#000000') },
-    uIsWireMode: { value: 0.0 },      // Estado ACTUAL (al finalizar transición)
-    uUseTexture: { value: 1.0 },      // Estado ACTUAL (al finalizar transición)
+    uIsWireMode: { value: 0.0 },        // Estado REAL actual (post-transición)
+    uUseTexture: { value: 1.0 },        // Estado REAL actual (post-transición)
     uMinX: { value: 0 },
     uMaxX: { value: 0 },
     uLightIntensity: { value: 1.0 },
     uGlassOpacity: { value: 1.0 },
-    uToTextureMode: { value: 0.0 },   // -1, 0, 1 para dirección
+    uTransitionType: { value: 0.0 },    // -1, 0, 1
 });
 
 export const injectShader = (material: THREE.Material) => {
@@ -120,13 +124,13 @@ export const injectShader = (material: THREE.Material) => {
             uniform vec3 uColorOld;
             uniform vec3 uWireColorNew;
             uniform vec3 uWireColorOld;
-            uniform float uIsWireMode;      // Modo objetivo (wireframe)
-            uniform float uUseTexture;      // Modo objetivo (textura)
+            uniform float uIsWireMode;
+            uniform float uUseTexture;
             uniform float uMinX;
             uniform float uMaxX;
             uniform float uLightIntensity;
             uniform float uGlassOpacity;
-            uniform float uToTextureMode;   // -1.0, 0.0, 1.0
+            uniform float uTransitionType;
             varying float vPosX;
             varying vec2 vUv;
 

@@ -1,83 +1,81 @@
-// Cálculo del progreso espacial (de izquierda a derecha)
+// Cálculo del progreso espacial (onda de izquierda a derecha)
 float normX = (vPosX - uMinX) / (uMaxX - uMinX);
-// Ajuste para que la transición cubra todo el modelo (1.2) y empiece un poco antes (-0.1)
 float threshold = uProgress * 1.2 - 0.1; 
-// Zona suave de transición (0.1 de ancho)
-float effect = smoothstep(threshold - 0.1, threshold, normX);
+float effect = smoothstep(threshold - 0.15, threshold, normX);
 
-// Color original con textura (del material base)
-vec3 texturedColor = diffuseColor.rgb;
-vec3 finalColor;
+// Color original del material (con textura y propiedades físicas intactas)
+vec3 originalColor = diffuseColor.rgb;
+float originalAlpha = diffuseColor.a;
+
+vec3 finalColor = originalColor;
+float finalAlpha = originalAlpha;
+
+// Detectar si estamos en modo textura puro (sin transición activa)
+bool isTextureMode = uUseTexture > 0.5;
+bool isTransitioning = abs(uTransitionType) > 0.1 || (uProgress > 0.01 && uProgress < 0.99);
 
 // ============================================================================
-// LÓGICA DE TRANSICIÓN CORREGIDA
-// uToTextureMode: 
-//   1.0  = Solid/Wire → Textured (entrando a textura)
-//  -1.0  = Textured → Solid/Wire (saliendo de textura)  
-//   0.0  = Solid→Solid o Wire→Wire (cambio de color o activación de wireframe)
+// LÓGICA DE TRANSICIÓN
 // ============================================================================
 
-if (uToTextureMode > 0.5) {
+if (!isTransitioning && isTextureMode) {
     // ------------------------------------------------------------------------
-    // CASO 1: Solid/Wire → Textured
+    // MODO TEXTURA PURO: No tocamos nada, preservamos cristal/transmisión original
     // ------------------------------------------------------------------------
-    vec3 solidColor = mix(uColorOld, uColorNew, effect);
+    finalColor = originalColor;
+    finalAlpha = originalAlpha;
     
-    // Si el modo objetivo es wireframe, calcular líneas sobre el color sólido
+} else if (uTransitionType > 0.5) {
+    // ------------------------------------------------------------------------
+    // HACIA TEXTURA (Solid/Wire → Textured)
+    // ------------------------------------------------------------------------
+    vec3 oldSolid = mix(uColorOld, uColorNew, effect);
+    vec3 oldWire = mix(uWireColorOld, uWireColorNew, effect);
+    
+    float oldWireVal = getWireframe(vUv);
+    vec3 oldWireLook = mix(oldSolid, oldWire, clamp(oldWireVal, 0.0, 1.0));
+    
+    // Mezclamos desde el look anterior hacia el original (que incluye transmisión)
+    finalColor = mix(oldWireLook, originalColor, effect);
+    finalAlpha = mix(0.95, originalAlpha, effect);
+    
+} else if (uTransitionType < -0.5) {
+    // ------------------------------------------------------------------------
+    // DESDE TEXTURA (Textured → Solid/Wire) 
+    // ------------------------------------------------------------------------
+    // El color destino es FIJO (uColorNew), no interpolado con Old
+    vec3 targetLook;
+    
     if (uIsWireMode > 0.5) {
-        float wire = getWireframe(vUv);
-        vec3 lineColor = mix(uWireColorOld, uWireColorNew, effect);
-        vec3 wireColor = mix(solidColor, lineColor, clamp(wire, 0.0, 1.0));
-        // Mezclamos desde wireColor hacia texturedColor
-        finalColor = mix(wireColor, texturedColor, effect);
+        float w = getWireframe(vUv);
+        targetLook = mix(uColorNew, uWireColorNew, clamp(w, 0.0, 1.0));
     } else {
-        // Solid puro hacia textura
-        finalColor = mix(solidColor, texturedColor, effect);
+        targetLook = uColorNew;
     }
     
-} else if (uToTextureMode < -0.5) {
-    // ------------------------------------------------------------------------
-    // CASO 2: Textured → Solid/Wire  
-    // ------------------------------------------------------------------------
-    vec3 targetSolid = mix(uColorOld, uColorNew, effect);
+    // Mezclamos desde el color original (con transmisión) hacia el sólido
+    finalColor = mix(originalColor, targetLook, effect);
     
-    if (uIsWireMode > 0.5) {
-        float wire = getWireframe(vUv);
-        vec3 lineColor = mix(uWireColorOld, uWireColorNew, effect);
-        vec3 wireColor = mix(targetSolid, lineColor, clamp(wire, 0.0, 1.0));
-        // Mezclamos desde texturedColor hacia wireColor
-        finalColor = mix(texturedColor, wireColor, effect);
-    } else {
-        // Desde textura hacia solid puro
-        finalColor = mix(texturedColor, targetSolid, effect);
-    }
+    // Interpolamos alpha: desde el original (transparente) hacia sólido
+    float targetAlpha = (uIsWireMode > 0.5) ? 0.9 : 1.0;
+    finalAlpha = mix(originalAlpha, targetAlpha, effect);
     
 } else {
     // ------------------------------------------------------------------------
-    // CASO 3: Transición del mismo tipo (Solid→Solid o Wire→Wire)
+    // ENTRE SOLIDOS/WIRES (Solid→Solid o Wire→Wire)
     // ------------------------------------------------------------------------
     if (uIsWireMode > 0.5) {
-        // Modo Wireframe: mezclamos fondo y líneas
-        float wire = getWireframe(vUv);
-        vec3 bgColor = mix(uColorOld, uColorNew, effect);
-        vec3 lineColor = mix(uWireColorOld, uWireColorNew, effect);
-        
-        // La intensidad del wireframe aparece gradualmente con el efecto
-        // Si venimos de sólido (wire no visible antes), effect controla la aparición
-        float wireIntensity = clamp(wire, 0.0, 1.0);
-        
-        finalColor = mix(bgColor, lineColor, wireIntensity);
+        vec3 solidMix = mix(uColorOld, uColorNew, effect);
+        vec3 wireMix = mix(uWireColorOld, uWireColorNew, effect);
+        float w = getWireframe(vUv);
+        finalColor = mix(solidMix, wireMix, clamp(w, 0.0, 1.0));
+        finalAlpha = 0.9;
     } else {
-        // Modo Sólido puro: solo interpolación de colores
         finalColor = mix(uColorOld, uColorNew, effect);
+        finalAlpha = 1.0;
     }
 }
 
-// Aplicar color final
+// Aplicar resultado
 diffuseColor.rgb = finalColor;
-
-// Manejo de transparencia (cristal vs sólido)
-// Cuando uGlassOpacity es 1.0, mantiene el alpha original (cristal)
-// Cuando es 0.0, fuerza alpha 0.95 (sólido)
-float targetAlpha = (uIsWireMode > 0.5) ? 0.95 : 1.0;
-diffuseColor.a = mix(targetAlpha, diffuseColor.a, uGlassOpacity);
+diffuseColor.a = finalAlpha;
