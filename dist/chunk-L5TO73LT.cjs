@@ -31,7 +31,7 @@ var setupModelBounds = (model) => {
   transitionUniforms.uMaxX.value = box.max.x;
 };
 var currentTransitionId = 0;
-var runPaintTransition = (targetColor, isWire = false, isTexture = false, wireLineColor, duration = 1200) => {
+var runPaintTransition = (targetColor, isWire = false, isTexture = false, wireLineColor, duration = 1200, meshes) => {
   const thisTransitionId = ++currentTransitionId;
   const currentColor = cloneColor(transitionUniforms.uColorNew.value);
   const currentWireColor = cloneColor(transitionUniforms.uWireColorNew.value);
@@ -57,6 +57,22 @@ var runPaintTransition = (targetColor, isWire = false, isTexture = false, wireLi
     texture: isTexture ? 1 : 0,
     wire: !isTexture && isWire ? 1 : 0
   };
+  if (meshes) {
+    meshes.forEach((mesh) => {
+      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      materials.forEach((mat) => {
+        if (!mat.userData.originalProps) {
+          mat.userData.originalProps = {
+            transparent: mat.transparent,
+            depthWrite: mat.depthWrite,
+            opacity: mat.opacity
+          };
+        }
+        mat.transparent = true;
+        mat.depthWrite = true;
+      });
+    });
+  }
   transitionUniforms.uProgress.value = 0;
   return _gsap2.default.to(transitionUniforms.uProgress, {
     value: 1,
@@ -70,6 +86,18 @@ var runPaintTransition = (targetColor, isWire = false, isTexture = false, wireLi
       transitionUniforms.uUseTexture.value = targetMode.texture;
       transitionUniforms.uIsWireMode.value = targetMode.wire;
       transitionUniforms.uTransitionType.value = 0;
+      if (isTexture && meshes) {
+        meshes.forEach((mesh) => {
+          const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+          materials.forEach((mat) => {
+            if (mat.userData.originalProps) {
+              mat.transparent = mat.userData.originalProps.transparent;
+              mat.depthWrite = mat.userData.originalProps.depthWrite;
+              mat.needsUpdate = true;
+            }
+          });
+        });
+      }
       if (!isTexture) {
         transitionUniforms.uColorOld.value.copy(transitionUniforms.uColorNew.value);
         transitionUniforms.uWireColorOld.value.copy(transitionUniforms.uWireColorNew.value);
@@ -94,11 +122,11 @@ var transitionUniforms = Object.freeze({
 var injectShader = (material) => {
   if (!material.userData.originalProps) {
     material.userData.originalProps = {
+      transparent: material.transparent,
       depthWrite: material.depthWrite,
-      transparent: material.transparent
+      opacity: material.opacity
     };
   }
-  material.transparent = true;
   material.onBeforeCompile = (shader) => {
     shader.uniforms = { ...shader.uniforms, ...transitionUniforms };
     shader.vertexShader = `
@@ -162,6 +190,7 @@ var MaterialController = ({
     setupModelBounds(model);
     model.traverse((child) => {
       if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh) {
+        child.userData.originalMaterial = child.material;
         const mats = Array.isArray(child.material) ? child.material : [child.material];
         mats.forEach((mat) => {
           injectShader(mat);
@@ -186,14 +215,33 @@ var MaterialController = ({
       const isWire = config.type === "wireframe";
       transitionUniforms.uLightIntensity.value = isTextured || config.keepLight === "default" ? 1 : config.keepLight === "blender" ? 0.6 : 0;
       transitionUniforms.uGlassOpacity.value = isTextured || config.keepGlass ? 1 : 0;
-      if (!isTextured) {
-        model.traverse((child) => {
-          if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh) {
-            const mats = Array.isArray(child.material) ? child.material : [child.material];
-            mats.forEach((mat) => mat.depthWrite = true);
+      const meshes = [];
+      model.traverse((child) => {
+        if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh) {
+          if (Array.isArray(child.userData.originalMaterial)) {
+            child.userData.originalMaterial.map(
+              (mat, idx) => {
+                const t = mat.clone();
+                if ("metalness" in t) {
+                  child.material[idx].metalness = "metalness" in config ? config.metalness : t.metalness;
+                }
+                if ("roughness" in t) {
+                  child.material[idx].roughness = "roughness" in config ? config.roughness : t.roughness;
+                }
+              }
+            );
+          } else {
+            const t = child.userData.originalMaterial.clone();
+            if ("metalness" in t) {
+              child.material.metalness = "metalness" in config ? config.metalness : t.metalness;
+            }
+            if ("roughness" in t) {
+              child.material.roughness = "roughness" in config ? config.roughness : t.roughness;
+            }
           }
-        });
-      }
+          meshes.push(child);
+        }
+      });
       const targetColor = isTextured ? "#ffffff" : _optionalChain([config, 'access', _ => _.color, 'optionalAccess', _2 => _2.toString, 'call', _3 => _3()]) || "#888888";
       const lineColor = _optionalChain([config, 'optionalAccess', _4 => _4.lineColor, 'optionalAccess', _5 => _5.toString, 'call', _6 => _6()]);
       const animation = runPaintTransition(
@@ -201,24 +249,14 @@ var MaterialController = ({
         isWire,
         isTextured,
         lineColor,
-        transitionDuration
+        transitionDuration,
+        meshes
+        // Pasar meshes para restaurar props
       );
       animation.eventCallback("onUpdate", () => {
         setPercentage(Math.round(animation.progress() * 100));
       });
       await animation;
-      if (isTextured) {
-        model.traverse((child) => {
-          if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh) {
-            const mats = Array.isArray(child.material) ? child.material : [child.material];
-            mats.forEach((mat) => {
-              if (mat.userData.originalProps) {
-                mat.depthWrite = mat.userData.originalProps.depthWrite;
-              }
-            });
-          }
-        });
-      }
       setActiveName(config.name);
       setIsTransitioning(false);
     },
@@ -252,21 +290,35 @@ var MaterialController = ({
       const config = materials.find((m) => m.name === def.name);
       if (config) {
         const isTextured = config.type === "textured";
-        const isWire = config.type === "wireframe";
         transitionUniforms.uUseTexture.value = isTextured ? 1 : 0;
-        transitionUniforms.uIsWireMode.value = !isTextured && isWire ? 1 : 0;
+        transitionUniforms.uIsWireMode.value = !isTextured && config.type === "wireframe" ? 1 : 0;
         transitionUniforms.uProgress.value = 1;
+        transitionUniforms.uTransitionType.value = 0;
         if (!isTextured) {
           const c = new _chunkEA3XQ4KJcjs.THREE.Color(_optionalChain([config, 'access', _7 => _7.color, 'optionalAccess', _8 => _8.toString, 'call', _9 => _9()]) || "#888888");
           transitionUniforms.uColorNew.value.copy(c);
           transitionUniforms.uColorOld.value.copy(c);
-          if (isWire) {
+          if (config.type === "wireframe") {
             const wc = new _chunkEA3XQ4KJcjs.THREE.Color(
               _optionalChain([config, 'access', _10 => _10.lineColor, 'optionalAccess', _11 => _11.toString, 'call', _12 => _12()]) || "#000000"
             );
             transitionUniforms.uWireColorNew.value.copy(wc);
             transitionUniforms.uWireColorOld.value.copy(wc);
           }
+        }
+        if (isTextured) {
+          model.traverse((child) => {
+            if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh) {
+              const mats = Array.isArray(child.material) ? child.material : [child.material];
+              mats.forEach((mat) => {
+                if (mat.userData.originalProps) {
+                  mat.transparent = mat.userData.originalProps.transparent;
+                  mat.depthWrite = mat.userData.originalProps.depthWrite;
+                  mat.needsUpdate = true;
+                }
+              });
+            }
+          });
         }
         setActiveName(config.name);
       }

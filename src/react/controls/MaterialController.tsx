@@ -383,6 +383,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     setupModelBounds(model);
     model.traverse((child) => {
       if (child instanceof THREE.Mesh) {
+        child.userData.originalMaterial = child.material;
         const mats = Array.isArray(child.material)
           ? child.material
           : [child.material];
@@ -413,7 +414,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       const isTextured = config.type === 'textured';
       const isWire = config.type === 'wireframe';
 
-      // Configurar iluminación
       transitionUniforms.uLightIntensity.value =
         isTextured || config.keepLight === 'default'
           ? 1.0
@@ -424,17 +424,38 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       transitionUniforms.uGlassOpacity.value =
         isTextured || config.keepGlass ? 1.0 : 0.0;
 
-      // Ajustar depthWrite para la transición (evita artifacts)
-      if (!isTextured) {
-        model.traverse((child) => {
-          if (child instanceof THREE.Mesh) {
-            const mats = Array.isArray(child.material)
-              ? child.material
-              : [child.material];
-            mats.forEach((mat) => (mat.depthWrite = true));
+      // Recopilar meshes para la transición
+      const meshes: THREE.Mesh[] = [];
+      model.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          if (Array.isArray(child.userData.originalMaterial)) {
+            child.userData.originalMaterial.map(
+              (mat: THREE.Material, idx: number) => {
+                const t = mat.clone();
+                if ('metalness' in t) {
+                  child.material[idx].metalness =
+                    'metalness' in config ? config.metalness : t.metalness;
+                }
+                if ('roughness' in t) {
+                  child.material[idx].roughness =
+                    'roughness' in config ? config.roughness : t.roughness;
+                }
+              },
+            );
+          } else {
+            const t = child.userData.originalMaterial.clone();
+            if ('metalness' in t) {
+              child.material.metalness =
+                'metalness' in config ? config.metalness : t.metalness;
+            }
+            if ('roughness' in t) {
+              child.material.roughness =
+                'roughness' in config ? config.roughness : t.roughness;
+            }
           }
-        });
-      }
+          meshes.push(child);
+        }
+      });
 
       const targetColor = isTextured
         ? '#ffffff'
@@ -447,6 +468,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         isTextured,
         lineColor,
         transitionDuration,
+        meshes, // Pasar meshes para restaurar props
       );
 
       animation.eventCallback('onUpdate', () => {
@@ -454,22 +476,6 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       });
 
       await animation;
-
-      // Restaurar depthWrite original si volvemos a textura
-      if (isTextured) {
-        model.traverse((child) => {
-          if (child instanceof THREE.Mesh) {
-            const mats = Array.isArray(child.material)
-              ? child.material
-              : [child.material];
-            mats.forEach((mat) => {
-              if (mat.userData.originalProps) {
-                mat.depthWrite = mat.userData.originalProps.depthWrite;
-              }
-            });
-          }
-        });
-      }
 
       setActiveName(config.name);
       setIsTransitioning(false);
@@ -503,7 +509,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     ],
   );
 
-  // Inicialización segura
+  // Inicialización segura - restaurar props originales al inicio
   useEffect(() => {
     if (!model || activeName || items.length === 0) {
       return;
@@ -514,26 +520,43 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       const config = materials.find((m) => m.name === def.name);
       if (config) {
         const isTextured = config.type === 'textured';
-        const isWire = config.type === 'wireframe';
 
-        // Setear estado inicial SIN animación
+        // Setear uniforms
         transitionUniforms.uUseTexture.value = isTextured ? 1.0 : 0.0;
         transitionUniforms.uIsWireMode.value =
-          !isTextured && isWire ? 1.0 : 0.0;
-        transitionUniforms.uProgress.value = 1.0; // Forzar completado
+          !isTextured && config.type === 'wireframe' ? 1.0 : 0.0;
+        transitionUniforms.uProgress.value = 1.0;
+        transitionUniforms.uTransitionType.value = 0.0;
 
         if (!isTextured) {
           const c = new THREE.Color(config.color?.toString() || '#888888');
           transitionUniforms.uColorNew.value.copy(c);
           transitionUniforms.uColorOld.value.copy(c);
-
-          if (isWire) {
+          if (config.type === 'wireframe') {
             const wc = new THREE.Color(
               (config as any).lineColor?.toString() || '#000000',
             );
             transitionUniforms.uWireColorNew.value.copy(wc);
             transitionUniforms.uWireColorOld.value.copy(wc);
           }
+        }
+
+        // CRÍTICO: Si es textura, asegurar que los materiales tengan sus props originales
+        if (isTextured) {
+          model.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+              const mats = Array.isArray(child.material)
+                ? child.material
+                : [child.material];
+              mats.forEach((mat) => {
+                if (mat.userData.originalProps) {
+                  mat.transparent = mat.userData.originalProps.transparent;
+                  mat.depthWrite = mat.userData.originalProps.depthWrite;
+                  mat.needsUpdate = true;
+                }
+              });
+            }
+          });
         }
 
         setActiveName(config.name);

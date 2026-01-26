@@ -11,7 +11,6 @@ export const setupModelBounds = (model: THREE.Object3D) => {
     transitionUniforms.uMaxX.value = box.max.x;
 };
 
-// Variable para evitar que el onComplete de una transición anterior interfiera
 let currentTransitionId = 0;
 
 export const runPaintTransition = (
@@ -19,21 +18,18 @@ export const runPaintTransition = (
   isWire: boolean = false,
   isTexture: boolean = false,
   wireLineColor?: string | THREE.Color,
-  duration: number = 1200
+  duration: number = 1200,
+  meshes?: THREE.Mesh[]
 ) => {
   const thisTransitionId = ++currentTransitionId;
   
-  // 1. CAPTURAR ESTADO ACTUAL EXACTO (antes de tocar nada)
-  // Usamos cloneColor para asegurar que no son referencias compartidas
   const currentColor = cloneColor(transitionUniforms.uColorNew.value);
   const currentWireColor = cloneColor(transitionUniforms.uWireColorNew.value);
   const wasTexture = transitionUniforms.uUseTexture.value > 0.5;
   
-  // 2. DETECTAR DIRECCIÓN
   const goingToTexture = isTexture;
   const comingFromTexture = wasTexture;
   
-  // 3. CONFIGURAR TIPO DE TRANSICIÓN
   if (goingToTexture && !comingFromTexture) {
     transitionUniforms.uTransitionType.value = 1.0;
   } else if (!goingToTexture && comingFromTexture) {
@@ -42,12 +38,9 @@ export const runPaintTransition = (
     transitionUniforms.uTransitionType.value = 0.0;
   }
 
-  // 4. SETEAR VALORES "OLD" (desde dónde partimos visualmente)
-  // Si venimos de textura, Old no importa mucho, pero lo seteamos igual
   transitionUniforms.uColorOld.value.copy(currentColor);
   transitionUniforms.uWireColorOld.value.copy(currentWireColor);
 
-  // 5. SETEAR VALORES "NEW" (hacia dónde vamos)
   if (!isTexture) {
     transitionUniforms.uColorNew.value.set(targetColor);
     if (isWire) {
@@ -55,13 +48,30 @@ export const runPaintTransition = (
     }
   }
 
-  // 6. GUARDAR MODO OBJETIVO PARA EL FINAL
   const targetMode = {
     texture: isTexture ? 1.0 : 0.0,
     wire: (!isTexture && isWire) ? 1.0 : 0.0
   };
 
-  // 7. RESETear progreso e iniciar animación
+  // FORZAR TRANSPARENT DURANTE LA TRANSICIÓN (para que la mezcla funcione)
+  if (meshes) {
+    meshes.forEach(mesh => {
+      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      materials.forEach(mat => {
+        if (!mat.userData.originalProps) {
+          mat.userData.originalProps = {
+            transparent: mat.transparent,
+            depthWrite: mat.depthWrite,
+            opacity: mat.opacity
+          };
+        }
+        // Forzar transparent durante la transición para permitir mezcla
+        mat.transparent = true;
+        mat.depthWrite = true;
+      });
+    });
+  }
+
   transitionUniforms.uProgress.value = 0;
 
   return gsap.to(transitionUniforms.uProgress, {
@@ -70,16 +80,27 @@ export const runPaintTransition = (
     ease: 'power2.inOut',
     overwrite: 'auto',
     onComplete: () => {
-      // IMPORTANTE: Solo ejecutar si esta es la transición más reciente
       if (thisTransitionId !== currentTransitionId) {return;}
       
-      // Actualizar estado final
       transitionUniforms.uUseTexture.value = targetMode.texture;
       transitionUniforms.uIsWireMode.value = targetMode.wire;
       transitionUniforms.uTransitionType.value = 0.0;
       
-      // Sincronizar colores para la próxima transición
-      // Ahora Old = New para que la próxima parta desde aquí
+      // RESTAURAR PROPIEDADES ORIGINALES SI VOLVEMOS A TEXTURA
+      if (isTexture && meshes) {
+        meshes.forEach(mesh => {
+          const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+          materials.forEach(mat => {
+            if (mat.userData.originalProps) {
+              // CRÍTICO: Restaurar transparent y depthWrite para que el cristal funcione
+              mat.transparent = mat.userData.originalProps.transparent;
+              mat.depthWrite = mat.userData.originalProps.depthWrite;
+              mat.needsUpdate = true;
+            }
+          });
+        });
+      }
+      
       if (!isTexture) {
         transitionUniforms.uColorOld.value.copy(transitionUniforms.uColorNew.value);
         transitionUniforms.uWireColorOld.value.copy(transitionUniforms.uWireColorNew.value);
@@ -107,13 +128,15 @@ export const injectShader = (material: THREE.Material) => {
     // Guardar props originales solo una vez
     if (!material.userData.originalProps) {
         material.userData.originalProps = {
+            transparent: material.transparent,
             depthWrite: material.depthWrite,
-            transparent: material.transparent
+            opacity: material.opacity
         };
     }
     
-    material.transparent = true;
-    // No forzar depthWrite aquí, lo manejaremos en el controller o dejar el original
+    // NO forzar transparent aquí. El shader funcionará igual porque 
+    // en modo textura puro no modificamos el color/alpha.
+    // El transparent se fuerza solo durante la transición.
     
     material.onBeforeCompile = (shader) => {
         shader.uniforms = { ...shader.uniforms, ...transitionUniforms };
