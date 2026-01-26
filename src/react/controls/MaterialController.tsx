@@ -368,13 +368,11 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   className,
 }) => {
   const model = useActiveModel();
-
   const [activeName, setActiveName] = useState<string | null>(null);
   const [oldName, setOldName] = useState<string>('');
   const [nextName, setNextName] = useState<string>('');
-  const [percentage, setPercentage] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-
+  const [percentage, setPercentage] = useState(0);
   const processedModelRef = useRef<THREE.Group | null>(null);
 
   useEffect(() => {
@@ -385,9 +383,16 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
     setupModelBounds(model);
     model.traverse((child) => {
       if (child instanceof THREE.Mesh) {
-        Array.isArray(child.material)
-          ? child.material.forEach(injectShader)
-          : injectShader(child.material);
+        const mats = Array.isArray(child.material)
+          ? child.material
+          : [child.material];
+        mats.forEach((mat) => {
+          injectShader(mat);
+          // Restaurar depthWrite original para modo textura inicial
+          if (mat.userData.originalProps) {
+            mat.depthWrite = mat.userData.originalProps.depthWrite;
+          }
+        });
       }
     });
     processedModelRef.current = model;
@@ -399,15 +404,16 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         return;
       }
 
-      setIsTransitioning(true);
       setOldName(activeName ?? '');
       setNextName(config.name);
+
+      setIsTransitioning(true);
       setPercentage(0);
 
       const isTextured = config.type === 'textured';
       const isWire = config.type === 'wireframe';
 
-      // Configurar iluminación y cristal INMEDIATAMENTE
+      // Configurar iluminación
       transitionUniforms.uLightIntensity.value =
         isTextured || config.keepLight === 'default'
           ? 1.0
@@ -418,7 +424,18 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       transitionUniforms.uGlassOpacity.value =
         isTextured || config.keepGlass ? 1.0 : 0.0;
 
-      // Ejecutar transición (ahora maneja tanto textured como no-textured)
+      // Ajustar depthWrite para la transición (evita artifacts)
+      if (!isTextured) {
+        model.traverse((child) => {
+          if (child instanceof THREE.Mesh) {
+            const mats = Array.isArray(child.material)
+              ? child.material
+              : [child.material];
+            mats.forEach((mat) => (mat.depthWrite = true));
+          }
+        });
+      }
+
       const targetColor = isTextured
         ? '#ffffff'
         : config.color?.toString() || '#888888';
@@ -437,6 +454,22 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
       });
 
       await animation;
+
+      // Restaurar depthWrite original si volvemos a textura
+      if (isTextured) {
+        model.traverse((child) => {
+          if (child instanceof THREE.Mesh) {
+            const mats = Array.isArray(child.material)
+              ? child.material
+              : [child.material];
+            mats.forEach((mat) => {
+              if (mat.userData.originalProps) {
+                mat.depthWrite = mat.userData.originalProps.depthWrite;
+              }
+            });
+          }
+        });
+      }
 
       setActiveName(config.name);
       setIsTransitioning(false);

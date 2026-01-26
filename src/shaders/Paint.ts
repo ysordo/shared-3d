@@ -3,14 +3,16 @@ import gsap from 'gsap';
 import vertexChunk from './paint.vert';
 import fragmentChunk from './paint.frag';
 
-// Helper para clonar colores de forma segura
-const cloneColor = (color: THREE.Color) => new THREE.Color().copy(color);
+const cloneColor = (c: THREE.Color) => new THREE.Color().copy(c);
 
 export const setupModelBounds = (model: THREE.Object3D) => {
     const box = new THREE.Box3().setFromObject(model);
     transitionUniforms.uMinX.value = box.min.x;
     transitionUniforms.uMaxX.value = box.max.x;
 };
+
+// Variable para evitar que el onComplete de una transición anterior interfiera
+let currentTransitionId = 0;
 
 export const runPaintTransition = (
   targetColor: string | THREE.Color,
@@ -19,42 +21,19 @@ export const runPaintTransition = (
   wireLineColor?: string | THREE.Color,
   duration: number = 1200
 ) => {
-  // 1. CAPTURAR ESTADO ACTUAL EXACTO (antes de tocar nada)
-  const currentMode = {
-    texture: transitionUniforms.uUseTexture.value,
-    wire: transitionUniforms.uIsWireMode.value,
-    color: cloneColor(transitionUniforms.uColorNew.value),
-    wireColor: cloneColor(transitionUniforms.uWireColorNew.value)
-  };
-
-  // 2. DETERMINAR DIRECCIÓN
-  const goingToTexture = isTexture;
-  const comingFromTexture = currentMode.texture > 0.5;
+  const thisTransitionId = ++currentTransitionId;
   
-  // 3. SETEAR VALORES "OLD" (desde dónde partimos)
-  if (comingFromTexture) {
-    // Si venimos de textura, usamos un color neutro o el último solid conocido
-    // como punto de partida visual. Usamos gris medio si no hay histórico.
-    transitionUniforms.uColorOld.value.copy(currentMode.color);
-    transitionUniforms.uWireColorOld.value.copy(currentMode.wireColor);
-  } else {
-    // Venimos de solid/wire: capturamos exactamente lo que se ve ahora
-    transitionUniforms.uColorOld.value.copy(currentMode.color);
-    transitionUniforms.uWireColorOld.value.copy(currentMode.wireColor);
-  }
-
-  // 4. SETEAR VALORES "NEW" (hacia dónde vamos)
-  if (!isTexture) {
-    transitionUniforms.uColorNew.value.set(targetColor);
-    if (isWire) {
-      transitionUniforms.uWireColorNew.value.set(wireLineColor ?? '#000000');
-    }
-  }
-
-  // 5. CONFIGURAR MODO DE TRANSICIÓN PARA EL SHADER
-  // 0 = Solid/Solid o Wire/Wire (mismo tipo)
-  // 1 = Hacia Textura (cualquier modo → texture)
-  // -1 = Desde Textura (texture → cualquier modo)
+  // 1. CAPTURAR ESTADO ACTUAL EXACTO (antes de tocar nada)
+  // Usamos cloneColor para asegurar que no son referencias compartidas
+  const currentColor = cloneColor(transitionUniforms.uColorNew.value);
+  const currentWireColor = cloneColor(transitionUniforms.uWireColorNew.value);
+  const wasTexture = transitionUniforms.uUseTexture.value > 0.5;
+  
+  // 2. DETECTAR DIRECCIÓN
+  const goingToTexture = isTexture;
+  const comingFromTexture = wasTexture;
+  
+  // 3. CONFIGURAR TIPO DE TRANSICIÓN
   if (goingToTexture && !comingFromTexture) {
     transitionUniforms.uTransitionType.value = 1.0;
   } else if (!goingToTexture && comingFromTexture) {
@@ -63,13 +42,26 @@ export const runPaintTransition = (
     transitionUniforms.uTransitionType.value = 0.0;
   }
 
+  // 4. SETEAR VALORES "OLD" (desde dónde partimos visualmente)
+  // Si venimos de textura, Old no importa mucho, pero lo seteamos igual
+  transitionUniforms.uColorOld.value.copy(currentColor);
+  transitionUniforms.uWireColorOld.value.copy(currentWireColor);
+
+  // 5. SETEAR VALORES "NEW" (hacia dónde vamos)
+  if (!isTexture) {
+    transitionUniforms.uColorNew.value.set(targetColor);
+    if (isWire) {
+      transitionUniforms.uWireColorNew.value.set(wireLineColor ?? '#000000');
+    }
+  }
+
   // 6. GUARDAR MODO OBJETIVO PARA EL FINAL
   const targetMode = {
     texture: isTexture ? 1.0 : 0.0,
     wire: (!isTexture && isWire) ? 1.0 : 0.0
   };
 
-  // 7. ANIMACIÓN
+  // 7. RESETear progreso e iniciar animación
   transitionUniforms.uProgress.value = 0;
 
   return gsap.to(transitionUniforms.uProgress, {
@@ -78,14 +70,20 @@ export const runPaintTransition = (
     ease: 'power2.inOut',
     overwrite: 'auto',
     onComplete: () => {
+      // IMPORTANTE: Solo ejecutar si esta es la transición más reciente
+      if (thisTransitionId !== currentTransitionId) {return;}
+      
+      // Actualizar estado final
       transitionUniforms.uUseTexture.value = targetMode.texture;
       transitionUniforms.uIsWireMode.value = targetMode.wire;
       transitionUniforms.uTransitionType.value = 0.0;
       
-      // Sincronizar: después de cualquier transición, Old = New
-      // Esto asegura que la próxima transición Solid→Solid parta del color correcto
-      transitionUniforms.uColorOld.value.copy(transitionUniforms.uColorNew.value);
-      transitionUniforms.uWireColorOld.value.copy(transitionUniforms.uWireColorNew.value);
+      // Sincronizar colores para la próxima transición
+      // Ahora Old = New para que la próxima parta desde aquí
+      if (!isTexture) {
+        transitionUniforms.uColorOld.value.copy(transitionUniforms.uColorNew.value);
+        transitionUniforms.uWireColorOld.value.copy(transitionUniforms.uWireColorNew.value);
+      }
     }
   });
 };
@@ -96,18 +94,26 @@ export const transitionUniforms = Object.freeze({
     uColorOld: { value: new THREE.Color('#ffffff') },
     uWireColorNew: { value: new THREE.Color('#000000') },
     uWireColorOld: { value: new THREE.Color('#000000') },
-    uIsWireMode: { value: 0.0 },        // Estado REAL actual (post-transición)
-    uUseTexture: { value: 1.0 },        // Estado REAL actual (post-transición)
+    uIsWireMode: { value: 0.0 },
+    uUseTexture: { value: 1.0 },
     uMinX: { value: 0 },
     uMaxX: { value: 0 },
     uLightIntensity: { value: 1.0 },
     uGlassOpacity: { value: 1.0 },
-    uTransitionType: { value: 0.0 },    // -1, 0, 1
+    uTransitionType: { value: 0.0 },
 });
 
 export const injectShader = (material: THREE.Material) => {
+    // Guardar props originales solo una vez
+    if (!material.userData.originalProps) {
+        material.userData.originalProps = {
+            depthWrite: material.depthWrite,
+            transparent: material.transparent
+        };
+    }
+    
     material.transparent = true;
-    material.depthWrite = true;
+    // No forzar depthWrite aquí, lo manejaremos en el controller o dejar el original
     
     material.onBeforeCompile = (shader) => {
         shader.uniforms = { ...shader.uniforms, ...transitionUniforms };
