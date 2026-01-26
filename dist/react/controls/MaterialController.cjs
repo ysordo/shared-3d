@@ -1,7 +1,7 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true});"use client";
 
 
-var _chunk4RLIDZTMcjs = require('../../chunk-4RLIDZTM.cjs');
+var _chunk6KBDDJPOcjs = require('../../chunk-6KBDDJPO.cjs');
 require('../../chunk-K7XBLML3.cjs');
 require('../../chunk-4JJRSZ7D.cjs');
 require('../../chunk-AIXPGHSD.cjs');
@@ -25,4 +25,4 @@ require('../../chunk-TGS6EYUY.cjs');
 require('../../chunk-VI2Z3BIA.cjs');
 
 
-exports.MaterialController = _chunk4RLIDZTMcjs.MaterialController;
+exports.MaterialController = _chunk6KBDDJPOcjs.MaterialController;

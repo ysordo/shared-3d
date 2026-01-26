@@ -20,22 +20,27 @@ if (uIsWireMode > 0.5) {
     nonTexturedRGB = mix(uColorNew, uColorOld, effect);
 }
 
-// Ahora, manejamos la transición basada en modo y dirección
-if (uUseTexture > 0.5) {
-    if (uToTextureMode > 0.5) {
-        // Transición HACIA textura: mix de no-textura → textura
-        targetRGB = mix(nonTexturedRGB, texturedColor, effect);
+// ─────────────────────────────────────────
+// DECISIÓN FINAL DE COLOR (SIN AMBIGÜEDAD)
+
+// Transición ACTIVA
+if (uToTextureMode > 0.5) {
+    // yendo HACIA textura
+    targetRGB = mix(nonTexturedRGB, texturedColor, effect);
+}
+else if (uToTextureMode < 0.0) {
+    // (no usado, pero dejo claro el concepto)
+    targetRGB = mix(texturedColor, nonTexturedRGB, effect);
+}
+else {
+    // SIN transición → usar modo REAL
+    if (uUseTexture > 0.5) {
+        targetRGB = texturedColor;
     } else {
-        targetRGB = texturedColor;  // Modo textura puro (sin transición activa)
-    }
-} else {
-    if (uToTextureMode < 0.5) {
-        // Transición DESDE textura: mix de textura → no-textura
-        targetRGB = mix(texturedColor, nonTexturedRGB, effect);
-    } else {
-        targetRGB = nonTexturedRGB;  // Modo no-textura puro
+        targetRGB = nonTexturedRGB;
     }
 }
+
 
 // LÓGICA DE SALIDA (ajustada para siempre aplicar targetRGB)
 diffuseColor.rgb = targetRGB;

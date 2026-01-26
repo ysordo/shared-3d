@@ -1,34 +1,34 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
-
-var _chunk76BBOGQKcjs = require('./chunk-76BBOGQK.cjs');
-
-
-var _chunk7J7CBFY2cjs = require('./chunk-7J7CBFY2.cjs');
-
-
-var _chunkEA3XQ4KJcjs = require('./chunk-EA3XQ4KJ.cjs');
+import {
+  useActiveModel
+} from "./chunk-V55S5YL6.js";
+import {
+  useScene
+} from "./chunk-NHJD6U4Z.js";
+import {
+  THREE
+} from "./chunk-OVHQQSEK.js";
 
 // src/react/controls/MaterialController.tsx
-
-
-
-
-
-
-var _react = require('react');
+import {
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+  useState
+} from "react";
 
 // src/shaders/Paint.ts
-var _gsap = require('gsap'); var _gsap2 = _interopRequireDefault(_gsap);
+import gsap from "gsap";
 
 // src/shaders/paint.vert
 var paint_default = "vPosX = position.x;\nvUv = uv;\n";
 
 // src/shaders/paint.frag
-var paint_default2 = "float normX = (vPosX - uMinX) / (uMaxX - uMinX);\nfloat threshold = uProgress * 1.1; \nfloat effect = smoothstep(threshold - 0.1, threshold, normX);\n\n// Siempre calculamos el color texturado original (si aplica)\nvec3 texturedColor = diffuseColor.rgb;  // Asumiendo que el mapa ya est\xE1 en diffuseColor antes de este chunk\n\nvec3 targetRGB;\nfloat targetAlpha = 1.0;\n\n// Calculamos el color no-textura (s\xF3lido o wireframe)\nvec3 nonTexturedRGB;\nif (uIsWireMode > 0.5) {\n    float wire = getWireframe(vUv);\n    vec3 background = mix(uColorNew, uColorOld, effect);\n    vec3 lineColor = mix(uWireColorOld, uWireColorNew, effect);\n    nonTexturedRGB = mix(background, lineColor, clamp(wire, 0.0, 1.0));\n    targetAlpha = 0.95;\n} else {\n    nonTexturedRGB = mix(uColorNew, uColorOld, effect);\n}\n\n// Ahora, manejamos la transici\xF3n basada en modo y direcci\xF3n\nif (uUseTexture > 0.5) {\n    if (uToTextureMode > 0.5) {\n        // Transici\xF3n HACIA textura: mix de no-textura \u2192 textura\n        targetRGB = mix(nonTexturedRGB, texturedColor, effect);\n    } else {\n        targetRGB = texturedColor;  // Modo textura puro (sin transici\xF3n activa)\n    }\n} else {\n    if (uToTextureMode < 0.5) {\n        // Transici\xF3n DESDE textura: mix de textura \u2192 no-textura\n        targetRGB = mix(texturedColor, nonTexturedRGB, effect);\n    } else {\n        targetRGB = nonTexturedRGB;  // Modo no-textura puro\n    }\n}\n\n// L\xD3GICA DE SALIDA (ajustada para siempre aplicar targetRGB)\ndiffuseColor.rgb = targetRGB;\ndiffuseColor.a = mix(targetAlpha, diffuseColor.a, uGlassOpacity);";
+var paint_default2 = "float normX = (vPosX - uMinX) / (uMaxX - uMinX);\nfloat threshold = uProgress * 1.1; \nfloat effect = smoothstep(threshold - 0.1, threshold, normX);\n\n// Siempre calculamos el color texturado original (si aplica)\nvec3 texturedColor = diffuseColor.rgb;  // Asumiendo que el mapa ya est\xE1 en diffuseColor antes de este chunk\n\nvec3 targetRGB;\nfloat targetAlpha = 1.0;\n\n// Calculamos el color no-textura (s\xF3lido o wireframe)\nvec3 nonTexturedRGB;\nif (uIsWireMode > 0.5) {\n    float wire = getWireframe(vUv);\n    vec3 background = mix(uColorNew, uColorOld, effect);\n    vec3 lineColor = mix(uWireColorOld, uWireColorNew, effect);\n    nonTexturedRGB = mix(background, lineColor, clamp(wire, 0.0, 1.0));\n    targetAlpha = 0.95;\n} else {\n    nonTexturedRGB = mix(uColorNew, uColorOld, effect);\n}\n\n// \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n// DECISI\xD3N FINAL DE COLOR (SIN AMBIG\xDCEDAD)\n\n// Transici\xF3n ACTIVA\nif (uToTextureMode > 0.5) {\n    // yendo HACIA textura\n    targetRGB = mix(nonTexturedRGB, texturedColor, effect);\n}\nelse if (uToTextureMode < 0.0) {\n    // (no usado, pero dejo claro el concepto)\n    targetRGB = mix(texturedColor, nonTexturedRGB, effect);\n}\nelse {\n    // SIN transici\xF3n \u2192 usar modo REAL\n    if (uUseTexture > 0.5) {\n        targetRGB = texturedColor;\n    } else {\n        targetRGB = nonTexturedRGB;\n    }\n}\n\n\n// L\xD3GICA DE SALIDA (ajustada para siempre aplicar targetRGB)\ndiffuseColor.rgb = targetRGB;\ndiffuseColor.a = mix(targetAlpha, diffuseColor.a, uGlassOpacity);";
 
 // src/shaders/Paint.ts
 var setupModelBounds = (model) => {
-  const box = new _chunkEA3XQ4KJcjs.THREE.Box3().setFromObject(model);
+  const box = new THREE.Box3().setFromObject(model);
   transitionUniforms.uMinX.value = box.min.x;
   transitionUniforms.uMaxX.value = box.max.x;
 };
@@ -40,32 +40,30 @@ var runPaintTransition = (newColor, isWire = false, isTexture = false, wireLineC
   if (!isTexture) {
     transitionUniforms.uColorNew.value.set(newColor);
   }
-  transitionUniforms.uUseTexture.value = isTexture ? 1 : 0;
   if (isWire && !isTexture) {
-    transitionUniforms.uWireColorNew.value.set(_nullishCoalesce(wireLineColor, () => ( "#000000")));
-    transitionUniforms.uIsWireMode.value = 1;
-  } else {
-    transitionUniforms.uIsWireMode.value = 0;
+    transitionUniforms.uWireColorNew.value.set(wireLineColor ?? "#000000");
   }
   transitionUniforms.uProgress.value = 0;
-  const tween = _gsap2.default.to(transitionUniforms.uProgress, {
+  const tween = gsap.to(transitionUniforms.uProgress, {
     value: 1,
     duration: duration / 1e3,
     ease: "power2.inOut",
     overwrite: "auto",
     onComplete: () => {
+      transitionUniforms.uUseTexture.value = isTexture ? 1 : 0;
+      transitionUniforms.uIsWireMode.value = !isTexture && isWire ? 1 : 0;
       transitionUniforms.uToTextureMode.value = 0;
       if (!(transitionUniforms.uUseTexture.value > 0.5)) {
         if (renderer && scene && camera) {
           try {
             const rtSize = 48;
-            const rt = new _chunkEA3XQ4KJcjs.THREE.WebGLRenderTarget(rtSize, rtSize, {
-              minFilter: _chunkEA3XQ4KJcjs.THREE.LinearFilter,
-              magFilter: _chunkEA3XQ4KJcjs.THREE.LinearFilter,
-              format: _chunkEA3XQ4KJcjs.THREE.RGBAFormat
+            const rt = new THREE.WebGLRenderTarget(rtSize, rtSize, {
+              minFilter: THREE.LinearFilter,
+              magFilter: THREE.LinearFilter,
+              format: THREE.RGBAFormat
             });
             const prevRT = renderer.getRenderTarget();
-            const prevClearColor = renderer.getClearColor(new _chunkEA3XQ4KJcjs.THREE.Color());
+            const prevClearColor = renderer.getClearColor(new THREE.Color());
             const prevClearAlpha = renderer.getClearAlpha();
             renderer.setRenderTarget(rt);
             renderer.setClearColor(0, 0);
@@ -87,7 +85,7 @@ var runPaintTransition = (newColor, isWire = false, isTexture = false, wireLineC
               }
             }
             if (count > 10) {
-              const finalColor = new _chunkEA3XQ4KJcjs.THREE.Color(
+              const finalColor = new THREE.Color(
                 r / count / 255,
                 g / count / 255,
                 b / count / 255
@@ -106,7 +104,7 @@ var runPaintTransition = (newColor, isWire = false, isTexture = false, wireLineC
       }
       function fallbackCPUWeighted() {
         const samples = 484;
-        let sumColor = new _chunkEA3XQ4KJcjs.THREE.Color(0, 0, 0);
+        let sumColor = new THREE.Color(0, 0, 0);
         let totalWeight = 0;
         if (wasTexture) {
           const lineFinal = transitionUniforms.uWireColorNew.value.clone();
@@ -151,10 +149,10 @@ var runPaintTransition = (newColor, isWire = false, isTexture = false, wireLineC
 var fract = (x) => x - Math.floor(x);
 var transitionUniforms = Object.freeze({
   uProgress: { value: 0 },
-  uColorNew: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#ffffff") },
-  uColorOld: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#ffffff") },
-  uWireColorNew: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#000000") },
-  uWireColorOld: { value: new _chunkEA3XQ4KJcjs.THREE.Color("#000000") },
+  uColorNew: { value: new THREE.Color("#ffffff") },
+  uColorOld: { value: new THREE.Color("#ffffff") },
+  uWireColorNew: { value: new THREE.Color("#000000") },
+  uWireColorOld: { value: new THREE.Color("#000000") },
   uIsWireMode: { value: 0 },
   uUseTexture: { value: 1 },
   uMinX: { value: 0 },
@@ -212,7 +210,7 @@ var injectShader = (material) => {
 };
 
 // src/react/controls/MaterialController.tsx
-var _jsxruntime = require('react/jsx-runtime');
+import { jsx } from "react/jsx-runtime";
 var MaterialController = ({
   materials,
   activeDefault,
@@ -221,33 +219,33 @@ var MaterialController = ({
   children,
   className
 }) => {
-  const model = _chunk76BBOGQKcjs.useActiveModel.call(void 0, );
-  const { scene, camera, renderer } = _chunk7J7CBFY2cjs.useScene.call(void 0, );
-  const [activeName, setActiveName] = _react.useState.call(void 0, null);
-  const [oldName, setOldName] = _react.useState.call(void 0, "");
-  const [nextName, setNextName] = _react.useState.call(void 0, "");
-  const [percentage, setPercentage] = _react.useState.call(void 0, 0);
-  const [isTransitioning, setIsTransitioning] = _react.useState.call(void 0, false);
-  const processedModelRef = _react.useRef.call(void 0, null);
-  _react.useEffect.call(void 0, () => {
+  const model = useActiveModel();
+  const { scene, camera, renderer } = useScene();
+  const [activeName, setActiveName] = useState(null);
+  const [oldName, setOldName] = useState("");
+  const [nextName, setNextName] = useState("");
+  const [percentage, setPercentage] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const processedModelRef = useRef(null);
+  useEffect(() => {
     if (!model || processedModelRef.current === model) {
       return;
     }
     setupModelBounds(model);
     model.traverse((child) => {
-      if (child instanceof _chunkEA3XQ4KJcjs.THREE.Mesh) {
+      if (child instanceof THREE.Mesh) {
         Array.isArray(child.material) ? child.material.forEach(injectShader) : injectShader(child.material);
       }
     });
     processedModelRef.current = model;
   }, [model]);
-  const applyMaterial = _react.useCallback.call(void 0, 
+  const applyMaterial = useCallback(
     async (config) => {
       if (!model || isTransitioning || config.name === activeName) {
         return;
       }
       setIsTransitioning(true);
-      setOldName(_nullishCoalesce(activeName, () => ( "")));
+      setOldName(activeName ?? "");
       setNextName(config.name);
       setPercentage(0);
       const isTextured = config.type === "textured";
@@ -256,12 +254,12 @@ var MaterialController = ({
       transitionUniforms.uLightIntensity.value = isTextured || config.keepLight === "default" ? 1 : config.keepLight === "blender" ? 0.6 : 0;
       transitionUniforms.uGlassOpacity.value = isTextured || config.keepGlass ? 1 : 0;
       if (!isTextured) {
-        const targetColor = _optionalChain([config, 'access', _ => _.color, 'optionalAccess', _2 => _2.toString, 'call', _3 => _3()]) || "#888888";
+        const targetColor = config.color?.toString() || "#888888";
         const animation = runPaintTransition(
           targetColor,
           isWire,
           isTextured,
-          _optionalChain([config, 'optionalAccess', _4 => _4.lineColor, 'optionalAccess', _5 => _5.toString, 'call', _6 => _6()]),
+          config?.lineColor?.toString(),
           transitionDuration,
           renderer,
           scene,
@@ -280,7 +278,7 @@ var MaterialController = ({
     },
     [model, isTransitioning, activeName, transitionDuration]
   );
-  const items = _react.useMemo.call(void 0, 
+  const items = useMemo(
     () => materials.map((config) => ({
       name: config.name,
       oldName,
@@ -292,7 +290,7 @@ var MaterialController = ({
     })),
     [materials, oldName, nextName, activeName, percentage, applyMaterial]
   );
-  _react.useEffect.call(void 0, () => {
+  useEffect(() => {
     if (!model || activeName || items.length === 0) {
       return;
     }
@@ -300,18 +298,18 @@ var MaterialController = ({
     if (def) {
       const config = materials.find((m) => m.name === def.name);
       if (config) {
-        transitionUniforms.uColorNew.value = "color" in config ? new _chunkEA3XQ4KJcjs.THREE.Color(_optionalChain([config, 'optionalAccess', _7 => _7.color]) || "#888888") : new _chunkEA3XQ4KJcjs.THREE.Color("#888888");
-        transitionUniforms.uWireColorNew.value = "lineColor" in config ? new _chunkEA3XQ4KJcjs.THREE.Color(_optionalChain([config, 'optionalAccess', _8 => _8.lineColor]) || "#000000") : new _chunkEA3XQ4KJcjs.THREE.Color("#000000");
+        transitionUniforms.uColorNew.value = "color" in config ? new THREE.Color(config?.color || "#888888") : new THREE.Color("#888888");
+        transitionUniforms.uWireColorNew.value = "lineColor" in config ? new THREE.Color(config?.lineColor || "#000000") : new THREE.Color("#000000");
         applyMaterial(config);
       }
     }
   }, [model, items, activeDefault, activeName, materials, applyMaterial]);
   if (!model) {
-    return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: children([], false) });
+    return /* @__PURE__ */ jsx("div", { className, children: children([], false) });
   }
-  return /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "div", { className, children: children(items, isTransitioning) });
+  return /* @__PURE__ */ jsx("div", { className, children: children(items, isTransitioning) });
 };
 
-
-
-exports.MaterialController = MaterialController;
+export {
+  MaterialController
+};
