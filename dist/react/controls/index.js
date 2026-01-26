@@ -4,7 +4,7 @@ import {
 } from "../../chunk-SAQVCY5L.js";
 import {
   MaterialController
-} from "../../chunk-N3NSBPUR.js";
+} from "../../chunk-GD5372XZ.js";
 import {
   AnimationController
 } from "../../chunk-L3T5CZE6.js";

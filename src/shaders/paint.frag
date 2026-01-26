@@ -1,5 +1,3 @@
-precision highp float;
-
 float normX = (vPosX - uMinX) / (uMaxX - uMinX);
 float threshold = uProgress * 1.1; 
 float effect = smoothstep(threshold - 0.1, threshold, normX);

@@ -20,7 +20,7 @@ import {
 } from "./chunk-SAQVCY5L.js";
 import {
   MaterialController
-} from "./chunk-N3NSBPUR.js";
+} from "./chunk-GD5372XZ.js";
 import "./chunk-N4S5S4XF.js";
 import "./chunk-7UDWAQOP.js";
 import {

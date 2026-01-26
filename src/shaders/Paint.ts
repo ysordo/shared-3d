@@ -70,7 +70,8 @@ export const injectShader = (material: THREE.Material) => {
             uniform float uProgress;
             uniform vec3 uColorNew;
             uniform vec3 uColorOld;
-            uniform vec3 uWireColor;
+            uniform vec3 uWireColorNew;
+            uniform vec3 uWireColorOld;
             uniform float uIsWireMode;
             uniform float uUseTexture;
             uniform float uMinX;

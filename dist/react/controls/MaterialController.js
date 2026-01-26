@@ -1,7 +1,7 @@
 "use client";
 import {
   MaterialController
-} from "../../chunk-N3NSBPUR.js";
+} from "../../chunk-GD5372XZ.js";
 import "../../chunk-V55S5YL6.js";
 import "../../chunk-PYBGN7YC.js";
 import "../../chunk-NHJD6U4Z.js";

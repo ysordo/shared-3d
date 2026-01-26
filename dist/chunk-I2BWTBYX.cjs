@@ -21,7 +21,7 @@ var _gsap = require('gsap'); var _gsap2 = _interopRequireDefault(_gsap);
 var paint_default = "vPosX = position.x;\nvUv = uv;\n";
 
 // src/shaders/paint.frag
-var paint_default2 = "precision highp float;\n\nfloat normX = (vPosX - uMinX) / (uMaxX - uMinX);\nfloat threshold = uProgress * 1.1; \nfloat effect = smoothstep(threshold - 0.1, threshold, normX);\n\nvec3 targetRGB;\nfloat targetAlpha = 1.0;\n\nif (uIsWireMode > 0.5) {\n    float wire = getWireframe(vUv);\n    \n    // El fondo es el color que ya estaba transicionando (uColorOld \u2192 uColorNew)\n    vec3 background = mix(uColorNew, uColorOld, effect);\n    \n    // La l\xEDnea transiciona de forma independiente\n    vec3 lineColor = mix(uWireColorOld, uWireColorNew, effect);\n    \n    // Combinamos: donde wire > 0 \u2192 usamos lineColor, donde wire \u2248 0 \u2192 background\n    targetRGB = mix(background, lineColor, clamp(wire, 0.0, 1.0));\n    \n    targetAlpha = 0.95;  // o uWireAlpha si quieres hacerlo configurable despu\xE9s\n} else {\n    // Modo s\xF3lido: sin cambios\n    targetRGB = mix(uColorNew, uColorOld, effect);\n}\n\n// L\xD3GICA DE SALIDA (sin cambios)\nif (uUseTexture > 0.5) {\n    // MODO TEXTURA: respetamos color y transparencia original\n} else {\n    diffuseColor.rgb = targetRGB;\n    diffuseColor.a = mix(targetAlpha, diffuseColor.a, uGlassOpacity);\n}";
+var paint_default2 = "float normX = (vPosX - uMinX) / (uMaxX - uMinX);\nfloat threshold = uProgress * 1.1; \nfloat effect = smoothstep(threshold - 0.1, threshold, normX);\n\nvec3 targetRGB;\nfloat targetAlpha = 1.0;\n\nif (uIsWireMode > 0.5) {\n    float wire = getWireframe(vUv);\n    \n    // El fondo es el color que ya estaba transicionando (uColorOld \u2192 uColorNew)\n    vec3 background = mix(uColorNew, uColorOld, effect);\n    \n    // La l\xEDnea transiciona de forma independiente\n    vec3 lineColor = mix(uWireColorOld, uWireColorNew, effect);\n    \n    // Combinamos: donde wire > 0 \u2192 usamos lineColor, donde wire \u2248 0 \u2192 background\n    targetRGB = mix(background, lineColor, clamp(wire, 0.0, 1.0));\n    \n    targetAlpha = 0.95;  // o uWireAlpha si quieres hacerlo configurable despu\xE9s\n} else {\n    // Modo s\xF3lido: sin cambios\n    targetRGB = mix(uColorNew, uColorOld, effect);\n}\n\n// L\xD3GICA DE SALIDA (sin cambios)\nif (uUseTexture > 0.5) {\n    // MODO TEXTURA: respetamos color y transparencia original\n} else {\n    diffuseColor.rgb = targetRGB;\n    diffuseColor.a = mix(targetAlpha, diffuseColor.a, uGlassOpacity);\n}";
 
 // src/shaders/Paint.ts
 var setupModelBounds = (model) => {
@@ -77,7 +77,8 @@ var injectShader = (material) => {
             uniform float uProgress;
             uniform vec3 uColorNew;
             uniform vec3 uColorOld;
-            uniform vec3 uWireColor;
+            uniform vec3 uWireColorNew;
+            uniform vec3 uWireColorOld;
             uniform float uIsWireMode;
             uniform float uUseTexture;
             uniform float uMinX;
