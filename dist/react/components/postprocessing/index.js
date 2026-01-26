@@ -1,8 +1,5 @@
 import "../../../chunk-7UDWAQOP.js";
 import {
-  RealisticPostProcessing
-} from "../../../chunk-RNBKZWFX.js";
-import {
   BloomPostProcessing
 } from "../../../chunk-XFCWNCQ3.js";
 import {
@@ -11,6 +8,9 @@ import {
 import {
   HighResPostProcessing
 } from "../../../chunk-2P2AX6CN.js";
+import {
+  RealisticPostProcessing
+} from "../../../chunk-RNBKZWFX.js";
 import "../../../chunk-VGY2SOT6.js";
 import "../../../chunk-PYBGN7YC.js";
 import "../../../chunk-NHJD6U4Z.js";

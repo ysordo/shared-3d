@@ -2,31 +2,41 @@ float normX = (vPosX - uMinX) / (uMaxX - uMinX);
 float threshold = uProgress * 1.1; 
 float effect = smoothstep(threshold - 0.1, threshold, normX);
 
+// Siempre calculamos el color texturado original (si aplica)
+vec3 texturedColor = diffuseColor.rgb;  // Asumiendo que el mapa ya está en diffuseColor antes de este chunk
+
 vec3 targetRGB;
 float targetAlpha = 1.0;
 
+// Calculamos el color no-textura (sólido o wireframe)
+vec3 nonTexturedRGB;
 if (uIsWireMode > 0.5) {
     float wire = getWireframe(vUv);
-    
-    // El fondo es el color que ya estaba transicionando (uColorOld → uColorNew)
     vec3 background = mix(uColorNew, uColorOld, effect);
-    
-    // La línea transiciona de forma independiente
     vec3 lineColor = mix(uWireColorOld, uWireColorNew, effect);
-    
-    // Combinamos: donde wire > 0 → usamos lineColor, donde wire ≈ 0 → background
-    targetRGB = mix(background, lineColor, clamp(wire, 0.0, 1.0));
-    
-    targetAlpha = 0.95;  // o uWireAlpha si quieres hacerlo configurable después
+    nonTexturedRGB = mix(background, lineColor, clamp(wire, 0.0, 1.0));
+    targetAlpha = 0.95;
 } else {
-    // Modo sólido: sin cambios
-    targetRGB = mix(uColorNew, uColorOld, effect);
+    nonTexturedRGB = mix(uColorNew, uColorOld, effect);
 }
 
-// LÓGICA DE SALIDA (sin cambios)
+// Ahora, manejamos la transición basada en modo y dirección
 if (uUseTexture > 0.5) {
-    // MODO TEXTURA: respetamos color y transparencia original
+    if (uToTextureMode > 0.5) {
+        // Transición HACIA textura: mix de no-textura → textura
+        targetRGB = mix(nonTexturedRGB, texturedColor, effect);
+    } else {
+        targetRGB = texturedColor;  // Modo textura puro (sin transición activa)
+    }
 } else {
-    diffuseColor.rgb = targetRGB;
-    diffuseColor.a = mix(targetAlpha, diffuseColor.a, uGlassOpacity);
+    if (uToTextureMode < 0.5) {
+        // Transición DESDE textura: mix de textura → no-textura
+        targetRGB = mix(texturedColor, nonTexturedRGB, effect);
+    } else {
+        targetRGB = nonTexturedRGB;  // Modo no-textura puro
+    }
 }
+
+// LÓGICA DE SALIDA (ajustada para siempre aplicar targetRGB)
+diffuseColor.rgb = targetRGB;
+diffuseColor.a = mix(targetAlpha, diffuseColor.a, uGlassOpacity);

@@ -2,6 +2,9 @@ import {
   useActiveModel
 } from "./chunk-V55S5YL6.js";
 import {
+  useScene
+} from "./chunk-NHJD6U4Z.js";
+import {
   THREE
 } from "./chunk-OVHQQSEK.js";
 
@@ -21,7 +24,7 @@ import gsap from "gsap";
 var paint_default = "vPosX = position.x;\nvUv = uv;\n";
 
 // src/shaders/paint.frag
-var paint_default2 = "float normX = (vPosX - uMinX) / (uMaxX - uMinX);\nfloat threshold = uProgress * 1.1; \nfloat effect = smoothstep(threshold - 0.1, threshold, normX);\n\nvec3 targetRGB;\nfloat targetAlpha = 1.0;\n\nif (uIsWireMode > 0.5) {\n    float wire = getWireframe(vUv);\n    \n    // El fondo es el color que ya estaba transicionando (uColorOld \u2192 uColorNew)\n    vec3 background = mix(uColorNew, uColorOld, effect);\n    \n    // La l\xEDnea transiciona de forma independiente\n    vec3 lineColor = mix(uWireColorOld, uWireColorNew, effect);\n    \n    // Combinamos: donde wire > 0 \u2192 usamos lineColor, donde wire \u2248 0 \u2192 background\n    targetRGB = mix(background, lineColor, clamp(wire, 0.0, 1.0));\n    \n    targetAlpha = 0.95;  // o uWireAlpha si quieres hacerlo configurable despu\xE9s\n} else {\n    // Modo s\xF3lido: sin cambios\n    targetRGB = mix(uColorNew, uColorOld, effect);\n}\n\n// L\xD3GICA DE SALIDA (sin cambios)\nif (uUseTexture > 0.5) {\n    // MODO TEXTURA: respetamos color y transparencia original\n} else {\n    diffuseColor.rgb = targetRGB;\n    diffuseColor.a = mix(targetAlpha, diffuseColor.a, uGlassOpacity);\n}";
+var paint_default2 = "float normX = (vPosX - uMinX) / (uMaxX - uMinX);\nfloat threshold = uProgress * 1.1; \nfloat effect = smoothstep(threshold - 0.1, threshold, normX);\n\n// Siempre calculamos el color texturado original (si aplica)\nvec3 texturedColor = diffuseColor.rgb;  // Asumiendo que el mapa ya est\xE1 en diffuseColor antes de este chunk\n\nvec3 targetRGB;\nfloat targetAlpha = 1.0;\n\n// Calculamos el color no-textura (s\xF3lido o wireframe)\nvec3 nonTexturedRGB;\nif (uIsWireMode > 0.5) {\n    float wire = getWireframe(vUv);\n    vec3 background = mix(uColorNew, uColorOld, effect);\n    vec3 lineColor = mix(uWireColorOld, uWireColorNew, effect);\n    nonTexturedRGB = mix(background, lineColor, clamp(wire, 0.0, 1.0));\n    targetAlpha = 0.95;\n} else {\n    nonTexturedRGB = mix(uColorNew, uColorOld, effect);\n}\n\n// Ahora, manejamos la transici\xF3n basada en modo y direcci\xF3n\nif (uUseTexture > 0.5) {\n    if (uToTextureMode > 0.5) {\n        // Transici\xF3n HACIA textura: mix de no-textura \u2192 textura\n        targetRGB = mix(nonTexturedRGB, texturedColor, effect);\n    } else {\n        targetRGB = texturedColor;  // Modo textura puro (sin transici\xF3n activa)\n    }\n} else {\n    if (uToTextureMode < 0.5) {\n        // Transici\xF3n DESDE textura: mix de textura \u2192 no-textura\n        targetRGB = mix(texturedColor, nonTexturedRGB, effect);\n    } else {\n        targetRGB = nonTexturedRGB;  // Modo no-textura puro\n    }\n}\n\n// L\xD3GICA DE SALIDA (ajustada para siempre aplicar targetRGB)\ndiffuseColor.rgb = targetRGB;\ndiffuseColor.a = mix(targetAlpha, diffuseColor.a, uGlassOpacity);";
 
 // src/shaders/Paint.ts
 var setupModelBounds = (model) => {
@@ -29,24 +32,123 @@ var setupModelBounds = (model) => {
   transitionUniforms.uMinX.value = box.min.x;
   transitionUniforms.uMaxX.value = box.max.x;
 };
-var runPaintTransition = (newColor, isWire = false, wireLineColor, duration = 1200) => {
+var runPaintTransition = (newColor, isWire = false, isTexture = false, wireLineColor, duration = 1200, renderer, scene, camera) => {
   transitionUniforms.uColorOld.value.copy(transitionUniforms.uColorNew.value);
   transitionUniforms.uWireColorOld.value.copy(transitionUniforms.uWireColorNew.value);
-  transitionUniforms.uColorNew.value.set(newColor);
-  if (isWire) {
+  const wasTexture = transitionUniforms.uUseTexture.value > 0.5;
+  transitionUniforms.uToTextureMode.value = isTexture ? 1 : 0;
+  if (!isTexture) {
+    transitionUniforms.uColorNew.value.set(newColor);
+  }
+  transitionUniforms.uUseTexture.value = isTexture ? 1 : 0;
+  if (isWire && !isTexture) {
     transitionUniforms.uWireColorNew.value.set(wireLineColor ?? "#000000");
     transitionUniforms.uIsWireMode.value = 1;
   } else {
     transitionUniforms.uIsWireMode.value = 0;
   }
   transitionUniforms.uProgress.value = 0;
-  return gsap.to(transitionUniforms.uProgress, {
+  const tween = gsap.to(transitionUniforms.uProgress, {
     value: 1,
     duration: duration / 1e3,
     ease: "power2.inOut",
-    overwrite: "auto"
+    overwrite: "auto",
+    onComplete: () => {
+      transitionUniforms.uToTextureMode.value = 0;
+      if (!(transitionUniforms.uUseTexture.value > 0.5)) {
+        if (renderer && scene && camera) {
+          try {
+            const rtSize = 48;
+            const rt = new THREE.WebGLRenderTarget(rtSize, rtSize, {
+              minFilter: THREE.LinearFilter,
+              magFilter: THREE.LinearFilter,
+              format: THREE.RGBAFormat
+            });
+            const prevRT = renderer.getRenderTarget();
+            const prevClearColor = renderer.getClearColor(new THREE.Color());
+            const prevClearAlpha = renderer.getClearAlpha();
+            renderer.setRenderTarget(rt);
+            renderer.setClearColor(0, 0);
+            renderer.clear();
+            renderer.render(scene, camera);
+            const pixels = new Uint8Array(rtSize * rtSize * 4);
+            renderer.readRenderTargetPixels(rt, 0, 0, rtSize, rtSize, pixels);
+            renderer.setRenderTarget(prevRT);
+            renderer.setClearColor(prevClearColor);
+            renderer.setClearAlpha(prevClearAlpha);
+            let r = 0, g = 0, b = 0, count = 0;
+            for (let i = 0; i < pixels.length; i += 4) {
+              const brightness = (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
+              if (brightness > 15) {
+                r += pixels[i];
+                g += pixels[i + 1];
+                b += pixels[i + 2];
+                count++;
+              }
+            }
+            if (count > 10) {
+              const finalColor = new THREE.Color(
+                r / count / 255,
+                g / count / 255,
+                b / count / 255
+              );
+              transitionUniforms.uColorNew.value.copy(finalColor);
+              transitionUniforms.uColorOld.value.copy(finalColor);
+            }
+            rt.dispose();
+          } catch (err) {
+            console.warn("[paint] Captura GPU fall\xF3, usando fallback CPU", err);
+            fallbackCPUWeighted();
+          }
+        } else {
+          fallbackCPUWeighted();
+        }
+      }
+      function fallbackCPUWeighted() {
+        const samples = 484;
+        let sumColor = new THREE.Color(0, 0, 0);
+        let totalWeight = 0;
+        if (wasTexture) {
+          const lineFinal = transitionUniforms.uWireColorNew.value.clone();
+          transitionUniforms.uColorNew.value.copy(lineFinal);
+          transitionUniforms.uColorOld.value.copy(lineFinal);
+          return;
+        }
+        for (let i = 0; i < samples; i++) {
+          const iu = i % 22;
+          const iv = Math.floor(i / 22);
+          const u = iu / 21;
+          const v = iv / 21;
+          const cell = 20;
+          const gx = Math.abs(fract(u * cell - 0.5) - 0.5);
+          const gy = Math.abs(fract(v * cell - 0.5) - 0.5);
+          const wireApprox = 1 - Math.min(gx, gy) * cell;
+          const clampedWire = Math.max(0, Math.min(1, wireApprox));
+          const weight = Math.pow(clampedWire, 1.8);
+          const bg = transitionUniforms.uColorNew.value.clone().lerp(
+            transitionUniforms.uColorOld.value,
+            1
+            // effect final = 1
+          );
+          const line = transitionUniforms.uWireColorOld.value.clone().lerp(
+            transitionUniforms.uWireColorNew.value,
+            1
+          );
+          const pixel = bg.clone().lerp(line, clampedWire);
+          sumColor.add(pixel.multiplyScalar(weight));
+          totalWeight += weight;
+        }
+        if (totalWeight > 1e-3) {
+          sumColor.multiplyScalar(1 / totalWeight);
+          transitionUniforms.uColorNew.value.copy(sumColor);
+          transitionUniforms.uColorOld.value.copy(sumColor);
+        }
+      }
+    }
   });
+  return tween;
 };
+var fract = (x) => x - Math.floor(x);
 var transitionUniforms = Object.freeze({
   uProgress: { value: 0 },
   uColorNew: { value: new THREE.Color("#ffffff") },
@@ -59,8 +161,10 @@ var transitionUniforms = Object.freeze({
   uMaxX: { value: 0 },
   uLightIntensity: { value: 1 },
   // Control de brillo Blender
-  uGlassOpacity: { value: 1 }
+  uGlassOpacity: { value: 1 },
   // 1.0 = Mantiene cristal, 0.0 = Sólido
+  uToTextureMode: { value: 0 }
+  // 1.0 = hacia textura, 0.0 = desde textura
 });
 var injectShader = (material) => {
   material.transparent = true;
@@ -116,6 +220,7 @@ var MaterialController = ({
   className
 }) => {
   const model = useActiveModel();
+  const { scene, camera, renderer } = useScene();
   const [activeName, setActiveName] = useState(null);
   const [oldName, setOldName] = useState("");
   const [nextName, setNextName] = useState("");
@@ -153,8 +258,12 @@ var MaterialController = ({
         const animation = runPaintTransition(
           targetColor,
           isWire,
+          isTextured,
           config?.lineColor?.toString(),
-          transitionDuration
+          transitionDuration,
+          renderer,
+          scene,
+          camera
         );
         animation.eventCallback("onUpdate", () => {
           const p = Math.round(animation.progress() * 100);

@@ -359,6 +359,7 @@ import {
   setupModelBounds,
   transitionUniforms,
 } from '../../shaders/Paint';
+import { useScene } from '../hooks';
 
 export const MaterialController: React.FC<MaterialControllerProps> = ({
   materials,
@@ -368,6 +369,7 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
   className,
 }) => {
   const model = useActiveModel();
+  const {scene, camera, renderer} = useScene();
 
   const [activeName, setActiveName] = useState<string | null>(null);
   const [oldName, setOldName] = useState<string>('');
@@ -432,8 +434,12 @@ export const MaterialController: React.FC<MaterialControllerProps> = ({
         const animation = runPaintTransition(
           targetColor,
           isWire,
+          isTextured,
           (config as any)?.lineColor?.toString(),
           transitionDuration,
+          renderer,
+          scene,
+          camera
         );
 
         // Sincronización del porcentaje con la UI

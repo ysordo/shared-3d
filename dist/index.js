@@ -20,12 +20,8 @@ import {
 } from "./chunk-SAQVCY5L.js";
 import {
   MaterialController
-} from "./chunk-GD5372XZ.js";
+} from "./chunk-7JNPCIMV.js";
 import "./chunk-N4S5S4XF.js";
-import "./chunk-7UDWAQOP.js";
-import {
-  RealisticPostProcessing
-} from "./chunk-RNBKZWFX.js";
 import "./chunk-JUWIZNQP.js";
 import {
   AmbientLight
@@ -39,6 +35,7 @@ import {
 import {
   TheaterLighting
 } from "./chunk-73OHKK7B.js";
+import "./chunk-7UDWAQOP.js";
 import {
   BloomPostProcessing
 } from "./chunk-XFCWNCQ3.js";
@@ -48,6 +45,9 @@ import {
 import {
   HighResPostProcessing
 } from "./chunk-2P2AX6CN.js";
+import {
+  RealisticPostProcessing
+} from "./chunk-RNBKZWFX.js";
 import {
   SuspenseModel
 } from "./chunk-SJKTRQOD.js";
